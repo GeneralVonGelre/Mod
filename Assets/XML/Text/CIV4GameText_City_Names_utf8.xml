@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!-- edited with XMLSPY v2004 rel. 2 U (http://www.xmlspy.com) by lcollins (Firaxis Games) -->
+<!-- Sid Meier's Civilization 4 -->
+<!-- Copyright Firaxis Games 2005 -->
+<!-- -->
+<!-- Game Text - New -->
+<Civ4GameText xmlns="http://www.firaxis.com">
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_0</Tag>
+        <English>Jamestown</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_1</Tag>
+        <English>Boston</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_2</Tag>
+        <English>Salem</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_3</Tag>
+        <English>Providence</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_4</Tag>
+        <English>Hartford</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_5</Tag>
+        <English>New Haven</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_6</Tag>
+        <English>Newport</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_7</Tag>
+        <English>Charles Town</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_8</Tag>
+        <English>Philadelphia</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_9</Tag>
+        <English>Kingston</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_10</Tag>
+        <English>Newport News</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_11</Tag>
+        <English>Portsmouth</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_12</Tag>
+        <English>Rocksbury</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_13</Tag>
+        <English>Middle Plantation</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_14</Tag>
+        <English>Concord</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_15</Tag>
+        <English>Springfield</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_16</Tag>
+        <English>Cambridge</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_17</Tag>
+        <English>Lexington</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_18</Tag>
+        <English>New Bedford</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_19</Tag>
+        <English>Stamford</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_20</Tag>
+        <English>Annapolis</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_21</Tag>
+        <English>Halifax</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_22</Tag>
+        <English>Worcester</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_23</Tag>
+        <English>Norfolk</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_24</Tag>
+        <English>Yorktown</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_25</Tag>
+        <English>Beaufort</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_26</Tag>
+        <English>Baltimore</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_27</Tag>
+        <English>Camden</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_28</Tag>
+        <English>Savannah</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_29</Tag>
+        <English>Augusta</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_30</Tag>
+        <English>Richmond</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_31</Tag>
+        <English>Salisbury</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_32</Tag>
+        <English>Reading</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_33</Tag>
+        <English>Georgetown</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_34</Tag>
+        <English>Burlington</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_35</Tag>
+        <English>Fort Erie</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_36</Tag>
+        <English>Charlotte</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_37</Tag>
+        <English>Roanoke</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_38</Tag>
+        <English>Exeter</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_39</Tag>
+        <English>New York</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_40</Tag>
+        <English>Albany</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_41</Tag>
+        <English>Newbury</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_42</Tag>
+        <English>New Jersey</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_43</Tag>
+        <English>Barbados</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_44</Tag>
+        <English>Penobscot</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_45</Tag>
+        <English>Williamsburg</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_46</Tag>
+        <English>Saint John's</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_47</Tag>
+        <English>Wilmington</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_48</Tag>
+        <English>Rupert House</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_49</Tag>
+        <English>Ottawa</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_50</Tag>
+        <English>Maine</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_51</Tag>
+        <English>New Hampshire</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_52</Tag>
+        <English>Martha's Vineyard</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_53</Tag>
+        <English>Saint George's</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_54</Tag>
+        <English>Dover</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_55</Tag>
+        <English>Hampton</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_56</Tag>
+        <English>Gloucester</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_57</Tag>
+        <English>Berwick</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_58</Tag>
+        <English>Windsor</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_59</Tag>
+        <English>New London</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_60</Tag>
+        <English>Saint Kitts</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_61</Tag>
+        <English>Medford</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_62</Tag>
+        <English>Weymouth</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_63</Tag>
+        <English>Green Bay</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_64</Tag>
+        <English>Taunton</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_65</Tag>
+        <English>Lancaster</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_66</Tag>
+        <English>Bridgetown</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_67</Tag>
+        <English>Newark</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_68</Tag>
+        <English>Cupids</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_69</Tag>
+        <English>Kecoughtan</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_70</Tag>
+        <English>Henricus</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_71</Tag>
+        <English>Chelsea</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_72</Tag>
+        <English>Lynn</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_73</Tag>
+        <English>Jersey City</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_74</Tag>
+        <English>Lewes</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_75</Tag>
+        <English>Saint Mary's City</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_76</Tag>
+        <English>Sandwich</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_77</Tag>
+        <English>Saint Marks</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_78</Tag>
+        <English>Stratford</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_79</Tag>
+        <English>Sudbury</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_80</Tag>
+        <English>Woburn</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_81</Tag>
+        <English>Haverhill</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_82</Tag>
+        <English>Guilford</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_83</Tag>
+        <English>Andover</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_84</Tag>
+        <English>Kittery</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_85</Tag>
+        <English>Speightstown</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_86</Tag>
+        <English>Medfield</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_87</Tag>
+        <English>New Castle</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_88</Tag>
+        <English>Old Road Town</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_89</Tag>
+        <English>Pelham</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_90</Tag>
+        <English>Chelmsford</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_91</Tag>
+        <English>Groton</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_92</Tag>
+        <English>Billerica</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_93</Tag>
+        <English>Hopewell</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_94</Tag>
+        <English>Rye</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_95</Tag>
+        <English>Uxbridge</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_96</Tag>
+        <English>Piscatawaytown</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_97</Tag>
+        <English>Mendon</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_98</Tag>
+        <English>Amesbury</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_99</Tag>
+        <English>Westfield</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_100</Tag>
+        <English>Middleborough</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_101</Tag>
+        <English>Wallingford</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_102</Tag>
+        <English>Waterbury</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_103</Tag>
+        <English>South Orange</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_104</Tag>
+        <English>Bridgewater</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_105</Tag>
+        <English>Harbour Grace</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_106</Tag>
+        <English>Cockburn Town</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_107</Tag>
+        <English>New Britain</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_108</Tag>
+        <English>Chatham</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_109</Tag>
+        <English>New Bern</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_CITY_110</Tag>
+        <English>Freehold</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_0</Tag>
+        <English>Horatio Lloyd Gates</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_1</Tag>
+        <English>Daniel Morgan</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_2</Tag>
+        <English>Charles Lee</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_3</Tag>
+        <English>Arthur St. Clair</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_4</Tag>
+        <English>Seth Warner</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_5</Tag>
+        <English>Nicholas Herkimer</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_6</Tag>
+        <English>Nathanael Greene</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_7</Tag>
+        <English>Edward Braddock</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_8</Tag>
+        <English>Richard Montgomery</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_9</Tag>
+        <English>James Wolfe</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_10</Tag>
+        <English>Henry Knox</English>
+    </TEXT>
+     <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_11</Tag>
+        <English>George Rogers Clark</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_12</Tag>
+        <English>Anthony Wayne</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_13</Tag>
+        <English>Thomas Conway</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_14</Tag>
+        <English>Josiah Harmar</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_15</Tag>
+        <English>John Sullivan</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_16</Tag>
+        <English>David Wooster</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_17</Tag>
+        <English>Francis Marion</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_18</Tag>
+        <English>William Alexander</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_19</Tag>
+        <English>John Cadwalader</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_20</Tag>
+        <English>Enoch Poor</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_GENERAL_21</Tag>
+        <English>James Abercrombie</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_0</Tag>
+        <English>William Hotham</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_1</Tag>
+        <English>George Anson</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_2</Tag>
+        <English>Martin Frobisher</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_3</Tag>
+        <English>Charles Saunders</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_4</Tag>
+        <English>Charles Hardy</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_5</Tag>
+        <English>John Byron</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_6</Tag>
+        <English>Edward Hawke</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_7</Tag>
+        <English>Samuel Hood</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_8</Tag>
+        <English>Abraham Whipple</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_9</Tag>
+        <English>Nicholas Biddle</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_10</Tag>
+        <English>Esek Hopkins</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_11</Tag>
+        <English>John Barry</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_12</Tag>
+        <English>Hector McNeill</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_13</Tag>
+        <English>John Burroughs Hopkins</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_14</Tag>
+        <English>James Nicholson</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_15</Tag>
+        <English>Samuel Tucker</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_16</Tag>
+        <English>John Manley</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_17</Tag>
+        <English>Lambert Wickes</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_18</Tag>
+        <English>Jonathan Haraden</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_ENGLISH_ADMIRAL_19</Tag>
+        <English>Dudley Saltonstall</English>
+    </TEXT>
+
+    <Ship>Royal Prince</Ship>
+                <Ship>Charles</Ship>
+                <Ship>Cambridge</Ship>
+                <Ship>London</Ship>
+                <Ship>Prince</Ship>
+                <Ship>Royal Charles</Ship>
+                <Ship>Royal James</Ship>
+                <Ship>Vanguart</Ship>
+                <Ship>Royal Oak</Ship>
+                <Ship>Renown</Ship>
+                <Ship>Loyal London</Ship>
+                <Ship>Valiant</Ship>
+                <Ship>French Ruby</Ship>
+                <Ship>Warspite</Ship>
+                <Ship>Clove Tree</Ship>
+                <Ship>Golden Phoenix</Ship>
+                <Ship>Slothany</Ship>
+                <Ship>Helverson</Ship>
+                <Ship>Phaeton</Ship>
+                <Ship>Defiance</Ship>
+                <Ship>Rupert</Ship>
+                <Ship>Resolution</Ship>
+                <Ship>Monmouth</Ship>
+                <Ship>Edgar</Ship>
+                <Ship>Swiftsure</Ship>
+                <Ship>Harwich</Ship>
+                <Ship>Royal Oak</Ship>
+                <Ship>Defiance</Ship>
+                <Ship>Dover</Ship>
+                <Ship>Bonaventure</Ship>
+                <Ship>West Friesland</Ship>
+                <Ship>Seven Oaks</Ship>
+                <Ship>Charles V</Ship>
+                <Ship>Maria Sancta</Ship>
+                <Ship>Mars</Ship>
+                <Ship>Delfe</Ship>
+                <Ship>Victory</Ship>
+                <Ship>Hope</Ship>
+                <Ship>Golden Lion</Ship>
+                <Ship>Zealand</Ship>
+                <Ship>Unity</Ship>
+                <Ship>Young Prince</Ship>
+                <Ship>Black Bull</Ship>
+                <Ship>Greenwich</Ship>
+                <Ship>Stavoreen</Ship>
+                <Ship>Arms of Terver</Ship>
+                <Ship>Oxford</Ship>
+                <Ship>Woolwich</Ship>
+                <Ship>Kingfisher</Ship>
+                <Ship>Britannia</Ship>
+                <Ship>Vanguard</Ship>
+                <Ship>Windsor Castle</Ship>
+                <Ship>Sandwich</Ship>
+                <Ship>Duchess</Ship>
+                <Ship>Albemarle</Ship>
+                <Ship>Neptune</Ship>
+                <Ship>Duke</Ship>
+                <Ship>Ossory</Ship>
+                <Ship>Coronation</Ship>
+                <Ship>Lenox</Ship>
+                <Ship>Hampton Court</Ship>
+                <Ship>Anne</Ship>
+                <Ship>Captain</Ship>
+                <Ship>Restoration</Ship>
+                <Ship>Berwick</Ship>
+                <Ship>Burford</Ship>
+                <Ship>Eagle</Ship>
+                <Ship>Expedition</Ship>
+                <Ship>Grafton</Ship>
+                <Ship>Pendennis</Ship>
+                <Ship>Northumberland</Ship>
+                <Ship>Essex</Ship>
+                <Ship>Kent</Ship>
+                <Ship>Exeter</Ship>
+                <Ship>Suffolk</Ship>
+                <Ship>Hope</Ship>
+                <Ship>Elizabeth</Ship>
+                <Ship>Breda</Ship>
+                <Ship>Devonshire</Ship>
+                <Ship>Cornwall</Ship>
+                <Ship>Boyne</Ship>
+                <Ship>Russell</Ship>
+                <Ship>Norfolk</Ship>
+                <Ship>Humber</Ship>
+                <Ship>Sussex</Ship>
+                <Ship>Torbay</Ship>
+                <Ship>Lancaster</Ship>
+                <Ship>Dorsetshire</Ship>
+                <Ship>Cambridge</Ship>
+                <Ship>Chichester</Ship>
+                <Ship>Newark</Ship>
+                <Ship>Shrewsbury</Ship>
+                <Ship>Cumberland</Ship>
+                <Ship>Ranelagh</Ship>
+                <Ship>Somerset</Ship>
+                <Ship>Bredah</Ship>
+                <Ship>Ipswich</Ship>
+                <Ship>Yarmouth</Ship>
+                <Ship>Medway</Ship>
+                <Ship>Carlisle</Ship>
+                <Ship>Winchester</Ship>
+                <Ship>Canterbury</Ship>
+                <Ship>Sunderland</Ship>
+                <Ship>Pembroke</Ship>
+                <Ship>Gloucester</Ship>
+                <Ship>Windsor</Ship>
+                <Ship>Kingston</Ship>
+                <Ship>Exeter</Ship>
+                <Ship>Bedford</Ship>
+                <Ship>Orford</Ship>
+                <Ship>Nassau</Ship>
+                <Ship>Revenge</Ship>
+                <Ship>Dreadnought</Ship>
+                <Ship>Association</Ship>
+                <Ship>Barfleur</Ship>
+                <Ship>Namur</Ship>
+                <Ship>Triumph</Ship>
+                <Ship>Chatham</Ship>
+                <Ship>Centurion</Ship>
+                <Ship>Chester</Ship>
+                <Ship>Norwich</Ship>
+                <Ship>Weymouth</Ship>
+                <Ship>Falmouth</Ship>
+                <Ship>Rochester</Ship>
+                <Ship>Portland</Ship>
+                <Ship>Southampton</Ship>
+                <Ship>Norwich</Ship>
+                <Ship>Dartmouth</Ship>
+                <Ship>Anglesea</Ship>
+                <Ship>Colchester</Ship>
+                <Ship>Romney</Ship>
+                <Ship>Lichfield</Ship>
+                <Ship>Lincoln</Ship>
+                <Ship>Coventry</Ship>
+                <Ship>Severn</Ship>
+                <Ship>Burlington</Ship>
+                <Ship>Harwich</Ship>
+                <Ship>Pendennis</Ship>
+                <Ship>Blackwall</Ship>
+                <Ship>Guernsey</Ship>
+                <Ship>Nonsuch</Ship>
+                <Ship>Warwick</Ship>
+                <Ship>Hampshire</Ship>
+                <Ship>Winchester</Ship>
+                <Ship>Salisbury</Ship>
+                <Ship>Worcester</Ship>
+                <Ship>Dartmouth</Ship>
+                <Ship>Jersey</Ship>
+                <Ship>Carlisle</Ship>
+                <Ship>Tilbury</Ship>
+</Civ4GameText>
