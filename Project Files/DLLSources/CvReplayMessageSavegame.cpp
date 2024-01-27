@@ -40,6 +40,7 @@ const char* getSavedEnumNameReplayMessage(SavegameVariableTypes eType)
 		case ReplayMessageSave_Text: return "ReplayMessageSave_Text";
 		case ReplayMessageSave_Color: return "ReplayMessageSave_Color";
 	}
+	FAssertMsg(0, "Missing case");
 	return "";
 }
 
@@ -98,6 +99,8 @@ void CvReplayMessage::read(CvSavegameReader reader)
 
 void CvReplayMessage::write(CvSavegameWriter writer) const
 {
+	LogIntentHelper helper(writer, "CvReplayMessage");
+
 	writer.AssignClassType(SAVEGAME_CLASS_REPLAYMESSAGE);
 
 	// Write the data.

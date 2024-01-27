@@ -5,6 +5,14 @@
 #ifndef CIV4_RANDOM_H
 #define CIV4_RANDOM_H
 
+#if GLOBAL_DEFINE_USE_OOS_LOGGING
+#define OOS_LOG( szLog, iValue ) CvRandom::writeLog( szLog , iValue )
+#define OOS_LOG_3( szLog, szText, iValue ) CvRandom::writeLog( szLog , szText, iValue )
+#else
+#define OOS_LOG( szLog, iValue )
+#define OOS_LOG_3( szLog, szText, iValue )
+#endif
+
 class CvRandom
 {
 
@@ -15,7 +23,12 @@ public:
 
 	bool isSorenRand() const;
 	void setSorenRand();
-	void writeLog(const CvString& szLog) const;
+	static void writeLog(const CvString& szLog);
+	static void writeLog(const char* szLog, int iData);
+	static void writeLog(const char* szLog, const char* szExtraText);
+	static void writeLog(const char* szLog, int iData1, int iData2);
+	static void writeLog(const char* szLog, const char* szExtraText, int iData);
+	static void writeLog(const char* szLog, const char* szExtraText, const char* szText3);
 
 	DllExport void init(unsigned long ulSeed);
 	void uninit();
@@ -33,6 +46,8 @@ public:
 
 	unsigned long peek() const;
 
+	void setSyncedStatus(bool bNewSetting);
+
 	// for serialization
 	void read(FDataStreamBase* pStream);
 	void write(FDataStreamBase* pStream);
@@ -43,6 +58,7 @@ public:
 protected:
 
 	unsigned long m_ulRandomSeed;
+	bool m_bSynced;
 #ifdef WITH_RANDOM_LOGGING
 	bool m_bIsSorenRand;
 #endif

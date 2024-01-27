@@ -70,5 +70,7 @@ void CyGlobalContextPythonInterface7(python::class_<CyGlobalContext>& x)
 		.def("getDomesticAdvisorState", &CyGlobalContext::getDomesticAdvisorState, "int ()")
 
 		.def("getUserSettings", &CyGlobalContext::getUserSettings, python::return_value_policy<python::manage_new_object>(), "class ()")
+		.def("openNetworkOOSMenu", &CyGlobalContext::openNetworkOOSMenu, "void()")
+		.def("openReadme", &CyGlobalContext::openReadme, "void(str)")
 	;
 }

@@ -19,6 +19,7 @@
         <German>Gehe-zu-Modus</German>
         <Italian>Modalità 'Vai'</Italian>
         <Spanish>Modo Ir a</Spanish>
+        <Russian>Идти к выбранной точке</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_INTERFACEMODE_GO_TO_ALL</Tag>
@@ -27,6 +28,7 @@
         <German>Gehe-zu-Modus (Alle Einheiten)</German>
         <Italian>Modalità 'Vai' (tutte le unità)</Italian>
         <Spanish>Modo Ir a (todas las unidades)</Spanish>
+        <Russian>Идти к выбранной точке (все юниты)</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_INTERFACEMODE_GO_TO_ALL_HELP</Tag>
@@ -35,6 +37,7 @@
         <German>Allen Einheiten auf diesem Feld einen Marschbefehl erteilen</German>
         <Italian>Ordina a tutte le unità attualmente sulla casella selezionata di muoversi</Italian>
         <Spanish>Ordena moverse a todas las unidades de la casilla seleccionada actualmente.</Spanish>
+        <Russian>Приказать всем юнитам на этой клетке двигаться в указанную точку</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_INTERFACEMODE_GO_TO_HELP</Tag>
@@ -43,6 +46,7 @@
         <German>Einheit auf ein bestimmtes Geländefeld schicken</German>
         <Italian>Ordina all'unità selezionata di muoversi su una casella</Italian>
         <Spanish>Ordena a la unidad seleccionada que se mueva hasta una casilla.</Spanish>
+        <Russian>Приказать выбранному юниту двигаться в указанную точку</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_INTERFACEMODE_GO_TO_TYPE</Tag>
@@ -51,6 +55,7 @@
         <German>Gehe-zu-Modus (Gleiche Einheiten)</German>
         <Italian>Modalità 'Vai' (unità dello stesso tipo)</Italian>
         <Spanish>Modo Ir a (mismo tipo de unidad)</Spanish>
+        <Russian>Идти к выбранной точке (все юниты этого типа)</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_INTERFACEMODE_GO_TO_TYPE_HELP</Tag>
@@ -59,6 +64,7 @@
         <German>Allen Einheiten dieses gewählten Typs einen Marschbefehl erteilen</German>
         <Italian>Ordina a tutte le unità dello stesso tipo di quella selezionata di muoversi</Italian>
         <Spanish>Ordena moverse a todas las unidades del tipo seleccionado actualmente.</Spanish>
+        <Russian>Приказать всем юнитам данного типа на этой клетке двигаться в указанную точку</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_INTERFACEMODE_GRIP</Tag>
@@ -94,19 +100,39 @@
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_INTERFACEMODE_ROUTE_TO</Tag>
-        <English>Route To Mode</English>
-        <French>Route vers</French>
-        <German>Straße nach-Modus</German>
-        <Italian>Modalità 'Itinerario'</Italian>
-        <Spanish>Modo Ir en ruta a</Spanish>
+        <English>Route To Mode (best available)</English>
+        <German>Straße nach-Modus (Bester verfügbarer Straßentyp)</German>
+        <Russian>Строить дорогу до точки ([COLOR_HIGHLIGHT_TEXT]вымощенная камнем дорога[COLOR_REVERT])</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_INTERFACEMODE_ROUTE_TO_HELP</Tag>
-        <English>Order the unit to build roads to the selected tile</English>
-        <French>Ordonner à l'unité de construire des routes vers la case sélectionnée.</French>
-        <German>Befehlen Sie der Einheit, Straßen zum gewählten Geländefeld zu bauen.</German>
-        <Italian>Ordina all'unità di costruire strade fino alla casella selezionata</Italian>
-        <Spanish>Ordena a la unidad que construya carreteras hasta la casilla seleccionada.</Spanish>
+        <English>Order the unit to build the highest level of roads to the selected tile</English>
+        <German>Befehlen Sie der Einheit, Straßen (des besten verfügbaren Straßentyps) bis zum gewählten Geländefeld zu bauen.</German>
+        <Russian>Приказывает юниту строить [COLOR_HIGHLIGHT_TEXT]вымощенную камнем дорогу[COLOR_REVERT] к выбранной клетке</Russian>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_INTERFACEMODE_ROUTE_TO_ROAD</Tag>
+        <English>Route To Mode (simple road)</English>
+        <German>Straße nach-Modus (einfache Straße)</German>
+        <Russian>Строить дорогу до точки ([COLOR_HIGHLIGHT_TEXT]обычная дорога[COLOR_REVERT])</Russian>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_INTERFACEMODE_ROUTE_TO_ROAD_HELP</Tag>
+        <English>Order the unit to build simple roads to the selected tile</English>
+        <German>Befehlen Sie der Einheit, einfache Straßen bis zum gewählten Geländefeld zu bauen.</German>
+        <Russian>Приказывает юниту строить [COLOR_HIGHLIGHT_TEXT]обычную дорогу[COLOR_REVERT] к выбранной клетке</Russian>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_INTERFACEMODE_ROUTE_TO_COUNTRY_ROAD</Tag>
+        <English>Route To Mode (country road)</English>
+        <German>Straße nach-Modus (Landstraße)</German>
+        <Russian>Строить дорогу до точки ([COLOR_HIGHLIGHT_TEXT]гравийная дорога[COLOR_REVERT])</Russian>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_INTERFACEMODE_ROUTE_TO_COUNTRY_ROAD_HELP</Tag>
+        <English>Order the unit to build country roads to the selected tile</English>
+        <German>Befehlen Sie der Einheit, Landstraßen bis zum gewählten Geländefeld zu bauen.</German>
+        <Russian>Приказывает юниту строить [COLOR_HIGHLIGHT_TEXT]гравийную дорогу[COLOR_REVERT] к выбранной клетке</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_INTERFACEMODE_SAVE_PLOT_NIFS</Tag>

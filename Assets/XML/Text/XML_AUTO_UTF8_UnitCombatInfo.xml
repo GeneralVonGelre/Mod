@@ -23,6 +23,7 @@
             <Gender>Female</Gender>
             <Plural>0:1</Plural>
         </Spanish>
+        <Russian>Огнестрельные юниты</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_UNITCOMBAT_MELEE</Tag>
@@ -47,6 +48,7 @@
             <Gender>Female</Gender>
             <Plural>0:1</Plural>
         </Spanish>
+        <Russian>Рукопашные юниты</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_UNITCOMBAT_MOUNTED</Tag>
@@ -71,6 +73,7 @@
             <Gender>Female</Gender>
             <Plural>0:1</Plural>
         </Spanish>
+        <Russian>Конные юниты</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_UNITCOMBAT_NAVAL_MILITARY</Tag>
@@ -80,7 +83,7 @@
             <Plural>0</Plural>
         </English>
         <French>
-            <Text>War Ships</Text>
+            <Text>Navires de guerre</Text>
             <Gender>Female</Gender>
             <Plural>0</Plural>
         </French>
@@ -99,6 +102,7 @@
             <Gender>Female</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Боевые корабли</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_UNITCOMBAT_NAVAL_PIRACY</Tag>
@@ -108,9 +112,9 @@
             <Plural>0</Plural>
         </English>
         <French>
-            <Text>Corsairs</Text>
-            <Gender>Female</Gender>
-            <Plural>0</Plural>
+            <Text>Navires pirates</Text>
+            <Gender>Male</Gender>
+            <Plural>1</Plural>
         </French>
         <German>
             <Text>Piratenschiffe</Text>
@@ -127,6 +131,7 @@
             <Gender>Female</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Пираты</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_UNITCOMBAT_NAVAL_TRADE</Tag>
@@ -136,8 +141,8 @@
             <Plural>0</Plural>
         </English>
         <French>
-            <Text>Merchant Ships</Text>
-            <Gender>Female</Gender>
+            <Text>Navires de commerce</Text>
+            <Gender>Male</Gender>
             <Plural>0</Plural>
         </French>
         <German>
@@ -155,6 +160,7 @@
             <Gender>Female</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Торговые корабли</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_UNITCOMBAT_SIEGE</Tag>
@@ -179,5 +185,6 @@
             <Gender>Female</Gender>
             <Plural>0:1</Plural>
         </Spanish>
+        <Russian>Осадные орудия</Russian>
     </TEXT>
 </Civ4GameText>

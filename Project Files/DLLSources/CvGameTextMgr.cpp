@@ -831,7 +831,7 @@ void CvGameTextMgr::setUnitHelp(CvWStringBuffer &szString, const CvUnit* pUnit, 
 			if (pUnit->getDomainType() == DOMAIN_LAND && pUnit->cargoSpace() == 6)
 			{
 				szString.append(NEWLINE);
-				szString.append(gDLL->getText("TXT_KEY_UNIT_TRAVEL_RAILROAD_ONLY"));
+				szString.append(gDLL->getText("TXT_KEY_UNIT_TRAVEL_PLASTERED_ROAD_ONLY"));
 			}
 			// R&R, ray, END Logic for Trains
 
@@ -1526,7 +1526,10 @@ void CvGameTextMgr::setPlotListHelp(CvWStringBuffer &szString, const CvPlot* pPl
 							CvUnit* pLoopUnit = ::getUnit(pUnitNode->m_data);
 							pUnitNode = pHeadGroup->nextUnitNode(pUnitNode);
 
-							iAverageDamage += (pLoopUnit->getDamage() * pLoopUnit->maxHitPoints()) / 100;
+							if (pLoopUnit != NULL)
+							{
+								iAverageDamage += (pLoopUnit->getDamage() * pLoopUnit->maxHitPoints()) / 100;
+							}
 						}
 						iAverageDamage /= pHeadGroup->getNumUnits();
 						if (iAverageDamage > 0)
@@ -1574,17 +1577,19 @@ void CvGameTextMgr::setPlotListHelp(CvWStringBuffer &szString, const CvPlot* pPl
 						{
 							switch (eMissionType)
 							{
-							case MISSION_MOVE_TO:
-							case MISSION_ROUTE_TO:
-								pMissionPlot =  GC.getMapINLINE().plotINLINE(pHeadGroup->getMissionData1(0), pHeadGroup->getMissionData2(0));
-								break;
+								case MISSION_MOVE_TO:
+								case MISSION_ROUTE_TO:
+								case MISSION_ROUTE_TO_ROAD:
+								case MISSION_ROUTE_TO_COUNTRY_ROAD:
+									pMissionPlot =  GC.getMap().plotINLINE(pHeadGroup->getMissionData1(0), pHeadGroup->getMissionData2(0));
+									break;
 
-							case MISSION_MOVE_TO_UNIT:
-								if (pMissionUnit != NULL)
-								{
-									pMissionPlot = pMissionUnit->plot();
-								}
-								break;
+								case MISSION_MOVE_TO_UNIT:
+									if (pMissionUnit != NULL)
+									{
+										pMissionPlot = pMissionUnit->plot();
+									}
+									break;
 							}
 						}
 
@@ -2798,7 +2803,7 @@ void CvGameTextMgr::setPlotHelp(CvWStringBuffer& szString, CvPlot* pPlot)
 			}
 			else
 			{
-				bool bWorkingPlot = pCity->isUnitWorkingPlot(pPlot);
+				bool bWorkingPlot = pCity->isPlotProducingYields(pPlot);
 
 				if (bWorkingPlot)
 					szTempBuffer.Format( SETCOLR L"\n%s is working" ENDCOLR, TEXT_COLOR("COLOR_ALT_HIGHLIGHT_TEXT"), pCity->getName().GetCString());
@@ -3061,6 +3066,15 @@ void CvGameTextMgr::setPlotHelp(CvWStringBuffer& szString, CvPlot* pPlot)
 				szString.append(gDLL->getText("TXT_KEY_PLOT_HELP_IMPROVEMENT_STORAGE", iStorageModifierForCity));
 			}
 			// WTP, ray, Improvements give Bonus to their City - PART 3 - END
+
+			// WTP, ray, Plot Heal Modifier for Improvements - START
+			if (GC.getImprovementInfo(eImprovement).getHealModifier() > 0)
+			{
+				int iHealModifier = GC.getImprovementInfo(eImprovement).getHealModifier();
+				szString.append(NEWLINE);
+				szString.append(gDLL->getText("TXT_KEY_IMPROVEMENT_HEAL_MODIFIER",iHealModifier));
+			}
+			// WTP, ray, Plot Heal Modifier for Improvements - END
 		}
 
 		// WTP, check Harbour System also for Plots with City - START
@@ -3304,12 +3318,12 @@ void CvGameTextMgr::setCityPlotYieldValueString(CvWStringBuffer &szString, CvCit
 	CvPlot* pPlot = NULL;
 
 	if (iIndex >= 0 && iIndex < NUM_CITY_PLOTS)
-		pPlot = pCity->getCityIndexPlot(iIndex);
+		pPlot = pCity->getCityIndexPlot((CityPlotTypes)iIndex);
 
 	if (pPlot != NULL)
 	{
 		CvCityAI* pCityAI = static_cast<CvCityAI*>(pCity);
-		bool bWorkingPlot = pCity->isUnitWorkingPlot(iIndex);
+		bool bWorkingPlot = pCity->isPlotProducingYields((CityPlotTypes)iIndex);
 
 		int iValue = pCityAI->AI_plotValue(pPlot, bAvoidGrowth, /*bRemove*/ bWorkingPlot, bIgnoreFood, bIgnoreGrowth);
 
@@ -3349,7 +3363,6 @@ void CvGameTextMgr::setYieldValueString(CvWStringBuffer &szString, int iValue, b
 void CvGameTextMgr::setCityBarHelp(CvWStringBuffer &szString, CvCity* pCity)
 {
 	PROFILE_FUNC();
-
 
 	szString.append(pCity->getName());
 
@@ -5445,7 +5458,7 @@ void CvGameTextMgr::setBasicUnitHelp(CvWStringBuffer &szBuffer, UnitTypes eUnit,
 	}
 
 	CvUnitInfo& kUnitInfo = GC.getUnitInfo(eUnit);
-	int unitClassIntToBeChecked = kUnitInfo.getUnitClassType();
+	const UnitClassTypes unitClassIntToBeChecked = kUnitInfo.getUnitClassType();
 
 	if (!bCivilopediaText)
 	{
@@ -5686,8 +5699,19 @@ void CvGameTextMgr::setBasicUnitHelp(CvWStringBuffer &szBuffer, UnitTypes eUnit,
 	// WTP, ray, Construction Supplies - START
 	if (kUnitInfo.getProductionWhenUsed() > 0)
 	{
+		int iProductionSuppliesToReceive = kUnitInfo.getProductionWhenUsed();
+
+		iProductionSuppliesToReceive *= GC.getDefineINT("UNIT_PRODUCTION_PERCENT");
+		iProductionSuppliesToReceive /= 100;
+
+		iProductionSuppliesToReceive *= GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getTrainPercent();
+		iProductionSuppliesToReceive /= 100;
+
+		iProductionSuppliesToReceive *= GC.getEraInfo(GC.getGameINLINE().getStartEra()).getTrainPercent();
+		iProductionSuppliesToReceive /= 100;
+
 		szBuffer.append(NEWLINE);
-		szBuffer.append(gDLL->getText("TXT_KEY_UNIT_GIVES_PRODUCTION_WHEN_USED", kUnitInfo.getProductionWhenUsed()));
+		szBuffer.append(gDLL->getText("TXT_KEY_UNIT_GIVES_PRODUCTION_WHEN_USED", iProductionSuppliesToReceive));
 	}
 	// WTP, ray, Construction Supplies - END
 
@@ -5757,14 +5781,14 @@ void CvGameTextMgr::setBasicUnitHelp(CvWStringBuffer &szBuffer, UnitTypes eUnit,
 		// WTP, ray, Capture Ship chance increase - END
 	}
 	//TAC Whaling, ray
-	if (unitClassIntToBeChecked == GC.getUNITCLASS_WHALING_BOAT())
+	if (unitClassIntToBeChecked == UNITCLASS_WHALING_BOAT)
 	{
 		szBuffer.append(NEWLINE);
 		szBuffer.append(gDLL->getText("TXT_KEY_UNIT_GATHER_BOAT_WHALING"));
 	}
 	//End TAC Whaling, ray
 	// R&R, ray, High Sea Fishing - START
-	if (unitClassIntToBeChecked == GC.getUNITCLASS_FISHING_BOAT())
+	if (unitClassIntToBeChecked == UNITCLASS_FISHING_BOAT)
 	{
 		szBuffer.append(NEWLINE);
 		szBuffer.append(gDLL->getText("TXT_KEY_UNIT_GATHER_BOAT_FISHING"));
@@ -5823,7 +5847,7 @@ void CvGameTextMgr::setBasicUnitHelp(CvWStringBuffer &szBuffer, UnitTypes eUnit,
 	if (kUnitInfo.getDomainType() == DOMAIN_LAND && kUnitInfo.getCargoSpace()== 6)
 	{
 		szBuffer.append(NEWLINE);
-		szBuffer.append(gDLL->getText("TXT_KEY_UNIT_TRAVEL_RAILROAD_ONLY"));
+		szBuffer.append(gDLL->getText("TXT_KEY_UNIT_TRAVEL_PLASTERED_ROAD_ONLY"));
 	}
 	// R&R, ray, END Logic for Trains
 
@@ -5861,6 +5885,13 @@ void CvGameTextMgr::setBasicUnitHelp(CvWStringBuffer &szBuffer, UnitTypes eUnit,
 		szBuffer.append(NEWLINE);
 		szBuffer.append(gDLL->getText("TXT_KEY_UNIT_FASTER_WORK_RATE", kUnitInfo.getWorkRateModifier()));
 	}
+	// WTP, ray, Scout Gold Modifier for Goodies and Chiefs at Unit - START
+	if (kUnitInfo.getGoldFromGoodiesAndChiefsModifier() != 0)
+	{
+		szBuffer.append(NEWLINE);
+		szBuffer.append(gDLL->getText("TXT_KEY_UNIT_MORE_GOLD_GOODIES_AND_CHIEFTAINS", kUnitInfo.getGoldFromGoodiesAndChiefsModifier()));
+	}
+	// WTP, ray, Scout Gold Modifier for Goodies and Chiefs at Unit - END
 	if (kUnitInfo.getMissionaryRateModifier() != 0)
 	{
 		szBuffer.append(NEWLINE);
@@ -6119,7 +6150,7 @@ void CvGameTextMgr::setUnitHelp(CvWStringBuffer &szBuffer, UnitTypes eUnit, bool
 	}
 
 	// test for unique unit
-	UnitClassTypes eUnitClass = (UnitClassTypes)GC.getUnitInfo(eUnit).getUnitClassType();
+	const UnitClassTypes eUnitClass = GC.getUnitInfo(eUnit).getUnitClassType();
 	UnitTypes eDefaultUnit = (UnitTypes)GC.getUnitClassInfo(eUnitClass).getDefaultUnitIndex();
 
 	if (NO_UNIT != eDefaultUnit && eDefaultUnit != eUnit)
@@ -6155,6 +6186,8 @@ void CvGameTextMgr::setUnitHelp(CvWStringBuffer &szBuffer, UnitTypes eUnit, bool
 			{
 				if (GC.getUnitInfo(eUnit).getYieldChange(eYield) > 0)
 				{
+					// WTP, ray, since it is cached / recalculated it needs to be recalculated here
+					pCity->updateSlaveWorkerProductionBonus();
 					iModifier = iModifier + pCity->getSlaveWorkerProductionBonus();
 				}
 			}
@@ -6391,17 +6424,17 @@ void CvGameTextMgr::setUnitHelp(CvWStringBuffer &szBuffer, UnitTypes eUnit, bool
 	{
 		if(NO_UNIT != eDefaultUnit && eDefaultUnit == eUnit)
 		{
-			for(int iI = 0; iI < GC.getNumUnitInfos(); ++iI)
+			for(UnitTypes eLoopUnit = FIRST_UNIT; eLoopUnit < NUM_UNIT_TYPES; ++eLoopUnit)
 			{
-				if(((UnitTypes)iI) == eUnit)
+				if(eLoopUnit == eUnit)
 				{
 					continue;
 				}
 
-				if(eUnitClass == ((UnitClassTypes)GC.getUnitInfo((UnitTypes)iI).getUnitClassType()))
+				if(eUnitClass == GC.getUnitInfo(eLoopUnit).getUnitClassType())
 				{
 					szBuffer.append(NEWLINE);
-					szBuffer.append(gDLL->getText("TXT_KEY_REPLACED_BY_UNIT", GC.getUnitInfo((UnitTypes)iI).getTextKeyWide()));
+					szBuffer.append(gDLL->getText("TXT_KEY_REPLACED_BY_UNIT", GC.getUnitInfo(eLoopUnit).getTextKeyWide()));
 				}
 			}
 		}
@@ -6664,6 +6697,12 @@ void CvGameTextMgr::setBuildingHelp(CvWStringBuffer &szBuffer, BuildingTypes eBu
 	{
 		szBuffer.append(NEWLINE);
 		szBuffer.append(gDLL->getText("TXT_KEY_BUILDING_YIELD_OVERFLOW_SELL_PERCENT", kBuilding.getStorageLossSellPercentage()));
+	}
+	
+	if (kBuilding.getUnlocksStorageLossTradeSettings())
+	{
+		szBuffer.append(NEWLINE);
+		szBuffer.append(gDLL->getText("TXT_KEY_BUILDING_UNLOCK_TRADESETTING"));
 	}
 
 	if (kBuilding.isWorksWater())
@@ -7293,6 +7332,36 @@ void CvGameTextMgr::setImprovementHelp(CvWStringBuffer &szBuffer, ImprovementTyp
 	}
 	if (bCivilopediaText)
 	{
+		//WTP, ray, show Plot Yield Requirmenet for Improvement - START
+		bool bRequiresTerrainYields = false;
+		bool bFirstRequiredYield = true;
+		CvWString szRequiredYieldsIconTempBuffer = "";
+		for (int iYield = 0; iYield < NUM_YIELD_TYPES; iYield++)
+		{
+			if (info.getPrereqNatureYield(iYield) > 0)
+			{
+				if (bFirstRequiredYield)
+				{
+					szRequiredYieldsIconTempBuffer.append(gDLL->getText("TXT_KEY_REQUIRED_TERRAIN_YIELDS_ICON_FIRST_BUFFER", GC.getYieldInfo((YieldTypes)iYield).getChar()));
+					bFirstRequiredYield = false;
+				}
+				// add a comma
+				else
+				{
+					szRequiredYieldsIconTempBuffer.append(gDLL->getText("TXT_KEY_REQUIRED_TERRAIN_YIELDS_ICON_BUFFER", GC.getYieldInfo((YieldTypes)iYield).getChar()));
+				}
+				// we have prerequired Terrain Yields
+				bRequiresTerrainYields = true;
+			}
+		}
+		
+		if (bRequiresTerrainYields)
+		{
+			szBuffer.append(NEWLINE);
+			szBuffer.append(gDLL->getText("TXT_KEY_REQUIRED_TERRAIN_YIELDS_TEXT") + szRequiredYieldsIconTempBuffer);
+		}
+		//WTP, ray, show Plot Yield Requirmenet for Improvement - END
+
 		if (info.isWater())
 		{
 			//WTP, ray, Large Rivers - START
@@ -7530,6 +7599,15 @@ void CvGameTextMgr::setImprovementHelp(CvWStringBuffer &szBuffer, ImprovementTyp
 		szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_LESS_GROWTH"));
 	}
 
+	// WTP, ray, Plot Heal Modifier for Improvements - START
+	if (info.getHealModifier() > 0)
+	{
+		szBuffer.append(NEWLINE);
+		int iHealModifier = info.getHealModifier();
+		szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_HEAL_MODIFIER",iHealModifier));
+	}
+	// WTP, ray, Plot Heal Modifier for Improvements - END
+
 	// Super Forts begin *text* *bombard*
 	/* todo revert
 	if (info.isBombardable() && (info.getDefenseModifier() > 0))
@@ -7576,7 +7654,7 @@ void CvGameTextMgr::setImprovementHelp(CvWStringBuffer &szBuffer, ImprovementTyp
 			int iPillage = info.getPillageGold();
 			iPillage *=iGrowthPercent;
 			iPillage /= 100;
-			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_PILLAGE_YIELDS",iPillage ));
+			szBuffer.append(gDLL->getText("TXT_KEY_IMPROVEMENT_PILLAGE_YIELDS",iPillage));
 		}
 	}
 }
@@ -8420,26 +8498,11 @@ void CvGameTextMgr::setYieldHelp(CvWStringBuffer &szBuffer, CvCity& city, YieldT
 		return;
 	}
 
-	int iBaseProduction = 0;
-
-	int iBuildingYield = 0;
-	// WTP, ray, refactored according to advice of Nightinggale
-	for (BuildingTypes eBuilding = FIRST_BUILDING; eBuilding < NUM_BUILDING_TYPES; ++eBuilding)
-	{
-		if (city.isHasBuilding(eBuilding))
-		{
-			iBuildingYield += GC.getBuildingInfo(eBuilding).getYieldChange(eYieldType);
-			iBuildingYield += city.getBuildingYieldChange((BuildingClassTypes)GC.getBuildingInfo(eBuilding).getBuildingClassType(), eYieldType);
-			iBuildingYield += owner.getBuildingYieldChange((BuildingClassTypes)GC.getBuildingInfo(eBuilding).getBuildingClassType(), eYieldType);
-		}
-	}
-
+	int iBuildingYield = city.yields().getBaseRawYieldProducedBuildings(eYieldType);
 	if (iBuildingYield != 0)
 	{
 		szBuffer.append(NEWLINE);
 		szBuffer.append(gDLL->getText("TXT_KEY_MISC_HELP_BUILDING_YIELD", iBuildingYield, info.getChar()));
-
-		iBaseProduction += iBuildingYield;
 	}
 
 	// WTP, ray, correcting Yield Help for Culture - missing Culture from Citizens - START
@@ -8459,6 +8522,8 @@ void CvGameTextMgr::setYieldHelp(CvWStringBuffer &szBuffer, CvCity& city, YieldT
 	std::vector< std::vector<int> > aaiProfessionYields;
 	aaiProfessionYields.resize(GC.getNumProfessionInfos());
 	
+	
+	int iBaseProduction = 0;
 	// Indoor professions
 	for (int i = 0; i < city.getPopulation(); ++i)
 	{
@@ -8486,13 +8551,15 @@ void CvGameTextMgr::setYieldHelp(CvWStringBuffer &szBuffer, CvCity& city, YieldT
 			}
 		}
 	}
+	FAssert(iBaseProduction == city.yields().getBaseRawYieldProducedIndoor(eYieldType));
+	
 
 	// From plots
-	int iPlotYield = 0;
+	iBaseProduction = 0;
 	int iCityPlotYield = 0;
 	for (int i = 0; i < NUM_CITY_PLOTS; ++i)
 	{
-		CvPlot* pPlot = city.getCityIndexPlot(i);
+		CvPlot* pPlot = city.getCityIndexPlot((CityPlotTypes)i);
 		if (pPlot != NULL)
 		{
 			if (i == CITY_HOME_PLOT)
@@ -8501,9 +8568,13 @@ void CvGameTextMgr::setYieldHelp(CvWStringBuffer &szBuffer, CvCity& city, YieldT
 			}
 			else
 			{	
-				CvUnit* pUnit = city.getUnitWorkingPlot(i);
+				CvUnit* pUnit = city.getUnitWorkingPlot((CityPlotTypes)i);
 				//WTP, ray, Slave Hunter and Slave Master - START
 				int Modifier = 100; 
+				
+				// WTP, ray, since it is cached / recalculated it needs to be recalculated here
+				city.updateSlaveWorkerProductionBonus();
+
 				int iSlaveWorkerProductionBonus = city.getSlaveWorkerProductionBonus(); 
 				if (NULL != pUnit && pUnit->getUnitInfo().LbD_canEscape() && iSlaveWorkerProductionBonus > 0)
 				{
@@ -8549,6 +8620,7 @@ void CvGameTextMgr::setYieldHelp(CvWStringBuffer &szBuffer, CvCity& city, YieldT
 			}
 		}
 	}
+	FAssert(iBaseProduction + iCityPlotYield == city.yields().getBaseRawYieldProducedPlots(eYieldType));
 
 	for (uint i = 0; i < aaiProfessionYields.size(); ++i)
 	{
@@ -8566,18 +8638,29 @@ void CvGameTextMgr::setYieldHelp(CvWStringBuffer &szBuffer, CvCity& city, YieldT
 	//city plot
 	if (iCityPlotYield > 0)
 	{
-		iBaseProduction += iCityPlotYield;
 		szBuffer.append(NEWLINE);
 		szBuffer.append(CvWString::format(gDLL->getText("TXT_KEY_MISC_FROM_CITY_YIELD", iCityPlotYield, info.getChar())));
 	}
 
-	FAssert(iBaseProduction == city.getBaseRawYieldProduced(eYieldType));
+	int iLeaderYield = city.yields().getBaseRawYieldProducedLeader(eYieldType);
+	if (iLeaderYield > 0)
+	{
+		szBuffer.append(NEWLINE);
+		szBuffer.append(CvWString::format(gDLL->getText("TXT_KEY_MISC_FROM_LEADER_YIELD", iLeaderYield, info.getChar())));
+	}
+
+	FAssert(city.yields().getBaseRawYieldProduced(eYieldType) == 
+		city.yields().getBaseRawYieldProducedIndoor(eYieldType)
+		+ city.yields().getBaseRawYieldProducedPlots(eYieldType)
+		+ city.yields().getBaseRawYieldProducedBuildings(eYieldType)
+		+ city.yields().getBaseRawYieldProducedLeader(eYieldType)
+	);
 
 	int aiYields[NUM_YIELD_TYPES];
 	int aiRawProducedYields[NUM_YIELD_TYPES];
 	int aiRawConsumedYields[NUM_YIELD_TYPES];
 	city.calculateNetYields(aiYields, aiRawProducedYields, aiRawConsumedYields);
-	int iUnproduced = city.getBaseRawYieldProduced(eYieldType) - aiRawProducedYields[eYieldType];
+	int iUnproduced = city.yields().getBaseRawYieldProduced(eYieldType) - aiRawProducedYields[eYieldType];
 	if (iUnproduced > 0)
 	{
 		// R&R, ray , MYCP partially based on code of Aymerick - START
@@ -8635,7 +8718,7 @@ void CvGameTextMgr::setYieldHelp(CvWStringBuffer &szBuffer, CvCity& city, YieldT
 		// R&R, ray , MYCP partially based on code of Aymerick - END
 	}
 
-	int iModifiedProduction = iBaseProduction;
+	int iModifiedProduction = city.yields().getBaseRawYieldProduced(eYieldType);
 	if (iBaseProduction != 0)
 	{
 		int iModifier = setCityYieldModifierString(szBuffer, eYieldType, city);
@@ -9111,7 +9194,7 @@ int CvGameTextMgr::setCityYieldModifierString(CvWStringBuffer& szBuffer, YieldTy
 
 	// WTP, ray, trying to fix Rebel Rate Modifier on Happiness for Balancing - START
 	// just if condition added
-	if (eYieldType != YIELD_HAPPINESS && eYieldType != YIELD_UNHAPPINESS)
+	if (eYieldType != YIELD_HAPPINESS && eYieldType != YIELD_UNHAPPINESS && eYieldType != YIELD_CRIME)
 	{
 		int iRebelMod = kCity.getRebelPercent() * GC.getMAX_REBEL_YIELD_MODIFIER() / 100;
 		if (0 != iRebelMod)
@@ -9442,8 +9525,11 @@ void CvGameTextMgr::setScoreHelp(CvWStringBuffer &szString, PlayerTypes ePlayer)
 		int iFatherScore = 0;
 		int iFather = player.getFatherScore();
 		int iMaxFather = GC.getGameINLINE().getMaxFather();
-		iFatherScore = (GC.getDefineINT("SCORE_FATHER_FACTOR") * iFather) / iMaxFather;
-
+		if (iMaxFather != 0)
+		{
+			iFatherScore = (GC.getDefineINT("SCORE_FATHER_FACTOR") * iFather) / iMaxFather;
+		}
+		
 		int iScoreTaxFactor = player.getScoreTaxFactor();
 		int iSubTotal = iPopScore + iLandScore + iFatherScore;
 		int iTotalScore = iSubTotal * iScoreTaxFactor / 100;
@@ -9554,7 +9640,7 @@ void CvGameTextMgr::setCitizenHelp(CvWStringBuffer &szString, const CvCity& kCit
 					}
 
 					szString.append(NEWLINE);
-					szString.append(gDLL->getText("TXT_KEY_SLAVE_PRODUCTION_WITHOUT_MODIFIER_CITIZENHELP",  GC.getYieldInfo(eProfessionYield).getTextKeyWide(), iYieldAmountWithoutModifier, iProfessionYieldChar));
+					szString.append(gDLL->getText("TXT_KEY_SLAVE_PRODUCTION_WITHOUT_MODIFIER_CITIZENHELP", kUnit.getNameKey(), iYieldAmountWithoutModifier, iProfessionYieldChar));
 					szString.append(NEWLINE);
 					szString.append(gDLL->getText("TXT_KEY_SLAVE_PRODUCTION_PERCENT_MODIFIER_CITIZENHELP", iSlaveWorkerProductionBonus));
 					szString.append(L"\n=======================\n");
@@ -9573,7 +9659,9 @@ void CvGameTextMgr::setCitizenHelp(CvWStringBuffer &szString, const CvCity& kCit
 				int iTotalYieldTimes100 = 0;
 				if (kUnit.getUnitInfo().LbD_canEscape() && iSlaveWorkerProductionBonus > 0  && kUnit.getUnitInfo().getYieldChange(eProfessionYield) > 0)
 				{
-					iTotalYieldTimes100 = (iModifier + iSlaveWorkerProductionBonus) * iYieldAmount;
+					// WTP, ray, fix for wrong Yield Display in total amount
+					// iTotalYieldTimes100 = (iModifier + iSlaveWorkerProductionBonus) * iYieldAmount;
+					iTotalYieldTimes100 = iYieldAmount * (100 + iSlaveWorkerProductionBonus) / 100 * iModifier;
 				}
 				else
 				{
@@ -9938,7 +10026,7 @@ void CvGameTextMgr::setEventHelp(CvWStringBuffer& szBuffer, EventTypes eEvent, i
 
 	CvCity* pCity = kActivePlayer.getCity(pTriggeredData->m_iCityId);
 	CvCity* pOtherPlayerCity = NULL;
-	CvPlot* pPlot = GC.getMapINLINE().plot(pTriggeredData->m_iPlotX, pTriggeredData->m_iPlotY);
+	CvPlot* pPlot = GC.getMap().plot(pTriggeredData->m_iPlotX, pTriggeredData->m_iPlotY);
 	CvUnit* pUnit = kActivePlayer.getUnit(pTriggeredData->m_iUnitId);
 
 	if (NO_PLAYER != pTriggeredData->m_eOtherPlayer)

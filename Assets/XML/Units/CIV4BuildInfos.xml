@@ -28,11 +28,32 @@
             <Button>Art\Interface\Game Hud\Actions\build_road_high_res.dds</Button>
         </BuildInfo>
         <BuildInfo>
+            <Type>BUILD_COUNTRY_ROAD</Type>
+            <Description>TXT_KEY_BUILD_COUNTRY_ROAD</Description>
+            <Help>TXT_KEY_BUILD_COUNTRY_ROAD_HELP</Help>
+            <iTime>400</iTime>
+            <iCost>20</iCost>
+            <bKill>0</bKill>
+            <ImprovementType>NONE</ImprovementType>
+            <PrereqTerrainType>NONE</PrereqTerrainType>
+            <ResultTerrainType>NONE</ResultTerrainType>
+            <ResultFeatureType>NONE</ResultFeatureType>
+            <RouteType>ROUTE_COUNTRY_ROAD</RouteType>
+            <EntityEvent>ENTITY_EVENT_SHOVEL</EntityEvent>
+            <FeatureStructs/>
+            <HotKey>KB_R</HotKey>
+            <bAltDown>0</bAltDown>
+            <bShiftDown>0</bShiftDown>
+            <bCtrlDown>0</bCtrlDown>
+            <iHotKeyPriority>0</iHotKeyPriority>
+            <Button>Art\Interface\Game Hud\Actions\build_country_road_high_res.dds</Button>
+        </BuildInfo>
+        <BuildInfo>
             <Type>BUILD_PLASTERED_ROAD</Type>
             <Description>TXT_KEY_BUILD_PLASTERED_ROAD</Description>
             <Help>TXT_KEY_BUILD_PLASTERED_ROAD_HELP</Help>
-            <iTime>400</iTime>
-            <iCost>20</iCost>
+            <iTime>500</iTime>
+            <iCost>40</iCost>
             <bKill>0</bKill>
             <ImprovementType>NONE</ImprovementType>
             <PrereqTerrainType>NONE</PrereqTerrainType>
@@ -42,32 +63,11 @@
             <EntityEvent>ENTITY_EVENT_SHOVEL</EntityEvent>
             <FeatureStructs/>
             <HotKey>KB_R</HotKey>
-            <bAltDown>0</bAltDown>
-            <bShiftDown>0</bShiftDown>
-            <bCtrlDown>0</bCtrlDown>
-            <iHotKeyPriority>0</iHotKeyPriority>
-            <Button>Art\Interface\Game Hud\Actions\build_plastered_road_high_res.dds</Button>
-        </BuildInfo>
-        <BuildInfo>
-            <Type>BUILD_RAILROAD</Type>
-            <Description>TXT_KEY_BUILD_RAILROAD</Description>
-            <Help>TXT_KEY_BUILD_RAILROAD_HELP</Help>
-            <iTime>500</iTime>
-            <iCost>40</iCost>
-            <bKill>0</bKill>
-            <ImprovementType>NONE</ImprovementType>
-            <PrereqTerrainType>NONE</PrereqTerrainType>
-            <ResultTerrainType>NONE</ResultTerrainType>
-            <ResultFeatureType>NONE</ResultFeatureType>
-            <RouteType>ROUTE_RAILROAD</RouteType>
-            <EntityEvent>ENTITY_EVENT_SHOVEL</EntityEvent>
-            <FeatureStructs/>
-            <HotKey>KB_R</HotKey>
             <bAltDown>1</bAltDown>
             <bShiftDown>0</bShiftDown>
             <bCtrlDown>0</bCtrlDown>
             <iHotKeyPriority>0</iHotKeyPriority>
-            <Button>Art\Interface\Game Hud\Actions\build_railroad_high_res.dds</Button>
+            <Button>Art\Interface\Game Hud\Actions\build_plastered_road_high_res.dds</Button>
         </BuildInfo>
         <BuildInfo>
             <Type>BUILD_REMOVE_ROAD</Type>
@@ -205,6 +205,17 @@
                 </FeatureStruct>
                 <FeatureStruct>
                     <FeatureType>FEATURE_LUSHGRASS</FeatureType>
+                    <iTime>100</iTime>
+                    <Yields>
+                        <Yield>
+                            <YieldType>YIELD_FOOD</YieldType>
+                            <iYield>10</iYield>
+                        </Yield>
+                    </Yields>
+                    <bRemove>1</bRemove>
+                </FeatureStruct>
+                <FeatureStruct>
+                    <FeatureType>FEATURE_WILD_FLOWERS</FeatureType>
                     <iTime>100</iTime>
                     <Yields>
                         <Yield>
@@ -424,6 +435,17 @@
                     <bRemove>1</bRemove>
                 </FeatureStruct>
                 <FeatureStruct>
+                    <FeatureType>FEATURE_WILD_FLOWERS</FeatureType>
+                    <iTime>100</iTime>
+                    <Yields>
+                        <Yield>
+                            <YieldType>YIELD_FOOD</YieldType>
+                            <iYield>10</iYield>
+                        </Yield>
+                    </Yields>
+                    <bRemove>1</bRemove>
+                </FeatureStruct>
+                <FeatureStruct>
                     <FeatureType>FEATURE_MEADOW</FeatureType>
                     <iTime>100</iTime>
                     <Yields>
@@ -633,6 +655,17 @@
                     <bRemove>1</bRemove>
                 </FeatureStruct>
                 <FeatureStruct>
+                    <FeatureType>FEATURE_WILD_FLOWERS</FeatureType>
+                    <iTime>100</iTime>
+                    <Yields>
+                        <Yield>
+                            <YieldType>YIELD_FOOD</YieldType>
+                            <iYield>10</iYield>
+                        </Yield>
+                    </Yields>
+                    <bRemove>1</bRemove>
+                </FeatureStruct>
+                <FeatureStruct>
                     <FeatureType>FEATURE_MEADOW</FeatureType>
                     <iTime>100</iTime>
                     <Yields>
@@ -775,7 +808,7 @@
             <EntityEvent>ENTITY_EVENT_BUILD</EntityEvent>
             <FeatureStructs/>
             <HotKey>KB_O</HotKey>
-            <bAltDown>0</bAltDown>
+            <bAltDown>1</bAltDown>
             <bShiftDown>0</bShiftDown>
             <bCtrlDown>0</bCtrlDown>
             <iHotKeyPriority>0</iHotKeyPriority>
@@ -927,6 +960,17 @@
                     <bRemove>1</bRemove>
                 </FeatureStruct>
                 <FeatureStruct>
+                    <FeatureType>FEATURE_WILD_FLOWERS</FeatureType>
+                    <iTime>100</iTime>
+                    <Yields>
+                        <Yield>
+                            <YieldType>YIELD_FOOD</YieldType>
+                            <iYield>10</iYield>
+                        </Yield>
+                    </Yields>
+                    <bRemove>1</bRemove>
+                </FeatureStruct>
+                <FeatureStruct>
                     <FeatureType>FEATURE_MEADOW</FeatureType>
                     <iTime>100</iTime>
                     <Yields>
@@ -951,17 +995,6 @@
                 <FeatureStruct>
                     <FeatureType>FEATURE_SWAMP</FeatureType>
                     <iTime>600</iTime>
-                    <Yields>
-                        <Yield>
-                            <YieldType>YIELD_LUMBER</YieldType>
-                            <iYield>10</iYield>
-                        </Yield>
-                    </Yields>
-                    <bRemove>1</bRemove>
-                </FeatureStruct>
-                <FeatureStruct>
-                    <FeatureType>FEATURE_BOG</FeatureType>
-                    <iTime>400</iTime>
                     <Yields>
                         <Yield>
                             <YieldType>YIELD_LUMBER</YieldType>
@@ -1158,6 +1191,17 @@
                     <bRemove>1</bRemove>
                 </FeatureStruct>
                 <FeatureStruct>
+                    <FeatureType>FEATURE_WILD_FLOWERS</FeatureType>
+                    <iTime>100</iTime>
+                    <Yields>
+                        <Yield>
+                            <YieldType>YIELD_FOOD</YieldType>
+                            <iYield>10</iYield>
+                        </Yield>
+                    </Yields>
+                    <bRemove>1</bRemove>
+                </FeatureStruct>
+                <FeatureStruct>
                     <FeatureType>FEATURE_MEADOW</FeatureType>
                     <iTime>100</iTime>
                     <Yields>
@@ -1182,17 +1226,6 @@
                 <FeatureStruct>
                     <FeatureType>FEATURE_SWAMP</FeatureType>
                     <iTime>600</iTime>
-                    <Yields>
-                        <Yield>
-                            <YieldType>YIELD_LUMBER</YieldType>
-                            <iYield>10</iYield>
-                        </Yield>
-                    </Yields>
-                    <bRemove>1</bRemove>
-                </FeatureStruct>
-                <FeatureStruct>
-                    <FeatureType>FEATURE_BOG</FeatureType>
-                    <iTime>400</iTime>
                     <Yields>
                         <Yield>
                             <YieldType>YIELD_LUMBER</YieldType>
@@ -1357,6 +1390,17 @@
                 </FeatureStruct>
                 <FeatureStruct>
                     <FeatureType>FEATURE_LUSHGRASS</FeatureType>
+                    <iTime>100</iTime>
+                    <Yields>
+                        <Yield>
+                            <YieldType>YIELD_FOOD</YieldType>
+                            <iYield>10</iYield>
+                        </Yield>
+                    </Yields>
+                    <bRemove>1</bRemove>
+                </FeatureStruct>
+                <FeatureStruct>
+                    <FeatureType>FEATURE_WILD_FLOWERS</FeatureType>
                     <iTime>100</iTime>
                     <Yields>
                         <Yield>
@@ -1576,6 +1620,17 @@
                     <bRemove>1</bRemove>
                 </FeatureStruct>
                 <FeatureStruct>
+                    <FeatureType>FEATURE_WILD_FLOWERS</FeatureType>
+                    <iTime>100</iTime>
+                    <Yields>
+                        <Yield>
+                            <YieldType>YIELD_FOOD</YieldType>
+                            <iYield>10</iYield>
+                        </Yield>
+                    </Yields>
+                    <bRemove>1</bRemove>
+                </FeatureStruct>
+                <FeatureStruct>
                     <FeatureType>FEATURE_MEADOW</FeatureType>
                     <iTime>100</iTime>
                     <Yields>
@@ -1775,6 +1830,17 @@
                 </FeatureStruct>
                 <FeatureStruct>
                     <FeatureType>FEATURE_LUSHGRASS</FeatureType>
+                    <iTime>100</iTime>
+                    <Yields>
+                        <Yield>
+                            <YieldType>YIELD_FOOD</YieldType>
+                            <iYield>10</iYield>
+                        </Yield>
+                    </Yields>
+                    <bRemove>1</bRemove>
+                </FeatureStruct>
+                <FeatureStruct>
+                    <FeatureType>FEATURE_WILD_FLOWERS</FeatureType>
                     <iTime>100</iTime>
                     <Yields>
                         <Yield>
@@ -2016,6 +2082,17 @@
                     <bRemove>1</bRemove>
                 </FeatureStruct>
                 <FeatureStruct>
+                    <FeatureType>FEATURE_WILD_FLOWERS</FeatureType>
+                    <iTime>100</iTime>
+                    <Yields>
+                        <Yield>
+                            <YieldType>YIELD_FOOD</YieldType>
+                            <iYield>10</iYield>
+                        </Yield>
+                    </Yields>
+                    <bRemove>1</bRemove>
+                </FeatureStruct>
+                <FeatureStruct>
                     <FeatureType>FEATURE_MEADOW</FeatureType>
                     <iTime>100</iTime>
                     <Yields>
@@ -2040,17 +2117,6 @@
                 <FeatureStruct>
                     <FeatureType>FEATURE_SWAMP</FeatureType>
                     <iTime>600</iTime>
-                    <Yields>
-                        <Yield>
-                            <YieldType>YIELD_LUMBER</YieldType>
-                            <iYield>10</iYield>
-                        </Yield>
-                    </Yields>
-                    <bRemove>1</bRemove>
-                </FeatureStruct>
-                <FeatureStruct>
-                    <FeatureType>FEATURE_BOG</FeatureType>
-                    <iTime>400</iTime>
                     <Yields>
                         <Yield>
                             <YieldType>YIELD_LUMBER</YieldType>
@@ -2237,6 +2303,17 @@
                 </FeatureStruct>
                 <FeatureStruct>
                     <FeatureType>FEATURE_LUSHGRASS</FeatureType>
+                    <iTime>100</iTime>
+                    <Yields>
+                        <Yield>
+                            <YieldType>YIELD_FOOD</YieldType>
+                            <iYield>10</iYield>
+                        </Yield>
+                    </Yields>
+                    <bRemove>1</bRemove>
+                </FeatureStruct>
+                <FeatureStruct>
+                    <FeatureType>FEATURE_WILD_FLOWERS</FeatureType>
                     <iTime>100</iTime>
                     <Yields>
                         <Yield>
@@ -2874,6 +2951,17 @@
                     <bRemove>1</bRemove>
                 </FeatureStruct>
                 <FeatureStruct>
+                    <FeatureType>FEATURE_WILD_FLOWERS</FeatureType>
+                    <iTime>100</iTime>
+                    <Yields>
+                        <Yield>
+                            <YieldType>YIELD_FOOD</YieldType>
+                            <iYield>10</iYield>
+                        </Yield>
+                    </Yields>
+                    <bRemove>1</bRemove>
+                </FeatureStruct>
+                <FeatureStruct>
                     <FeatureType>FEATURE_MEADOW</FeatureType>
                     <iTime>100</iTime>
                     <Yields>
@@ -3105,6 +3193,17 @@
                     <bRemove>1</bRemove>
                 </FeatureStruct>
                 <FeatureStruct>
+                    <FeatureType>FEATURE_WILD_FLOWERS</FeatureType>
+                    <iTime>100</iTime>
+                    <Yields>
+                        <Yield>
+                            <YieldType>YIELD_FOOD</YieldType>
+                            <iYield>10</iYield>
+                        </Yield>
+                    </Yields>
+                    <bRemove>1</bRemove>
+                </FeatureStruct>
+                <FeatureStruct>
                     <FeatureType>FEATURE_MEADOW</FeatureType>
                     <iTime>100</iTime>
                     <Yields>
@@ -3326,6 +3425,17 @@
                 </FeatureStruct>
                 <FeatureStruct>
                     <FeatureType>FEATURE_LUSHGRASS</FeatureType>
+                    <iTime>100</iTime>
+                    <Yields>
+                        <Yield>
+                            <YieldType>YIELD_FOOD</YieldType>
+                            <iYield>10</iYield>
+                        </Yield>
+                    </Yields>
+                    <bRemove>1</bRemove>
+                </FeatureStruct>
+                <FeatureStruct>
+                    <FeatureType>FEATURE_WILD_FLOWERS</FeatureType>
                     <iTime>100</iTime>
                     <Yields>
                         <Yield>
@@ -3655,6 +3765,17 @@
             <FeatureStructs>
                 <FeatureStruct>
                     <FeatureType>FEATURE_LUSHGRASS</FeatureType>
+                    <iTime>100</iTime>
+                    <Yields>
+                        <Yield>
+                            <YieldType>YIELD_FOOD</YieldType>
+                            <iYield>10</iYield>
+                        </Yield>
+                    </Yields>
+                    <bRemove>1</bRemove>
+                </FeatureStruct>
+                <FeatureStruct>
+                    <FeatureType>FEATURE_WILD_FLOWERS</FeatureType>
                     <iTime>100</iTime>
                     <Yields>
                         <Yield>

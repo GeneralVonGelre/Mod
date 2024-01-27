@@ -1,171 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Civ4GameText xmlns="http://www.firaxis.com">
     <TEXT>
-        <Tag>TXT_KEY_WORLDSIZE_GIGANTIC</Tag>
-        <English>Gigantic</English>
-        <French>
-            <Text>Gigantesque</Text>
-            <Gender>Female</Gender>
-            <Plural>0</Plural>
-        </French>
-        <German>
-            <Text>Gigantisch</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </German>
-        <Italian>
-            <Text>Gigantesco</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </Italian>
-        <Spanish>
-            <Text>Gigantesco</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </Spanish>
+        <Tag>TXT_KEY_WORLDSIZE_TINY</Tag>
+        <English>Tiny</English>
+        <French>Minuscule</French>
+        <German>Winzig</German>
+        <Italian>Minuscolo</Italian>
+        <Spanish>Diminuto</Spanish>
+        <Russian>Крошечный</Russian>
     </TEXT>
     <TEXT>
-        <Tag>TXT_KEY_WORLDSIZE_GIGANTIC_HELP</Tag>
-        <English>????</English>
-    </TEXT>
-    <TEXT>
-        <Tag>TXT_KEY_WORLDSIZE_HUGE</Tag>
-        <English>Huge</English>
-        <French>
-            <Text>Immense</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </French>
-        <German>
-            <Text>Riesig</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </German>
-        <Italian>
-            <Text>Enorme</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </Italian>
-        <Spanish>
-            <Text>Enorme</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </Spanish>
-    </TEXT>
-    <TEXT>
-        <Tag>TXT_KEY_WORLDSIZE_HUGE_HELP</Tag>
-        <English>????</English>
-    </TEXT>
-    <TEXT>
-        <Tag>TXT_KEY_WORLDSIZE_LARGE</Tag>
-        <English>Large</English>
-        <French>
-            <Text>Grand</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </French>
-        <German>
-            <Text>Groß</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </German>
-        <Italian>
-            <Text>Grande</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </Italian>
-        <Spanish>
-            <Text>Grande</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </Spanish>
-    </TEXT>
-    <TEXT>
-        <Tag>TXT_KEY_WORLDSIZE_LARGE_HELP</Tag>
-        <English>????</English>
+        <Tag>TXT_KEY_WORLDSIZE_TINY_HELP</Tag>
+        <English>22x36</English>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_WORLDSIZE_SMALL</Tag>
         <English>Small</English>
-        <French>
-            <Text>Petit</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </French>
-        <German>
-            <Text>Klein</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </German>
-        <Italian>
-            <Text>Piccolo</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </Italian>
-        <Spanish>
-            <Text>Pequeño</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </Spanish>
+        <French>Petit</French>
+        <German>Klein</German>
+        <Italian>Piccolo</Italian>
+        <Spanish>Pequeño</Spanish>
+        <Russian>Маленький</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_WORLDSIZE_SMALL_HELP</Tag>
-        <English>????</English>
+        <English>30x48</English>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_WORLDSIZE_STANDARD</Tag>
         <English>Standard</English>
-        <French>
-            <Text>Normal</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </French>
-        <German>
-            <Text>Standard</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </German>
-        <Italian>
-            <Text>Normale</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </Italian>
-        <Spanish>
-            <Text>Estándar</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </Spanish>
+        <French>Normal</French>
+        <German>Standard</German>
+        <Italian>Normale</Italian>
+        <Spanish>Estándar</Spanish>
+        <Russian>Стандартный</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_WORLDSIZE_STANDARD_HELP</Tag>
-        <English>????</English>
+        <English>40x64</English>
     </TEXT>
     <TEXT>
-        <Tag>TXT_KEY_WORLDSIZE_TINY</Tag>
-        <English>Tiny</English>
-        <French>
-            <Text>Minuscule</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </French>
-        <German>
-            <Text>Winzig</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </German>
-        <Italian>
-            <Text>Minuscolo</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </Italian>
-        <Spanish>
-            <Text>Diminuto</Text>
-            <Gender>Male</Gender>
-            <Plural>0</Plural>
-        </Spanish>
+        <Tag>TXT_KEY_WORLDSIZE_LARGE</Tag>
+        <English>Large</English>
+        <French>Grand</French>
+        <German>Groß</German>
+        <Italian>Grande</Italian>
+        <Spanish>Grande</Spanish>
+        <Russian>Большой</Russian>
     </TEXT>
     <TEXT>
-        <Tag>TXT_KEY_WORLDSIZE_TINY_HELP</Tag>
-        <English>????</English>
+        <Tag>TXT_KEY_WORLDSIZE_LARGE_HELP</Tag>
+        <English>50x78</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_WORLDSIZE_HUGE</Tag>
+        <English>Huge</English>
+        <French>Immense</French>
+        <German>Riesig</German>
+        <Italian>Enorme</Italian>
+        <Spanish>Enorme</Spanish>
+        <Russian>Огромный</Russian>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_WORLDSIZE_HUGE_HELP</Tag>
+        <English>58x100</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_WORLDSIZE_MASSIVE</Tag>
+        <English>Massive</English>
+        <French>Massive</French>
+        <German>Massiv</German>
+        <Italian>Massicce</Italian>
+        <Spanish>Masivo</Spanish>
+        <Russian>Массивный</Russian>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_WORLDSIZE_MASSIVE_HELP</Tag>
+        <English>85x137</English>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_WORLDSIZE_GIGANTIC</Tag>
+        <English>Gigantic</English>
+        <French>Gigantesque</French>
+        <German>Gigantisch</German>
+        <Italian>Gigantesco</Italian>
+        <Spanish>Gigantesco</Spanish>
+        <Russian>Гигантский</Russian>
+    </TEXT>
+    <TEXT>
+        <Tag>TXT_KEY_WORLDSIZE_GIGANTIC_HELP</Tag>
+        <English>127x184</English>
     </TEXT>
 </Civ4GameText>

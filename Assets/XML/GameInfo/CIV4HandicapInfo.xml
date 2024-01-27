@@ -52,6 +52,7 @@
             <iMaxGoldAskPercent>20</iMaxGoldAskPercent>
             <iMinGoldAskPercent>10</iMinGoldAskPercent>
             <iNBMOD_REF_Weight>50</iNBMOD_REF_Weight>
+            <iOppressometerGrowthHandicap>50</iOppressometerGrowthHandicap>
             <Waves>
                 <Wave>10</Wave>
                 <Wave>20</Wave>
@@ -118,6 +119,7 @@
                 <GoodyType>GOODY_SLAVE_MASTER</GoodyType>
                 <GoodyType>GOODY_CHRISTIAN_MISSIONARY</GoodyType>
                 <GoodyType>GOODY_FAILED_MISSIONARY</GoodyType>
+                <GoodyType>GOODY_FAILED_TRADER</GoodyType>
                 <GoodyType>GOODY_RANGER</GoodyType>
                 <GoodyType>GOODY_NATIVE_TRADER</GoodyType>
                 <GoodyType>GOODY_SHIPWRECKED</GoodyType>
@@ -219,10 +221,11 @@
             <iEuropePriceThresholdMultiplier>120</iEuropePriceThresholdMultiplier>
             <iNativePacifismPercent>90</iNativePacifismPercent>
             <iMissionFailureThresholdPercent>97</iMissionFailureThresholdPercent>
-            <iInitMaxTaxRate>50</iInitMaxTaxRate>
+            <iInitMaxTaxRate>45</iInitMaxTaxRate>
             <iMaxGoldAskPercent>30</iMaxGoldAskPercent>
             <iMinGoldAskPercent>10</iMinGoldAskPercent>
             <iNBMOD_REF_Weight>75</iNBMOD_REF_Weight>
+            <iOppressometerGrowthHandicap>75</iOppressometerGrowthHandicap>
             <Waves>
                 <Wave>10</Wave>
                 <Wave>20</Wave>
@@ -289,6 +292,7 @@
                 <GoodyType>GOODY_SLAVE_MASTER</GoodyType>
                 <GoodyType>GOODY_CHRISTIAN_MISSIONARY</GoodyType>
                 <GoodyType>GOODY_FAILED_MISSIONARY</GoodyType>
+                <GoodyType>GOODY_FAILED_TRADER</GoodyType>
                 <GoodyType>GOODY_RANGER</GoodyType>
                 <GoodyType>GOODY_NATIVE_TRADER</GoodyType>
                 <GoodyType>GOODY_SHIPWRECKED</GoodyType>
@@ -394,6 +398,7 @@
             <iMaxGoldAskPercent>40</iMaxGoldAskPercent>
             <iMinGoldAskPercent>20</iMinGoldAskPercent>
             <iNBMOD_REF_Weight>100</iNBMOD_REF_Weight>
+            <iOppressometerGrowthHandicap>100</iOppressometerGrowthHandicap>
             <Waves>
                 <Wave>10</Wave>
                 <Wave>30</Wave>
@@ -460,6 +465,7 @@
                 <GoodyType>GOODY_SLAVE_MASTER</GoodyType>
                 <GoodyType>GOODY_CHRISTIAN_MISSIONARY</GoodyType>
                 <GoodyType>GOODY_FAILED_MISSIONARY</GoodyType>
+                <GoodyType>GOODY_FAILED_TRADER</GoodyType>
                 <GoodyType>GOODY_RANGER</GoodyType>
                 <GoodyType>GOODY_NATIVE_TRADER</GoodyType>
                 <GoodyType>GOODY_SHIPWRECKED</GoodyType>
@@ -561,10 +567,11 @@
             <iEuropePriceThresholdMultiplier>90</iEuropePriceThresholdMultiplier>
             <iNativePacifismPercent>70</iNativePacifismPercent>
             <iMissionFailureThresholdPercent>91</iMissionFailureThresholdPercent>
-            <iInitMaxTaxRate>60</iInitMaxTaxRate>
+            <iInitMaxTaxRate>55</iInitMaxTaxRate>
             <iMaxGoldAskPercent>45</iMaxGoldAskPercent>
             <iMinGoldAskPercent>20</iMinGoldAskPercent>
             <iNBMOD_REF_Weight>110</iNBMOD_REF_Weight>
+            <iOppressometerGrowthHandicap>110</iOppressometerGrowthHandicap>
             <Waves>
                 <Wave>20</Wave>
                 <Wave>30</Wave>
@@ -631,6 +638,7 @@
                 <GoodyType>GOODY_SLAVE_MASTER</GoodyType>
                 <GoodyType>GOODY_CHRISTIAN_MISSIONARY</GoodyType>
                 <GoodyType>GOODY_FAILED_MISSIONARY</GoodyType>
+                <GoodyType>GOODY_FAILED_TRADER</GoodyType>
                 <GoodyType>GOODY_RANGER</GoodyType>
                 <GoodyType>GOODY_NATIVE_TRADER</GoodyType>
                 <GoodyType>GOODY_SHIPWRECKED</GoodyType>
@@ -732,10 +740,11 @@
             <iEuropePriceThresholdMultiplier>80</iEuropePriceThresholdMultiplier>
             <iNativePacifismPercent>60</iNativePacifismPercent>
             <iMissionFailureThresholdPercent>89</iMissionFailureThresholdPercent>
-            <iInitMaxTaxRate>65</iInitMaxTaxRate>
+            <iInitMaxTaxRate>60</iInitMaxTaxRate>
             <iMaxGoldAskPercent>50</iMaxGoldAskPercent>
             <iMinGoldAskPercent>25</iMinGoldAskPercent>
             <iNBMOD_REF_Weight>125</iNBMOD_REF_Weight>
+            <iOppressometerGrowthHandicap>125</iOppressometerGrowthHandicap>
             <Waves>
                 <Wave>20</Wave>
                 <Wave>30</Wave>
@@ -802,6 +811,7 @@
                 <GoodyType>GOODY_SLAVE_MASTER</GoodyType>
                 <GoodyType>GOODY_CHRISTIAN_MISSIONARY</GoodyType>
                 <GoodyType>GOODY_FAILED_MISSIONARY</GoodyType>
+                <GoodyType>GOODY_FAILED_TRADER</GoodyType>
                 <GoodyType>GOODY_RANGER</GoodyType>
                 <GoodyType>GOODY_NATIVE_TRADER</GoodyType>
                 <GoodyType>GOODY_SHIPWRECKED</GoodyType>
@@ -903,10 +913,11 @@
             <iEuropePriceThresholdMultiplier>70</iEuropePriceThresholdMultiplier>
             <iNativePacifismPercent>40</iNativePacifismPercent>
             <iMissionFailureThresholdPercent>87</iMissionFailureThresholdPercent>
-            <iInitMaxTaxRate>70</iInitMaxTaxRate>
+            <iInitMaxTaxRate>65</iInitMaxTaxRate>
             <iMaxGoldAskPercent>50</iMaxGoldAskPercent>
             <iMinGoldAskPercent>25</iMinGoldAskPercent>
             <iNBMOD_REF_Weight>150</iNBMOD_REF_Weight>
+            <iOppressometerGrowthHandicap>150</iOppressometerGrowthHandicap>
             <Waves>
                 <Wave>30</Wave>
                 <Wave>30</Wave>
@@ -973,6 +984,7 @@
                 <GoodyType>GOODY_SLAVE_MASTER</GoodyType>
                 <GoodyType>GOODY_CHRISTIAN_MISSIONARY</GoodyType>
                 <GoodyType>GOODY_FAILED_MISSIONARY</GoodyType>
+                <GoodyType>GOODY_FAILED_TRADER</GoodyType>
                 <GoodyType>GOODY_RANGER</GoodyType>
                 <GoodyType>GOODY_NATIVE_TRADER</GoodyType>
                 <GoodyType>GOODY_SHIPWRECKED</GoodyType>
@@ -1078,6 +1090,7 @@
             <iMaxGoldAskPercent>60</iMaxGoldAskPercent>
             <iMinGoldAskPercent>30</iMinGoldAskPercent>
             <iNBMOD_REF_Weight>175</iNBMOD_REF_Weight>
+            <iOppressometerGrowthHandicap>175</iOppressometerGrowthHandicap>
             <Waves>
                 <Wave>30</Wave>
                 <Wave>30</Wave>
@@ -1144,6 +1157,7 @@
                 <GoodyType>GOODY_SLAVE_MASTER</GoodyType>
                 <GoodyType>GOODY_CHRISTIAN_MISSIONARY</GoodyType>
                 <GoodyType>GOODY_FAILED_MISSIONARY</GoodyType>
+                <GoodyType>GOODY_FAILED_TRADER</GoodyType>
                 <GoodyType>GOODY_RANGER</GoodyType>
                 <GoodyType>GOODY_NATIVE_TRADER</GoodyType>
                 <GoodyType>GOODY_SHIPWRECKED</GoodyType>

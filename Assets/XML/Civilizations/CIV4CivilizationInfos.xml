@@ -354,6 +354,10 @@
                     <UnitClassType>UNITCLASS_CHRISTIAN_MISSIONARY</UnitClassType>
                     <UnitType>UNIT_CHRISTIAN_MISSIONARY_PROT</UnitType>
                 </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_DISTILLER</UnitClassType>
+                    <UnitType>UNIT_COLONIAL_DISTILLER</UnitType>
+                </Unit>
             </Units>
             <Professions>
                 <Profession>
@@ -784,6 +788,10 @@
                     <UnitClassType>UNITCLASS_PREACHER</UnitClassType>
                     <UnitType>UNIT_PRIEST</UnitType>
                 </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_FUR_TRADER</UnitClassType>
+                    <UnitType>UNIT_FRENCH_FURRIER</UnitType>
+                </Unit>
             </Units>
             <Professions>
                 <Profession>
@@ -1182,6 +1190,10 @@
                     <UnitClassType>UNITCLASS_PREACHER</UnitClassType>
                     <UnitType>UNIT_PRIEST</UnitType>
                 </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SCOUT</UnitClassType>
+                    <UnitType>UNIT_EXPLORADOR</UnitType>
+                </Unit>
             </Units>
             <Professions>
                 <Profession>
@@ -1533,6 +1545,10 @@
                     <UnitClassType>UNITCLASS_CHRISTIAN_MISSIONARY</UnitClassType>
                     <UnitType>UNIT_CHRISTIAN_MISSIONARY_PROT</UnitType>
                 </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CARPENTER</UnitClassType>
+                    <UnitType>UNIT_TIMMERMAN</UnitType>
+                </Unit>
             </Units>
             <Professions>
                 <Profession>
@@ -1858,6 +1874,10 @@
                     <UnitClassType>UNITCLASS_PREACHER</UnitClassType>
                     <UnitType>UNIT_PRIEST</UnitType>
                 </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_PROSPECTOR</UnitClassType>
+                    <UnitType>UNIT_ESCAVADOR</UnitType>
+                </Unit>
             </Units>
             <Professions>
                 <Profession>
@@ -1969,7 +1989,7 @@
                 <City>Fort Frederiksborg</City>
                 <City>Fredriksted</City>
                 <City>Christiansh&#229;b</City>
-                <City>Fort Christiansværn</City>
+                <City>Fort Christiansv&#230;rn</City>
                 <City>Jakobshavn</City>
                 <City>Frederiksh&#229;b</City>
                 <City>Fort Fredensborg</City>
@@ -2135,6 +2155,10 @@
                 <Unit>
                     <UnitClassType>UNITCLASS_CHRISTIAN_MISSIONARY</UnitClassType>
                     <UnitType>UNIT_CHRISTIAN_MISSIONARY_PROT</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_FISHERMAN</UnitClassType>
+                    <UnitType>UNIT_DANSK_FISKER</UnitType>
                 </Unit>
             </Units>
             <Professions>
@@ -2447,6 +2471,10 @@
                 <Unit>
                     <UnitClassType>UNITCLASS_CHRISTIAN_MISSIONARY</UnitClassType>
                     <UnitType>UNIT_CHRISTIAN_MISSIONARY_PROT</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_BLACKSMITH</UnitClassType>
+                    <UnitType>UNIT_JARNSMED</UnitType>
                 </Unit>
             </Units>
             <Professions>
@@ -2927,6 +2955,10 @@
                     <UnitClassType>UNITCLASS_CHRISTIAN_MISSIONARY</UnitClassType>
                     <UnitType>UNIT_RUSSIAN_MISSIONARY</UnitType>
                 </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_LUMBERJACK</UnitClassType>
+                    <UnitType>UNIT_SIBERIAN_LUMBERJACK</UnitType>
+                </Unit>
             </Units>
             <Professions>
                 <Profession>
@@ -3132,6 +3164,10 @@
                 <Unit>
                     <UnitClassType>UNITCLASS_REVOLTING_CRIMINAL</UnitClassType>
                     <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_DISTILLER</UnitClassType>
+                    <UnitType>UNIT_COLONIAL_DISTILLER</UnitType>
                 </Unit>
             </Units>
             <Professions>
@@ -3447,6 +3483,10 @@
                     <UnitClassType>UNITCLASS_REVOLTING_CRIMINAL</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_FUR_TRADER</UnitClassType>
+                    <UnitType>UNIT_FRENCH_FURRIER</UnitType>
+                </Unit>
             </Units>
             <Professions>
                 <Profession>
@@ -3757,6 +3797,10 @@
                 <Unit>
                     <UnitClassType>UNITCLASS_REVOLTING_CRIMINAL</UnitClassType>
                     <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SCOUT</UnitClassType>
+                    <UnitType>UNIT_EXPLORADOR</UnitType>
                 </Unit>
             </Units>
             <Professions>
@@ -4072,6 +4116,14 @@
                     <UnitClassType>UNITCLASS_REVOLTING_CRIMINAL</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CHRISTIAN_MISSIONARY</UnitClassType>
+                    <UnitType>UNIT_CHRISTIAN_MISSIONARY_PROT</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CARPENTER</UnitClassType>
+                    <UnitType>UNIT_TIMMERMAN</UnitType>
+                </Unit>
             </Units>
             <Professions>
                 <Profession>
@@ -4369,6 +4421,10 @@
                 <Unit>
                     <UnitClassType>UNITCLASS_REVOLTING_CRIMINAL</UnitClassType>
                     <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_PROSPECTOR</UnitClassType>
+                    <UnitType>UNIT_ESCAVADOR</UnitType>
                 </Unit>
             </Units>
             <Professions>
@@ -4669,6 +4725,10 @@
                     <UnitClassType>UNITCLASS_REVOLTING_CRIMINAL</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_FISHERMAN</UnitClassType>
+                    <UnitType>UNIT_DANSK_FISKER</UnitType>
+                </Unit>
             </Units>
             <Professions>
                 <Profession>
@@ -4968,6 +5028,10 @@
                 <Unit>
                     <UnitClassType>UNITCLASS_REVOLTING_CRIMINAL</UnitClassType>
                     <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_BLACKSMITH</UnitClassType>
+                    <UnitType>UNIT_JARNSMED</UnitType>
                 </Unit>
             </Units>
             <Professions>
@@ -5271,6 +5335,10 @@
                 <Unit>
                     <UnitClassType>UNITCLASS_REVOLTING_CRIMINAL</UnitClassType>
                     <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_LUMBERJACK</UnitClassType>
+                    <UnitType>UNIT_SIBERIAN_LUMBERJACK</UnitType>
                 </Unit>
             </Units>
             <Professions>
@@ -6024,6 +6092,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -6198,7 +6286,7 @@
                     <UnitClassType>UNITCLASS_CARPENTER</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
- 				<Unit>
+                <Unit>
                     <UnitClassType>UNITCLASS_BAKER</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
@@ -6209,8 +6297,8 @@
                 <Unit>
                     <UnitClassType>UNITCLASS_CHARCOAL_BURNER</UnitClassType>
                     <UnitType>NONE</UnitType>
-                </Unit>				
-				<Unit>
+                </Unit>
+                <Unit>
                     <UnitClassType>UNITCLASS_VETERAN</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
@@ -6356,6 +6444,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -7167,6 +7263,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -7503,6 +7619,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -8325,7 +8449,27 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
-			</Buildings>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+            </Buildings>
             <Units>
                 <Unit>
                     <UnitClassType>UNITCLASS_GREAT_GENERAL</UnitClassType>
@@ -8657,6 +8801,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -9482,6 +9634,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -9814,6 +9986,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -10634,6 +10814,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -10970,6 +11170,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -11781,6 +11989,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -12117,6 +12345,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -12925,6 +13161,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -13261,6 +13517,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -14069,6 +14333,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -14405,6 +14689,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -15238,6 +15530,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -15570,6 +15882,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -16395,6 +16715,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -16727,6 +17067,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -17541,6 +17889,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -17873,6 +18241,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -18704,6 +19080,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -19040,6 +19436,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -19852,6 +20256,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -20188,6 +20612,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -21006,6 +21438,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -21338,6 +21790,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -22157,6 +22617,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -22489,6 +22969,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -23301,6 +23789,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -23637,6 +24145,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -24449,6 +24965,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -24785,6 +25321,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -25606,6 +26150,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -25942,6 +26506,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -26738,6 +27310,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -27070,6 +27662,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -27895,6 +28495,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -28227,6 +28847,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -29038,6 +29666,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -29370,6 +30018,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -30173,6 +30829,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -30509,6 +31185,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -31315,6 +31999,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -31651,6 +32355,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -32452,6 +33164,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -32784,6 +33516,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -33595,6 +34335,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -33931,6 +34691,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -34738,6 +35506,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -35074,6 +35862,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -35878,6 +36674,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -36214,6 +37030,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -37021,6 +37845,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -37353,6 +38197,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -38160,6 +39012,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -38492,6 +39364,14 @@
                 </Unit>
                 <Unit>
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
             </Units>
@@ -39293,6 +40173,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -39627,6 +40527,14 @@
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
             </Units>
             <Professions>
                 <Profession>
@@ -39868,105 +40776,6 @@
             <DerivativeCiv>NONE</DerivativeCiv>
             <CivilizationSelectionSound>AS3D_NATIVE_AMERICA_SELECT</CivilizationSelectionSound>
             <CivilizationActionSound>AS3D_NATIVE_AMERICA_ORDER</CivilizationActionSound>
-        </CivilizationInfo>
-        <CivilizationInfo>
-            <Type>CIVILIZATION_BARBARIAN</Type>
-            <Description>TXT_KEY_CIVILIZATION_BARBARIAN</Description>
-            <ShortDescription>TXT_KEY_CIV_BARBARIAN_SHORT_DESC</ShortDescription>
-            <Adjective>TXT_KEY_CIV_BARBARIAN_ADJECTIVE</Adjective>
-            <Civilopedia>TXT_KEY_CIVILIZATION_BARBARIAN_PEDIA</Civilopedia>
-            <DefaultPlayerColor>PLAYERCOLOR_BLACK</DefaultPlayerColor>
-            <ArtDefineTag>ART_DEF_CIVILIZATION_BARBARIAN</ArtDefineTag>
-            <ArtStyleType>ARTSTYLE_NATIVES_EAST</ArtStyleType>
-            <bPlayable>0</bPlayable>
-            <bAIPlayable>0</bAIPlayable>
-            <bWaterStart>0</bWaterStart>
-            <bOpenBorders>0</bOpenBorders>
-            <bWaterWorks>1</bWaterWorks>
-            <bEurope>0</bEurope>
-            <bNative>0</bNative>
-            <eCivCategory>CIV_CATEGORY_BARBARIAN</eCivCategory>
-            <iAdvancedStartPoints>0</iAdvancedStartPoints>
-            <iAreaMultiplier>0</iAreaMultiplier>
-            <iDensityMultiplier>0</iDensityMultiplier>
-            <iTreasure>0</iTreasure>
-            <FavoredTerrain>NONE</FavoredTerrain>
-            <DefaultProfession>NONE</DefaultProfession>
-            <Cities/>
-            <Generals/>
-            <Admirals/>
-            <Ships/>
-            <Buildings/>
-            <Units/>
-            <Professions>
-                <Profession>
-                    <ProfessionType>PROFESSION_SETTLER</ProfessionType>
-                    <bValid>0</bValid>
-                </Profession>
-            </Professions>
-            <Traits/>
-            <FreeUnitClasses/>
-            <FreeBuildingClasses/>
-            <TeachUnitClasses/>
-            <FreeYields/>
-            <CapturedCityUnitClass>NONE</CapturedCityUnitClass>
-            <InitialCivics/>
-            <Leaders>
-                <Leader>
-                    <LeaderName>LEADER_BARBARIAN</LeaderName>
-                    <bLeaderAvailability>1</bLeaderAvailability>
-                </Leader>
-            </Leaders>
-            <DerivativeCiv>NONE</DerivativeCiv>
-            <CivilizationSelectionSound/>
-            <CivilizationActionSound/>
-        </CivilizationInfo>
-        <CivilizationInfo>
-            <Type>CIVILIZATION_CHURCH</Type>
-            <Description>TXT_KEY_CIVILIZATION_CHURCH</Description>
-            <ShortDescription>TXT_KEY_CIV_CHURCH_SHORT_DESC</ShortDescription>
-            <Adjective>TXT_KEY_CIV_CHURCH_ADJECTIVE</Adjective>
-            <Civilopedia>TXT_KEY_CIVILIZATION_CHURCH_PEDIA</Civilopedia>
-            <DefaultPlayerColor>PLAYERCOLOR_WHITE</DefaultPlayerColor>
-            <ArtDefineTag>ART_DEF_CIVILIZATION_ENGLAND_EUROPE</ArtDefineTag>
-            <ArtStyleType>ARTSTYLE_ENGLAND</ArtStyleType>
-            <bPlayable>0</bPlayable>
-            <bAIPlayable>0</bAIPlayable>
-            <bWaterStart>0</bWaterStart>
-            <bOpenBorders>0</bOpenBorders>
-            <bWaterWorks>1</bWaterWorks>
-            <bEurope>0</bEurope>
-            <bNative>0</bNative>
-            <eCivCategory>CIV_CATEGORY_CHURCH</eCivCategory>
-            <iAdvancedStartPoints>0</iAdvancedStartPoints>
-            <iAreaMultiplier>0</iAreaMultiplier>
-            <iDensityMultiplier>0</iDensityMultiplier>
-            <iTreasure>0</iTreasure>
-            <FavoredTerrain>NONE</FavoredTerrain>
-            <DefaultProfession>NONE</DefaultProfession>
-            <Cities/>
-            <Generals/>
-            <Admirals/>
-            <Ships/>
-            <Buildings/>
-            <Units/>
-            <Professions/>
-            <Traits/>
-            <FreeUnitClasses/>
-            <FreeBuildingClasses/>
-            <TeachUnitClasses/>
-            <FreeYields/>
-            <CapturedCityUnitClass>NONE</CapturedCityUnitClass>
-            <InitialCivics/>
-            <Leaders>
-                <Leader>
-                    <LeaderName>LEADER_CHURCH</LeaderName>
-                    <bLeaderAvailability>1</bLeaderAvailability>
-                </Leader>
-            </Leaders>
-            <DerivativeCiv>NONE</DerivativeCiv>
-            <CivilizationSelectionSound/>
-            <CivilizationActionSound/>
         </CivilizationInfo>
         <CivilizationInfo>
             <Type>CIVILIZATION_NEZ_PERCE</Type>
@@ -40537,6 +41346,26 @@
                     <BuildingClassType>BUILDINGCLASS_BAKERY</BuildingClassType>
                     <BuildingType>NONE</BuildingType>
                 </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_VILLAGE_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_TOWN_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_CITY_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_SUPREME_COURT</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
+                <Building>
+                    <BuildingClassType>BUILDINGCLASS_JAIL</BuildingClassType>
+                    <BuildingType>NONE</BuildingType>
+                </Building>
             </Buildings>
             <Units>
                 <Unit>
@@ -40875,6 +41704,14 @@
                     <UnitClassType>UNITCLASS_EXPERT_SETTLER</UnitClassType>
                     <UnitType>NONE</UnitType>
                 </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_CONSTRUCTION_SUPPLIES</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
+                <Unit>
+                    <UnitClassType>UNITCLASS_SLAVE_BARQUE</UnitClassType>
+                    <UnitType>NONE</UnitType>
+                </Unit>
             </Units>
             <Professions>
                 <Profession>
@@ -41104,6 +41941,105 @@
             <DerivativeCiv>NONE</DerivativeCiv>
             <CivilizationSelectionSound>AS3D_NATIVE_AMERICA_SELECT</CivilizationSelectionSound>
             <CivilizationActionSound>AS3D_NATIVE_AMERICA_ORDER</CivilizationActionSound>
+        </CivilizationInfo>
+        <CivilizationInfo>
+            <Type>CIVILIZATION_BARBARIAN</Type>
+            <Description>TXT_KEY_CIVILIZATION_BARBARIAN</Description>
+            <ShortDescription>TXT_KEY_CIV_BARBARIAN_SHORT_DESC</ShortDescription>
+            <Adjective>TXT_KEY_CIV_BARBARIAN_ADJECTIVE</Adjective>
+            <Civilopedia>TXT_KEY_CIVILIZATION_BARBARIAN_PEDIA</Civilopedia>
+            <DefaultPlayerColor>PLAYERCOLOR_BLACK</DefaultPlayerColor>
+            <ArtDefineTag>ART_DEF_CIVILIZATION_BARBARIAN</ArtDefineTag>
+            <ArtStyleType>ARTSTYLE_NATIVES_EAST</ArtStyleType>
+            <bPlayable>0</bPlayable>
+            <bAIPlayable>0</bAIPlayable>
+            <bWaterStart>0</bWaterStart>
+            <bOpenBorders>0</bOpenBorders>
+            <bWaterWorks>1</bWaterWorks>
+            <bEurope>0</bEurope>
+            <bNative>0</bNative>
+            <eCivCategory>CIV_CATEGORY_BARBARIAN</eCivCategory>
+            <iAdvancedStartPoints>0</iAdvancedStartPoints>
+            <iAreaMultiplier>0</iAreaMultiplier>
+            <iDensityMultiplier>0</iDensityMultiplier>
+            <iTreasure>0</iTreasure>
+            <FavoredTerrain>NONE</FavoredTerrain>
+            <DefaultProfession>NONE</DefaultProfession>
+            <Cities/>
+            <Generals/>
+            <Admirals/>
+            <Ships/>
+            <Buildings/>
+            <Units/>
+            <Professions>
+                <Profession>
+                    <ProfessionType>PROFESSION_SETTLER</ProfessionType>
+                    <bValid>0</bValid>
+                </Profession>
+            </Professions>
+            <Traits/>
+            <FreeUnitClasses/>
+            <FreeBuildingClasses/>
+            <TeachUnitClasses/>
+            <FreeYields/>
+            <CapturedCityUnitClass>NONE</CapturedCityUnitClass>
+            <InitialCivics/>
+            <Leaders>
+                <Leader>
+                    <LeaderName>LEADER_BARBARIAN</LeaderName>
+                    <bLeaderAvailability>1</bLeaderAvailability>
+                </Leader>
+            </Leaders>
+            <DerivativeCiv>NONE</DerivativeCiv>
+            <CivilizationSelectionSound/>
+            <CivilizationActionSound/>
+        </CivilizationInfo>
+        <CivilizationInfo>
+            <Type>CIVILIZATION_CHURCH</Type>
+            <Description>TXT_KEY_CIVILIZATION_CHURCH</Description>
+            <ShortDescription>TXT_KEY_CIV_CHURCH_SHORT_DESC</ShortDescription>
+            <Adjective>TXT_KEY_CIV_CHURCH_ADJECTIVE</Adjective>
+            <Civilopedia>TXT_KEY_CIVILIZATION_CHURCH_PEDIA</Civilopedia>
+            <DefaultPlayerColor>PLAYERCOLOR_WHITE</DefaultPlayerColor>
+            <ArtDefineTag>ART_DEF_CIVILIZATION_ENGLAND_EUROPE</ArtDefineTag>
+            <ArtStyleType>ARTSTYLE_ENGLAND</ArtStyleType>
+            <bPlayable>0</bPlayable>
+            <bAIPlayable>0</bAIPlayable>
+            <bWaterStart>0</bWaterStart>
+            <bOpenBorders>0</bOpenBorders>
+            <bWaterWorks>1</bWaterWorks>
+            <bEurope>0</bEurope>
+            <bNative>0</bNative>
+            <eCivCategory>CIV_CATEGORY_CHURCH</eCivCategory>
+            <iAdvancedStartPoints>0</iAdvancedStartPoints>
+            <iAreaMultiplier>0</iAreaMultiplier>
+            <iDensityMultiplier>0</iDensityMultiplier>
+            <iTreasure>0</iTreasure>
+            <FavoredTerrain>NONE</FavoredTerrain>
+            <DefaultProfession>NONE</DefaultProfession>
+            <Cities/>
+            <Generals/>
+            <Admirals/>
+            <Ships/>
+            <Buildings/>
+            <Units/>
+            <Professions/>
+            <Traits/>
+            <FreeUnitClasses/>
+            <FreeBuildingClasses/>
+            <TeachUnitClasses/>
+            <FreeYields/>
+            <CapturedCityUnitClass>NONE</CapturedCityUnitClass>
+            <InitialCivics/>
+            <Leaders>
+                <Leader>
+                    <LeaderName>LEADER_CHURCH</LeaderName>
+                    <bLeaderAvailability>1</bLeaderAvailability>
+                </Leader>
+            </Leaders>
+            <DerivativeCiv>NONE</DerivativeCiv>
+            <CivilizationSelectionSound/>
+            <CivilizationActionSound/>
         </CivilizationInfo>
     </CivilizationInfos>
 </Civ4CivilizationInfos>

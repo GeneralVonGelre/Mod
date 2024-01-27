@@ -53,16 +53,28 @@ https://forums.civfanatics.com/forums/civ4col-we-the-people.591/
 
 ------------------
 
-Aktuelle aktive WTP Teammitglieder
+WTP Teammitglieder:
 
 	raystuttgart
 	Devolution
 	Nightinggale
 	Schmiddie
 	Mr.Zorg
-	Fürstbischof
 	Kendon
 	Raubwürger
+	Liet
+	Barthoze
+	sneed
+	FlaviusBelisarius
+	Fürstbischof
+	jooe
+	Tucker8
+	victorxucp
+	Aemon
+
+Besonderen Dank:
+	f1rpo (wiederholte Unterstützung zu Code)
+	karadoc (für seinen Pathfinding Code)
 
 Ehemalige (jetzt inaktive) RaR Mitglieder:
 
@@ -132,6 +144,47 @@ Spezielle Credits für die Musik:
 
 René Osmanczyk (Komponist des grössten Teiles unseres Soundtracks)
 Gregoire Lourme, The Seven Seas Journey, Cinematic Volume 7 Animation Movies (http://www.jamendo.com/de/track/1119930/the-seven-seas-journey)
+
+Weitere Music Credits:
+
+Efisio Cross
+Adrian Ziegler
+Luke Richards
+James Horner
+Hans Zimmer
+Greg Dombrowski
+Michael Ortega
+David Chappell
+Kim Planert
+Thomas Bergersen
+Steven Jablonsk
+Mattia Cupeli
+Really Slow Motion & Giant Apes
+R. Armando Morabito
+Music for the Fearless
+Lewis Capaldi
+Eurielle
+HDSoundi
+Rajiw Seewollal
+Abel Korzeniowski
+RS Soundtracks
+Brand X Music
+Brunuh Ville
+Arn Sanderson
+Elias Nilsson
+Patrick Doyle
+Onur Tarcin
+Gregoire Lourme
+Pandora Journey
+Zack Hemsey
+Trevor Da Maere
+Dirk Maassen
+...
+and many other great composers that we may have forgotten.
+(Please excuse in that case, we will add you to the credits once we find out.)
+
+------------------
+
 
 Spezielle Credits und Dank auch den Schöpfern/Herausgeber des ursprünglichen Spiels:
 

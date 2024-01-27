@@ -165,7 +165,7 @@ class CvPediaUnit:
 		if (gc.getUnitInfo(self.iUnit).NBMOD_GetTeachLevel() < 100): 
 			for iBuilding in range(gc.getNumBuildingInfos()):
 				if (gc.getBuildingInfo(iBuilding).getSpecialBuildingType() == gc.getInfoTypeForString("SPECIALBUILDING_EDUCATION")):
-					if (gc.getBuildingInfo(iBuilding).NBMOD_GetTeachLevel() >= gc.getUnitInfo(self.iUnit).NBMOD_GetTeachLevel()):
+					if (gc.getBuildingInfo(iBuilding).NBMOD_GetTeachLevel() == gc.getUnitInfo(self.iUnit).NBMOD_GetTeachLevel()):
 						szSpecialText += "\n" + localText.getText("TXT_KEY_SCHOOL_BUILDING_NEEDED", (gc.getBuildingInfo(iBuilding).getDescription(), ))
 		# Check learning by doing
 		if gc.getUnitInfo(self.iUnit).LbD_canBecomeExpert():
@@ -181,10 +181,14 @@ class CvPediaUnit:
 		# WTP, ray, LbD Slaves Revolt and END - START
 		
 ## Pedia - Unit source - Start Nightinggale
-		if gc.getUnitInfo(self.iUnit).getImmigrationWeight():
+		if gc.getUnitInfo(self.iUnit).getImmigrationWeight() > 0:
 			szSpecialText += "\n" +	localText.getText("TXT_KEY_UNIT_MIGRATES", ())
 		if gc.getUnitInfo(self.iUnit).getEuropeCost() > 0:
 			szSpecialText += "\n" +	localText.getText("TXT_KEY_UNIT_BUYABLE_IN_EUROPE", ())
+		if gc.getUnitInfo(self.iUnit).getAfricaCost() > 0:
+			szSpecialText += "\n" +	localText.getText("TXT_KEY_UNIT_BUYABLE_IN_AFRICA", ())
+		if gc.getUnitInfo(self.iUnit).getPortRoyalCost() > 0:
+			szSpecialText += "\n" +	localText.getText("TXT_KEY_UNIT_BUYABLE_IN_PORT_ROYAL", ())
 		trainableAtNatives = False
 		for iCiv in range(gc.getNumCivilizationInfos()):
 			if gc.getCivilizationInfo(iCiv).isNative():
@@ -225,7 +229,7 @@ class CvPediaUnit:
 		unitsList=[(0,0)]*gc.getNumUnitInfos()
 		for j in range(gc.getNumUnitInfos()):
 			unitsList[j] = (gc.getUnitInfo(j).getDescription(), j)
-		unitsList.sort()
+		unitsList.sort(key = CvUtil.sortkey)
 
 		i = 0
 		iSelected = 0

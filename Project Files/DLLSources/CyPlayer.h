@@ -103,6 +103,7 @@ public:
 	bool canDoCivics(int /*CivicTypes*/ eCivic);
 	int greatGeneralThreshold();
 	int greatAdmiralThreshold(); // R&R, ray, Great Admirals
+	int getImmigrationThresholdModifierFromUnitsWaitingOnDock(); // WTP, ray, increase threshold if more than X units waiting on the docks - START
 	int immigrationThreshold();
 	int revolutionEuropeUnitThreshold();
 	CyPlot* getStartingPlot();
@@ -351,7 +352,6 @@ public:
 	int getChurchFavourPrice() const; // R&R, ray, Church Favours
 
 	// R&R, ray, Church Favours - START
-	void cacheUsedShipData(int iUsedShipPrice, int iUsedShipClassType);
 	int getRandomUsedShipClassTypeID() const;
 	int getUsedShipPrice(int iUsedShipClassType) const;
 	bool isKingWillingToTradeUsedShips() const;
@@ -359,8 +359,7 @@ public:
 	// R&R, ray, Church Favours - START
 
 	// WTP, ray, Foreign Kings, buy Immigrants - START
-	void cacheForeignImmigrantData(int iForeignImmigrantPrice, int iUsedShipClassType);
-	int getRandomForeignImmigrantClassTypeID() const;
+	int getRandomForeignImmigrantClassTypeID(int iKingID) const;
 	int getForeignImmigrantPrice(int iForeignImmigrantClassType, int iKingID) const;
 	bool isForeignKingWillingToTradeImmigrants(int iKingID) const;
 	void resetCounterForForeignImmigrantsDeals();

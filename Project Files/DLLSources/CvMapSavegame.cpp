@@ -61,6 +61,7 @@ const char* getSavedEnumNameMap(SavegameVariableTypes eType)
 	case Save_Areas: return "Save_Areas";
 	case Save_Plots: return "Save_Plots";
 	}
+	FAssertMsg(0, "Missing case");
 	return "";
 }
 
@@ -185,6 +186,8 @@ void CvMap::read(CvSavegameReader reader)
 
 void CvMap::write(CvSavegameWriter writer)
 {
+	LogIntentHelper helper(writer, "CvMap");
+
 	writer.AssignClassType(SAVEGAME_CLASS_MAP);
 
 	if (writer.isDebug())

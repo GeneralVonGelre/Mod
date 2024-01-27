@@ -37,6 +37,8 @@
 CvGame::CvGame()
 {
 	m_sorenRand.setSorenRand();
+	m_sorenRand.setSyncedStatus(true);
+	m_mapRand.setSyncedStatus(true);
 
 	m_pReplayInfo = NULL;
 
@@ -240,13 +242,16 @@ void CvGame::init(HandicapTypes eHandicap)
 	doUpdateCacheOnTurn();
 }
 
+// placed in CvDLLButtonPopup.cpp as it needs local enum access there to function correctly
+void doNewGameErrorTesting();
+
 //
 // Set initial items (units, techs, etc...)
 //
 void CvGame::setInitialItems(bool bScenario)
 {
 	PROFILE_FUNC();
-	
+
 	for (int i = 0; i < MAX_PLAYERS; ++i)
 	{
 		if (GET_PLAYER((PlayerTypes)i).isAlive())
@@ -257,7 +262,7 @@ void CvGame::setInitialItems(bool bScenario)
 
 	createBarbarianPlayer(); // < JAnimals Mod Start >
 	createChurchPlayer(); // R&R, ray, the Church - START
-	
+
 	// R&R, ray, Correct Geographical Placement of Natives - START
 	if (!GC.getGameINLINE().isOption(GAMEOPTION_RANDOM_SETTLEMENT_AREAS))
 	{
@@ -289,11 +294,11 @@ void CvGame::setInitialItems(bool bScenario)
 									}
 								}
 							}
-							
+
 							// So ok, we have found a Civ that fits
 							if (alreadyPlaced == false)
 							{
-								
+
 								// We now choose the leader and replace the non matching Civ
 								int iLeader = -1;
 								for (int z = 0; z < GC.getNumLeaderHeadInfos(); z++)
@@ -333,7 +338,7 @@ void CvGame::setInitialItems(bool bScenario)
 					{
 						//Should be take out, but how
 					}
-					
+
 				}
 			}
 		}
@@ -363,6 +368,8 @@ void CvGame::setInitialItems(bool bScenario)
 			kPlayer.AI_updateFoundValues();
 		}
 	}
+
+	doNewGameErrorTesting();
 }
 
 
@@ -405,12 +412,12 @@ void CvGame::regenerateMap()
 
 	for (iI = 0; iI < MAX_TEAMS; iI++)
 	{
-		GC.getMapINLINE().setRevealedPlots(((TeamTypes)iI), false);
+		GC.getMap().setRevealedPlots(((TeamTypes)iI), false);
 	}
 
 	gDLL->getEngineIFace()->clearSigns();
 
-	GC.getMapINLINE().erasePlots();
+	GC.getMap().erasePlots();
 
 	CvMapGenerator::GetInstance().generateRandomMap();
 	CvMapGenerator::GetInstance().addGameElements();
@@ -422,13 +429,13 @@ void CvGame::regenerateMap()
 	setInitialItems(false);
 
 	// Super Forts begin *choke* *canal*
-	GC.getMapINLINE().calculateCanalAndChokePoints();
+	GC.getMap().calculateCanalAndChokePoints();
 	// Super Forts end
 
 	initScoreCalculation();
 	setFinalInitialized(true);
 
-	GC.getMapINLINE().setupGraphical();
+	GC.getMap().setupGraphical();
 	gDLL->getEngineIFace()->SetDirty(GlobeTexture_DIRTY_BIT, true);
 	gDLL->getEngineIFace()->SetDirty(MinimapTexture_DIRTY_BIT, true);
 	gDLL->getInterfaceIFace()->setDirty(ColoredPlots_DIRTY_BIT, true);
@@ -651,7 +658,7 @@ void CvGame::assignStartingPlots()
 
 	// R&R, ray, Correct Geographical Placement of Natives - START
 	//Getting Y axis
-	int mapheight = GC.getMapINLINE().getGridHeightINLINE();
+	int mapheight = GC.getMap().getGridHeightINLINE();
 	//Getting X axis
 	//int mapwidth = GC.getMapINLINE().getGridWidthINLINE();
 	// R&R, ray, Correct Geographical Placement of Natives - END
@@ -668,11 +675,11 @@ void CvGame::assignStartingPlots()
 				iBestValue = 0;
 				pBestPlot = NULL;
 
-				for (iJ = 0; iJ < GC.getMapINLINE().numPlotsINLINE(); iJ++)
+				for (iJ = 0; iJ < GC.getMap().numPlotsINLINE(); iJ++)
 				{
 					gDLL->callUpdater();	// allow window updates during launch
 
-					pPlot = GC.getMapINLINE().plotByIndexINLINE(iJ);
+					pPlot = GC.getMap().plotByIndexINLINE(iJ);
 
 					if (pPlot->isStartingPlot())
 					{
@@ -849,11 +856,11 @@ void CvGame::assignStartingPlots()
 			}
 		}
 
-		// R&R, ray, Correct Geographical Placement of Natives - START	
+		// R&R, ray, Correct Geographical Placement of Natives - START
 		// resorting the starting locations depending on geographical setting
 		if (!GC.getGameINLINE().isOption(GAMEOPTION_RANDOM_SETTLEMENT_AREAS))
 		{
-			for (iI = 0; iI < MAX_PLAYERS; iI++) 
+			for (iI = 0; iI < MAX_PLAYERS; iI++)
 			{
 				CvPlayer& selfPlayer = GET_PLAYER((PlayerTypes)iI);
 				if (selfPlayer.isNative())
@@ -863,8 +870,8 @@ void CvGame::assignStartingPlots()
 					bool selfIsNorthAmericanNative = (GC.getCivilizationInfo(selfPlayer.getCivilizationType()).isNorthAmericanNative());
 					bool selfIsCentralAmericanNative = (GC.getCivilizationInfo(selfPlayer.getCivilizationType()).isCentralAmericanNative());
 					bool selfIsSouthAmericanNative = (GC.getCivilizationInfo(selfPlayer.getCivilizationType()).isSouthAmericanNative());
-				
-					for (int jJ = 0; jJ < MAX_PLAYERS; jJ++) 
+
+					for (int jJ = 0; jJ < MAX_PLAYERS; jJ++)
 					{
 						CvPlayer& otherPlayer = GET_PLAYER((PlayerTypes)jJ);
 						if (otherPlayer.isNative())
@@ -875,7 +882,7 @@ void CvGame::assignStartingPlots()
 							//getting Y of Starting Plots and eventually switching
 							int selfY = selfPlayer.getStartingPlot()->getY_INLINE();
 							int otherY = otherPlayer.getStartingPlot()->getY_INLINE();
-					
+
 							// self is North, other is Central or South
 							if (selfIsNorthAmericanNative && (otherIsCentralAmericanNative || otherIsSouthAmericanNative))
 							{
@@ -980,7 +987,7 @@ void CvGame::assignStartingPlots()
 	{
 		GET_PLAYER((PlayerTypes)(*playerOrderIter)).setStartingPlot(GET_PLAYER((PlayerTypes)(*playerOrderIter)).findStartingPlot(), true);
 	}
-	
+
 	//Do it again to even out the water player starts.
 	for (playerOrderIter = playerOrder.begin(); playerOrderIter != playerOrder.end(); ++playerOrderIter)
 	{
@@ -1023,7 +1030,7 @@ void CvGame::normalizeStartingPlotLocations()
 						CvPlot *pPlotJ = GET_PLAYER((PlayerTypes)iJ).getStartingPlot();
 						if (pPlotJ != NULL)
 						{
-							int iDist = GC.getMapINLINE().calculatePathDistance(pPlotI, pPlotJ);
+							int iDist = GC.getMap().calculatePathDistance(pPlotI, pPlotJ);
 							if (iDist == -1)
 							{
 								// 5x penalty for not being on the same area, or having no passable route
@@ -1136,14 +1143,14 @@ void CvGame::normalizeStartingPlots()
 void CvGame::assignNativeTerritory()
 {
 	//The owners.
-	std::vector<int> territoryId(GC.getMapINLINE().numPlotsINLINE(), -1);
+	std::vector<int> territoryId(GC.getMap().numPlotsINLINE(), -1);
 
 	//The native players.
 	std::vector<PlayerTypes> natives;
 
 	//The territory centers.
 	std::vector<CvPlot*> centers;
-	
+
 	for (int iJ = 0; iJ < MAX_PLAYERS; iJ++)
 	{
 		PlayerTypes eLoopPlayer = (PlayerTypes)iJ;
@@ -1157,11 +1164,11 @@ void CvGame::assignNativeTerritory()
 			centers.push_back(pStartingPlot);
 		}
 	}
-	
 
-	for(int iI = 0; iI < GC.getMapINLINE().numPlotsINLINE(); iI++)
+
+	for(int iI = 0; iI < GC.getMap().numPlotsINLINE(); iI++)
 	{
-		CvPlot* pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(iI);
+		CvPlot* pLoopPlot = GC.getMap().plotByIndexINLINE(iI);
 		if (pLoopPlot->isWater())
 		{
 			territoryId[iI] = -1;
@@ -1197,11 +1204,11 @@ void CvGame::assignNativeTerritory()
 	for(int i=0;i<(int)natives.size();i++)
 	{
 		PlayerTypes eBestPlayer = natives[i];
-		for(int iI = 0; iI < GC.getMapINLINE().numPlotsINLINE(); iI++)
+		for(int iI = 0; iI < GC.getMap().numPlotsINLINE(); iI++)
 		{
 			if (territoryId[iI] == i)
 			{
-				CvPlot* pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(iI);
+				CvPlot* pLoopPlot = GC.getMap().plotByIndexINLINE(iI);
 				pLoopPlot->setOwner(eBestPlayer, false);
 			}
 		}
@@ -1440,7 +1447,6 @@ void CvGame::updateColoredPlots()
 	int iRange;
 	//int iPathTurns;
 	int iDX, iDY;
-	int iI;
 
 	gDLL->getEngineIFace()->clearColoredPlots(PLOT_LANDSCAPE_LAYER_BASE);
 	gDLL->getEngineIFace()->clearAreaBorderPlots(AREA_BORDER_LAYER_CITY_RADIUS);
@@ -1534,9 +1540,9 @@ void CvGame::updateColoredPlots()
 		{
 			NiColorA color(GC.getColorInfo((ColorTypes)GC.getPlayerColorInfo(GET_PLAYER(eEuropePlayer).getPlayerColor()).getColorTypePrimary()).getColor());
 			color.a = 0.5f;
-			for(int i=0;i<GC.getMapINLINE().numPlotsINLINE();i++)
+			for(int i=0;i<GC.getMap().numPlotsINLINE();i++)
 			{
-				CvPlot* pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(i);
+				CvPlot* pLoopPlot = GC.getMap().plotByIndexINLINE(i);
 				if(pLoopPlot->isEurope() && pLoopPlot->isRevealed(getActiveTeam(), true))
 				{
 					gDLL->getEngineIFace()->fillAreaBorderPlot(pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE(), color, AREA_BORDER_LAYER_EUROPE);
@@ -1549,12 +1555,12 @@ void CvGame::updateColoredPlots()
 	{
 		if (gDLL->getInterfaceIFace()->isCityScreenUp())
 		{
-			for (iI = 0; iI < NUM_CITY_PLOTS; iI++)
+			FOREACH(CityPlot)
 			{
-				pLoopPlot = pHeadSelectedCity->getCityIndexPlot(iI);
+				pLoopPlot = pHeadSelectedCity->getCityIndexPlot(eLoopCityPlot);
 				if (pLoopPlot != NULL)
 				{
-					CvUnit* pWorkingUnit = pHeadSelectedCity->getUnitWorkingPlot(iI);
+					CvUnit* pWorkingUnit = pHeadSelectedCity->getUnitWorkingPlot(eLoopCityPlot);
 					if (pWorkingUnit != NULL)
 					{
 						NiColorA color(GC.getColorInfo((ColorTypes)GC.getInfoTypeForString("COLOR_WHITE")).getColor());
@@ -1819,7 +1825,7 @@ CvUnit* CvGame::getPlotUnit(const CvPlot* pPlot, int iIndex)
 				pLoopUnit1 = ::getUnit(pUnitNode1->m_data);
 				pUnitNode1 = pPlot->nextUnitNode(pUnitNode1);
 
-				if (!(pLoopUnit1->isInvisible(activeTeam, true)))
+				if (pLoopUnit1 != NULL && !(pLoopUnit1->isInvisible(activeTeam, true)))
 				{
 					if (!(pLoopUnit1->isCargo()))
 					{
@@ -1843,7 +1849,7 @@ CvUnit* CvGame::getPlotUnit(const CvPlot* pPlot, int iIndex)
 										pLoopUnit2 = ::getUnit(pUnitNode2->m_data);
 										pUnitNode2 = pPlot->nextUnitNode(pUnitNode2);
 
-										if (!(pLoopUnit2->isInvisible(activeTeam, true)))
+										if (pLoopUnit2 != NULL && !(pLoopUnit2->isInvisible(activeTeam, true)))
 										{
 											if (pLoopUnit2->getTransportUnit() == pLoopUnit1)
 											{
@@ -1892,7 +1898,7 @@ void CvGame::getPlotUnits(const CvPlot *pPlot, std::vector<CvUnit *> &plotUnits)
 				pLoopUnit1 = ::getUnit(pUnitNode1->m_data);
 				pUnitNode1 = pPlot->nextUnitNode(pUnitNode1);
 
-				if (!(pLoopUnit1->isInvisible(activeTeam, true)))
+				if (pLoopUnit1 != NULL && !(pLoopUnit1->isInvisible(activeTeam, true)))
 				{
 					if (!(pLoopUnit1->isCargo()))
 					{
@@ -1911,7 +1917,7 @@ void CvGame::getPlotUnits(const CvPlot *pPlot, std::vector<CvUnit *> &plotUnits)
 										pLoopUnit2 = ::getUnit(pUnitNode2->m_data);
 										pUnitNode2 = pPlot->nextUnitNode(pUnitNode2);
 
-										if (!(pLoopUnit2->isInvisible(activeTeam, true)))
+										if (pLoopUnit2 != NULL && !(pLoopUnit2->isInvisible(activeTeam, true)))
 										{
 											if (pLoopUnit2->getTransportUnit() == pLoopUnit1)
 											{
@@ -2008,7 +2014,7 @@ void CvGame::cycleSelectionGroups(bool bClear, bool bForward)
 	else
 	{
 		pPlot = gDLL->getInterfaceIFace()->getLookAtPlot();
-		pNextSelectionGroup = GC.getMapINLINE().findSelectionGroup(((pPlot != NULL) ? pPlot->getX() : 0), ((pPlot != NULL) ? pPlot->getY() : 0), getActivePlayer(), true);
+		pNextSelectionGroup = GC.getMap().findSelectionGroup(((pPlot != NULL) ? pPlot->getX() : 0), ((pPlot != NULL) ? pPlot->getY() : 0), getActivePlayer(), true);
 	}
 
 	if (pNextSelectionGroup != NULL)
@@ -2041,7 +2047,7 @@ bool CvGame::cyclePlotUnits(CvPlot* pPlot, bool bForward, bool bAuto, int iCount
 		{
 			pLoopUnit = ::getUnit(pUnitNode->m_data);
 
-			if (pLoopUnit->IsSelected())
+			if (pLoopUnit != NULL && pLoopUnit->IsSelected())
 			{
 				break;
 			}
@@ -2114,7 +2120,7 @@ bool CvGame::cyclePlotUnits(CvPlot* pPlot, bool bForward, bool bAuto, int iCount
 				}
 			}
 
-			if (pLoopUnit->getOwnerINLINE() == getActivePlayer())
+			if (pLoopUnit != NULL && pLoopUnit->getOwnerINLINE() == getActivePlayer())
 			{
 				if (bAuto)
 				{
@@ -2191,11 +2197,11 @@ void CvGame::selectionListMove(CvPlot* pPlot, bool bAlt, bool bShift, bool bCtrl
 		pSelectedUnit = ::getUnit(pSelectedUnitNode->m_data);
 
 		eRivalTeam = pSelectedUnit->getDeclareWarUnitMove(pPlot);
-		
+
 		// Erik: No annoying popup for transport units
 		// WTP, ray, unless it is a "Troop only" ship
 		//if (pSelectedUnit->cargoSpace() == 0 && eRivalTeam != NO_TEAM)
-		if ((pSelectedUnit->cargoSpace() == 0 || pSelectedUnit->getUnitInfo().isTroopShip())&& eRivalTeam != NO_TEAM)
+		if (pSelectedUnit != NULL && eRivalTeam != NO_TEAM && (pSelectedUnit->cargoSpace() == 0 || pSelectedUnit->getUnitInfo().isTroopShip()))
 		{
 			CvPopupInfo* pInfo = new CvPopupInfo(BUTTONPOPUP_DECLAREWARMOVE);
 			if (NULL != pInfo)
@@ -2259,19 +2265,22 @@ void CvGame::selectionListGameNetMessage(int eMessage, int iData2, int iData3, i
 				{
 					pSelectedUnit = ::getUnit(pSelectedUnitNode->m_data);
 					pSelectedUnitNode = gDLL->getInterfaceIFace()->nextSelectionListNode(pSelectedUnitNode);
-
-					if (bShift)
+				
+					if (pSelectedUnit != NULL)
 					{
-						gDLL->sendJoinGroup(pSelectedUnit->getID(), FFreeList::INVALID_INDEX);
-					}
-					else
-					{
-						if (pSelectedUnit == pHeadSelectedUnit)
+						if (bShift)
 						{
 							gDLL->sendJoinGroup(pSelectedUnit->getID(), FFreeList::INVALID_INDEX);
 						}
+						else
+						{
+							if (pSelectedUnit == pHeadSelectedUnit)
+							{
+								gDLL->sendJoinGroup(pSelectedUnit->getID(), FFreeList::INVALID_INDEX);
+							}
 
-						gDLL->sendJoinGroup(pSelectedUnit->getID(), pHeadSelectedUnit->getID());
+							gDLL->sendJoinGroup(pSelectedUnit->getID(), pHeadSelectedUnit->getID());
+						}
 					}
 				}
 
@@ -2289,7 +2298,10 @@ void CvGame::selectionListGameNetMessage(int eMessage, int iData2, int iData3, i
 					pSelectedUnit = ::getUnit(pSelectedUnitNode->m_data);
 					pSelectedUnitNode = gDLL->getInterfaceIFace()->nextSelectionListNode(pSelectedUnitNode);
 
-					gDLL->sendDoCommand(pSelectedUnit->getID(), ((CommandTypes)iData2), iData3, iData4, bAlt);
+					if (pSelectedUnit != NULL)
+					{
+						gDLL->sendDoCommand(pSelectedUnit->getID(), ((CommandTypes)iData2), iData3, iData4, bAlt);
+					}
 				}
 			}
 			else if ((eMessage == GAMEMESSAGE_PUSH_MISSION) || (eMessage == GAMEMESSAGE_AUTO_MISSION))
@@ -2426,7 +2438,11 @@ void CvGame::selectUnit(CvUnit* pUnit, bool bClear, bool bToggle, bool bSound)
 		while (pEntityNode != NULL)
 		{
 			FAssertMsg(::getUnit(pEntityNode->m_data), "null entity in selection group");
-			gDLL->getInterfaceIFace()->insertIntoSelectionList(::getUnit(pEntityNode->m_data), false, bToggle, bGroup, bSound, true);
+			CvUnit *pUnit = ::getUnit(pEntityNode->m_data);
+			if (pUnit != NULL)
+			{
+				gDLL->getInterfaceIFace()->insertIntoSelectionList(pUnit, false, bToggle, bGroup, bSound, true);
+			}
 
 			pEntityNode = pSelectionGroup->nextUnitNode(pEntityNode);
 		}
@@ -2478,7 +2494,7 @@ void CvGame::selectGroup(CvUnit* pUnit, bool bShift, bool bCtrl, bool bAlt)
 			pLoopUnit = ::getUnit(pUnitNode->m_data);
 			pUnitNode = pUnitPlot->nextUnitNode(pUnitNode);
 
-			if (pLoopUnit->getOwnerINLINE() == getActivePlayer())
+			if (pLoopUnit != NULL && pLoopUnit->getOwnerINLINE() == getActivePlayer())
 			{
 				if (pLoopUnit->canMove())
 				{
@@ -2854,7 +2870,14 @@ bool CvGame::canDoControl(ControlTypes eControl)
 	case CONTROL_WORLD_BUILDER:
 		if (!(isGameMultiPlayer()) && GC.getInitCore().getAdminPassword().empty() && !gDLL->getInterfaceIFace()->isInAdvancedStart() && !gDLL->getInterfaceIFace()->isCombatFocus())
 		{
-			if (!isOption(GAMEOPTION_REMOVE_WORLD_BUILDER) || gDLL->getChtLvl() > 0) // added game option to remove the WB as requested on the forum - Nightinggale
+#ifdef FASSERT_ENABLE
+			// added game option to remove the WB as requested on the forum - Nightinggale
+			// assert builds can cheat to get the option as asserts tend to be used to explore problems.
+			if (!isOption(GAMEOPTION_REMOVE_WORLD_BUILDER) || gDLL->getChtLvl() > 0)
+#else
+			// without asserts the game should ignore cheat level and will only look at the game option
+			if (!isOption(GAMEOPTION_REMOVE_WORLD_BUILDER))
+#endif
 			{
 				return true;
 			}
@@ -3617,6 +3640,25 @@ int CvGame::countHumanPlayersEverAlive() const
 	return iCount;
 }
 
+int CvGame::countCivPlayerEuropeanAI()
+{
+	int iCount = 0;
+
+	for (PlayerTypes ePlayer = FIRST_PLAYER; ePlayer < NUM_PLAYER_TYPES; ePlayer++)
+	{
+		const CvPlayer& kPlayer = GET_PLAYER(ePlayer);
+		if (kPlayer.isEverAlive())
+		{
+			if (!kPlayer.isHuman() && kPlayer.getCivCategoryTypes() == CIV_CATEGORY_EUROPEAN)
+			{
+				iCount++;
+			}
+		}
+	}
+
+	return iCount;
+}
+
 
 int CvGame::countTotalCivPower()
 {
@@ -4057,7 +4099,7 @@ void CvGame::resetTurnTimer()
 			{
 				// Let's allow more time for the initial turn
 				TurnTimerTypes eTurnTimer = GC.getInitCore().getTurnTimer();
-				FAssertMsg(eTurnTimer >= 0 && eTurnTimer < GC.getNumTurnTimerInfos(), "Invalid TurnTimer selection in InitCore");
+				FAssertMsg(VARINFO<TurnTimerTypes>::isInRange(eTurnTimer), "Invalid TurnTimer selection in InitCore");
 				iTurnLen = (iTurnLen * GC.getTurnTimerInfo(eTurnTimer).getFirstTurnMultiplier());
 			}
 			// Set the current turn slice to start the 'timer'
@@ -4116,7 +4158,7 @@ int CvGame::getMaxTurnLen()
 
 		// Now return turn len based on base len and unit and city bonuses
 		TurnTimerTypes eTurnTimer = GC.getInitCore().getTurnTimer();
-		FAssertMsg(eTurnTimer >= 0 && eTurnTimer < GC.getNumTurnTimerInfos(), "Invalid TurnTimer Selection in InitCore");
+		FAssertMsg(VARINFO<TurnTimerTypes>::isInRange(eTurnTimer), "Invalid TurnTimer Selection in InitCore");
 		return ( GC.getTurnTimerInfo(eTurnTimer).getBaseTime() +
 			    (GC.getTurnTimerInfo(eTurnTimer).getCityBonus()*iMaxCities) +
 				(GC.getTurnTimerInfo(eTurnTimer).getUnitBonus()*iMaxUnits) );
@@ -4226,9 +4268,9 @@ void CvGame::initScoreCalculation()
 {
 	// initialize score calculation
 	int iMaxFood = 0;
-	for (int i = 0; i < GC.getMapINLINE().numPlotsINLINE(); i++)
+	for (int i = 0; i < GC.getMap().numPlotsINLINE(); i++)
 	{
-		CvPlot* pPlot = GC.getMapINLINE().plotByIndexINLINE(i);
+		CvPlot* pPlot = GC.getMap().plotByIndexINLINE(i);
 		if (!pPlot->isWater() || pPlot->isAdjacentToLand())
 		{
 			iMaxFood += pPlot->calculateBestNatureYield(YIELD_FOOD, NO_TEAM);
@@ -4236,7 +4278,7 @@ void CvGame::initScoreCalculation()
 	}
 
 	m_iMaxPopulation = iMaxFood / std::max(1, GLOBAL_DEFINE_FOOD_CONSUMPTION_PER_POPULATION);
-	m_iMaxLand = GC.getMapINLINE().getLandPlots();
+	m_iMaxLand = GC.getMap().getLandPlots();
 	m_iMaxFather = GC.getNumFatherInfos();
 
 	if (NO_ERA != getStartEra())
@@ -4343,9 +4385,9 @@ void CvGame::toggleDebugMode()
 	m_bDebugMode = ((m_bDebugMode) ? false : true);
 	updateDebugModeCache();
 
-	GC.getMapINLINE().updateVisibility();
-	GC.getMapINLINE().updateSymbols();
-	GC.getMapINLINE().updateMinimapColor();
+	GC.getMap().updateVisibility();
+	GC.getMap().updateSymbols();
+	GC.getMap().updateMinimapColor();
 
 	gDLL->getInterfaceIFace()->setDirty(GameData_DIRTY_BIT, true);
 	gDLL->getInterfaceIFace()->setDirty(Score_DIRTY_BIT, true);
@@ -4553,10 +4595,10 @@ void CvGame::setActivePlayer(PlayerTypes eNewValue, bool bForceHotSeat)
 
 		if (GC.IsGraphicsInitialized())
 		{
-			GC.getMapINLINE().updateFog();
-			GC.getMapINLINE().updateVisibility();
-			GC.getMapINLINE().updateSymbols();
-			GC.getMapINLINE().updateMinimapColor();
+			GC.getMap().updateFog();
+			GC.getMap().updateVisibility();
+			GC.getMap().updateSymbols();
+			GC.getMap().updateMinimapColor();
 
 			updateUnitEnemyGlow();
 
@@ -4751,9 +4793,9 @@ GameSpeedTypes CvGame::getGameSpeedType() const
 int CvGame::getCultureLevelThreshold(CultureLevelTypes eCultureLevel, PlayerTypes ePlayer) const
 {
 	int iThreshold;
-	
+
 	iThreshold = GC.getCultureLevelInfo(eCultureLevel).getThreshold() * GC.getGameSpeedInfo(getGameSpeedType()).getGrowthPercent() / 100;
-	
+
 	if (ePlayer != NO_PLAYER)
 	{
 		CvPlayer &kPlayer = GET_PLAYER(ePlayer);
@@ -4769,7 +4811,7 @@ int CvGame::getCultureLevelThreshold(CultureLevelTypes eCultureLevel, PlayerType
 		}
 	}
 
-	return iThreshold;					
+	return iThreshold;
 }
 
 int CvGame::getCargoYieldCapacity() const
@@ -5018,7 +5060,7 @@ void CvGame::makeSpecialBuildingValid(SpecialBuildingTypes eIndex, bool bAnnounc
 			{
 				if (GET_PLAYER((PlayerTypes)iI).isAlive())
 				{
-					gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_BUILDING_COMPLETED", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_HIGHLIGHT_TEXT"));
+					gDLL->UI().addPlayerMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_BUILDING_COMPLETED", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_HIGHLIGHT_TEXT"));
 				}
 			}
 		}
@@ -5269,18 +5311,18 @@ void CvGame::doTurn()
 	{
 		int iChance = GC.getHandicapInfo(getHandicapType()).getAIImmigration() * 100;
 		iChance /= GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getGrowthPercent();
-		
-		if (NO_WORLDSIZE != GC.getMapINLINE().getWorldSize())
+
+		if (NO_WORLDSIZE != GC.getMap().getWorldSize())
 		{
-			iChance *= GC.getWorldInfo(GC.getMapINLINE().getWorldSize()).getAIImmigrationModifier();
+			iChance *= GC.getWorldInfo(GC.getMap().getWorldSize()).getAIImmigrationModifier();
 			iChance /= 100;
 		}
-	
+
 		if (GC.getGameINLINE().getSorenRandNum(100, "AI") < iChance)
 		{
-			for (int iPlayer = 0; iPlayer < MAX_PLAYERS; ++iPlayer)
+			for (PlayerTypes ePlayer = FIRST_PLAYER; ePlayer < NUM_PLAYER_TYPES; ++ePlayer)
 			{
-				CvPlayer& kPlayer = GET_PLAYER((PlayerTypes) iPlayer);
+				CvPlayer &kPlayer = GET_PLAYER(ePlayer);
 				if (kPlayer.isAlive())
 				{
 					if (!kPlayer.isHuman() && !kPlayer.isEurope() && !kPlayer.isNative())
@@ -5292,16 +5334,16 @@ void CvGame::doTurn()
 		}
 	}
 	// TAC - AI More Immigrants - koma13 - END
-
-	for (iI = 0; iI < MAX_TEAMS; iI++)
+	for (TeamTypes eTeam = FIRST_TEAM; eTeam < NUM_TEAM_TYPES; ++eTeam)
 	{
-		if (GET_TEAM((TeamTypes)iI).isAlive())
+		CvTeam &kTeam = GET_TEAM(eTeam);
+		if (kTeam.isAlive())
 		{
-			GET_TEAM((TeamTypes)iI).doTurn();
+			kTeam.doTurn();
 		}
 	}
 
-	GC.getMapINLINE().doTurn();
+	GC.getMap().doTurn();
 
 	// < JAnimals Mod Start >
 	createAnimalsLand();
@@ -5454,9 +5496,9 @@ void CvGame::createAnimalsLand()
 	int iNeededAnimals;
 	int iValue, iBestValue, iRand;
 	int iLoop, iI, iJ;
-	int iStartDist = 0; 
+	int iStartDist = 0;
 
-	for(pLoopArea = GC.getMapINLINE().firstArea(&iLoop); pLoopArea != NULL; pLoopArea = GC.getMapINLINE().nextArea(&iLoop))
+	for(pLoopArea = GC.getMap().firstArea(&iLoop); pLoopArea != NULL; pLoopArea = GC.getMap().nextArea(&iLoop))
 	{
 		iNeededAnimals = (pLoopArea->getNumTiles() * GC.getHandicapInfo(getHandicapType()).getAIAnimalLandMaxPercent()) / 100;
 		//iNeededAnimals = std::min(100, iNeededAnimals);
@@ -5474,10 +5516,10 @@ void CvGame::createAnimalsLand()
 			{
 				for (iI = 0; iI < iNeededAnimals; iI++)
 				{
-				    pPlot = GC.getMapINLINE().syncRandPlot((RANDPLOT_NOT_CITY), pLoopArea->getID(), iStartDist);
+				    pPlot = GC.getMap().syncRandPlot((RANDPLOT_NOT_CITY), pLoopArea->getID(), iStartDist);
 
-					// Do not spawn in enemy territory
-					if (pPlot != NULL && pPlot->getOwner() != NO_PLAYER)
+					// WTP, ray, Do not spawn in impassable Terrain - owner is checked below
+					if (pPlot != NULL && !pPlot->isImpassable())
 					{
 					    /*
 					    // May Cause OOS Errors as Active Player is different on each Computer
@@ -5564,9 +5606,9 @@ void CvGame::createAnimalsSea()
 	int iLoop, iI, iJ;
 	int iStartDist = 0;
 
-	for(pLoopArea = GC.getMapINLINE().firstArea(&iLoop); pLoopArea != NULL; pLoopArea = GC.getMapINLINE().nextArea(&iLoop))
+	for(pLoopArea = GC.getMap().firstArea(&iLoop); pLoopArea != NULL; pLoopArea = GC.getMap().nextArea(&iLoop))
 	{
-		iNeededAnimals = (pLoopArea->getNumTiles() * GC.getHandicapInfo(getHandicapType()).getAIAnimalLandMaxPercent()) / 100;
+		iNeededAnimals = (pLoopArea->getNumTiles() * GC.getHandicapInfo(getHandicapType()).getAIAnimalSeaMaxPercent()) / 100;
 		//iNeededAnimals = std::min(100, iNeededAnimals);
 		//iNeededAnimals -= pLoopArea->getUnitsPerPlayer(getBarbarianPlayer());
 		if (iNeededAnimals == 0 && GC.getGameINLINE().getSorenRandNum(10, "Small Area Animal Spwan") == 1)
@@ -5585,9 +5627,10 @@ void CvGame::createAnimalsSea()
 			{
 				for (iI = 0; iI < iNeededAnimals; iI++)
 				{
-				    pPlot = GC.getMapINLINE().syncRandPlot((RANDPLOT_NOT_CITY), pLoopArea->getID(), iStartDist);
+				    pPlot = GC.getMap().syncRandPlot((RANDPLOT_NOT_CITY), pLoopArea->getID(), iStartDist);
 
-					if (pPlot != NULL)
+					// WTP, ray, Do not spawn in impassable Terrain - owner is checked below
+					if (pPlot != NULL && !pPlot->isImpassable())
 					{
 					    /*
 					    // May Cause OOS Errors as Active Player is different on each Computer
@@ -5673,8 +5716,8 @@ void CvGame::createChurchPlayer()
 						// set permanent peace with all Europeans and make contact
 						if (GET_TEAM((TeamTypes)iI).isAlive() && !GET_TEAM((TeamTypes)iI).hasNativePlayer())
 						{
-							GET_TEAM(eTeam).setPermanentWarPeace(((TeamTypes)iI), true); 
-							GET_TEAM(eTeam).meet(((TeamTypes)iI), false); 
+							GET_TEAM(eTeam).setPermanentWarPeace(((TeamTypes)iI), true);
+							GET_TEAM(eTeam).meet(((TeamTypes)iI), false);
 						}
 					}
 				}
@@ -5854,7 +5897,7 @@ void CvGame::testAlive()
 	for (int iI = 0; iI < MAX_PLAYERS; iI++)
 	{
 	    // < JAnimals Mod Start > AND // R&R, ray, the Church - START
-	    if (!isBarbarianPlayer((PlayerTypes) iI) && !isChurchPlayer((PlayerTypes) iI)) 
+	    if (!isBarbarianPlayer((PlayerTypes) iI) && !isChurchPlayer((PlayerTypes) iI))
 	    {
             GET_PLAYER((PlayerTypes)iI).verifyAlive();
 	    }
@@ -6058,7 +6101,7 @@ bool CvGame::testVictory(VictoryTypes eVictory, TeamTypes eTeam, bool* pbEndScor
 	{
 		if (getAdjustedLandPercent(eVictory) > 0)
 		{
-			if (100 * GET_TEAM(eTeam).getTotalLand() < GC.getMapINLINE().getLandPlots() * getAdjustedLandPercent(eVictory))
+			if (100 * GET_TEAM(eTeam).getTotalLand() < GC.getMap().getLandPlots() * getAdjustedLandPercent(eVictory))
 			{
 				bValid = false;
 			}
@@ -6319,7 +6362,13 @@ CvDeal* CvGame::nextDeal(int *pIterIdx, bool bRev)
 }
 
 
- CvRandom& CvGame::getMapRand()
+CvRandom& CvGame::getMapRand()
+{
+	FAssertMsg(GC.isMainThread(), "Using non-const random while multi threaded (causes OOS)");
+	return m_mapRand;
+}
+
+const CvRandom& CvGame::getMapRand() const
 {
 	return m_mapRand;
 }
@@ -6327,11 +6376,18 @@ CvDeal* CvGame::nextDeal(int *pIterIdx, bool bRev)
 
 int CvGame::getMapRandNum(int iNum, const char* pszLog)
 {
+	FAssertMsg(GC.isMainThread(), "Using non-const random while multi threaded (causes OOS)");
 	return m_mapRand.get(iNum, pszLog);
 }
 
 
 CvRandom& CvGame::getSorenRand()
+{
+	FAssertMsg(GC.isMainThread(), "Using non-const random while multi threaded (causes OOS)");
+	return m_sorenRand;
+}
+
+const CvRandom& CvGame::getSorenRand() const
 {
 	return m_sorenRand;
 }
@@ -6363,8 +6419,8 @@ int CvGame::calculateSyncChecksum(CvString* pLogString)
 	iValue += getNumCities();
 	iValue += getNumDeals();
 
-	iValue += GC.getMapINLINE().getOwnedPlots();
-	iValue += GC.getMapINLINE().getNumAreas();
+	iValue += GC.getMap().getOwnedPlots();
+	iValue += GC.getMap().getNumAreas();
 
 	for (iI = 0; iI < MAX_PLAYERS; iI++)
 	{
@@ -6456,8 +6512,8 @@ int CvGame::calculateSyncChecksum(CvString* pLogString)
 		*pLogString += CvString::format("Gameplay seed = %d\n", getSorenRand().getSeed());
 		*pLogString += CvString::format("NumCities = %d\n", getNumCities());
 		*pLogString += CvString::format("NumDeals = %d\n", getNumDeals());
-		*pLogString += CvString::format("Owned plots = %d\n", GC.getMapINLINE().getOwnedPlots());
-		*pLogString += CvString::format("NumAreas = %d\n", GC.getMapINLINE().getNumAreas());
+		*pLogString += CvString::format("Owned plots = %d\n", GC.getMap().getOwnedPlots());
+		*pLogString += CvString::format("NumAreas = %d\n", GC.getMap().getNumAreas());
 		for (iI = 0; iI < MAX_PLAYERS; iI++)
 		{
 			CvPlayer& kPlayer = GET_PLAYER((PlayerTypes)iI);
@@ -6532,13 +6588,13 @@ int CvGame::calculateOptionsChecksum()
 }
 
 
-void CvGame::addReplayMessage(ReplayMessageTypes eType, PlayerTypes ePlayer, CvWString pszText, int iPlotX, int iPlotY, ColorTypes eColor)
+void CvGame::addReplayMessage(ReplayMessageTypes eType, PlayerTypes ePlayer, CvWString pszText, Coordinates coord, ColorTypes eColor)
 {
 	int iGameTurn = getGameTurn();
 	CvReplayMessage* pMessage = new CvReplayMessage(iGameTurn, eType, ePlayer);
 	if (NULL != pMessage)
 	{
-		pMessage->setPlot(iPlotX, iPlotY);
+		pMessage->setPlot(coord.x(), coord.y());
 		pMessage->setText(pszText);
 		if (NO_COLOR == eColor)
 		{
@@ -6856,7 +6912,7 @@ void CvGame::setPlotExtraYield(int iX, int iY, YieldTypes eYield, int iExtraYiel
 		m_aPlotExtraYields.push_back(kExtraYield);
 	}
 
-	CvPlot* pPlot = GC.getMapINLINE().plot(iX, iY);
+	CvPlot* pPlot = GC.getMap().plot(iX, iY);
 	if (NULL != pPlot)
 	{
 		pPlot->updateYield(true);
@@ -6874,7 +6930,7 @@ void CvGame::removePlotExtraYield(int iX, int iY)
 		}
 	}
 
-	CvPlot* pPlot = GC.getMapINLINE().plot(iX, iY);
+	CvPlot* pPlot = GC.getMap().plot(iX, iY);
 	if (NULL != pPlot)
 	{
 		pPlot->updateYield(true);
@@ -7088,7 +7144,7 @@ void CvGame::setFatherTeam(FatherTypes eFather, TeamTypes eTeam)
 							szBuffer = gDLL->getText("TXT_KEY_FATHER_JOINED_UNKNOWN", GC.getFatherInfo(eFather).getTextKeyWide());
 						}
 
-						gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_GLOBECIRCUMNAVIGATED", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_HIGHLIGHT_TEXT"));
+						gDLL->UI().addPlayerMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_GLOBECIRCUMNAVIGATED", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_HIGHLIGHT_TEXT"));
 					}
 				}
 				szBuffer = gDLL->getText("TXT_KEY_FATHER_JOINED_TEAM", GC.getFatherInfo(eFather).getTextKeyWide(), GET_TEAM(getFatherTeam(eFather)).getName().GetCString());
@@ -7232,9 +7288,9 @@ void CvGame::updateOceanDistances()
 	PROFILE_FUNC();
 
 	std::deque<CvPlot*> plotQueue;
-	for(int iI = 0; iI < GC.getMapINLINE().numPlotsINLINE(); iI++)
+	for(int iI = 0; iI < GC.getMap().numPlotsINLINE(); iI++)
 	{
-		CvPlot* pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(iI);
+		CvPlot* pLoopPlot = GC.getMap().plotByIndexINLINE(iI);
 		if (pLoopPlot->isEurope())
 		{
 			pLoopPlot->setDistanceToOcean(0);
@@ -7287,7 +7343,7 @@ void CvGame::updateOceanDistances()
 
 	//DannyDaemonic fix
 	//OutputDebugStr(CvString::format("[CvGame::updateOceanDistances] Plots: %i, Visits: %i\n", GC.getMapINLINE().numPlotsINLINE(), iVisits).GetCString());
-	OutputDebugString(CvString::format("[CvGame::updateOceanDistances] Plots: %i, Visits: %i\n", GC.getMapINLINE().numPlotsINLINE(), iVisits).GetCString());
+	OutputDebugString(CvString::format("[CvGame::updateOceanDistances] Plots: %i, Visits: %i\n", GC.getMap().numPlotsINLINE(), iVisits).GetCString());
 	//end
 }
 
@@ -7323,6 +7379,9 @@ void CvGame::setWBCentralAmericanNative(bool bValue)
 }
 // R&R, ray, Correct Geographical Placement of Natives - END
 
+
+void CreateOOSSavegame();
+
 // function to write a log file containing various data useful to track down OOS issues.
 // Never call this directly, call it by clicking a WIDGET_NETWORK_DESYNC button in python.
 // This in turn will send PLAYER_ACTION_NETWORK_DESYNC_LOG_WRITE on the network to call this function in sync.
@@ -7357,18 +7416,12 @@ void CvGame::writeDesyncLog()
 			}
 		}
 
-		GC.getMapINLINE().writeDesyncLog(f);
+		GC.getMap().writeDesyncLog(f);
 
 		fclose(f);
 	}
 
-	filename = gDLL->getModName();
-	filename.append(CvString::format("Desync save for player %d.ColonizationSave", getActivePlayer()));
-
-	// remove the savegame file if it exist. Let it silently fail if it's not there.
-	remove(filename.c_str());
-
-	gDLL->getEngineIFace()->SaveGame(filename);
+	CreateOOSSavegame();
 
 	// create a popup telling the task is done
 	CvPopupInfo* pInfo = new CvPopupInfo(BUTTONPOPUP_DESYNC_LOG_COMPLETE);

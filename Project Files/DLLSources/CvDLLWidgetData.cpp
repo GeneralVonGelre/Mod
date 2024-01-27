@@ -125,13 +125,13 @@ void CvDLLWidgetData::parseHelp(CvWStringBuffer &szBuffer, CvWidgetDataStruct &w
 	case WIDGET_YIELD_IMPORT_EXPORT:
 		parseImportExportHelp(widgetDataStruct, szBuffer);
 		break;
-	
+
 	// R&R mod, vetiarvind, max yield import limit - start
-	case WIDGET_CONDENSED_YIELD_IMPORT_EXPORT: 
+	case WIDGET_CONDENSED_YIELD_IMPORT_EXPORT:
 		parseCondensedImportExportHelp(widgetDataStruct, szBuffer);
 		break;
 	// R&R mod, vetiarvind, max yield import limit - end
-	
+
 	// Teacher List - start - Nightinggale
 	case WIDGET_TEACHER_LIST:
 		szBuffer.append(gDLL->getText("TXT_KEY_EDIT_TEACHER_LIST"));
@@ -145,6 +145,24 @@ void CvDLLWidgetData::parseHelp(CvWStringBuffer &szBuffer, CvWidgetDataStruct &w
 		szBuffer.append(gDLL->getText("TXT_KEY_DOMESTIC_MARKET"));
 		break;
 	// R&R, Robert Surcouf, Custom House Popup-Screen END
+
+	case WIDGET_MOVE_CARGO_TO_CITY:
+		{
+			CvCity* pCity = gDLL->getInterfaceIFace()->getHeadSelectedCity();
+			if (pCity == NULL || pCity->getOwnerINLINE() != GC.getGameINLINE().getActivePlayer())
+			{
+				break;
+			}
+			int iUnitId = widgetDataStruct.m_iData2;
+			CvUnit* pUnit = GET_PLAYER(GC.getGameINLINE().getActivePlayer()).getUnit(iUnitId);
+			if (pUnit == NULL || pUnit->isGoods())
+			{
+				break;
+			}
+			widgetDataStruct.m_iData1 = widgetDataStruct.m_iData2;
+			widgetDataStruct.m_iData2 = 1;
+		}
+		// fallthrough
 
 	case WIDGET_EJECT_CITIZEN:
 		parseEjectCitizenHelp(widgetDataStruct, szBuffer);
@@ -406,6 +424,9 @@ void CvDLLWidgetData::parseHelp(CvWStringBuffer &szBuffer, CvWidgetDataStruct &w
 		break;
 	// WTP, ray, Widgets for Harbour System and Barracks System - END
 
+	case WIDGET_HELP_SHOW_OR_HIDE_YIELDS:
+		parseShowOrHideYieldsHelp(widgetDataStruct, szBuffer);
+		break;
 	}
 }
 
@@ -649,11 +670,11 @@ bool CvDLLWidgetData::executeAction( CvWidgetDataStruct &widgetDataStruct )
 		break;
 
 	// R&R mod, vetiarvind, max yield import limit - start
-	case WIDGET_CONDENSED_YIELD_IMPORT_EXPORT: 
+	case WIDGET_CONDENSED_YIELD_IMPORT_EXPORT:
 		doYieldImportExport(widgetDataStruct, true);
 		break;
 	// R&R mod, vetiarvind, max yield import limit - end
-	
+
 
 	// Teacher List - start - Nightinggale
 	case WIDGET_TEACHER_LIST:
@@ -796,6 +817,26 @@ bool CvDLLWidgetData::executeDoubleClick(const CvWidgetDataStruct& widgetDataStr
 	case WIDGET_CITIZEN:
 		doDoubleClickCitizen(widgetDataStruct);
 		break;
+
+	case WIDGET_MOVE_CARGO_TO_CITY:
+	{
+		CvCity* pCity = gDLL->getInterfaceIFace()->getHeadSelectedCity();
+		if (pCity == NULL || pCity->getOwnerINLINE() != GC.getGameINLINE().getActivePlayer())
+		{
+			break;
+		}
+		int iUnitId = widgetDataStruct.m_iData2;
+		CvUnit* pUnit = GET_PLAYER(GC.getGameINLINE().getActivePlayer()).getUnit(iUnitId);
+		if (pUnit == NULL || pUnit->isGoods())
+		{
+			break;
+		}
+		CvWidgetDataStruct widgetDataStructModified = widgetDataStruct;
+		widgetDataStructModified.m_iData1 = widgetDataStruct.m_iData2;
+		widgetDataStructModified.m_iData2 = 1;
+		doDoubleClickGarrison(widgetDataStructModified);
+		break;
+	}
 
 	case WIDGET_EJECT_CITIZEN:
 		doDoubleClickGarrison(widgetDataStruct);
@@ -1326,7 +1367,7 @@ void CvDLLWidgetData::doPediaBuildJump(CvWidgetDataStruct &widgetDataStruct)
 
 void CvDLLWidgetData::doGotoTurnEvent(CvWidgetDataStruct &widgetDataStruct)
 {
-	CvPlot* pPlot = GC.getMapINLINE().plotINLINE(widgetDataStruct.m_iData1, widgetDataStruct.m_iData2);
+	CvPlot* pPlot = GC.getMap().plotINLINE(widgetDataStruct.m_iData1, widgetDataStruct.m_iData2);
 
 	if (NULL != pPlot && !gDLL->getEngineIFace()->isCameraLocked())
 	{
@@ -1406,6 +1447,9 @@ void CvDLLWidgetData::parseCityNameHelp(CvWidgetDataStruct &widgetDataStruct, Cv
 		//WTP, ray, Slave Hunter and Slave Master - START
 		szBuffer.append(NEWLINE);
 		szBuffer.append(gDLL->getText("TXT_KEY_CITY_SLAVE_REVOLT_REDUCTION_BONUS", pHeadSelectedCity->getSlaveRevoltReductionBonus()));
+
+		// WTP, ray, since it is cached / recalculated it needs to be recalculated here
+		pHeadSelectedCity->updateSlaveWorkerProductionBonus();
 		szBuffer.append(NEWLINE);
 		szBuffer.append(gDLL->getText("TXT_KEY_CITY_SLAVE_WORKER_PRODUCTION_BONUS", pHeadSelectedCity->getSlaveWorkerProductionBonus()));
 		//WTP, ray, Slave Hunter and Slave Master - END
@@ -1524,7 +1568,7 @@ void CvDLLWidgetData::parseHurryHelp(CvWidgetDataStruct &widgetDataStruct, CvWSt
 			}
 
 			for (int iYield = 0; iYield < NUM_YIELD_TYPES; ++iYield)
-			{	
+			{
 				int iAmountNeeded = pHeadSelectedCity->hurryYield(eHurry, (YieldTypes) iYield);
 				if (iAmountNeeded > 0)
 				{
@@ -1665,7 +1709,10 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 				while (pSelectedUnitNode != NULL)
 				{
 					pSelectedUnit = ::getUnit(pSelectedUnitNode->m_data);
-					iTurns = std::max(iTurns, pSelectedUnit->healTurns(pMissionPlot));
+					if (pSelectedUnit != NULL)
+					{
+						iTurns = std::max(iTurns, pSelectedUnit->healTurns(pMissionPlot));
+					}
 
 					pSelectedUnitNode = gDLL->getInterfaceIFace()->nextSelectionListNode(pSelectedUnitNode);
 				}
@@ -1688,7 +1735,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 			}
 			else if (GC.getActionInfo(widgetDataStruct.m_iData1).getMissionType() == MISSION_FOUND)
 			{
-				if (!(GET_PLAYER(pHeadSelectedUnit->getOwnerINLINE()).canFound(pMissionPlot->getX_INLINE(), pMissionPlot->getY_INLINE())))
+				if (!(GET_PLAYER(pHeadSelectedUnit->getOwnerINLINE()).canFound(pMissionPlot->coord())))
 				{
 					bValid = true;
 
@@ -1794,7 +1841,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 				{
 					pSelectedUnit = ::getUnit(pSelectedUnitNode->m_data);
 
-					if (pSelectedUnit->canBuild(pMissionPlot, eBuild))
+					if (pSelectedUnit != NULL && pSelectedUnit->canBuild(pMissionPlot, eBuild))
 					{
 						bValid = true;
 						break;
@@ -1898,7 +1945,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 
 					if (GC.getImprovementInfo(eBuildImprovement).getDefenseModifier() != 0)
 					{
-						szBuffer.append(NEWLINE);						
+						szBuffer.append(NEWLINE);
 						// Super Forts begin *bombard* *text*
 						szBuffer.append(gDLL->getText("TXT_KEY_ACTION_DEFENSE_MODIFIER", (GC.getImprovementInfo(eImprovement).getDefenseModifier() - pMissionPlot->getDefenseDamage())));
 						// szBuffer.append(gDLL->getText("TXT_KEY_ACTION_DEFENSE_MODIFIER", GC.getImprovementInfo(eImprovement).getDefenseModifier())); - Original Code
@@ -2000,8 +2047,11 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 				{
 					pSelectedUnit = ::getUnit(pSelectedUnitNode->m_data);
 
-					iNowWorkRate += pSelectedUnit->workRate(false);
-					iThenWorkRate += pSelectedUnit->workRate(true);
+					if (pSelectedUnit != NULL)
+					{
+						iNowWorkRate += pSelectedUnit->workRate(false);
+						iThenWorkRate += pSelectedUnit->workRate(true);
+					}
 
 					pSelectedUnitNode = gDLL->getInterfaceIFace()->nextSelectionListNode(pSelectedUnitNode);
 				}
@@ -2027,8 +2077,8 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 				{
 					pSelectedUnit = ::getUnit(pSelectedUnitNode->m_data);
 					// R&R, ray, High Sea Fishing - START
-					//if (pSelectedUnit->getUnitInfo().isGatherBoat()) 
-					if (pSelectedUnit->isWhalingBoat())
+					//if (pSelectedUnit->getUnitInfo().isGatherBoat())
+					if (pSelectedUnit != NULL && pSelectedUnit->isWhalingBoat())
 					{
 						pCommandUnit = pSelectedUnit;
 						break;
@@ -2053,7 +2103,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 					BonusTypes eFishBonus = pPlot->getBonusType();
 					if (eFishBonus != NO_BONUS)
 					{
-						
+
 						if (GC.getBonusInfo(eFishBonus).isWhalingboatWorkable())
 						{
 							if (pCommandUnit->isWhalingBoat())
@@ -2069,7 +2119,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 
 					if (pPlot->isCityRadius())
 					{
-						CvCity* pNearestCity = GC.getMapINLINE().findCity(pPlot->getX_INLINE(), pPlot->getY_INLINE(), pPlot->getOwner(), pPlot->getTeam(), false, true);
+						CvCity* pNearestCity = GC.getMap().findCity(pPlot->getX_INLINE(), pPlot->getY_INLINE(), pPlot->getOwner(), pPlot->getTeam(), false, true);
 						if (pNearestCity != NULL)
 						{
 							if (pPlot->isBeingWorked())
@@ -2121,7 +2171,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 				while (pSelectedUnitNode != NULL)
 				{
 					pSelectedUnit = ::getUnit(pSelectedUnitNode->m_data);
-					if (pSelectedUnit->isFishingBoat())
+					if (pSelectedUnit != NULL && pSelectedUnit->isFishingBoat())
 					{
 						pCommandUnit = pSelectedUnit;
 						break;
@@ -2146,7 +2196,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 					BonusTypes eFishBonus = pPlot->getBonusType();
 					if (eFishBonus != NO_BONUS)
 					{
-						
+
 						if (GC.getBonusInfo(eFishBonus).isFishingboatWorkable())
 						{
 							if (pCommandUnit->isFishingBoat())
@@ -2162,7 +2212,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 
 					if (pPlot->isCityRadius())
 					{
-						CvCity* pNearestCity = GC.getMapINLINE().findCity(pPlot->getX_INLINE(), pPlot->getY_INLINE(), pPlot->getOwner(), pPlot->getTeam(), false, true);
+						CvCity* pNearestCity = GC.getMap().findCity(pPlot->getX_INLINE(), pPlot->getY_INLINE(), pPlot->getOwner(), pPlot->getTeam(), false, true);
 						if (pNearestCity != NULL)
 						{
 							if (pPlot->isBeingWorked())
@@ -2236,7 +2286,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 					{
 						pSelectedUnit = ::getUnit(pSelectedUnitNode->m_data);
 
-						if (pSelectedUnit->canUpgrade(((UnitTypes)(GC.getActionInfo(widgetDataStruct.m_iData1).getCommandData())), true))
+						if (pSelectedUnit != NULL && pSelectedUnit->canUpgrade(((UnitTypes)(GC.getActionInfo(widgetDataStruct.m_iData1).getCommandData())), true))
 						{
 							iPrice += pSelectedUnit->upgradePrice((UnitTypes)(GC.getActionInfo(widgetDataStruct.m_iData1).getCommandData()));
 						}
@@ -2266,7 +2316,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 					{
 						pSelectedUnit = ::getUnit(pSelectedUnitNode->m_data);
 
-						if (!(GET_PLAYER(eGiftPlayer).AI_acceptUnit(pSelectedUnit)))
+						if (pSelectedUnit != NULL && !(GET_PLAYER(eGiftPlayer).AI_acceptUnit(pSelectedUnit)))
 						{
 							szBuffer.append(NEWLINE);
 							szBuffer.append(gDLL->getText("TXT_KEY_REFUSE_GIFT", GET_PLAYER(eGiftPlayer).getNameKey()));
@@ -2290,7 +2340,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 					}
 				}
 			}
-			
+
 			else if (GC.getActionInfo(widgetDataStruct.m_iData1).getCommandType() == COMMAND_ESTABLISH_MISSION)
 			{
 				CvUnit* pMissionary = NULL;
@@ -2298,7 +2348,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 				while (pSelectedUnitNode != NULL)
 				{
 					pSelectedUnit = ::getUnit(pSelectedUnitNode->m_data);
-					if (pSelectedUnit->canEstablishMission())
+					if (pSelectedUnit != NULL && pSelectedUnit->canEstablishMission())
 					{
 						pMissionary = pSelectedUnit;
 						break;
@@ -2322,7 +2372,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 				while (pSelectedUnitNode != NULL)
 				{
 					pSelectedUnit = ::getUnit(pSelectedUnitNode->m_data);
-					if (pSelectedUnit->canEstablishTradePost())
+					if (pSelectedUnit != NULL && pSelectedUnit->canEstablishTradePost())
 					{
 						pTrader = pSelectedUnit;
 						break;
@@ -2347,7 +2397,7 @@ void CvDLLWidgetData::parseActionHelp(CvWidgetDataStruct &widgetDataStruct, CvWS
 				while (pSelectedUnitNode != NULL)
 				{
 					pSelectedUnit = ::getUnit(pSelectedUnitNode->m_data);
-					if (pSelectedUnit->canStirUp())
+					if (pSelectedUnit != NULL && pSelectedUnit->canStirUp())
 					{
 						pMissionary = pSelectedUnit;
 						break;
@@ -2431,7 +2481,7 @@ void CvDLLWidgetData::parseCityPlotHelp(CvWidgetDataStruct &widgetDataStruct, Cv
     }
     if (pCity != NULL)
     {
-        CvPlot* pPlot = pCity->getCityIndexPlot(widgetDataStruct.m_iData1);
+        CvPlot* pPlot = pCity->getCityIndexPlot(static_cast<CityPlotTypes>(widgetDataStruct.m_iData1));
         if (NULL == pPlot)
         {
 			return;
@@ -2479,7 +2529,7 @@ void CvDLLWidgetData::parseContactCivHelp(CvWidgetDataStruct &widgetDataStruct, 
 	if (GC.getGameINLINE().isOption(GAMEOPTION_NO_MORE_VARIABLES_HIDDEN))
     {
 		if (!otherPlayer.isEurope())
-		{	
+		{
 			GAMETEXT.parseLeaderTraits(szBuffer, otherPlayer.getLeaderType(), otherPlayer.getCivilizationType());
 			szBuffer.append(NEWLINE);
 		}
@@ -2488,7 +2538,7 @@ void CvDLLWidgetData::parseContactCivHelp(CvWidgetDataStruct &widgetDataStruct, 
 	{
 		GAMETEXT.parsePlayerTraits(szBuffer, otherPlayer.getID());
 	}
-	
+
 	if (!(GET_TEAM(GC.getGameINLINE().getActiveTeam()).isHasMet(otherPlayer.getTeam())))
 	{
 		szBuffer.append(NEWLINE);
@@ -2541,7 +2591,7 @@ void CvDLLWidgetData::parseContactCivHelp(CvWidgetDataStruct &widgetDataStruct, 
 	if ((gDLL->getChtLvl() > 0) && gDLL->shiftKey())
 	{
 		CvPlayerAI& player = GET_PLAYER((PlayerTypes)widgetDataStruct.m_iData1);
-		
+
 		szBuffer.append(CvWString::format(L"\nPlayer %d, Team %d", player.getID(), player.getTeam()));
 		szBuffer.append(CvWString::format(L"\n%d%c %d%c", player.getGold(), GC.getSymbolID(GOLD_CHAR), GET_TEAM(player.getTeam()).getRebelPercent(), GC.getSymbolID(POWER_CHAR)));
 		szBuffer.append(CvWString::format(L"\nCities = %d, Units = %d, Pop = %d, AIPop = %d", player.getNumCities(), player.getNumUnits(), player.getTotalPopulation(), player.AI_getPopulation()));
@@ -2553,7 +2603,7 @@ void CvDLLWidgetData::parseContactCivHelp(CvWidgetDataStruct &widgetDataStruct, 
 				szBuffer.append(CvWString::format(L"\nStrategy %s, Duration %d", getStrategyString((StrategyTypes)i).GetCString(), player.AI_getStrategyDuration((StrategyTypes) i)));
 			}
 		}
-		
+
 		//Extra Info
 		ProfessionTypes eBuyProfession;
 		UnitTypes eBuyProfessionUnit;
@@ -2579,30 +2629,30 @@ void CvDLLWidgetData::parseContactCivHelp(CvWidgetDataStruct &widgetDataStruct, 
 			getUnitAIString(szTempString, eBuyUnitAI);
 			szBuffer.append(CvWString::format(SETCOLR L"\n%s/ %s/ %d" ENDCOLR , TEXT_COLOR("COLOR_UNIT_TEXT"), GC.getUnitInfo(eBuyUnit).getDescription(), szTempString.GetCString(), iBuyUnitValue ));
 		}
-		
+
 		if (player.isNative())
 		{
 			szBuffer.append(CvWString::format(L"\nOverpopulation : %d", player.AI_getOverpopulationPercent()));
 		}
-		
+
 		CvTeamAI& kTeam = GET_TEAM(player.getTeam());
 		for (int i = 0; i < MAX_PLAYERS; ++i)
 		{
 			CvPlayer& kLoopPlayer = GET_PLAYER((PlayerTypes)i);
-						
+
 			if (kLoopPlayer.isAlive())
 			{
 				TeamTypes eLoopTeam = kLoopPlayer.getTeam();
 				if (eLoopTeam != player.getTeam() && GET_TEAM(eLoopTeam).isAlive())
 				{
 					WarPlanTypes eWarplan = kTeam.AI_getWarPlan(eLoopTeam);
-					
+
 					if (eWarplan != NO_WARPLAN)
 					{
 						CvWStringBuffer szTempString;
 						GAMETEXT.getWarplanString(szTempString, eWarplan);
 						szBuffer.append(CvWString::format(L"\n%s : %s", kLoopPlayer.getName(), szTempString));
-	
+
 					}
 				}
 			}
@@ -2858,6 +2908,17 @@ void CvDLLWidgetData::parseCityHarbourSystemHelp(CvWidgetDataStruct &widgetDataS
 		}
 
 		// improving Widget Display
+		// available space (edit: aemon)
+		const int iBaseHarborSpace = GLOBAL_DEFINE_BASE_HARBOUR_SPACES_WITHOUT_BUILDINGS;
+		szBuffer.append(SEPARATOR);
+		szBuffer.append(NEWLINE);
+		szBuffer.append(gDLL->getText("TXT_KEY_MISC_FROM_CITY_YIELD", iBaseHarborSpace, GC.getSymbolID(ANCHOR_CHAR)));
+		if (iCityHarborSpaceMax > iBaseHarborSpace)
+		{
+			szBuffer.append(NEWLINE);
+			szBuffer.append(gDLL->getText("TXT_KEY_MISC_HELP_BUILDING_YIELD", iCityHarborSpaceMax-iBaseHarborSpace, GC.getSymbolID(ANCHOR_CHAR)));
+		}
+		// space used
 		if (iCityHarborSpaceUsed > 0)
 		{
 			szBuffer.append(SEPARATOR);
@@ -2871,7 +2932,7 @@ void CvDLLWidgetData::parseCityHarbourSystemHelp(CvWidgetDataStruct &widgetDataS
 					int iCityHarbourSpaceUsedSingleUnit = pLoopUnit->getUnitInfo().getHarbourSpaceNeeded();
 					if (iCityHarbourSpaceUsedSingleUnit > 0)
 					{
-						szDesc = CvWString::format(L"\n %c%s %d%c", GC.getSymbolID(BULLET_CHAR), pLoopUnit->getUnitInfo().getDescription(), iCityHarbourSpaceUsedSingleUnit, GC.getSymbolID(ANCHOR_CHAR));
+						szDesc = CvWString::format(L"\n %c%s -%d%c", GC.getSymbolID(BULLET_CHAR), pLoopUnit->getUnitInfo().getDescription(), iCityHarbourSpaceUsedSingleUnit, GC.getSymbolID(ANCHOR_CHAR));
 						szBuffer.append(szDesc);
 					}
 				}
@@ -2905,8 +2966,18 @@ void CvDLLWidgetData::parseCityBarracksSystemHelp(CvWidgetDataStruct &widgetData
 		{
 			szBuffer.append(gDLL->getText("TXT_KEY_CITY_BARRACKS_TOTALLY_FULL", iCityBarracksSpaceUsed, iCityBarracksSpaceMax, GC.getSymbolID(NO_BARRACKS_CHAR)));
 		}
-
 		// improving Widget Display
+		// available space (edit: aemon)
+		const int iBaseBarracksSpace = GLOBAL_DEFINE_BASE_BARRACKS_SPACES_WITHOUT_BUILDINGS;
+		szBuffer.append(SEPARATOR);
+		szBuffer.append(NEWLINE);
+		szBuffer.append(gDLL->getText("TXT_KEY_MISC_FROM_CITY_YIELD", iBaseBarracksSpace, GC.getSymbolID(BARRACKS_CHAR)));
+		if (iCityBarracksSpaceMax > iBaseBarracksSpace)
+		{
+			szBuffer.append(NEWLINE);
+			szBuffer.append(gDLL->getText("TXT_KEY_MISC_HELP_BUILDING_YIELD", iCityBarracksSpaceMax-iBaseBarracksSpace, GC.getSymbolID(BARRACKS_CHAR)));
+		}
+		// space used
 		if (iCityBarracksSpaceUsed > 0)
 		{
 			szBuffer.append(SEPARATOR);
@@ -2925,10 +2996,10 @@ void CvDLLWidgetData::parseCityBarracksSystemHelp(CvWidgetDataStruct &widgetData
 					if (pLoopUnit->getProfession() != NO_PROFESSION)
 					{
 						CvProfessionInfo& kProfessionInfo = GC.getProfessionInfo(pLoopUnit->getProfession());
-						iCityBarracksSpaceUsedSingleUnit += kProfessionInfo.getBarracksSpaceNeededChange();			
+						iCityBarracksSpaceUsedSingleUnit += kProfessionInfo.getBarracksSpaceNeededChange();
 						if (iCityBarracksSpaceUsedSingleUnit > 0)
 						{
-							szDesc = CvWString::format(L"\n %c%s %d%c", GC.getSymbolID(BULLET_CHAR), kProfessionInfo.getDescription(), iCityBarracksSpaceUsedSingleUnit, GC.getSymbolID(BARRACKS_CHAR));
+							szDesc = CvWString::format(L"\n %c%s -%d%c", GC.getSymbolID(BULLET_CHAR), kProfessionInfo.getDescription(), iCityBarracksSpaceUsedSingleUnit, GC.getSymbolID(BARRACKS_CHAR));
 							szBuffer.append(szDesc);
 						}
 					}
@@ -2937,7 +3008,7 @@ void CvDLLWidgetData::parseCityBarracksSystemHelp(CvWidgetDataStruct &widgetData
 					{
 						if (iCityBarracksSpaceUsedSingleUnit > 0)
 						{
-							szDesc = CvWString::format(L"\n %c%s %d%c", GC.getSymbolID(BULLET_CHAR), pLoopUnit->getUnitInfo().getDescription(), iCityBarracksSpaceUsedSingleUnit, GC.getSymbolID(BARRACKS_CHAR));
+							szDesc = CvWString::format(L"\n %c%s -%d%c", GC.getSymbolID(BULLET_CHAR), pLoopUnit->getUnitInfo().getDescription(), iCityBarracksSpaceUsedSingleUnit, GC.getSymbolID(BARRACKS_CHAR));
 							szBuffer.append(szDesc);
 						}
 					}
@@ -2948,6 +3019,14 @@ void CvDLLWidgetData::parseCityBarracksSystemHelp(CvWidgetDataStruct &widgetData
 }
 // WTP, ray, Widgets for Harbour System and Barracks System - END
 
+void CvDLLWidgetData::parseShowOrHideYieldsHelp(CvWidgetDataStruct& widgetDataStruct, CvWStringBuffer& szBuffer)
+{
+	CvCity* pHeadSelectedCity = gDLL->getInterfaceIFace()->getHeadSelectedCity();
+	if (pHeadSelectedCity != NULL)
+	{
+		szBuffer.append(gDLL->getText("TXT_KEY_RESOURCETABLE_SHOW_OR_HIDE_YIELDS"));
+	}
+}
 
 void CvDLLWidgetData::parseFlagHelp(CvWidgetDataStruct &widgetDataStruct, CvWStringBuffer &szBuffer)
 {
@@ -3013,16 +3092,16 @@ void CvDLLWidgetData::parseSelectedHelp(CvWidgetDataStruct &widgetDataStruct, Cv
 
 		if (pOrder != NULL)
 		{
-			switch (pOrder->eOrderType)
+			switch (pOrder->getType())
 			{
 			case ORDER_TRAIN:
-				GAMETEXT.setUnitHelp(szBuffer, ((UnitTypes)(pOrder->iData1)), false, false, pHeadSelectedCity);
+				GAMETEXT.setUnitHelp(szBuffer, pOrder->unit(), false, false, pHeadSelectedCity);
 				break;
 			case ORDER_CONSTRUCT:
-				GAMETEXT.setBuildingHelp(szBuffer, ((BuildingTypes)(pOrder->iData1)), false, false, pHeadSelectedCity);
+				GAMETEXT.setBuildingHelp(szBuffer, pOrder->building(), false, false, pHeadSelectedCity);
 				break;
 			case ORDER_CONVINCE:
-				GAMETEXT.setFatherPointHelp(szBuffer, (FatherPointTypes) pOrder->iData1);
+				GAMETEXT.setFatherPointHelp(szBuffer, pOrder->fatherpoint());
 				break;
 
 			default:
@@ -3199,7 +3278,7 @@ void CvDLLWidgetData::parseUnitPromotionHelp(CvWidgetDataStruct &widgetDataStruc
 void CvDLLWidgetData::parseCityUnitHelp(CvWidgetDataStruct &widgetDataStruct, CvWStringBuffer &szBuffer)
 {
 	UnitTypes eUnit = (UnitTypes) widgetDataStruct.m_iData1;
-	GAMETEXT.setUnitHelp(szBuffer, eUnit, false, true);	
+	GAMETEXT.setUnitHelp(szBuffer, eUnit, false, true);
 }
 // Teacher List - end - Nightinggale
 
@@ -3635,7 +3714,7 @@ void CvDLLWidgetData::doMoveCargoToCity(const CvWidgetDataStruct& destinationWid
 	case WIDGET_RECEIVE_MOVE_CARGO_TO_CITY:
 	case WIDGET_MOVE_CARGO_TO_TRANSPORT:
 	//R&R, vetiarvind, bug fix for shift-key trading in africa and PR - start
-	case WIDGET_MOVE_CARGO_TO_TRANSPORT_AFRICA: 
+	case WIDGET_MOVE_CARGO_TO_TRANSPORT_AFRICA:
 	case WIDGET_MOVE_CARGO_TO_TRANSPORT_PORT_ROYAL:
 	//R&R, vetiarvind, bug fix for shift-key trading in africa and PR - end
 		if (gDLL->shiftKey())
@@ -3865,7 +3944,7 @@ void CvDLLWidgetData::doMoveShipCargo(const CvWidgetDataStruct& destinationWidge
 		}
 		break;
 	/*************************************/
-	
+
 	// R&R, ray, Port Royal
 	case WIDGET_DOCK_PORT_ROYAL:
 		{
@@ -4122,7 +4201,7 @@ void CvDLLWidgetData::doUnitIntoCity(const CvWidgetDataStruct& destinationWidget
 		{
 			CvUnit* pUnit = GET_PLAYER(GC.getGameINLINE().getActivePlayer()).getUnit(sourceWidgetData.m_iData1);
 			CvUnit* pTransport = GET_PLAYER(GC.getGameINLINE().getActivePlayer()).getUnit(destinationWidgetData.m_iData1);
-			
+
 			if (NULL != pUnit && NULL != pTransport)
 			{
 				gDLL->sendDoCommand(sourceWidgetData.m_iData1, COMMAND_LOAD_UNIT, pTransport->getOwnerINLINE(), destinationWidgetData.m_iData1, false);
@@ -4411,19 +4490,19 @@ void CvDLLWidgetData::parseScoreHelp(CvWidgetDataStruct& widgetDataStruct, CvWSt
 	GAMETEXT.setScoreHelp(szBuffer, (PlayerTypes)widgetDataStruct.m_iData1);
 }
 
-// R&R mod, vetiarvind, max yield import limit - start	
+// R&R mod, vetiarvind, max yield import limit - start
 /*void CvDLLWidgetData::parseImportExportHelp(CvWidgetDataStruct& widgetDataStruct, CvWStringBuffer& szBuffer)
-{	
-	//szBuffer.append(gDLL->getText("TXT_KEY_HELP_EDIT_IMPORTS"));	
+{
+	//szBuffer.append(gDLL->getText("TXT_KEY_HELP_EDIT_IMPORTS"));
 }*/
 
 void CvDLLWidgetData::parseImportExportHelp(CvWidgetDataStruct& widgetDataStruct, CvWStringBuffer& szBuffer)
-{		
-	szBuffer.append(gDLL->getText("TXT_KEY_HELP_EDIT_IMPORTS_EXPORTS"));	
+{
+	szBuffer.append(gDLL->getText("TXT_KEY_HELP_EDIT_IMPORTS_EXPORTS"));
 }
 void CvDLLWidgetData::parseCondensedImportExportHelp(CvWidgetDataStruct& widgetDataStruct, CvWStringBuffer& szBuffer)
 {
-	szBuffer.append(gDLL->getText("TXT_KEY_HELP_EDIT_CONDENSED_IMPORTS_EXPORTS"));	
+	szBuffer.append(gDLL->getText("TXT_KEY_HELP_EDIT_CONDENSED_IMPORTS_EXPORTS"));
 }
 // R&R mod, vetiarvind, max yield import limit - end
 
@@ -4451,7 +4530,7 @@ void CvDLLWidgetData::doAssignCitizenToPlot(CvCity* pCity, int iPlotIndex, int i
 	{
 		if (pCity->getOwnerINLINE() == GC.getGameINLINE().getActivePlayer())
 		{
-			CvUnit* pOtherUnit = pCity->getUnitWorkingPlot(iPlotIndex);
+			CvUnit* pOtherUnit = pCity->getUnitWorkingPlot(static_cast<CityPlotTypes>(iPlotIndex));
 			if (pOtherUnit != NULL)
 			{
 				gDLL->sendDoTask(pCity->getID(), TASK_REPLACE_CITIZEN, iUnitId, pOtherUnit->getID(), true, false, false, false);

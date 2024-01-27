@@ -60,7 +60,7 @@ CvPlayer::CvPlayer()
 	m_iTimerRevolutionaryNoble = 0;
 	m_iTimerBishop = 0;
 	m_iTimerChurchDemand = 0;
-	m_iTimerChurchWar = 0; 
+	m_iTimerChurchWar = 0;
 	m_iTimerColonialInterventionInNativeWar = 0; //WTP, ray, Colonial Intervention In Native War - START
 	m_iTimerColoniesAndNativeAlliesWar= 0; // WTP, ray, Big Colonies and Native Allies War - START
 	m_iTimerSmugglingShip = 0;
@@ -75,15 +75,11 @@ CvPlayer::CvPlayer()
 	// R&R, ray, Timers Diplo Events - END
 
 	//WTP, ray Kings Used Ship - START
-	m_iTimerUsedShips = 0; 
-	m_iCachedUsedShipPrice = 0;
-	m_iCachedUsedShipClassTypeID = 0;
+	m_iTimerUsedShips = 0;
 	//WTP, ray Kings Used Ship - END
 
 	// WTP, ray, Foreign Kings, buy Immigrants - START
-	m_iTimerForeignImmigrants = 0; 
-	m_iCachedForeignImmigrantPrice = 0;
-	m_iCachedForeignImmigrantClassTypeID = 0;
+	m_iTimerForeignImmigrants = 0;
 	// WTP, ray, Foreign Kings, buy Immigrants - END
 
 	m_iChurchFavoursReceived = 0; // R&R, ray, Church Favours
@@ -117,12 +113,15 @@ void CvPlayer::init(PlayerTypes eID)
 	reset(eID);
 
 	// set the CivEffect cache
-	CivEffect()->rebuildCivEffectCache();
+	CivEffect().rebuildCivEffectCache();
 
     /** NBMOD TAX **/
     m_iMaxTaxRate = GC.getHandicapInfo(getHandicapType()).NBMOD_GetInitMaxTaxRate();
 
     /** NBMOD TAX **/
+
+	// the once a turn random number
+	m_ulRandomSeed = GC.getGameINLINE().getSorenRand().peek();
 
 	//assign europe civilization as parent
 	for (int iParent = 0; iParent < MAX_PLAYERS; ++iParent)
@@ -161,7 +160,7 @@ void CvPlayer::init(PlayerTypes eID)
 		setYieldAfricaBuyPrice(eYield, iAfricaBuyPrice, false);
 	}
 	// R&R, ray, Africa - END
-	
+
 	// R&R, ray, Port Royal
 	for (int iYield = 0; iYield < NUM_YIELD_TYPES; ++iYield)
 	{
@@ -249,6 +248,10 @@ void CvPlayer::init(PlayerTypes eID)
 	AI_init();
 
 	Update_cache_YieldEquipmentAmount(); // cache CvPlayer::getYieldEquipmentAmount - Nightinggale
+
+	m_iOppressometerDiscriminationModifier = GLOBAL_DEFINE_OPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_COLONIZERS;
+	m_iOppressometerForcedLaborModifier = GLOBAL_DEFINE_OPPRESSOMETER_FORCED_LABOR_MODIFIER_BASE;
+	m_lPlayerOppressometer = 0l;
 }
 
 
@@ -304,7 +307,7 @@ void CvPlayer::reset(PlayerTypes eID, bool bConstructorCall)
 	// Dale - AoD: AI Autoplay START
 	m_bDisableHuman = false;
 	// Dale - AoD: AI Autoplay END
-	
+
 	m_uiStartTime = 0;
 
 	m_aszTradeMessages.clear();
@@ -361,9 +364,9 @@ void CvPlayer::initFreeState()
 	iStartingGold += GC.getEraInfo(GC.getGameINLINE().getStartEra()).getStartingGold();
 
 	// Gives an appropriate sum of money to trade with Natives, which depends on cargo size.
-	iStartingGold *= GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getStoragePercent(); 
+	iStartingGold *= GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getStoragePercent();
 	iStartingGold /= 100;
-	
+
 	changeGold(iStartingGold);
     // Barthoze : Time is the issue - END
 }
@@ -410,11 +413,11 @@ void CvPlayer::initFreeUnits()
 		CvPlot* pStartingPlot = getStartingPlot();
 		if (NULL != pStartingPlot)
 		{
-			for (int iPlotLoop = 0; iPlotLoop < GC.getMapINLINE().numPlots(); ++iPlotLoop)
+			for (int iPlotLoop = 0; iPlotLoop < GC.getMap().numPlots(); ++iPlotLoop)
 			{
-				CvPlot* pPlot = GC.getMapINLINE().plotByIndex(iPlotLoop);
+				CvPlot* pPlot = GC.getMap().plotByIndex(iPlotLoop);
 
-				if (plotDistance(pPlot->getX_INLINE(), pPlot->getY_INLINE(), pStartingPlot->getX_INLINE(), pStartingPlot->getY_INLINE()) <= GC.getDefineINT("ADVANCED_START_SIGHT_RANGE"))
+				if (plotDistance(pPlot, pStartingPlot) <= GC.getDefineINT("ADVANCED_START_SIGHT_RANGE"))
 				{
 					pPlot->setRevealed(getTeam(), true, false, NO_TEAM);
 				}
@@ -544,7 +547,7 @@ void CvPlayer::initImmigration()
 {
 	FAssert(getParent() != NO_PLAYER);
 	m_aDocksNextUnits.clear();
-	m_aDocksNextUnits.reserve(CivEffect()->getNumUnitsOnDock());
+	m_aDocksNextUnits.reserve(CivEffect().getNumUnitsOnDock());
 	verifyImmigration();
 }
 
@@ -559,9 +562,9 @@ void CvPlayer::verifyImmigration()
 	for (unsigned int i = 0; i < m_aDocksNextUnits.size(); ++i)
 	{
 		UnitTypes eUnit = m_aDocksNextUnits[i];
-		if (eUnit != NO_UNIT && (!CivEffect()->canUseUnit(eUnit) || !CivEffect()->canUseImmigrant(eUnit)))
+		if (eUnit != NO_UNIT && (!CivEffect().canUseUnit(eUnit) || !CivEffect().canUseImmigrant(eUnit)))
 		{
-			if (eUnit != NO_UNIT && (!CivEffect()->canUseUnit(eUnit) || !CivEffect()->canUseImmigrant(eUnit)))
+			if (eUnit != NO_UNIT && (!CivEffect().canUseUnit(eUnit) || !CivEffect().canUseImmigrant(eUnit)))
 			{
 				m_aDocksNextUnits.erase(m_aDocksNextUnits.begin() + i);
 				--i; // compensate for ++i as next iteration needs to use the same value for i
@@ -569,16 +572,16 @@ void CvPlayer::verifyImmigration()
 		}
 	}
 
-	if (m_aDocksNextUnits.size() > CivEffect()->getNumUnitsOnDock())
+	if (m_aDocksNextUnits.size() > CivEffect().getNumUnitsOnDock())
 	{
 		// Too many units on the dock.
 		// Remove from the right to match the number of units requested.
-		m_aDocksNextUnits.resize(CivEffect()->getNumUnitsOnDock());
+		m_aDocksNextUnits.resize(CivEffect().getNumUnitsOnDock());
 	}
 	else
 	{
 		// Add units until the requested amount of units have appeared.
-		while (m_aDocksNextUnits.size() < CivEffect()->getNumUnitsOnDock())
+		while (m_aDocksNextUnits.size() < CivEffect().getNumUnitsOnDock())
 		{
 			m_aDocksNextUnits.push_back(pickBestImmigrant());
 		}
@@ -626,9 +629,9 @@ CvUnit* CvPlayer::addFreeUnit(UnitTypes eUnit, ProfessionTypes eProfession, Unit
 {
 	CvPlot* pStartingPlot = getStartingPlot();
 	if (pStartingPlot != NULL)
-	{		
+	{
 		pStartingPlot->setImprovementType(NO_IMPROVEMENT);//R&R, ray, bugfix for starting on Water Goody
-		CvUnit* pUnit = initUnit(eUnit, eProfession, pStartingPlot->getX_INLINE(), pStartingPlot->getY_INLINE(), eUnitAI);
+		CvUnit* pUnit = initUnit(eUnit, eProfession, pStartingPlot->coord(), eUnitAI);
 		return pUnit;
 	}
 
@@ -641,17 +644,17 @@ int CvPlayer::startingPlotRange() const
 	int iRange;
 
 	// PatchMod: Spread out start locs START
-	iRange = (GC.getMapINLINE().maxStepDistance() + 60);
+	iRange = (GC.getMap().maxStepDistance() + 60);
 //	iRange = (GC.getMapINLINE().maxStepDistance() + 40);
 	// PatchMod: Spread out start locs END
 
 	iRange *= GC.getDefineINT("STARTING_DISTANCE_PERCENT");
 	iRange /= 100;
 
-	iRange *= (GC.getMapINLINE().getLandPlots() / (GC.getWorldInfo(GC.getMapINLINE().getWorldSize()).getTargetNumCities() * GC.getGameINLINE().countCivPlayersAlive()));
+	iRange *= (GC.getMap().getLandPlots() / (GC.getWorldInfo(GC.getMap().getWorldSize()).getTargetNumCities() * GC.getGameINLINE().countCivPlayersAlive()));
 	iRange /= NUM_CITY_PLOTS;
 
-	iRange += std::min(((GC.getMapINLINE().getNumAreas() + 1) / 2), GC.getGameINLINE().countCivPlayersAlive());
+	iRange += std::min(((GC.getMap().getNumAreas() + 1) / 2), GC.getGameINLINE().countCivPlayersAlive());
 
 	long lResult=0;
 	if (gDLL->getPythonIFace()->callFunction(gDLL->getPythonIFace()->getMapScriptModule(), "minStartingDistanceModifier", NULL, &lResult))
@@ -692,7 +695,7 @@ int CvPlayer::startingPlotDistanceFactor(CvPlot* pPlot, PlayerTypes ePlayer, int
 			}
 		}
 
-		int iDistance = stepDistance(pPlot->getX_INLINE(), pPlot->getY_INLINE(), pStartingPlot->getX_INLINE(), pStartingPlot->getY_INLINE());
+		int iDistance = stepDistance(pPlot->coord(), pStartingPlot->coord());
 		if (pStartingPlot->getArea() != pPlot->getArea())
 		{
 			iDistance *= 4;
@@ -717,7 +720,7 @@ int CvPlayer::findStartingArea() const
 	long result = -1;
 	if (gDLL->getPythonIFace()->pythonFindStartingArea(getID(), &result) && !gDLL->getPythonIFace()->pythonUsingDefaultImpl()) // Python override
 	{
-		if (result == -1 || GC.getMapINLINE().getArea(result) != NULL)
+		if (result == -1 || GC.getMap().getArea(result) != NULL)
 		{
 			return result;
 		}
@@ -741,7 +744,7 @@ int CvPlayer::findStartingArea() const
 	CvArea *pLoopArea = NULL;
 
 	// find best land area
-	for(pLoopArea = GC.getMapINLINE().firstArea(&iLoop); pLoopArea != NULL; pLoopArea = GC.getMapINLINE().nextArea(&iLoop))
+	for(pLoopArea = GC.getMap().firstArea(&iLoop); pLoopArea != NULL; pLoopArea = GC.getMap().nextArea(&iLoop))
 	{
 		if (!(pLoopArea->isWater()))
 		{
@@ -778,7 +781,7 @@ CvPlot* CvPlayer::findStartingPlot(bool bRandomize)
 	long result = -1;
 	if (gDLL->getPythonIFace()->pythonFindStartingPlot(getID(), &result) && !gDLL->getPythonIFace()->pythonUsingDefaultImpl()) // Python override
 	{
-		CvPlot *pPlot = GC.getMapINLINE().plotByIndexINLINE(result);
+		CvPlot *pPlot = GC.getMap().plotByIndexINLINE(result);
 		if (pPlot != NULL)
 		{
 			return pPlot;
@@ -809,16 +812,16 @@ CvPlot* CvPlayer::findStartingPlot(bool bRandomize)
 	}
 
 	//flood fill land distances O(numPlots)
-	std::vector<short> aLandDistances(GC.getMapINLINE().numPlotsINLINE(), MAX_SHORT);
+	std::vector<short> aLandDistances(GC.getMap().numPlotsINLINE(), MAX_SHORT);
 
 	{
 		PROFILE("CvPlayer::findStartingPlot::landDistances");
 
 		//initialize
 		std::deque<int> aFillQueue;
-		for(int i=0;i<GC.getMapINLINE().numPlotsINLINE();i++)
+		for(int i=0;i<GC.getMap().numPlotsINLINE();i++)
 		{
-			CvPlot* pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(i);
+			CvPlot* pLoopPlot = GC.getMap().plotByIndexINLINE(i);
 			if(!pLoopPlot->isWater())
 			{
 				aLandDistances[i] = 0;
@@ -831,14 +834,14 @@ CvPlot* CvPlayer::findStartingPlot(bool bRandomize)
 		{
 			int iLoopIndex = aFillQueue.front();
 			aFillQueue.pop_front();
-			CvPlot* pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(iLoopIndex);
+			CvPlot* pLoopPlot = GC.getMap().plotByIndexINLINE(iLoopIndex);
 			int iLoopDistance = aLandDistances[iLoopIndex] + 1;
 			for(int iDirection=0;iDirection<NUM_DIRECTION_TYPES;iDirection++)
 			{
 				CvPlot* pAdjacentPlot = plotDirection(pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE(), (DirectionTypes) iDirection);
 				if(pAdjacentPlot != NULL)
 				{
-					int iAdjacentIndex = GC.getMapINLINE().plotNumINLINE(pAdjacentPlot->getX_INLINE(), pAdjacentPlot->getY_INLINE());
+					int iAdjacentIndex = GC.getMap().plotNumINLINE(pAdjacentPlot->getX_INLINE(), pAdjacentPlot->getY_INLINE());
 					if(iLoopDistance < aLandDistances[iAdjacentIndex])
 					{
 						aLandDistances[iAdjacentIndex] = iLoopDistance;
@@ -865,11 +868,11 @@ CvPlot* CvPlayer::findStartingPlot(bool bRandomize)
 		int iBestValue = 0;
 		int iBestIndex = -1;
 
-		std::vector<int> aiWeights(GC.getMapINLINE().numPlotsINLINE(), 0);
-		for (iI = 0; iI < GC.getMapINLINE().numPlotsINLINE(); iI++)
+		std::vector<int> aiWeights(GC.getMap().numPlotsINLINE(), 0);
+		for (iI = 0; iI < GC.getMap().numPlotsINLINE(); iI++)
 		{
 			int iValue = 0;
-			pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(iI);
+			pLoopPlot = GC.getMap().plotByIndexINLINE(iI);
 
 			if ((iBestArea == -1) || (pLoopPlot->getArea() == iBestArea) || (iPass > 0))
 			{
@@ -884,12 +887,12 @@ CvPlot* CvPlayer::findStartingPlot(bool bRandomize)
 						case CARDINALDIRECTION_EAST:
 						case CARDINALDIRECTION_WEST:
 							iValue *= 1 + std::min(::plotDistance(pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE(), pLoopPlot->getX_INLINE(), 0), startingPlotRange());
-							iValue *= 1 + std::min(::plotDistance(pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE(), pLoopPlot->getX_INLINE(), GC.getMapINLINE().getGridHeightINLINE() - 1), startingPlotRange() / 2);
+							iValue *= 1 + std::min(::plotDistance(pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE(), pLoopPlot->getX_INLINE(), GC.getMap().getGridHeightINLINE() - 1), startingPlotRange() / 2);
 							break;
 						case CARDINALDIRECTION_NORTH:
 						case CARDINALDIRECTION_SOUTH:
 							iValue *= 1 + std::min(::plotDistance(pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE(), 0, pLoopPlot->getY_INLINE()), startingPlotRange());
-							iValue *= 1 + std::min(::plotDistance(pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE(), GC.getMapINLINE().getGridWidthINLINE() - 1, pLoopPlot->getY_INLINE()), startingPlotRange() / 2);
+							iValue *= 1 + std::min(::plotDistance(pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE(), GC.getMap().getGridWidthINLINE() - 1, pLoopPlot->getY_INLINE()), startingPlotRange() / 2);
 							break;
 						default:
 							break;
@@ -905,7 +908,7 @@ CvPlot* CvPlayer::findStartingPlot(bool bRandomize)
 								{
 									if(GC.getCivilizationInfo(otherPlayer.getCivilizationType()).isWaterStart())
 									{
-										int iPlotDistance = plotDistance(pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE(), pOtherPlot->getX_INLINE(), pOtherPlot->getY_INLINE());
+										int iPlotDistance = plotDistance(pLoopPlot, pOtherPlot);
 										if (iPlotDistance < iMinPlotDistance)
 										{
 											iMinPlotDistance = iPlotDistance;
@@ -943,7 +946,7 @@ CvPlot* CvPlayer::findStartingPlot(bool bRandomize)
 			iBestIndex = GC.getGameINLINE().getSorenRand().pickValue(aiWeights, "Randomizing start");
 		}
 
-		return GC.getMapINLINE().plotByIndexINLINE(iBestIndex);
+		return GC.getMap().plotByIndexINLINE(iBestIndex);
 
 		FAssertMsg(iPass != 0, "CvPlayer::findStartingPlot - could not find starting plot in first pass.");
 	}
@@ -953,16 +956,16 @@ CvPlot* CvPlayer::findStartingPlot(bool bRandomize)
 }
 
 
-CvCity* CvPlayer::initCity(int iX, int iY, bool bBumpUnits)
+CvCity* CvPlayer::initCity(Coordinates initCoord, bool bBumpUnits)
 {
 	PROFILE_FUNC();
 
 	CvCity* pCity = addCity();
 
 	FAssertMsg(pCity != NULL, "City is not assigned a valid value");
-	FAssertMsg(!(GC.getMapINLINE().plotINLINE(iX, iY)->isCity()), "No city is expected at this plot when initializing new city");
+	FAssertMsg(!(initCoord.plot()->isCity()), "No city is expected at this plot when initializing new city");
 
-	pCity->init(pCity->getID(), getID(), iX, iY, bBumpUnits);
+	pCity->init(pCity->getID(), getID(), initCoord, bBumpUnits);
 
 	return pCity;
 }
@@ -1087,7 +1090,7 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bTrade)
 	if (bConquest)
 	{
 		szBuffer = gDLL->getText("TXT_KEY_MISC_CAPTURED_CITY", pOldCity->getNameKey()).GetCString();
-		gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CITYCAPTURE", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_GREEN"), pOldCity->getX_INLINE(), pOldCity->getY_INLINE(), true, true);
+		gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, pOldCity, "AS2D_CITYCAPTURE", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_GREEN"), true, true);
 
 		szName.Format(L"%s (%s)", pOldCity->getName().GetCString(), GET_PLAYER(pOldCity->getOwnerINLINE()).getName());
 
@@ -1100,7 +1103,7 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bTrade)
 					if (pOldCity->isRevealed(GET_PLAYER((PlayerTypes)iI).getTeam(), false))
 					{
 						szBuffer = gDLL->getText("TXT_KEY_MISC_CITY_CAPTURED_BY", szName.GetCString(), getCivilizationDescriptionKey());
-						gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CITYCAPTURED", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), pOldCity->getX_INLINE(), pOldCity->getY_INLINE(), true, true);
+						gDLL->UI().addPlayerMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, pOldCity, "AS2D_CITYCAPTURED", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), true, true);
 					}
 				}
 			}
@@ -1240,7 +1243,7 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bTrade)
 		}
 	}
 
-	pNewCity = initCity(pCityPlot->getX_INLINE(), pCityPlot->getY_INLINE(), !bConquest);
+	pNewCity = initCity(pCityPlot->coord(), !bConquest);
 
 	FAssertMsg(pNewCity != NULL, "NewCity is not assigned a valid value");
 
@@ -1327,7 +1330,7 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bTrade)
 			// WTP, ray, Game Option Unrest Duration depends stronger on City size - END
 		}
 
-		GC.getMapINLINE().verifyUnitValidPlot();
+		GC.getMap().verifyUnitValidPlot();
 	}
 
 	pCityPlot->setRevealed(GET_PLAYER(eOldOwner).getTeam(), true, false, NO_TEAM);
@@ -1377,7 +1380,7 @@ void CvPlayer::acquireCity(CvCity* pOldCity, bool bConquest, bool bTrade)
 				if (iCaptureGold > 0)
 				{
 					szBuffer = gDLL->getText("TXT_KEY_MISC_PILLAGED_CITY", iCaptureGold, pNewCity->getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CITYRAZE", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_GREEN"), pNewCity->getX_INLINE(), pNewCity->getY_INLINE(), true, true);
+					gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, pNewCity, "AS2D_CITYRAZE", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_GREEN"), true, true);
 				}
 
 				pNewCity->doTask(TASK_RAZE);
@@ -1446,9 +1449,9 @@ void CvPlayer::killCities()
 	}
 	// Super Forts begin *culture* - Clears culture from forts when a player dies
 	PlayerTypes ePlayer = getID();
-	for (int iI = 0; iI < GC.getMapINLINE().numPlotsINLINE(); iI++)
+	for (int iI = 0; iI < GC.getMap().numPlotsINLINE(); iI++)
 	{
-		CvPlot* pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(iI);
+		CvPlot* pLoopPlot = GC.getMap().plotByIndexINLINE(iI);
 		if (pLoopPlot != NULL && pLoopPlot->getOwner() == ePlayer) //R&R mod, vetiarvind, super forts merge - added null check
 		{
 			pLoopPlot->setOwner(pLoopPlot->calculateCulturalOwner(), true);
@@ -1527,7 +1530,7 @@ void CvPlayer::getCivilizationCityName(CvWString& szBuffer, CivilizationTypes eC
 {
 	for (int iI = 0; iI < GC.getCivilizationInfo(eCivilization).getNumCityNames(); iI++)
 	{
-		szBuffer = CvWString(GC.getCivilizationInfo(eCivilization).getCityNames(iI));
+		szBuffer = GC.getCivilizationInfo(eCivilization).getCityNames(iI);
 		if (isCityNameValid(szBuffer, true))
 		{
 			return;
@@ -1579,9 +1582,16 @@ bool CvPlayer::isCityNameValid(const CvWString& szName, bool bTestDestroyed) con
 
 CvUnit* CvPlayer::initUnit(UnitTypes eUnit, ProfessionTypes eProfession, int iX, int iY, UnitAITypes eUnitAI, DirectionTypes eFacingDirection, int iYieldStored)
 {
+	return initUnit(eUnit, eProfession, Coordinates(iX, iY), eUnitAI, eFacingDirection, iYieldStored);
+}
+
+CvUnit* CvPlayer::initUnit(UnitTypes eUnit, ProfessionTypes eProfession, Coordinates initCoord, UnitAITypes eUnitAI, DirectionTypes eFacingDirection, int iYieldStored)
+{
 	PROFILE_FUNC();
 
 	FAssertMsg(eUnit != NO_UNIT, "Unit is not assigned a valid value");
+
+	OOS_LOG("Init unit", getTypeStr(eUnit));
 
 	CvUnit* pUnit = addUnit();
 	FAssertMsg(pUnit != NULL, "Unit is not assigned a valid value");
@@ -1597,7 +1607,7 @@ CvUnit* CvPlayer::initUnit(UnitTypes eUnit, ProfessionTypes eProfession, int iX,
 			eUnitAI = (UnitAITypes) GC.getUnitInfo(eUnit).getDefaultUnitAIType();
 		}
 
-		pUnit->init(pUnit->getID(), eUnit, eProfession, eUnitAI, getID(), iX, iY, eFacingDirection, iYieldStored);
+		pUnit->init(pUnit->getID(), eUnit, eProfession, eUnitAI, getID(), initCoord, eFacingDirection, iYieldStored);
 
 		if (getID() == GC.getGameINLINE().getActivePlayer())
 		{
@@ -1613,14 +1623,15 @@ CvUnit* CvPlayer::initUnit(UnitTypes eUnit, ProfessionTypes eProfession, int iX,
 
 CvUnit* CvPlayer::initEuropeUnit(UnitTypes eUnit, UnitAITypes eUnitAI, DirectionTypes eFacingDirection)
 {
-	CvUnit* pUnit = initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), INVALID_PLOT_COORD, INVALID_PLOT_COORD, eUnitAI, eFacingDirection);
+	CvUnit* pUnit = initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), Coordinates::invalidCoord(), eUnitAI, eFacingDirection);
 	unloadUnitToEurope(pUnit);
 	return pUnit;
 }
 
 //WTP, ray, Settler Professsion - START
 //This is the function to init Units in Profession Settler in Europe
-void CvPlayer::initEuropeSettler(bool bPayEquipment)
+//WTP, jooe, add a return value to signal if we succeeded or not
+bool CvPlayer::initEuropeSettler(bool bPayEquipment)
 {
 	// here we need to get the Profession Settler for initUnit call
 	ProfessionTypes eSettlerProfession = NO_PROFESSION;
@@ -1633,7 +1644,7 @@ void CvPlayer::initEuropeSettler(bool bPayEquipment)
 		// checking if the profession is valid and can found settlements
 		if (GC.getCivilizationInfo(getCivilizationType()).isValidProfession(eLoopProfession) && kProfession.canFound())
 		{
-			//  only if bPayEquipment - the for the Equipment is calculated. otherwise it stays 0
+			//  only if bPayEquipment - the cost for the Equipment is calculated. otherwise it stays 0
 			if(bPayEquipment)
 			{
 				for (YieldTypes eYield = FIRST_YIELD; eYield < NUM_YIELD_TYPES; ++eYield)
@@ -1647,29 +1658,56 @@ void CvPlayer::initEuropeSettler(bool bPayEquipment)
 			break; // we do not loop further
 		}
 	}
-	
+
 	if (eSettlerProfession != NO_PROFESSION)
 	{
 		// AI pays the calculated costs - wich are already calculated nicely just Sell Price
 		// if bPayEquipment is false, these are 0
-		// if it does not have the money it does not get the Settler in Europe
+		// if it does not have the money it does not get the Settler in Europe and returns false
 		if(getGold() >= iEquipmentCosts)
 		{
 			changeGold(-iEquipmentCosts);
 			UnitTypes eUnit = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("DEFAULT_POPULATION_UNIT"));
-			CvUnit* pUnit = initUnit(eUnit, eSettlerProfession, INVALID_PLOT_COORD, INVALID_PLOT_COORD, UNITAI_SETTLER, NO_DIRECTION);
-			unloadUnitToEurope(pUnit);		
+			CvUnit* pUnit = initUnit(eUnit, eSettlerProfession, Coordinates::invalidCoord(), UNITAI_SETTLER, NO_DIRECTION);
+			unloadUnitToEurope(pUnit);
+			return true;
 		}
 	}
-	return;
+	return false;
 }
 //WTP, ray, Settler Professsion - END
 
+//WTP, jooe, new respawn logic - START
+bool CvPlayer::initEuropeTransport(bool bPay)
+{
+	CvCivilizationInfo& kCivilizationInfo = GC.getCivilizationInfo(getCivilizationType());
+	for (int iI = 0; iI < kCivilizationInfo.getNumCivilizationFreeUnits(); iI++)
+	{
+		int iLoopUnitClass = kCivilizationInfo.getCivilizationFreeUnitsClass(iI);
+		ProfessionTypes eLoopUnitProfession = (ProfessionTypes) kCivilizationInfo.getCivilizationFreeUnitsProfession(iI);
+		UnitTypes eLoopUnit = (UnitTypes)kCivilizationInfo.getCivilizationUnits(iLoopUnitClass);
+
+		if (GC.getUnitInfo(eLoopUnit).getDefaultUnitAIType() == UNITAI_TRANSPORT_SEA)
+		{
+			int iPrice = 0;
+			if(bPay)
+				iPrice = getEuropeUnitBuyPrice(eLoopUnit);
+
+			if(getGold() >= iPrice)
+			{
+				CvUnit* pUnit = buyEuropeUnit(eLoopUnit, bPay ? 100 : 0);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+//WTP, jooe, new respawn logic - END
 
 /*** TRIANGLETRADE 10/23/08 by DPII ***/
 CvUnit* CvPlayer::initAfricaUnit(UnitTypes eUnit, UnitAITypes eUnitAI, DirectionTypes eFacingDirection)
 {
-	CvUnit* pUnit = initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), INVALID_PLOT_COORD, INVALID_PLOT_COORD, eUnitAI, eFacingDirection);
+	CvUnit* pUnit = initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), Coordinates::invalidCoord(), eUnitAI, eFacingDirection);
 	unloadUnitToAfrica(pUnit);
 	return pUnit;
 }
@@ -1678,7 +1716,7 @@ CvUnit* CvPlayer::initAfricaUnit(UnitTypes eUnit, UnitAITypes eUnitAI, Direction
 // R&R, ray, Port Royal
 CvUnit* CvPlayer::initPortRoyalUnit(UnitTypes eUnit, UnitAITypes eUnitAI, DirectionTypes eFacingDirection)
 {
-	CvUnit* pUnit = initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), INVALID_PLOT_COORD, INVALID_PLOT_COORD, eUnitAI, eFacingDirection);
+	CvUnit* pUnit = initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), Coordinates::invalidCoord(), eUnitAI, eFacingDirection);
 	unloadUnitToPortRoyal(pUnit);
 	return pUnit;
 }
@@ -1887,7 +1925,6 @@ bool CvPlayer::isHuman() const
 
 void CvPlayer::updateHuman()
 {
-	bool old_m_bHuman = m_bHuman; // cache CvPlayer::getYieldEquipmentAmount - Nightinggale
 	if (getID() == NO_PLAYER)
 	{
 		m_bHuman = false;
@@ -1905,10 +1942,7 @@ void CvPlayer::updateHuman()
 	// Dale - AoD: AI Autoplay END
 
 	// cache CvPlayer::getYieldEquipmentAmount - start - Nightinggale
-	if (old_m_bHuman != m_bHuman)
-	{
-		Update_cache_YieldEquipmentAmount();
-	}
+	Update_cache_YieldEquipmentAmount();
 	// cache CvPlayer::getYieldEquipmentAmount - Nightinggale
 }
 
@@ -1921,6 +1955,11 @@ bool CvPlayer::isNative() const
 	}
 
 	return GC.getCivilizationInfo(eCivilizationType).isNative();
+}
+
+bool CvPlayer::isColonialNation() const
+{
+	return (getCivCategoryTypes() == CIV_CATEGORY_EUROPEAN);
 }
 
 CivCategoryTypes CvPlayer::getCivCategoryTypes() const
@@ -2107,12 +2146,16 @@ const TCHAR* CvPlayer::getUnitButton(UnitTypes eUnit) const
 
 void CvPlayer::doTurn()
 {
+	OOS_LOG("CvPlayer::doTurn start", getID());
 	PROFILE_FUNC();
 
 	EXTRA_POWER_CHECK
 
 	CvCity* pLoopCity;
 	int iLoop;
+
+	// the once a turn random number
+	m_ulRandomSeed = GC.getGameINLINE().getSorenRand().peek();
 
 	FAssertMsg(isAlive(), "isAlive is expected to be true");
 	FAssertMsg(!hasBusyUnit() || GC.getGameINLINE().isMPOption(MPOPTION_SIMULTANEOUS_TURNS)  || GC.getGameINLINE().isSimultaneousTeamTurns(), "End of turn with busy units in a sequential-turn game");
@@ -2158,7 +2201,7 @@ void CvPlayer::doTurn()
 	// TAC - LbD - Ray - START
 	doLbD();
 	// TAC - LbD - Ray - END
-	
+
 	EXTRA_POWER_CHECK
 
 	// WTP, ray, Foreign Kings, buy Immigrants - START
@@ -2206,8 +2249,7 @@ void CvPlayer::doTurn()
 		if (!isHuman())
 		{
 			//koma13
-			CvPlayerAI& kPlayerAI = GET_PLAYER((PlayerTypes) getID());
-			kPlayerAI.AI_updateBestPortCities();
+			AI().AI_updateBestPortCities();
 
 			redistributeWood();
 
@@ -2233,7 +2275,7 @@ void CvPlayer::doTurn()
 		if (pLoopCity->getPopulation() == 0 )
 		{
 			CvWString szBuffer = gDLL->getText("CITY_ABANDONED", pLoopCity->getNameKey());
-			gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CITYCAPTURED", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), pLoopCity->getX_INLINE(), pLoopCity->getY_INLINE(), true, true);
+			gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, pLoopCity, "AS2D_CITYCAPTURED", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), true, true);
 			disband(pLoopCity, true);
 		}
 		else
@@ -2275,6 +2317,7 @@ void CvPlayer::doTurn()
 	EXTRA_POWER_CHECK
 
 	doEvents();
+	OOS_LOG("CvPlayer::doEvents end", getID());
 
 	EXTRA_POWER_CHECK
 
@@ -2295,6 +2338,8 @@ void CvPlayer::doTurn()
 	m_aiTradeMessageCommissions.clear();
 	// TAC - Trade Messages - koma13 - END
 
+	recalculatePlayerOppressometer();
+
 	gDLL->getInterfaceIFace()->setDirty(CityInfo_DIRTY_BIT, true);
 
 	AI_doTurnPost();
@@ -2304,6 +2349,8 @@ void CvPlayer::doTurn()
 	// keep the vanilla checkPower outside of EXTRA_POWER_CHECK. This way we will be informed if power is broken even without spending time on extra checks.
 	FAssert(checkPower(false));
 	FAssert(checkPopulation());
+
+	OOS_LOG("CvPlayer::doTurn end", getID());
 }
 
 /** NBMOD TAX **/
@@ -2445,9 +2492,9 @@ void CvPlayer::doTurnUnits()
 				CvPlot* pBestPlot = getStartingPlot();
 				CvPlot* pLoopPlot = NULL;
 				int iBestPlotRand = 0;
-				for (int iI = 0; iI < GC.getMapINLINE().numPlotsINLINE(); iI++)
+				for (int iI = 0; iI < GC.getMap().numPlotsINLINE(); iI++)
 				{
-					pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(iI);
+					pLoopPlot = GC.getMap().plotByIndexINLINE(iI);
 					if (pLoopPlot->isRevealed(getTeam(), false) && pBestPlot->getEurope() == pLoopPlot->getEurope())
 					{
 						int iPlotRand = (1 + GC.getGameINLINE().getSorenRandNum(1000, "Starting Plot"));
@@ -2758,7 +2805,7 @@ int CvPlayer::findBestFoundValue() const
 
 	iBestValue = 0;
 
-	for(pLoopArea = GC.getMapINLINE().firstArea(&iLoop); pLoopArea != NULL; pLoopArea = GC.getMapINLINE().nextArea(&iLoop))
+	for(pLoopArea = GC.getMap().firstArea(&iLoop); pLoopArea != NULL; pLoopArea = GC.getMap().nextArea(&iLoop))
 	{
 		iValue = pLoopArea->getBestFoundValue(getID());
 
@@ -3047,6 +3094,114 @@ void CvPlayer::contact(PlayerTypes ePlayer)
 	}
 }
 
+CvCity *CvPlayer::buyUnitFromParentPlayer(PlayerTypes eSellingPlayer, const char *szUnitClass, int iNumUnits, CvWString szMessage, int iPriceToPay, LocationFlags eLocationFlags, bool bReceivePrice, bool bMessageMentionLocation)
+{
+	UnitTypes eUnitType = (UnitTypes)GC.getCivilizationInfo(GET_PLAYER(getParent()).getCivilizationType()).getCivilizationUnits(GC.getDefineINT(szUnitClass));
+	return buyUnitFromPlayer(eSellingPlayer, eUnitType, iNumUnits, szMessage, iPriceToPay, eLocationFlags, bReceivePrice, bMessageMentionLocation);
+}
+
+CvCity *CvPlayer::buyUnitFromPlayer(PlayerTypes eSellingPlayer, UnitClassTypes eUnitClass, int iNumUnits, CvWString szMessage, int iPriceToPay, LocationFlags eLocationFlags, bool bReceivePrice, bool bMessageMentionLocation)
+{
+	UnitTypes eUnitType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(eUnitClass);
+	return buyUnitFromPlayer(eSellingPlayer, eUnitType, iNumUnits, szMessage, iPriceToPay, eLocationFlags, bReceivePrice, bMessageMentionLocation);
+}
+
+CvCity* CvPlayer::buyUnitFromPlayer(PlayerTypes eSellingPlayer, UnitTypes eUnitType, int iNumUnits, CvWString szMessage, int iPriceToPay, LocationFlags eLocationFlags, bool bReceivePrice, bool bMessageMentionLocation)
+{
+	CvPlayer& kSellingPlayer = GET_PLAYER(eSellingPlayer);
+
+	if (getGold() >= iPriceToPay)
+	{
+		//create the unit
+		//get City
+		int iLoop;
+		CvCity* locationToAppear = NULL;
+		CvCity* pLoopCity = NULL;
+
+		if(eLocationFlags.none)
+		{
+			locationToAppear = firstCity(&iLoop);
+		}
+		if (locationToAppear == NULL && eLocationFlags.deepCoastal)
+		{
+			for (pLoopCity = firstCity(&iLoop); pLoopCity != NULL; pLoopCity = nextCity(&iLoop))
+			{
+				if (pLoopCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()) && pLoopCity->plot()->hasDeepWaterCoast())
+				{
+					locationToAppear = pLoopCity;
+					break;
+				}
+			}
+		}
+		if (locationToAppear == NULL && eLocationFlags.coastal)
+		{
+			for (pLoopCity = firstCity(&iLoop); pLoopCity != NULL; pLoopCity = nextCity(&iLoop))
+			{
+				if (pLoopCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()))
+				{
+					locationToAppear = pLoopCity;
+					break;
+				}
+			}
+		}
+		if (locationToAppear == NULL && eLocationFlags.inland)
+		{
+			for (pLoopCity = firstCity(&iLoop); pLoopCity != NULL; pLoopCity = nextCity(&iLoop))
+			{
+				if (!pLoopCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()))
+				{
+					locationToAppear = pLoopCity;
+					break;
+				}
+			}
+		}
+
+		if (locationToAppear != NULL || eLocationFlags.europe)
+		{
+			CvUnit* kBuyUnit = NULL;
+			const Coordinates coord = locationToAppear ? locationToAppear->coord() : Coordinates::invalidCoord();
+			for (int iI = 0; iI < iNumUnits; iI++)
+			{
+				kBuyUnit = initUnit(eUnitType, GC.getUnitInfo(eUnitType).getDefaultProfession(), coord, NO_UNITAI);
+				if (!locationToAppear)
+				{
+					CvPlot* pStartingPlot = getStartingPlot();
+					if (GC.getUnitInfo(eUnitType).getDomainType() == DOMAIN_SEA && pStartingPlot != NULL)
+					{
+						kBuyUnit->setUnitTravelState(UNIT_TRAVEL_STATE_IN_EUROPE, false);
+						//add unit to map after setting Europe state so that it doesn't bump enemy units
+						kBuyUnit->addToMap(pStartingPlot->coord());
+					}
+					else if (GC.getUnitInfo(eUnitType).getDomainType() != DOMAIN_SEA && pStartingPlot != NULL)
+					{
+						unloadUnitToEurope(kBuyUnit);
+					}
+					else
+					{
+						FAssertMsg(GC.getUnitInfo(eUnitType).getDomainType() != DOMAIN_SEA, "Player failed to create ship in Europe");
+					}
+				}
+			}
+
+			//pay
+			changeGold(-iPriceToPay);
+			if(bReceivePrice)
+			{
+				kSellingPlayer.changeGold(iPriceToPay);
+			}
+
+			//add message if requested
+			if(!szMessage.empty())
+			{
+				CvWString szBuffer = bMessageMentionLocation ? gDLL->getText(szMessage, locationToAppear->getNameKey()) : gDLL->getText(szMessage);
+				gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, kBuyUnit, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, kBuyUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
+			}
+			return locationToAppear;
+		}
+	}
+	return NULL;
+}
+
 
 void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer, int iData1, int iData2)
 {
@@ -3054,6 +3209,8 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 	int iI;
 
 	FAssertMsg(ePlayer != getID(), "shouldn't call this function on ourselves");
+
+	OOS_LOG("CvPlayer::handleDiploEvent", eDiploEvent);
 
 	switch (eDiploEvent)
 	{
@@ -3167,14 +3324,14 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 			YieldTypes eYield = (YieldTypes) iData1;
 			kPlayer.setYieldEuropeTradable(eYield, false);
 			// R&R, ray, Improvements to Tax Mechanism - START
-			kPlayer.setYieldTradedTotal(eYield, 0);			
-			kPlayer.setYieldScoreTotal(eYield, 0);// R&R, vetiarvind, price dependent tax rate change						 
+			kPlayer.setYieldTradedTotal(eYield, 0);
+			kPlayer.setYieldScoreTotal(eYield, 0);// R&R, vetiarvind, price dependent tax rate change
 			for (int i = 0; i < NUM_YIELD_TYPES; i++)
 			{
 				if (kPlayer.isYieldEuropeTradable((YieldTypes)i))
 				{
 					kPlayer.setYieldTradedTotal((YieldTypes)i, 0);
-					kPlayer.setYieldScoreTotal((YieldTypes)i, 0);// R&R, vetiarvind, price dependent tax rate change					 
+					kPlayer.setYieldScoreTotal((YieldTypes)i, 0);// R&R, vetiarvind, price dependent tax rate change
 				}
 			}
 			// R&R, ray, Improvements to Tax Mechanism - END
@@ -3183,7 +3340,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 			{
 				pCity->setYieldStored(eYield, 0);
 				CvWString szMessage = gDLL->getText("TXT_KEY_BOSTON_TEA_PARTY", kPlayer.getCivilizationAdjectiveKey(), pCity->getNameKey(), GC.getYieldInfo(eYield).getTextKeyWide());
-				gDLL->getInterfaceIFace()->addMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_CITY_REVOLT", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), pCity->getX_INLINE(), pCity->getY_INLINE(), true, true);
+				gDLL->UI().addPlayerMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szMessage, pCity, "AS2D_CITY_REVOLT", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 			}
 		}
 		break;
@@ -3264,34 +3421,9 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 
 	// R&R, ray, Native Slave, START
 	case DIPLOEVENT_ACQUIRE_NATIVE_SLAVE:
-		{
-			int pricetopay = iData1;
-			CvPlayer& kPlayer = GET_PLAYER(ePlayer);
-
-			int availableGold = kPlayer.getGold();
-			if (availableGold >= pricetopay)
-			{
-				//get City
-				int iLoop;
-				CvCity* locationToAppear = kPlayer.firstCity(&iLoop); 
-
-				if (locationToAppear != NULL)
-				{
-					UnitTypes SlaveType = (UnitTypes)GC.getCivilizationInfo(kPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_NATIVE_SLAVE"));
-					CvUnit* SlaveUnit = kPlayer.initUnit(SlaveType, GC.getUnitInfo(SlaveType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-				
-					//pay 
-					changeGold(pricetopay);
-					kPlayer.changeGold(-pricetopay);
-
-					CvWString szBuffer = gDLL->getText("TXT_KEY_BOUGHT_NATIVE_SLAVE", locationToAppear->getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, SlaveUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), SlaveUnit->getX(), SlaveUnit->getY(), true, true);
-				}
-			}
-		}
+		GET_PLAYER(ePlayer).buyUnitFromPlayer(getID(), UNITCLASS_NATIVE_SLAVE, 1, "TXT_KEY_BOUGHT_NATIVE_SLAVE", iData1);
 		break;
 	// R&R, ray, Native Slave, END
-
 
 	// R&R, ray, African Slaves - START
 	case DIPLOEVENT_ACQUIRE_AFRICAN_SLAVES:
@@ -3306,7 +3438,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 			int totalslavesprice = baseslaveprice - discount;
 			int gamespeedMod = GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getTrainPercent();
 			int pricetopay = iNumSlaves * totalslavesprice * gamespeedMod / 100;
-			
+
 			int availableGold = kPlayer.getGold();
 			if (availableGold >= pricetopay && iNumSlaves > 0)
 			{
@@ -3320,7 +3452,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 					CvUnit* pSlaveUnit = NULL;
 					for (int i=0; i < iNumSlaves; ++i)
 					{
-						pSlaveUnit = kPlayer.initUnit(SlaveType, GC.getUnitInfo(SlaveType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+						pSlaveUnit = kPlayer.initUnit(SlaveType, GC.getUnitInfo(SlaveType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 					}
 					FAssert(pSlaveUnit != NULL);
 					//pay the king
@@ -3329,7 +3461,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 					kPlayer.changeGold(-pricetopay);
 
 					CvWString szBuffer = gDLL->getText("TXT_KEY_BOUGHT_AFRICAN_SLAVE", locationToAppear->getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, pSlaveUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), pSlaveUnit->getX(), pSlaveUnit->getY(), true, true);
+					gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, pSlaveUnit, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, pSlaveUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 				}
 			}
 		}
@@ -3352,7 +3484,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 
 			int availableGold = kPlayer.getGold();
 			if (availableGold >= pricetopay && iNumPrisoners > 0)
-			{	
+			{
 
 				//create the prisoners
 				//get City
@@ -3365,7 +3497,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 					CvUnit* pPrisonerUnit = NULL;
 					for (int i=0; i < iNumPrisoners; ++i)
 					{
-						pPrisonerUnit = kPlayer.initUnit(ePrisonerType, GC.getUnitInfo(ePrisonerType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+						pPrisonerUnit = kPlayer.initUnit(ePrisonerType, GC.getUnitInfo(ePrisonerType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 					}
 					//pay the king
 					changeGold(pricetopay);
@@ -3377,7 +3509,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 					kPlayer.changeGold(-pricetopay);
 
 					CvWString szBuffer = gDLL->getText("TXT_KEY_BOUGHT_PRISONERS", locationToAppear->getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, pPrisonerUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), pPrisonerUnit->getX(), pPrisonerUnit->getY(), true, true);
+					gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, pPrisonerUnit, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, pPrisonerUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 				}
 			}
 		}
@@ -3386,70 +3518,13 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 
 	// R&R, ray, Revolutionary Noble - START
 	case DIPLOEVENT_ACQUIRE_NOBLE:
-		{
-			int pricetopay = iData1;
-			CvPlayer& kPlayer = GET_PLAYER(ePlayer);
-
-			int availableGold = kPlayer.getGold();
-			if (availableGold >= pricetopay)
-			{
-				//create the noble
-				//get City
-				int iLoop;
-				CvCity* locationToAppear = kPlayer.firstCity(&iLoop);
-
-				if (locationToAppear != NULL)
-				{
-
-					UnitTypes NobleType = (UnitTypes)GC.getCivilizationInfo(kPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_NOBLE"));
-					CvUnit* NobleUnit;
-					NobleUnit = kPlayer.initUnit(NobleType, GC.getUnitInfo(NobleType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-
-					//pay the king
-					changeGold(pricetopay);
-					AI_changeAttitudeExtra(ePlayer, 5);
-					kPlayer.changeGold(-pricetopay);
-
-					//add message
-					CvWString szBuffer = gDLL->getText("TXT_KEY_BOUGHT_NOBLE", locationToAppear->getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NobleUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NobleUnit->getX(), NobleUnit->getY(), true, true);
-				}
-			}
-		}
+		GET_PLAYER(ePlayer).buyUnitFromPlayer(getID(), UNITCLASS_NOBLE, 1, "TXT_KEY_BOUGHT_NOBLE", iData1);
 		break;
 	// R&R, ray, Revolutionary Noble - END
 
 	// R&R, ray, Bishop - START
 	case DIPLOEVENT_ACQUIRE_BISHOP:
-		{
-			int pricetopay = iData1;
-			CvPlayer& kPlayer = GET_PLAYER(ePlayer);
-
-			int availableGold = kPlayer.getGold();
-			if (availableGold >= pricetopay)
-			{
-				//create the bishop
-				//get City
-				int iLoop;
-				CvCity* locationToAppear = kPlayer.firstCity(&iLoop);
-
-				if (locationToAppear != NULL)
-				{
-
-					UnitTypes BishopType = (UnitTypes)GC.getCivilizationInfo(kPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_BISHOP"));
-					CvUnit* BishopUnit;
-					BishopUnit = kPlayer.initUnit(BishopType, GC.getUnitInfo(BishopType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-
-					//pay the church
-					changeGold(pricetopay);
-					kPlayer.changeGold(-pricetopay);
-
-					//add message
-					CvWString szBuffer = gDLL->getText("TXT_KEY_BOUGHT_BISHOP", locationToAppear->getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, BishopUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), BishopUnit->getX(), BishopUnit->getY(), true, true);
-				}
-			}
-		}
+		GET_PLAYER(ePlayer).buyUnitFromPlayer(getID(), UNITCLASS_BISHOP, 1, "TXT_KEY_BOUGHT_BISHOP", iData1);
 		break;
 	// R&R, ray, Bishop - END
 
@@ -3477,7 +3552,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 					//effects of choice
 					AI_changeAttitudeExtra(ePlayer, 1);
 
-					int effectRand = GC.getGameINLINE().getSorenRandNum(6, "ChurchEffectRand");	
+					int effectRand = GC.getGameINLINE().getSorenRandNum(6, "ChurchEffectRand");
 					switch (effectRand)
 					{
 						case 0:
@@ -3489,7 +3564,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 								// To prevent broken hurry button, do immigration, if Threshold got lowered below current crosses
 								while (getCrossesStored() >= immigrationThreshold())
 								{
-									doImmigrant(GC.getGameINLINE().getSorenRandNum(CivEffect()->getNumUnitsOnDock(), "pick immigrant"), true);
+									doImmigrant(GC.getGameINLINE().getSorenRandNum(CivEffect().getNumUnitsOnDock(), "pick immigrant"), true);
 								}
 
 								break;
@@ -3524,7 +3599,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 								// To prevent broken hurry button, do immigration, if Threshold got lowered below current crosses
 								while (getCrossesStored() >= immigrationThreshold())
 								{
-									doImmigrant(GC.getGameINLINE().getSorenRandNum(CivEffect()->getNumUnitsOnDock(), "pick immigrant"), true);
+									doImmigrant(GC.getGameINLINE().getSorenRandNum(CivEffect().getNumUnitsOnDock(), "pick immigrant"), true);
 								}
 
 								break;
@@ -3534,7 +3609,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 								// new Missionary
 								UnitTypes ChurchRewardUnitType = (UnitTypes)GC.getCivilizationInfo(kPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_CHURCH_REWARD1"));
 								CvUnit* ChurchRewardUnit;
-								ChurchRewardUnit = kPlayer.initUnit(ChurchRewardUnitType, GC.getUnitInfo(ChurchRewardUnitType).getDefaultProfession(), pCity->getX_INLINE(), pCity->getY_INLINE(), NO_UNITAI);
+								ChurchRewardUnit = kPlayer.initUnit(ChurchRewardUnitType, GC.getUnitInfo(ChurchRewardUnitType).getDefaultProfession(), pCity->coord(), NO_UNITAI);
 								szBuffer += gDLL->getText("TXT_KEY_CHURCH_REWARD_MISSIONARY");
 								break;
 							}
@@ -3543,7 +3618,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 								// new Preacher or Priest
 								UnitTypes ChurchRewardUnitType = (UnitTypes)GC.getCivilizationInfo(kPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_CHURCH_REWARD2"));
 								CvUnit* ChurchRewardUnit;
-								ChurchRewardUnit = kPlayer.initUnit(ChurchRewardUnitType, GC.getUnitInfo(ChurchRewardUnitType).getDefaultProfession(), pCity->getX_INLINE(), pCity->getY_INLINE(), NO_UNITAI);
+								ChurchRewardUnit = kPlayer.initUnit(ChurchRewardUnitType, GC.getUnitInfo(ChurchRewardUnitType).getDefaultProfession(), pCity->coord(), NO_UNITAI);
 								szBuffer += gDLL->getText("TXT_KEY_PAYED_CHURCH_REWARD_PREACHER");
 								break;
 							}
@@ -3551,7 +3626,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 							break;
 					}
 
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), pCity->getX_INLINE(), pCity->getY_INLINE(), true, true);
+					gDLL->UI().addPlayerMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szBuffer, pCity, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 				}
 			}
 		}
@@ -3573,7 +3648,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 				//effects of choice
 				AI_changeAttitudeExtra(ePlayer, -1); // attitude of church
 
-				int effectRand = GC.getGameINLINE().getSorenRandNum(5, "ChurchEffectRand");	
+				int effectRand = GC.getGameINLINE().getSorenRandNum(5, "ChurchEffectRand");
 				switch (effectRand)
 				{
 					case 0:
@@ -3600,7 +3675,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 								{
 									kLoopPlayer.AI_changeAttitudeExtra(ePlayer, -1);
 								}
-							}	
+							}
 							szBuffer += gDLL->getText("TXT_KEY_CHURCH_PENALTY_ATTITUDE_EUROPEANS");
 							break;
 						}
@@ -3628,7 +3703,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 						break;
 				}
 
-				gDLL->getInterfaceIFace()->addMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CITY_REVOLT", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), pCity->getX_INLINE(), pCity->getY_INLINE(), true, true);
+				gDLL->UI().addPlayerMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szBuffer, pCity, "AS2D_CITY_REVOLT", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), true, true);
 			}
 		}
 		break;
@@ -3660,7 +3735,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 						GET_PLAYER(kPlayer.getParent()).AI_changeAttitudeExtra(ePlayer, 1); //attitude of King improved
 
 						CvWString szBuffer = gDLL->getText("TXT_KEY_CHURCH_SPOKE_FAVOUR_KING");
-						gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, false, false);
+						gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 						break;
 					}
 					// change attitude of selected European
@@ -3668,16 +3743,16 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 					{
 						CvPlayer& kEuropePlayer = GET_PLAYER((PlayerTypes) iData2);
 						kEuropePlayer.AI_changeAttitudeExtra(ePlayer, 1); //attitude of selected European improved
-		
+
 						CvWString szBuffer = gDLL->getText("TXT_KEY_CHURCH_SPOKE_FAVOUR_EUROPEAN", kEuropePlayer.getNameKey());
-						gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, false, false);
+						gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 						break;
 					}
 					default: // just for safety
 						break;
 				}
 			}
-			
+
 		}
 		break;
 	// R&R, ray, Church Favours - END
@@ -3705,7 +3780,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 
 				//sending message
 				CvWString szBuffer = gDLL->getText("TXT_KEY_CHURCH_WAR_ACCEPTED_PRESTIGE", kNativePlayer.getNameKey());
-				gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, false, false);
+				gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 			}
 
 			// we have chosen to obey but asked for troops
@@ -3730,22 +3805,22 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 					UnitTypes ChurchReinforcementTypeCavalery = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_MOUNTED_CONQUISTADOR"));
 					UnitTypes ChurchReinforcementTypeArtillery = (UnitTypes)GC.getCivilizationInfo(GET_PLAYER(kPlayer.getParent()).getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_KING_REINFORCEMENT_ARTIL"));
 
-					CvUnit* ChurchReinforcementUnitInfantery = kPlayer.initUnit(ChurchReinforcementTypeInfantery, GC.getUnitInfo(ChurchReinforcementTypeInfantery).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					CvUnit* ChurchReinforcementUnitCavalery = kPlayer.initUnit(ChurchReinforcementTypeCavalery, GC.getUnitInfo(ChurchReinforcementTypeCavalery).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					CvUnit* ChurchReinforcementUnitArtillery = kPlayer.initUnit(ChurchReinforcementTypeArtillery, GC.getUnitInfo(ChurchReinforcementTypeArtillery).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					
+					CvUnit* ChurchReinforcementUnitInfantery = kPlayer.initUnit(ChurchReinforcementTypeInfantery, GC.getUnitInfo(ChurchReinforcementTypeInfantery).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
+					CvUnit* ChurchReinforcementUnitCavalery = kPlayer.initUnit(ChurchReinforcementTypeCavalery, GC.getUnitInfo(ChurchReinforcementTypeCavalery).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
+					CvUnit* ChurchReinforcementUnitArtillery = kPlayer.initUnit(ChurchReinforcementTypeArtillery, GC.getUnitInfo(ChurchReinforcementTypeArtillery).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
+
 					//declaring limited war
 					GET_TEAM(kPlayer.getTeam()).declareWar(GET_PLAYER(enemyID).getTeam(),false, WARPLAN_LIMITED);
 
 					//sending message
 					CvWString szBuffer = gDLL->getText("TXT_KEY_CHURCH_WAR_ACCEPTED_TROOPS", kNativePlayer.getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, ChurchReinforcementUnitInfantery->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), ChurchReinforcementUnitInfantery->getX(), ChurchReinforcementUnitInfantery->getY(), true, true);
+					gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, ChurchReinforcementUnitInfantery, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, ChurchReinforcementUnitInfantery->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 				}
 			}
 
 			// we have chosen to disobey
 			else
-			{		
+			{
 				//improve relationship to the potential Native enemy
 				GET_PLAYER(enemyID).AI_changeAttitudeExtra(ePlayer, 2);
 
@@ -3754,7 +3829,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 
 				//sending message
 				CvWString szBuffer = gDLL->getText("TXT_KEY_CHURCH_WAR_REFUSED", kNativePlayer.getNameKey());
-				gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, false, false);
+				gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 			}
 		}
 		break;
@@ -3778,11 +3853,11 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 				kNativePlayer.AI_changeAttitudeExtra(ePlayer, 2); // Native Attitude improvement
 
 				// make peace with Natives
-				GET_TEAM(kPlayer.getTeam()).makePeace(GET_PLAYER(NativeID).getTeam(),true);
+				kPlayer.forcePeace(NativeID);
 
 				//sending message
 				CvWString szBuffer = gDLL->getText("TXT_KEY_COLONIAL_INTERVENTION_NATIVE_WAR_ENDED", kNativePlayer.getNameKey());
-				gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, false, false);
+				gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 			}
 
 			// we have chosen to continue the war
@@ -3819,20 +3894,20 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 					UnitTypes Colonial_Intervention_Unit3 = (UnitTypes)GC.getCivilizationInfo(kNativePlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_GREAT_GENERAL"));
 
 					// now let us see how much Gold the Natives have and how many Native Soldiers can be acquired
-					int iGoldCostPerUnit = GC.getCOLONIAL_INTERVENTION_NATIVE_WAR_GOLD_TO_PAY_PER_UNIT();				
+					int iGoldCostPerUnit = GC.getCOLONIAL_INTERVENTION_NATIVE_WAR_GOLD_TO_PAY_PER_UNIT();
 					while (kNativePlayer.getGold() > iGoldCostPerUnit)
 					{
 						kNativePlayer.changeGold(-iGoldCostPerUnit);
-						CvUnit* Intervention_Unit_Native = kNativePlayer.initUnit(Colonial_Intervention_Unit1, GC.getUnitInfo(Colonial_Intervention_Unit1).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+						CvUnit* Intervention_Unit_Native = kNativePlayer.initUnit(Colonial_Intervention_Unit1, GC.getUnitInfo(Colonial_Intervention_Unit1).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 					}
 
 					// these 2 are for free
-					CvUnit* Intervention_Unit_Colonial = kNativePlayer.initUnit(Colonial_Intervention_Unit2, GC.getUnitInfo(Colonial_Intervention_Unit2).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					CvUnit* Intervention_Unit_Native_Leader = kNativePlayer.initUnit(Colonial_Intervention_Unit3, GC.getUnitInfo(Colonial_Intervention_Unit3).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					
+					CvUnit* Intervention_Unit_Colonial = kNativePlayer.initUnit(Colonial_Intervention_Unit2, GC.getUnitInfo(Colonial_Intervention_Unit2).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
+					CvUnit* Intervention_Unit_Native_Leader = kNativePlayer.initUnit(Colonial_Intervention_Unit3, GC.getUnitInfo(Colonial_Intervention_Unit3).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
+
 					//sending message
 					CvWString szBuffer = gDLL->getText("TXT_KEY_COLONIAL_INTERVENTION_NATIVE_WAR_CONTINUED", kNativePlayer.getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, Intervention_Unit_Native_Leader->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), locationToAppear->getX(), locationToAppear->getY(), true, true);
+					gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, locationToAppear, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, Intervention_Unit_Native_Leader->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 				}
 			}
 		}
@@ -3860,10 +3935,10 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 
 			// sending message - if we can figure out our enemy currently at war
 			if (iIDofEnemyColonialPlayer != NO_PLAYER)
-			{					
+			{
 				CvPlayer& kEnemyColonialPlayer = GET_PLAYER((PlayerTypes) iIDofEnemyColonialPlayer);
 				CvWString szBuffer = gDLL->getText("TXT_KEY_COLONIES_AND_NATIVE_ALLIES_WAR_REFUSED", kEnemyColonialPlayer.getNameKey());
-				gDLL->getInterfaceIFace()->addMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_POSITIVE_DINK", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
+				gDLL->UI().addPlayerMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_POSITIVE_DINK", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 			}
 
 		}
@@ -3905,17 +3980,18 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 				pOurOwnCapitolCity->changeYieldStored(YIELD_HORSES, -iHorsesNeededToPayNatives);
 			}
 
-			// in exchange we also get some Warriors - we use the Civilization of the Native Civ for getting the UnitTypes= 
+			// in exchange we also get some Warriors - we use the Civilization of the Native Civ for getting the UnitTypes=
 			int iNumNativeWarriorsCreated = GC.getDefineINT("NATIVE_WARRIORS_RECEIVED_COLONIES_AND_NATIVE_ALLIES_WAR");
 			UnitTypes NativeWarriorUnitType = (UnitTypes)GC.getCivilizationInfo(HumanPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_NATIVE_WARRIORS"));
 			if (pOurOwnCapitolCity != NULL)
-			{	
+			{
 				for (int i=0;i<iNumNativeWarriorsCreated;i++)
 				{
+					OOS_LOG("Added native units", getTypeStr(NativeWarriorUnitType));
 					CvUnit* NativeWarriorUnit = HumanPlayer.initUnit(NativeWarriorUnitType, NO_PROFESSION, pOurOwnCapitolCity->getX_INLINE(), pOurOwnCapitolCity->getY_INLINE(), NO_UNITAI);
 				}
 			}
-			
+
 
 			// creating alliances and declaring War
 			// sending message - if we can figure out our enemy currently at war
@@ -3967,89 +4043,23 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 
 				// sending message
 				CvWString szBuffer = gDLL->getText("TXT_KEY_COLONIES_AND_NATIVE_ALLIES_WAR_ACCEPTED", getNameKey(), ColonialEnemy.getNameKey(), NativeEnemy.getNameKey());
-				gDLL->getInterfaceIFace()->addMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_POSITIVE_DINK", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
+				gDLL->UI().addPlayerMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_POSITIVE_DINK", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 			}
 		}
 		break;
 	// WTP, ray, Big Colonies and Native Allies War - END
 
-	
+
 	// R&R, ray, Smuggling - START
 	case DIPLOEVENT_ACQUIRE_SMUGGLERS:
-		{
-			int pricetopay = iData1;
-			CvPlayer& kPlayer = GET_PLAYER(ePlayer);
-
-			int availableGold = kPlayer.getGold();
-			if (availableGold >= pricetopay)
-			{
-				//get City
-				CvCity* pLoopCity = NULL;
-				CvCity* locationToAppear = NULL;
-				int iLoop;
-				for (pLoopCity = kPlayer.firstCity(&iLoop); pLoopCity != NULL; pLoopCity = kPlayer.nextCity(&iLoop))
-				{
-					if (pLoopCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()) && pLoopCity->plot()->hasDeepWaterCoast())
-					{
-						locationToAppear = pLoopCity;
-						break;
-					}			
-				}
-
-				if (locationToAppear!= NULL)
-				{
-					//create the smuggling ship
-					UnitTypes SmugglingShipType = (UnitTypes)GC.getCivilizationInfo(kPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_SMUGGLING_SHIP"));
-					CvUnit* SmugglingShipUnit;
-					SmugglingShipUnit = kPlayer.initUnit(SmugglingShipType, GC.getUnitInfo(SmugglingShipType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					//pay
-					kPlayer.changeGold(-pricetopay);
-					//add message
-					CvWString szBuffer = gDLL->getText("TXT_KEY_BOUGHT_SMUGGLERS", locationToAppear->getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, SmugglingShipUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), SmugglingShipUnit->getX(), SmugglingShipUnit->getY(), true, true);
-				}
-			}
-		}
+		GET_PLAYER(ePlayer).buyUnitFromPlayer(getID(), UNITCLASS_SMUGGLING_SHIP, 1, "TXT_KEY_BOUGHT_SMUGGLERS", iData1, LocationFlags::LocationFlagDeepCoastal, false);
 		break;
 	// R&R, ray, Smuggling - END
 
 
 	// R&R, ray, Rangers - START
 	case DIPLOEVENT_ACQUIRE_RANGERS:
-		{
-			int pricetopay = iData1;
-			CvPlayer& kPlayer = GET_PLAYER(ePlayer);
-
-			int availableGold = kPlayer.getGold();
-			if (availableGold >= pricetopay)
-			{
-				//get City
-				CvCity* pLoopCity = NULL;
-				CvCity* locationToAppear = NULL;
-				int iLoop;
-				for (pLoopCity = kPlayer.firstCity(&iLoop); pLoopCity != NULL; pLoopCity = kPlayer.nextCity(&iLoop))
-				{
-					if (!pLoopCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()))
-					{
-						locationToAppear = pLoopCity;
-						break;
-					}
-				}
-
-				if (locationToAppear!= NULL)
-				{
-					//create the ranger
-					UnitTypes RangerType = (UnitTypes)GC.getCivilizationInfo(kPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_RANGER"));
-					CvUnit* RangerUnit;
-					RangerUnit = kPlayer.initUnit(RangerType, GC.getUnitInfo(RangerType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					//pay
-					kPlayer.changeGold(-pricetopay);
-					//add message
-					CvWString szBuffer = gDLL->getText("TXT_KEY_TRAINED_RANGERS", locationToAppear->getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, RangerUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), RangerUnit->getX(), RangerUnit->getY(), true, true);
-				}
-			}
-		}
+		GET_PLAYER(ePlayer).buyUnitFromPlayer(getID(), UNITCLASS_RANGER, 1, "TXT_KEY_TRAINED_RANGERS", iData1, LocationFlags::LocationFlagDeepCoastal);
 		break;
 	// R&R, ray, Rangers - END
 
@@ -4057,46 +4067,14 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 	// R&R, ray, Conquistadors - START
 	case DIPLOEVENT_ACQUIRE_CONQUISTADORS:
 		{
-			int pricetopay = iData1;
-			CvPlayer& kPlayer = GET_PLAYER(ePlayer);
-
-			int availableGold = kPlayer.getGold();
-			if (availableGold >= pricetopay)
+			int conquistUnitRand = GC.getGameINLINE().getSorenRandNum(3, "Conquistadors Available");
+			if (conquistUnitRand == 1)
 			{
-				//get City
-				CvCity* pLoopCity = NULL;
-				CvCity* locationToAppear = NULL;
-				int iLoop;
-				for (pLoopCity = kPlayer.firstCity(&iLoop); pLoopCity != NULL; pLoopCity = kPlayer.nextCity(&iLoop))
-				{
-					if (pLoopCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()) && pLoopCity->plot()->hasDeepWaterCoast())
-					{
-						locationToAppear = pLoopCity;
-						break;
-					}
-				}
-
-				if (locationToAppear!= NULL)
-				{
-					//create the conquistador
-					UnitTypes ConquistadorType;
-					int conquistUnitRand = GC.getGameINLINE().getSorenRandNum(3, "Conquistadors Available");
-					if (conquistUnitRand == 1)
-					{
-						ConquistadorType = (UnitTypes)GC.getCivilizationInfo(kPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_MOUNTED_CONQUISTADOR"));
-					}
-					else
-					{
-						ConquistadorType = (UnitTypes)GC.getCivilizationInfo(kPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_CONQUISTADOR"));
-					}
-					CvUnit* ConquistadorUnit;
-					ConquistadorUnit = kPlayer.initUnit(ConquistadorType, GC.getUnitInfo(ConquistadorType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					//pay
-					kPlayer.changeGold(-pricetopay);
-					//add message
-					CvWString szBuffer = gDLL->getText("TXT_KEY_HIRED_CONQUISTADORS", locationToAppear->getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, ConquistadorUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), ConquistadorUnit->getX(), ConquistadorUnit->getY(), true, true);
-				}
+				GET_PLAYER(ePlayer).buyUnitFromPlayer(getID(), UNITCLASS_MOUNTED_CONQUISTADOR, 1, "TXT_KEY_HIRED_CONQUISTADORS", iData1, LocationFlags::LocationFlagDeepCoastal);
+			}
+			else
+			{
+				GET_PLAYER(ePlayer).buyUnitFromPlayer(getID(), UNITCLASS_CONQUISTADOR, 1, "TXT_KEY_HIRED_CONQUISTADORS", iData1, LocationFlags::LocationFlagDeepCoastal);
 			}
 		}
 		break;
@@ -4105,40 +4083,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 
 	// R&R, ray, Pirates - START
 	case DIPLOEVENT_ACQUIRE_PIRATES:
-		{
-			int pricetopay = iData1;
-			CvPlayer& kPlayer = GET_PLAYER(ePlayer);
-
-			int availableGold = kPlayer.getGold();
-			if (availableGold >= pricetopay)
-			{
-				//get City
-				CvCity* pLoopCity = NULL;
-				CvCity* locationToAppear = NULL;
-				int iLoop;
-				for (pLoopCity = kPlayer.firstCity(&iLoop); pLoopCity != NULL; pLoopCity = kPlayer.nextCity(&iLoop))
-				{
-					if (pLoopCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()) && pLoopCity->plot()->hasDeepWaterCoast())
-					{
-						locationToAppear = pLoopCity;
-						break;
-					}
-				}
-
-				if (locationToAppear!= NULL)
-				{
-					//create the Pirate Ship
-					UnitTypes PirateShipType = (UnitTypes)GC.getCivilizationInfo(kPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_PIRATE_FRIGATE"));
-					CvUnit* PirateShipUnit;
-					PirateShipUnit = kPlayer.initUnit(PirateShipType, GC.getUnitInfo(PirateShipType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					//pay
-					kPlayer.changeGold(-pricetopay);
-					//add message
-					CvWString szBuffer = gDLL->getText("TXT_KEY_HIRED_PIRATES", locationToAppear->getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, PirateShipUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), PirateShipUnit->getX(), PirateShipUnit->getY(), true, true);
-				}
-			}
-		}
+		GET_PLAYER(ePlayer).buyUnitFromPlayer(getID(), UNITCLASS_PIRATE_FRIGATE, 1, "TXT_KEY_HIRED_PIRATES", iData1, LocationFlags::LocationFlagDeepCoastal, false);
 		break;
 
 	case DIPLOEVENT_BRIBE_PIRATES:
@@ -4171,17 +4116,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 			// get the Player
 			CvPlayer& kPlayer = GET_PLAYER(ePlayer);
 
-			// read cash for the data of the used
-			int iRandomUsedShipTypeID = kPlayer.m_iCachedUsedShipClassTypeID;
-			int pricetopay = kPlayer.m_iCachedUsedShipPrice;
-
-			// call the logic
-			kPlayer.acquireUsedShip(iRandomUsedShipTypeID, pricetopay);
-
-			// reset cache, optional - would be overwritten anyways
-			kPlayer.m_iCachedUsedShipPrice = 0;
-			kPlayer.m_iCachedUsedShipClassTypeID = 0;
-
+			kPlayer.acquireUsedShip((UnitClassTypes)iData1, iData2);
 		}
 		break;
 	//WTP, ray Kings Used Ship - END
@@ -4192,148 +4127,43 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 			// get the Player
 			CvPlayer& kPlayer = GET_PLAYER(ePlayer);
 
-			// read cash for the data of the used
-			int iRandomForeignImmigrantTypeID = kPlayer.m_iCachedForeignImmigrantClassTypeID ;
-			int pricetopay = kPlayer.m_iCachedForeignImmigrantPrice ;
-
-			// call the logic
-			kPlayer.acquireForeignImmigrant(iRandomForeignImmigrantTypeID, pricetopay);
-
-			// reset cache, optional - would be overwritten anyways
-			kPlayer.m_iCachedUsedShipPrice = 0;
-			kPlayer.m_iCachedUsedShipClassTypeID = 0;
-
+			kPlayer.acquireForeignImmigrant((UnitClassTypes)iData1, iData2);
 		}
 		break;
 	// WTP, ray, Foreign Kings, buy Immigrants - END
 
 	// R&R, ray, Continental Guard - START
 	case DIPLOEVENT_ACQUIRE_CONTINENTAL_GUARD:
-		{
-			int pricetopay = iData1;
-			CvPlayer& kPlayer = GET_PLAYER(ePlayer);
-
-			int availableGold = kPlayer.getGold();
-			if (availableGold >= pricetopay)
-			{
-				//get City
-				CvCity* pLoopCity = NULL;
-				CvCity* locationToAppear = NULL;
-				int iLoop;
-				for (pLoopCity = kPlayer.firstCity(&iLoop); pLoopCity != NULL; pLoopCity = kPlayer.nextCity(&iLoop))
-				{
-					if (pLoopCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()) && pLoopCity->plot()->hasDeepWaterCoast())
-					{
-						locationToAppear = pLoopCity;
-						break;
-					}
-				}
-
-				if (locationToAppear!= NULL)
-				{
-					//create the Continental Guard
-					UnitTypes ContinentalGuardType = (UnitTypes)GC.getCivilizationInfo(kPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_CONTINENTAL_GUARD"));
-					CvUnit* ContinentalGuardUnit;
-					ContinentalGuardUnit = kPlayer.initUnit(ContinentalGuardType, GC.getUnitInfo(ContinentalGuardType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					//pay
-					kPlayer.changeGold(-pricetopay);
-					//add message
-					CvWString szBuffer = gDLL->getText("TXT_KEY_ACQUIRED_CONTINENTAL_GUARD", locationToAppear->getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, ContinentalGuardUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), ContinentalGuardUnit->getX(), ContinentalGuardUnit->getY(), true, true);
-				}
-			}
-		}
+		GET_PLAYER(ePlayer).buyUnitFromPlayer(getID(), UNITCLASS_CONTINENTAL_GUARD, 1, "TXT_KEY_ACQUIRED_CONTINENTAL_GUARD", iData1, LocationFlags::LocationFlagDeepCoastal);
 		break;
 	// R&R, ray, Continental Guard - END
 
 	// R&R, ray, Mortar - START
 	case DIPLOEVENT_ACQUIRE_MORTAR:
-		{
-			int pricetopay = iData1;
-			CvPlayer& kPlayer = GET_PLAYER(ePlayer);
-
-			int availableGold = kPlayer.getGold();
-			if (availableGold >= pricetopay)
-			{
-				//get City
-				CvCity* pLoopCity = NULL;
-				CvCity* locationToAppear = NULL;
-				int iLoop;
-				for (pLoopCity = kPlayer.firstCity(&iLoop); pLoopCity != NULL; pLoopCity = kPlayer.nextCity(&iLoop))
-				{
-					if (pLoopCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()) && pLoopCity->plot()->hasDeepWaterCoast())
-					{
-						locationToAppear = pLoopCity;
-						break;
-					}
-				}
-
-				if (locationToAppear!= NULL)
-				{
-					//create the Continental Guard
-					UnitTypes MortarType = (UnitTypes)GC.getCivilizationInfo(kPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_MORTAR"));
-					CvUnit* MortarUnit;
-					MortarUnit = kPlayer.initUnit(MortarType, GC.getUnitInfo(MortarType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					//pay
-					kPlayer.changeGold(-pricetopay);
-					//add message
-					CvWString szBuffer = gDLL->getText("TXT_KEY_ACQUIRED_MORTAR", locationToAppear->getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, MortarUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), MortarUnit->getX(), MortarUnit->getY(), true, true);
-				}
-			}
-		}
+		GET_PLAYER(ePlayer).buyUnitFromPlayer(getID(), UNITCLASS_MORTAR, 1, "TXT_KEY_ACQUIRED_MORTAR", iData1, LocationFlags::LocationFlagDeepCoastal);
 		break;
 	// R&R, ray, Mortar - END
 
 	//TAC Revolution Support
 	case DIPLOEVENT_REV_SUPPORT:
+	{
+		bool choosenLandSupport = iData1;
+
+		LocationFlags location;
+		location.deepCoastal = true;
+		location.europe = true;
+
+		if(choosenLandSupport)
 		{
-			bool choosenLandSupport = iData1;
-			int supportAmount;
-
-			CvPlayer& kPlayer = GET_PLAYER(ePlayer);
-
-			//get City
-			CvCity* pLoopCity = NULL;
-			CvCity* locationToAppear = NULL;
-			int iLoop;
-			for (pLoopCity = kPlayer.firstCity(&iLoop); pLoopCity != NULL; pLoopCity = kPlayer.nextCity(&iLoop))
-			{
-				if (pLoopCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()) && pLoopCity->plot()->hasDeepWaterCoast())
-				{
-					locationToAppear = pLoopCity;
-					break;
-				}
-			}
-
-			if (locationToAppear != NULL)
-			{
-				UnitTypes DefaultSupportType;
-				CvUnit* pSupportUnit = NULL;
-
-				if(choosenLandSupport) {
-					supportAmount = GC.getDefineINT("REV_SUPPORT_LAND");
-					//getting UnitType by parent
-					DefaultSupportType = (UnitTypes)GC.getCivilizationInfo(GET_PLAYER(kPlayer.getParent()).getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_REV_SUPPORT_LAND"));
-				}
-
-				else
-				{
-					supportAmount = GC.getDefineINT("REV_SUPPORT_SEA");
-					DefaultSupportType = (UnitTypes)GC.getCivilizationInfo(GET_PLAYER(kPlayer.getParent()).getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_REV_SUPPORT_SEA"));
-				}
-				FAssert(supportAmount > 0);
-
-				for (int i=0;i<supportAmount;i++)
-				{
-					pSupportUnit = kPlayer.initUnit(DefaultSupportType, GC.getUnitInfo(DefaultSupportType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-				}
-
-				//sending message
-				CvWString szBuffer = gDLL->getText("TXT_KEY_REV_SUPPORT_ARRIVED", GC.getLeaderHeadInfo(GET_PLAYER(getParent()).getLeaderType()).getDescription());
-				gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, pSupportUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), pSupportUnit->getX(), pSupportUnit->getY(), true, true);
-			}
+			CvWString szBuffer = gDLL->getText("TXT_KEY_REV_SUPPORT_ARRIVED", GC.getLeaderHeadInfo(GET_PLAYER(getParent()).getLeaderType()).getDescription());
+			GET_PLAYER(ePlayer).buyUnitFromParentPlayer(getID(), "UNITCLASS_REV_SUPPORT_LAND", GLOBAL_DEFINE_REV_SUPPORT_LAND, szBuffer, 0, location, false, false);
 		}
+		else
+		{
+			CvWString szBuffer = gDLL->getText("TXT_KEY_REV_SUPPORT_ARRIVED", GC.getLeaderHeadInfo(GET_PLAYER(getParent()).getLeaderType()).getDescription());
+			GET_PLAYER(ePlayer).buyUnitFromParentPlayer(getID(), "UNITCLASS_REV_SUPPORT_SEA", GLOBAL_DEFINE_REV_SUPPORT_SEA, szBuffer, 0, location, false, false);
+		}
+	}
 		break;
 	//End TAC Revolution Support
 
@@ -4341,10 +4171,15 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 	case DIPLOEVENT_EUROPE_WAR:
 		{
 			//getting the Data from Diplo-Event
-			PlayerTypes enemyID = (PlayerTypes) iData1;
 			CvPlayer& kPlayer = GET_PLAYER(ePlayer);
 
-			PlayerTypes parentID = kPlayer.getParent();
+			PlayerTypes eEnemyPlayer = (PlayerTypes) iData1;
+			CvPlayer& kEnemyPlayer = GET_PLAYER(eEnemyPlayer);
+
+			PlayerTypes eParent = kPlayer.getParent();
+			PlayerTypes eEnemyParentPlayer = kEnemyPlayer.getParent();
+			CvPlayer& kEnemyParentPlayer = GET_PLAYER(eEnemyParentPlayer);
+
 			int choice = iData2;
 
 			// we have chosen to obey
@@ -4360,103 +4195,54 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 					kPlayer.NBMOD_DecreaseMaxTaxRate();
 				}
 				//declaring limited war
-				GET_TEAM(kPlayer.getTeam()).declareWar(GET_PLAYER(enemyID).getTeam(),false, WARPLAN_LIMITED);
+				GET_TEAM(kPlayer.getTeam()).declareWar(kEnemyPlayer.getTeam(),false, WARPLAN_LIMITED);
 
 				int taxchange = currentmaxtax - kPlayer.NBMOD_GetMaxTaxRate();
 
 				//sending message
 				CvWString szBuffer = gDLL->getText("TXT_KEY_EUROPE_WAR_KING_DECREASED_MAX_TAX", taxchange);
-				gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, false, false);
+				gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, false, false);
 			}
 
 			// we have chosen to obey but asked for troops
 			else if(choice == 2)
 			{
-				int reinforcementAmountLand = GC.getDefineINT("KING_REINFORCEMENT_LAND");
-				int reinforcementAmountArtil = GC.getDefineINT("KING_REINFORCEMENT_ARTIL");
-				int reinforcementAmountSea = GC.getDefineINT("KING_REINFORCEMENT_SEA");
-				//getting UnitType by parent
-				UnitTypes KingReinforcementTypeLand = (UnitTypes)GC.getCivilizationInfo(GET_PLAYER(kPlayer.getParent()).getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_KING_REINFORCEMENT_LAND"));
-				UnitTypes KingReinforcementTypeArtil = (UnitTypes)GC.getCivilizationInfo(GET_PLAYER(kPlayer.getParent()).getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_KING_REINFORCEMENT_ARTIL"));
-				UnitTypes KingReinforcementTypeSea = (UnitTypes)GC.getCivilizationInfo(GET_PLAYER(kPlayer.getParent()).getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_KING_REINFORCEMENT_SEA"));
+				LocationFlags location;
+				location.deepCoastal = true;
+				location.europe = true;
 
-				CvUnit* ReinforcementUnit = NULL;
-				//get City
-				CvCity* pLoopCity = NULL;
-				CvCity* locationToAppear = NULL;
-				int iLoop;
-				for (pLoopCity = kPlayer.firstCity(&iLoop); pLoopCity != NULL; pLoopCity = kPlayer.nextCity(&iLoop))
+				//declaring limited war
+				GET_TEAM(kPlayer.getTeam()).declareWar(kEnemyPlayer.getTeam(),false, WARPLAN_LIMITED);
+
+				bool bSuccess = kPlayer.buyUnitFromParentPlayer(getID(), "UNITCLASS_KING_REINFORCEMENT_SEA", GLOBAL_DEFINE_KING_REINFORCEMENT_SEA, "", 0, location);
+				if (bSuccess)
 				{
-					if (pLoopCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()) && pLoopCity->plot()->hasDeepWaterCoast())
-					{
-						locationToAppear = pLoopCity;
-						break;
-					}
+					kPlayer.buyUnitFromParentPlayer(getID(), "UNITCLASS_KING_REINFORCEMENT_LAND", GLOBAL_DEFINE_KING_REINFORCEMENT_LAND, "TXT_KEY_EUROPE_WAR_KING_SENT_TROOPS", 0, location, false, false);
+					kPlayer.buyUnitFromParentPlayer(getID(), "UNITCLASS_KING_REINFORCEMENT_ARTIL", GLOBAL_DEFINE_KING_REINFORCEMENT_ARTIL, "", 0, location);
 				}
-				if (locationToAppear != NULL)
+				else	// we need to find an alternative since the Player seems to have not gotten a proper city
+							// we just give the player more land Units in his Capitol but no Sea Units
 				{
-					for (int i=0;i<reinforcementAmountLand;i++)
-					{
-						ReinforcementUnit = kPlayer.initUnit(KingReinforcementTypeLand, GC.getUnitInfo(KingReinforcementTypeLand).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					}
-
-					for (int i=0;i<reinforcementAmountArtil;i++)
-					{
-						ReinforcementUnit = kPlayer.initUnit(KingReinforcementTypeArtil, GC.getUnitInfo(KingReinforcementTypeArtil).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					}
-
-					for (int i=0;i<reinforcementAmountSea;i++)
-					{
-						ReinforcementUnit = kPlayer.initUnit(KingReinforcementTypeSea, GC.getUnitInfo(KingReinforcementTypeSea).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					}
-
-					//declaring limited war
-					GET_TEAM(kPlayer.getTeam()).declareWar(GET_PLAYER(enemyID).getTeam(),false, WARPLAN_LIMITED);
-
-					//sending message
-					CvWString szBuffer = gDLL->getText("TXT_KEY_EUROPE_WAR_KING_SENT_TROOPS");
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, ReinforcementUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), ReinforcementUnit->getX(), ReinforcementUnit->getY(), true, true);
+					kPlayer.buyUnitFromParentPlayer(getID(), "UNITCLASS_KING_REINFORCEMENT_LAND", GLOBAL_DEFINE_KING_REINFORCEMENT_LAND + 1, "TXT_KEY_EUROPE_WAR_KING_SENT_TROOPS", 0, location, false, false);
+					kPlayer.buyUnitFromParentPlayer(getID(), "UNITCLASS_KING_REINFORCEMENT_ARTIL", GLOBAL_DEFINE_KING_REINFORCEMENT_ARTIL + 1, "", 0, location);
 				}
 
 				// WTP, ray, giving reinforcement to other Player as well - START
-				CvUnit* ReinforcementOtherPlayerUnit = NULL;
-				CvPlayer& otherPlayer = GET_PLAYER(enemyID);
-				//get City
-				CvCity* pLoopOtherPlayerCity = NULL;
-				CvCity* locationOtherPlayerToAppear = NULL;
-				int iLoopOther;
-				for (pLoopOtherPlayerCity = otherPlayer.firstCity(&iLoopOther); pLoopOtherPlayerCity != NULL; pLoopOtherPlayerCity = otherPlayer.nextCity(&iLoopOther))
+				bSuccess = kEnemyPlayer.buyUnitFromParentPlayer(eEnemyParentPlayer, "UNITCLASS_KING_REINFORCEMENT_SEA", GLOBAL_DEFINE_KING_REINFORCEMENT_SEA, "", 0, location);
+				if (bSuccess)
 				{
-					if (pLoopOtherPlayerCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()))
-					{
-						locationOtherPlayerToAppear = pLoopOtherPlayerCity;
-						break;
-					}
+					kEnemyPlayer.buyUnitFromParentPlayer(eEnemyParentPlayer, "UNITCLASS_KING_REINFORCEMENT_LAND", GLOBAL_DEFINE_KING_REINFORCEMENT_LAND, "TXT_KEY_EUROPE_WAR_KING_SENT_TROOPS_OTHER_PLAYER", 0, location, false, false);
+					kEnemyPlayer.buyUnitFromParentPlayer(eEnemyParentPlayer, "UNITCLASS_KING_REINFORCEMENT_ARTIL", GLOBAL_DEFINE_KING_REINFORCEMENT_ARTIL, "", 0, location);
 				}
-				if (locationOtherPlayerToAppear != NULL)
+				else	// we need to find an alternative since the other Player seems to have not gotten a proper city
+							// we just give the player more land Units in his Capitol but no Sea Units
 				{
-					for (int i=0;i<reinforcementAmountLand;i++)
-					{
-						ReinforcementOtherPlayerUnit = otherPlayer.initUnit(KingReinforcementTypeLand, GC.getUnitInfo(KingReinforcementTypeLand).getDefaultProfession(), locationOtherPlayerToAppear->getX_INLINE(), locationOtherPlayerToAppear->getY_INLINE(), NO_UNITAI);
-					}
-
-					for (int i=0;i<reinforcementAmountArtil;i++)
-					{
-						ReinforcementOtherPlayerUnit = otherPlayer.initUnit(KingReinforcementTypeArtil, GC.getUnitInfo(KingReinforcementTypeArtil).getDefaultProfession(), locationOtherPlayerToAppear->getX_INLINE(), locationOtherPlayerToAppear->getY_INLINE(), NO_UNITAI);
-					}
-
-					for (int i=0;i<reinforcementAmountSea;i++)
-					{
-						ReinforcementOtherPlayerUnit = otherPlayer.initUnit(KingReinforcementTypeSea, GC.getUnitInfo(KingReinforcementTypeSea).getDefaultProfession(), locationOtherPlayerToAppear->getX_INLINE(), locationOtherPlayerToAppear->getY_INLINE(), NO_UNITAI);
-					}
-
-					//sending message
-					CvWString szBuffer = gDLL->getText("TXT_KEY_EUROPE_WAR_KING_SENT_TROOPS_OTHER_PLAYER");
-					gDLL->getInterfaceIFace()->addMessage(enemyID, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, ReinforcementOtherPlayerUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), ReinforcementOtherPlayerUnit->getX(), ReinforcementOtherPlayerUnit->getY(), true, true);
+					kEnemyPlayer.buyUnitFromParentPlayer(eEnemyParentPlayer, "UNITCLASS_KING_REINFORCEMENT_LAND", GLOBAL_DEFINE_KING_REINFORCEMENT_LAND + 1, "TXT_KEY_EUROPE_WAR_KING_SENT_TROOPS_OTHER_PLAYER", 0, location, false, false);
+					kEnemyPlayer.buyUnitFromParentPlayer(eEnemyParentPlayer, "UNITCLASS_KING_REINFORCEMENT_ARTIL", GLOBAL_DEFINE_KING_REINFORCEMENT_ARTIL + 1, "", 0, location);
 				}
 				// WTP, ray, giving reinforcement to other Player as well - END
-			}
 
+			}
 			// we have chosen to disobey
 			else
 			{
@@ -4470,13 +4256,13 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 					kPlayer.NBMOD_IncreaseMaxTaxRate();
 				}
 				//improve relationship to the potential enemy
-				GET_PLAYER(enemyID).AI_changeAttitudeExtra(ePlayer, 2);
+				kEnemyPlayer.AI_changeAttitudeExtra(ePlayer, 2);
 
 				int taxchange = kPlayer.NBMOD_GetMaxTaxRate() - currentmaxtax;
 
 				//sending message
-				CvWString szBuffer = gDLL->getText("TXT_KEY_EUROPE_WAR_KING_INCCREASED_MAX_TAX", taxchange, GC.getLeaderHeadInfo(GET_PLAYER(enemyID).getLeaderType()).getDescription());
-				gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, false, false);
+				CvWString szBuffer = gDLL->getText("TXT_KEY_EUROPE_WAR_KING_INCCREASED_MAX_TAX", taxchange, GC.getLeaderHeadInfo(kEnemyPlayer.getLeaderType()).getDescription());
+				gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 			}
 		}
 		break;
@@ -4491,15 +4277,15 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 			priceStealingImmigrant = priceStealingImmigrant * gamespeedMod / 100;
 
 			//getting the Data from Diplo-Event
-			PlayerTypes victimID = (PlayerTypes) iData1; 
-			
+			PlayerTypes victimID = (PlayerTypes) iData1;
+
 			CvPlayer& victimPlayer = GET_PLAYER(victimID); // European we steal Immigrant
 			CvPlayer& kPlayer = GET_PLAYER(ePlayer); // human Player
 
 			if (kPlayer.getGold() >= priceStealingImmigrant)
 			{
 				// get random Unit from other European, we steal from
-				int randomUnitSelectOnDock = GC.getGameINLINE().getSorenRandNum(CivEffect()->getNumUnitsOnDock(), "pick immigrant");
+				int randomUnitSelectOnDock = GC.getGameINLINE().getSorenRandNum(CivEffect().getNumUnitsOnDock(), "pick immigrant");
 				UnitTypes eBestUnit = victimPlayer.getDocksNextUnit(randomUnitSelectOnDock);
 				if (NO_UNIT != eBestUnit)
 				{
@@ -4511,7 +4297,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 					// add message for human player
 					CvWString szBuffer;
 					szBuffer = gDLL->getText("TXT_KEY_STEALING_IMMIGRANT_SUCCESSFULL", GC.getCivilizationInfo(GET_PLAYER(victimPlayer.getParent()).getCivilizationType()).getShortDescriptionKey(), GC.getCivilizationInfo(getCivilizationType()).getShortDescriptionKey(), GC.getUnitInfo(eBestUnit).getTextKeyWide());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eBestUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+					gDLL->UI().addPlayerMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eBestUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 
 					gDLL->getInterfaceIFace()->setDirty(EuropeScreen_DIRTY_BIT, true);
 
@@ -4531,7 +4317,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 						victimPlayer.AI_changeAttitudeExtra(ePlayer, -1);
 						CvWString szBuffer;
 						szBuffer = gDLL->getText("TXT_KEY_STEALING_IMMIGRANT_NOTICED", GC.getCivilizationInfo(GET_PLAYER(victimPlayer.getParent()).getCivilizationType()).getShortDescriptionKey());
-						gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), NULL, NULL, false, false);
+						gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
 					}
 				}
 			}
@@ -4553,29 +4339,18 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 			if(choice == 1)
 			{
 				//make peace
-				GET_TEAM(kPlayer.getTeam()).makePeace(GET_PLAYER(enemyID).getTeam(),true);
+				kPlayer.forcePeace(enemyID);
 
-				UnitTypes Diplomat1UnitTypes =(UnitTypes)GC.getCivilizationInfo(kPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_DIPLOMAT_1"));
-				UnitTypes Diplomat2UnitTypes =(UnitTypes)GC.getCivilizationInfo(kPlayer.getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_DIPLOMAT_2"));
-
-				//get City
-				int iLoop;
-				CvCity* locationToAppear = kPlayer.firstCity(&iLoop);
-
-				//just for safety
-				if (locationToAppear != NULL) {
-					//creating the units
-					CvUnit* Diplomat1Unit = kPlayer.initUnit(Diplomat1UnitTypes, GC.getUnitInfo(Diplomat1UnitTypes).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					CvUnit* Diplomat2Unit = kPlayer.initUnit(Diplomat2UnitTypes, GC.getUnitInfo(Diplomat1UnitTypes).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					CvWString szBuffer = gDLL->getText("TXT_KEY_EUROPE_PEACE_ACCEPTED", GC.getLeaderHeadInfo(GET_PLAYER(enemyID).getLeaderType()).getDescription());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, false, false);
-				}
+				CvWString szBuffer = gDLL->getText("TXT_KEY_EUROPE_PEACE_ACCEPTED", GC.getLeaderHeadInfo(GET_PLAYER(enemyID).getLeaderType()).getDescription());
+				kPlayer.buyUnitFromParentPlayer(getID(), "UNITCLASS_DIPLOMAT_1", 1, szBuffer, 0, LocationFlags::LocationFlagNone, false, false);
+				kPlayer.buyUnitFromParentPlayer(getID(), "UNITCLASS_DIPLOMAT_2", 1, "", 0, LocationFlags::LocationFlagNone, false, false);
 			}
-			else {
+			else
+			{
 				//nothing really happens only parent little disappointed
 				AI_changeAttitudeExtra(ePlayer, -1);
 				CvWString szBuffer = gDLL->getText("TXT_KEY_EUROPE_PEACE_DENIED", GC.getLeaderHeadInfo(GET_PLAYER(enemyID).getLeaderType()).getDescription());
-				gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, false, false);
+				gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 			}
 		}
 		break;
@@ -4597,7 +4372,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 				int iGoldToPayBaseValue = GC.getDefineINT("ROYAL_INTERVENTIONS_GOLD_PRICE");
 				iGoldToPayBaseValue = iGoldToPayBaseValue * GC.getGameSpeedInfo(GC.getGame().getGameSpeedType()).getStoragePercent() / 100;
 				int iGoldModiferByAttitude = GC.getDefineINT("ROYAL_INTERVENTIONS_PERCENT_GOLD_PRICE_CHANGE_PER_ATTITUDE_POINT");
-				int iKingsAttitudeValue = GET_PLAYER((PlayerTypes) getID()).AI_getAttitudeVal(ePlayer, false);
+				int iKingsAttitudeValue = AI().AI_getAttitudeVal(ePlayer, false);
 				int iGoldModifiedByAttitude = iGoldToPayBaseValue * (100 - iGoldModiferByAttitude * iKingsAttitudeValue) / 100;
 
 				if (iGoldModifiedByAttitude < iGoldToPayBaseValue / 2)
@@ -4635,30 +4410,21 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 			// we have chosen one of the 2 Options that give us Royal Units
 			if(choice == 1 || choice == 2)
 			{
-				UnitTypes RoyalInterventionShip =(UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_ROYAL_INTERVENTIONS_SHIP"));
-				UnitTypes RoyalInterventionLandUnit1 =(UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_ROYAL_INTERVENTIONS_LAND_UNIT_1"));
-				UnitTypes RoyalInterventionLandUnit2 =(UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_ROYAL_INTERVENTIONS_LAND_UNIT_2"));
+				LocationFlags location;
+				location.deepCoastal = true;
+				location.europe = true;
+				CvCity *locationToAppear = kPlayer.buyUnitFromParentPlayer(getID(), "UNITCLASS_ROYAL_INTERVENTIONS_SHIP", 1, "", 0, location, false, false);
+				CvWString locationName = locationToAppear != NULL ? locationToAppear->getNameKey() : gDLL->getText("TXT_KEY_CONCEPT_EUROPE");
+				CvWString szBuffer = gDLL->getText("TXT_KEY_ROYAL_INTERVENTION_ACCEPTED", GC.getLeaderHeadInfo(GET_PLAYER(enemyID).getLeaderType()).getDescription(), locationName.c_str());
 
-				//get City
-				int iLoop;
-				CvCity* locationToAppear = kPlayer.firstCity(&iLoop);
-
-				//just for safety
-				if (locationToAppear != NULL) {
-					//creating the units
-					CvUnit* RoyalInterventionShipUnit = kPlayer.initUnit(RoyalInterventionShip, GC.getUnitInfo(RoyalInterventionShip).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					CvUnit* RoyalInterventionLandUnitA = kPlayer.initUnit(RoyalInterventionLandUnit1, GC.getUnitInfo(RoyalInterventionLandUnit1).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-					CvUnit* RoyalInterventionLandUnitB = kPlayer.initUnit(RoyalInterventionLandUnit2, GC.getUnitInfo(RoyalInterventionLandUnit2).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-
-					CvWString szBuffer = gDLL->getText("TXT_KEY_ROYAL_INTERVENTION_ACCEPTED", GC.getLeaderHeadInfo(GET_PLAYER(enemyID).getLeaderType()).getDescription(), locationToAppear->getNameKey());
-					gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, RoyalInterventionShipUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), true, true);
-				}
+				kPlayer.buyUnitFromParentPlayer(getID(), "UNITCLASS_ROYAL_INTERVENTIONS_LAND_UNIT_1", 1, szBuffer, 0, location, false, false);
+				kPlayer.buyUnitFromParentPlayer(getID(), "UNITCLASS_ROYAL_INTERVENTIONS_LAND_UNIT_2", 1, "", 0, location, false, false);
 			}
 			// we just post a message
-			else 
+			else
 			{
 				CvWString szBuffer = gDLL->getText("TXT_KEY_ROYAL_INTERVENTION_REFUSED", GC.getLeaderHeadInfo(GET_PLAYER(enemyID).getLeaderType()).getDescription());
-				gDLL->getInterfaceIFace()->addMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, false, false);
+				gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 			}
 		}
 		break;
@@ -4673,7 +4439,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 			// this here is the Colonial Player itself
 			PlayerTypes eColonialPlayer = (PlayerTypes) getID();
 
-			// getting the Parent of the Colonial Player 
+			// getting the Parent of the Colonial Player
 			PlayerTypes parentID = getParent();
 			CvPlayer& kColonialParentPlayer = GET_PLAYER(parentID);
 
@@ -4718,7 +4484,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 			CvUnit* pUnit = getUnit(iData1);
 			int choice = iData2;
 			CvPlayer& kPlayer = GET_PLAYER(ePlayer);
-		
+
 			// bugfix start - Nightinggale
 			// don't assume that unit and cities exist just because they existed when the window was added to the pop-up queue
 			// failed assumtions leads to crashes
@@ -4768,7 +4534,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 
 							//add message
 							CvWString szMessage = gDLL->getText("TXT_KEY_NATIVE_TRADE_FINISHED", iAmountToTrade, pOtherCity->getNameKey(), GC.getYieldInfo(yieldToTrade).getChar());
-							gDLL->getInterfaceIFace()->addMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_BUILD_BANK", MESSAGE_TYPE_MAJOR_EVENT, GC.getYieldInfo(yieldToTrade).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), pOtherCity->getX_INLINE(), pOtherCity->getY_INLINE(), true, true);
+							gDLL->UI().addPlayerMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szMessage, pOtherCity, "AS2D_BUILD_BANK", MESSAGE_TYPE_MAJOR_EVENT, GC.getYieldInfo(yieldToTrade).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 						}
 					}
 
@@ -4796,7 +4562,7 @@ void CvPlayer::handleDiploEvent(DiploEventTypes eDiploEvent, PlayerTypes ePlayer
 			//pUnit->setYieldForNativeTrade(NO_YIELD);
 			//pUnit->setAmountForNativeTrade(0);
 			// R&R, vetiarvind, bug fix - END
-			
+
 
 		}
 		break;
@@ -5338,7 +5104,7 @@ void CvPlayer::raze(CvCity* pCity)
 	}
 
 	CvWString szBuffer = gDLL->getText("TXT_KEY_MISC_DESTROYED_CITY", pCity->getNameKey());
-	gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CITYRAZE", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_GREEN"), pCity->getX_INLINE(), pCity->getY_INLINE(), true, true);
+	gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, pCity, "AS2D_CITYRAZE", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_GREEN"), true, true);
 
 	for (int iI = 0; iI < MAX_PLAYERS; iI++)
 	{
@@ -5349,14 +5115,14 @@ void CvPlayer::raze(CvCity* pCity)
 				if (pCity->isRevealed(GET_PLAYER((PlayerTypes)iI).getTeam(), false))
 				{
 					szBuffer = gDLL->getText("TXT_KEY_MISC_CITY_HAS_BEEN_RAZED_BY", pCity->getNameKey(), getCivilizationDescriptionKey());
-					gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CITYRAZED", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), pCity->getX_INLINE(), pCity->getY_INLINE(), true, true);
+					gDLL->UI().addPlayerMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, pCity, "AS2D_CITYRAZED", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), true, true);
 				}
 			}
 		}
 	}
 
 	szBuffer = gDLL->getText("TXT_KEY_MISC_CITY_RAZED_BY", pCity->getNameKey(), getCivilizationDescriptionKey());
-	GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), szBuffer, pCity->getX_INLINE(), pCity->getY_INLINE(), (ColorTypes)GC.getInfoTypeForString("COLOR_WARNING_TEXT"));
+	GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), szBuffer, pCity->coord(), (ColorTypes)GC.getInfoTypeForString("COLOR_WARNING_TEXT"));
 
 	// Report this event
 	gDLL->getEventReporterIFace()->cityRazed(pCity, getID());
@@ -5379,12 +5145,12 @@ void CvPlayer::raze(CvCity* pCity)
 						if (GET_PLAYER(pCity->getPreviousOwner()).isNative())
 						{
 							UnitTypes SlaveType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_NATIVE_SLAVE"));
-							initUnit(SlaveType, GC.getUnitInfo(SlaveType).getDefaultProfession(), pCity->getX_INLINE(), pCity->getY_INLINE());
+							initUnit(SlaveType, GC.getUnitInfo(SlaveType).getDefaultProfession(), pCity->coord());
 
 						}
 						else
 						{
-							initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pCity->getX_INLINE(), pCity->getY_INLINE());
+							initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pCity->coord());
 						}
 						// R&R, ray, Native Slaves, END
 					}
@@ -5426,7 +5192,7 @@ void CvPlayer::raze(CvCity* pCity)
 				if (eUnit != NO_UNIT)
 				{
 					FAssert(GC.getUnitInfo(eUnit).isTreasure());
-					CvUnit* pTreasure = initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pCity->getX_INLINE(), pCity->getY_INLINE(), NO_UNITAI, NO_DIRECTION, iTreasure);
+					CvUnit* pTreasure = initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pCity->coord(), NO_UNITAI, NO_DIRECTION, iTreasure);
 				}
 			}
 		}
@@ -5465,7 +5231,7 @@ void CvPlayer::disband(CvCity* pCity, bool bAbandon)
 	}
 
 	CvPlot* const pCityPlot = pCity->plot();
-	
+
 	// No ruins for a city that was voluntarily abandoned
 	pCityPlot->setImprovementType(NO_IMPROVEMENT);
 
@@ -5588,7 +5354,7 @@ bool CvPlayer::canReceiveGoody(CvPlot* pPlot, GoodyTypes eGoody, const CvUnit* p
 		// R&R, ray, Goodies on Water - START
 		if (pPlot->isWater())
 		{
-			if (pUnit == NULL) 
+			if (pUnit == NULL)
 			{
 				return false;
 			}
@@ -5748,6 +5514,8 @@ void CvPlayer::receiveRandomGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUni
 
 int CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit)
 {
+	OOS_LOG_3("CvPlayer::receiveGoody", getTypeStr(eGoody), getID());
+
 	int iReturnValue = -1;
 
 	FAssertMsg(canReceiveGoody(pPlot, eGoody, pUnit), "Instance is expected to be able to recieve goody");
@@ -5758,11 +5526,18 @@ int CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit)
 
 	int iGold = kGoody.getGold() + GC.getGameINLINE().getSorenRandNum(kGoody.getGoldRand1(), "Goody Gold 1") + GC.getGameINLINE().getSorenRandNum(kGoody.getGoldRand2(), "Goody Gold 2");
 	iGold = iGold * GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getGrowthPercent() / 100;
-	if ((pUnit != NULL) && pUnit->isNoBadGoodies())
+	// WTP, ray, Scout Gold Modifier for Goodies and Chiefs at Unit - START
+	// Comment about NO_BAD_GOODIES_GOLD_PERCENT: It is very bad style to have such hidden modifiers that are not visible to player
+	// now instead the GoldModifier at Unit below is used - thus the old logic is commented out
+	// if ((pUnit != NULL) && pUnit->isNoBadGoodies())
+	// {
+	//		iGold = iGold * GC.getDefineINT("NO_BAD_GOODIES_GOLD_PERCENT") / 100;
+	// }
+	if ((pUnit != NULL) && pUnit->getUnitInfo().getGoldFromGoodiesAndChiefsModifier() != 0)
 	{
-		iGold = iGold * GC.getDefineINT("NO_BAD_GOODIES_GOLD_PERCENT") / 100;
+		iGold = iGold + (iGold * pUnit->getUnitInfo().getGoldFromGoodiesAndChiefsModifier() / 100);
 	}
-
+	// WTP, ray, Scout Gold Modifier for Goodies and Chiefs at Unit - END
 	if (iGold != 0)
 	{
 		CvCity* pCity = pPlot->getPlotCity();
@@ -5802,7 +5577,7 @@ int CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit)
 
 	if (!szBuffer.empty())
 	{
-		gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, kGoody.getSound(), MESSAGE_TYPE_MINOR_EVENT, ARTFILEMGR.getImprovementArtInfo("ART_DEF_IMPROVEMENT_GOODY_HUT")->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), pPlot->getX_INLINE(), pPlot->getY_INLINE());
+		gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, pPlot, kGoody.getSound(), MESSAGE_TYPE_MINOR_EVENT, ARTFILEMGR.getImprovementArtInfo("ART_DEF_IMPROVEMENT_GOODY_HUT")->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 	}
 
 	// R&R, ray, Goody Enhancement
@@ -5811,7 +5586,7 @@ int CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit)
 	{
 		for (int gi = 0; gi < iGoodyImmigrants; gi++)
 		{
-			int randomUnitSelectOnDock = GC.getGameINLINE().getSorenRandNum(CivEffect()->getNumUnitsOnDock(), "pick immigrant");
+			int randomUnitSelectOnDock = GC.getGameINLINE().getSorenRandNum(CivEffect().getNumUnitsOnDock(), "pick immigrant");
 			UnitTypes eBestUnit = getDocksNextUnit(randomUnitSelectOnDock);
 			if (NO_UNIT != eBestUnit)
 			{
@@ -5820,7 +5595,7 @@ int CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit)
 
 				CvWString szBuffer;
 				szBuffer = gDLL->getText("TXT_KEY_NEW_IMMIGRANT_AVAILABLE_SHORT", GC.getCivilizationInfo(GET_PLAYER(getParent()).getCivilizationType()).getShortDescriptionKey(),  GC.getUnitInfo(eBestUnit).getTextKeyWide());
-				gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eBestUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+				gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eBestUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 
 				gDLL->getInterfaceIFace()->setDirty(EuropeScreen_DIRTY_BIT, true);
 
@@ -5836,7 +5611,9 @@ int CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit)
 	int iRange = kGoody.getMapRange();
 	if ((pUnit != NULL) && pUnit->isNoBadGoodies())
 	{
-		iRange = iRange * GC.getDefineINT("NO_BAD_GOODIES_GOLD_PERCENT") / 100;
+		// WTP, ray, Scout Gold Modifier for Goodies and Chiefs at Unit - START
+		// iRange = iRange * GC.getDefineINT("NO_BAD_GOODIES_GOLD_PERCENT") / 100;
+		iRange = iRange * GC.getDefineINT("NO_BAD_GOODIES_MAP_RANGE_PERCENT") / 100;
 	}
 
 	if (iRange > 0)
@@ -5852,7 +5629,7 @@ int CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit)
 			{
 				for (int iDY = -(iOffset); iDY <= iOffset; iDY++)
 				{
-					CvPlot* pLoopPlot = plotXY(pPlot->getX_INLINE(), pPlot->getY_INLINE(), iDX, iDY);
+					CvPlot* pLoopPlot = (pPlot->coord() + RelCoordinates(iDX, iDY)).plot();
 
 					if (pLoopPlot != NULL)
 					{
@@ -5860,7 +5637,7 @@ int CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit)
 						{
 							int iValue = (1 + GC.getGameINLINE().getSorenRandNum(10000, "Goody Map"));
 
-							iValue *= plotDistance(pPlot->getX_INLINE(), pPlot->getY_INLINE(), pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE());
+							iValue *= plotDistance(pPlot, pLoopPlot);
 
 							if (iValue > iBestValue)
 							{
@@ -5886,7 +5663,7 @@ int CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit)
 
 				if (pLoopPlot != NULL)
 				{
-					if (plotDistance(pBestPlot->getX_INLINE(), pBestPlot->getY_INLINE(), pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE()) <= iRange)
+					if (plotDistance(pBestPlot, pLoopPlot) <= iRange)
 					{
 						if (GC.getGameINLINE().getSorenRandNum(100, "Goody Map") < kGoody.getMapProb())
 						{
@@ -5923,7 +5700,7 @@ int CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit)
 
 			if (eUnit != NO_UNIT)
 			{
-				CvUnit* pGoodyUnit = initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pPlot->getX_INLINE(), pPlot->getY_INLINE());
+				CvUnit* pGoodyUnit = initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pPlot->coord());
 
 				//treasure
 				if((pGoodyUnit != NULL) && (iGold != 0) && pGoodyUnit->getUnitInfo().isTreasure())
@@ -5941,7 +5718,7 @@ int CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit)
 
 		if (eUnit != NO_UNIT)
 		{
-			CvUnit* pLearnUnit = initUnit(eUnit, pUnit->getProfession(), pPlot->getX_INLINE(), pPlot->getY_INLINE(), pUnit->AI_getUnitAIType());
+			CvUnit* pLearnUnit = initUnit(eUnit, pUnit->getProfession(), pPlot->coord(), pUnit->AI_getUnitAIType());
 			FAssert(pLearnUnit != NULL);
 			pLearnUnit->joinGroup(pUnit->getGroup());
 			pLearnUnit->convert(pUnit, true);
@@ -5959,7 +5736,7 @@ int CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit)
 		{
 			if (isHuman())
 			{
-				CvPopupInfo* pInfo = new CvPopupInfo(BUTTONPOPUP_CHOOSE_GOODY, eGoody, GC.getMapINLINE().plotNumINLINE(pPlot->getX_INLINE(), pPlot->getY_INLINE()), pUnit ? pUnit->getID() : -1);
+				CvPopupInfo* pInfo = new CvPopupInfo(BUTTONPOPUP_CHOOSE_GOODY, eGoody, GC.getMap().plotNumINLINE(pPlot->coord()), pUnit ? pUnit->getID() : -1);
 				gDLL->getInterfaceIFace()->addPopup(pInfo, getID(), true);
 			}
 			else
@@ -5987,7 +5764,7 @@ int CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit)
 	// code the logic here what these Goodies do
 	// is is actually all the same - the XML tags are just used for immersive spwaning config
 	if (kGoody.isSpawnHostileUnitsAsXML() || kGoody.isSpawnHostileAnimals() || kGoody.isSpawnHostileNatives() || kGoody.isSpawnHostileCriminals())
-	{	
+	{
 
 		int eHostileUnitClass = kGoody.getUnitClassType();
 		PlayerTypes barbarianPlayerTypes = GC.getGameINLINE().getBarbarianPlayer();
@@ -6013,7 +5790,7 @@ int CvPlayer::receiveGoody(CvPlot* pPlot, GoodyTypes eGoody, CvUnit* pUnit)
 				// now we loop and spwan the Hostiles
 				for(int iI=0; iI<iActualHostileUnitsToSpawn; iI++)
 				{
-					CvUnit* eHostileUnit= barbarianPlayer.initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pPlot->getX_INLINE(), pPlot->getY_INLINE(), NO_UNITAI);
+					CvUnit* eHostileUnit= barbarianPlayer.initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pPlot->coord(), NO_UNITAI);
 					//treasures get loaded with Gold if configured in XML
 					if((eHostileUnit != NULL) && (iGold != 0) && eHostileUnit->getUnitInfo().isTreasure())
 					{
@@ -6045,7 +5822,7 @@ void CvPlayer::doGoody(CvPlot* pPlot, CvUnit* pUnit)
 		if (!isNative() && !GC.getGameINLINE().isBarbarianPlayer(getID()))
 		// < JAnimals Mod End >
 		{
-			//WTP, Unit only Goodies - END 
+			//WTP, Unit only Goodies - END
 			bool bCanTriggerUnitGoodies = pPlot->isGoodyForSpawningUnits();
 			//WTP, Unit only Goodies - START
 
@@ -6166,7 +5943,7 @@ void CvPlayer::doGoody(CvPlot* pPlot, CvUnit* pUnit)
 							}
 							// WTP, ray, Unit spawning Goodies and Goody Huts - END
 
-							// in all other Cases Unit Goodies may only be triggered if bCanTriggerUnitGoodies 
+							// in all other Cases Unit Goodies may only be triggered if bCanTriggerUnitGoodies
 							// normal case for hostile and non-hostile Units
 							else if (bCanTriggerUnitGoodies)
 							{
@@ -6176,7 +5953,7 @@ void CvPlayer::doGoody(CvPlot* pPlot, CvUnit* pUnit)
 						}
 
 						// Case: Goody gives other rewards
-						else 
+						else
 						{
 							// Land or Water Goody?
 							bool isWaterGoody = uGoody.isWaterGoody();
@@ -6185,7 +5962,7 @@ void CvPlayer::doGoody(CvPlot* pPlot, CvUnit* pUnit)
 							// Goodies that are not giving Units only valid for Land Goody Huts not giving Units
 							if (!isWaterGoody && !bCanTriggerUnitGoodies)
 							{
-								bValid = true;	
+								bValid = true;
 							}
 							// case Water Goody
 							// to ensure that Water Unit Goodies do not only trigger Units - unless Cargo is full
@@ -6230,7 +6007,7 @@ void CvPlayer::doGoody(CvPlot* pPlot, CvUnit* pUnit)
 }
 
 
-bool CvPlayer::canFound(int iX, int iY, bool bTestVisible) const
+bool CvPlayer::canFound(Coordinates foundCoord, bool bTestVisible) const
 {
 	CvPlot* pPlot;
 	CvPlot* pLoopPlot;
@@ -6238,12 +6015,12 @@ bool CvPlayer::canFound(int iX, int iY, bool bTestVisible) const
 	int iRange;
 	int iDX, iDY;
 
-	if (!CivEffect()->canFoundCity())
+	if (!CivEffect().canFoundCity())
 	{
 		return false;
 	}
 
-	pPlot = GC.getMapINLINE().plotINLINE(iX, iY);
+	pPlot = foundCoord.plot();
 
 	if (GC.getGameINLINE().isFinalInitialized())
 	{
@@ -6312,8 +6089,8 @@ bool CvPlayer::canFound(int iX, int iY, bool bTestVisible) const
 	if(GC.getUSE_CAN_FOUND_CITIES_ON_WATER_CALLBACK())
 	{
 		CyArgsList argsList2;
-		argsList2.add(iX);
-		argsList2.add(iY);
+		argsList2.add(foundCoord.x());
+		argsList2.add(foundCoord.y());
 		lResult=0;
 		gDLL->getPythonIFace()->callFunction(PYGameModule, "canFoundCitiesOnWater", argsList2.makeFunctionArgs(), &lResult);
 	}
@@ -6347,7 +6124,7 @@ bool CvPlayer::canFound(int iX, int iY, bool bTestVisible) const
 			{
 				for (iDY = -1; iDY <= 1 && bOwnsAll; iDY++)
 				{
-					pLoopPlot = plotXY(pPlot->getX_INLINE(), pPlot->getY_INLINE(), iDX, iDY);
+					pLoopPlot = (pPlot->coord() + RelCoordinates(iDX, iDY)).plot();
 					if (pLoopPlot != NULL && pLoopPlot->getOwnerINLINE() != getID())
 					{
 						bOwnsAll = false;
@@ -6365,7 +6142,7 @@ bool CvPlayer::canFound(int iX, int iY, bool bTestVisible) const
 		{
 			for (iDY = -(iRange); iDY <= iRange; iDY++)
 			{
-				pLoopPlot	= plotXY(pPlot->getX_INLINE(), pPlot->getY_INLINE(), iDX, iDY);
+				pLoopPlot	= (pPlot->coord() + RelCoordinates(iDX, iDY)).plot();
 
 				if (pLoopPlot != NULL)
 				{
@@ -6388,14 +6165,14 @@ bool CvPlayer::canFound(int iX, int iY, bool bTestVisible) const
 }
 
 
-void CvPlayer::found(int iX, int iY)
+CvCity* CvPlayer::found(Coordinates foundCoord)
 {
-	if (!canFound(iX, iY))
+	if (!canFound(foundCoord))
 	{
-		return;
+		return NULL;
 	}
 
-	CvCity* pCity = initCity(iX, iY, true);
+	CvCity* pCity = initCity(foundCoord, true);
 	FAssertMsg(pCity != NULL, "City is not assigned a valid value");
 
 	for (int iI = 0; iI < GC.getNumBuildingClassInfos(); iI++)
@@ -6430,7 +6207,9 @@ void CvPlayer::found(int iX, int iY)
 	}
 
 	gDLL->getEventReporterIFace()->cityBuilt(pCity);
-	if (gPlayerLogLevel >= 1) logBBAI(" Player %d (%S) founds new city %S at %d, %d", getID(), getCivilizationDescription(0), pCity->getName(0).GetCString(), iX, iY); // BETTER_BTS_AI_MOD, AI logging, 10/02/09, jdog5000
+	if (gPlayerLogLevel >= 1) logBBAI(" Player %d (%S) founds new city %S at %d, %d", getID(), getCivilizationDescription(0), pCity->getName(0).GetCString(), foundCoord.x(), foundCoord.y()); // BETTER_BTS_AI_MOD, AI logging, 10/02/09, jdog5000
+
+	return pCity;
 }
 
 
@@ -6438,8 +6217,7 @@ bool CvPlayer::canTrain(UnitTypes eUnit, bool bContinue, bool bTestVisible, bool
 {
 	PROFILE_FUNC();
 
-	UnitClassTypes eUnitClass;
-	eUnitClass = ((UnitClassTypes)(GC.getUnitInfo(eUnit).getUnitClassType()));
+	const UnitClassTypes eUnitClass = GC.getUnitInfo(eUnit).getUnitClassType();
 
 	FAssert(GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(eUnitClass) == eUnit);
 	if (GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(eUnitClass) != eUnit)
@@ -6581,7 +6359,7 @@ bool CvPlayer::canConstruct(BuildingTypes eBuilding, bool bContinue, bool bTestV
 
 int CvPlayer::getYieldProductionNeeded(UnitTypes eUnit, YieldTypes eYield) const
 {
-	UnitClassTypes eUnitClass = (UnitClassTypes)GC.getUnitInfo(eUnit).getUnitClassType();
+	const UnitClassTypes eUnitClass = GC.getUnitInfo(eUnit).getUnitClassType();
 	FAssert(NO_UNITCLASS != eUnitClass);
 
 	int iProductionNeeded = GC.getUnitInfo(eUnit).getYieldCost(eYield);
@@ -6735,7 +6513,7 @@ int CvPlayer::getBuildingClassPrereqBuilding(BuildingTypes eBuilding, BuildingCl
 
 	BuildingClassTypes eBuildingClass = (BuildingClassTypes)kBuilding.getBuildingClassType();
 
-	iPrereqs *= std::max(0, (GC.getWorldInfo(GC.getMapINLINE().getWorldSize()).getBuildingClassPrereqModifier() + 100));
+	iPrereqs *= std::max(0, (GC.getWorldInfo(GC.getMap().getWorldSize()).getBuildingClassPrereqModifier() + 100));
 	iPrereqs /= 100;
 
 	iPrereqs *= (getBuildingClassCount((BuildingClassTypes)(GC.getBuildingInfo(eBuilding).getBuildingClassType())) + iExtra + 1);
@@ -6776,7 +6554,7 @@ void CvPlayer::processTrait(TraitTypes eTrait, int iChange)
 
 	changeTraitCount(eTrait, iChange);
 
-	CivEffect()->applyCivEffect(kTrait.getCivEffect(), iChange);
+	CivEffect().applyCivEffect(kTrait.getCivEffect(), iChange);
 
 	changeLevelExperienceModifier(kTrait.getLevelExperienceModifier() * iChange);
 	changeGreatGeneralRateModifier(kTrait.getGreatGeneralRateModifier() * iChange);
@@ -6785,7 +6563,7 @@ void CvPlayer::processTrait(TraitTypes eTrait, int iChange)
 	changeNativeAngerModifier(kTrait.getNativeAngerModifier() * iChange);
 	changeNativeCombatModifier(kTrait.getNativeCombatModifier() * iChange);
 	changeMissionaryRateModifier(kTrait.getMissionaryModifier() * iChange);
-	changeNativeTradeModifier(kTrait.getNativeTradeModifier() * iChange); // R&R, ray, new Attribute in Traits 
+	changeNativeTradeModifier(kTrait.getNativeTradeModifier() * iChange); // R&R, ray, new Attribute in Traits
 
 	// WTP, Africa and Port Royal Profit Modifiers - START
 	// needs to be stored in the KING Player object, because these prices are calcuated on KING
@@ -6908,9 +6686,9 @@ void CvPlayer::processTrait(TraitTypes eTrait, int iChange)
 
 	if (kTrait.getNativeAttitudeChange() != 0)
 	{
-		for (int iPlayer = 0; iPlayer < MAX_PLAYERS; ++iPlayer)
+		for (PlayerTypes eLoopPlayer = FIRST_PLAYER; eLoopPlayer < NUM_PLAYER_TYPES; eLoopPlayer++)
 		{
-			CvPlayer& kLoopPlayer = GET_PLAYER((PlayerTypes) iPlayer);
+			CvPlayer& kLoopPlayer = GET_PLAYER(eLoopPlayer);
 
 			if (kLoopPlayer.isAlive() && kLoopPlayer.isNative())
 			{
@@ -6918,7 +6696,7 @@ void CvPlayer::processTrait(TraitTypes eTrait, int iChange)
 
 				if (iChange > 0 && kTrait.getNativeAttitudeChange() > 0)
 				{
-					GET_TEAM(getTeam()).makePeace(kLoopPlayer.getTeam());
+					forcePeace(eLoopPlayer);
 				}
 			}
 		}
@@ -6927,9 +6705,9 @@ void CvPlayer::processTrait(TraitTypes eTrait, int iChange)
 	// R&R, ray, new Attribute in Traits  - START
 	if (kTrait.getEuropeanAttitudeChange() != 0)
 	{
-		for (int iPlayer = 0; iPlayer < MAX_PLAYERS; ++iPlayer)
+		for (PlayerTypes eLoopPlayer = FIRST_PLAYER; eLoopPlayer < NUM_PLAYER_TYPES; eLoopPlayer++)
 		{
-			CvPlayer& kLoopPlayer = GET_PLAYER((PlayerTypes) iPlayer);
+			CvPlayer& kLoopPlayer = GET_PLAYER(eLoopPlayer);
 
 			// Erik: Do not attempt to make peace with ourselves!
 			if (kLoopPlayer.getTeam() == getTeam())
@@ -6944,7 +6722,10 @@ void CvPlayer::processTrait(TraitTypes eTrait, int iChange)
 					// R&R, ray, making peace with Animals fixed
 					if (!GC.getGameINLINE().isBarbarianPlayer(kLoopPlayer.getID()))
 					{
-						GET_TEAM(getTeam()).makePeace(kLoopPlayer.getTeam());
+						if (GC.getGameINLINE().isChurchPlayer(kLoopPlayer.getID()))
+							continue;
+
+						forcePeace(eLoopPlayer);
 					}
 				}
 			}
@@ -6982,7 +6763,7 @@ void CvPlayer::processFatherOnce(FatherTypes eFather)
 {
 	CvFatherInfo& kFatherInfo = GC.getFatherInfo(eFather);
 
-	CivEffect()->applyCivEffect(kFatherInfo.getCivEffect());
+	CivEffect().applyCivEffect(kFatherInfo.getCivEffect());
 
 	for (int iUnitClass = 0; iUnitClass < GC.getNumUnitClassInfos(); ++iUnitClass)
 	{
@@ -7002,11 +6783,11 @@ void CvPlayer::processFatherOnce(FatherTypes eFather)
 
 			//WTP, ray fix for issue Free Water Units - START
 			CvPlot* pPortPlot = NULL;
-			int iLoopWater; 
+			int iLoopWater;
 			for (CvCity* pPortCity = firstCity(&iLoopWater); pPortCity != NULL && pPortPlot == NULL; pPortCity = nextCity(&iLoopWater))
 			{
 				CvPlot* pPortCityPlot = pPortCity->plot();
-				if (pPortCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()) && pPortCityPlot->isEuropeAccessable())
+				if (pPortCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()) && pPortCityPlot->isEuropeAccessable() && pPortCityPlot->hasDeepWaterCoast())
 				{
 					pPortPlot = pPortCityPlot;
 				}
@@ -7029,11 +6810,13 @@ void CvPlayer::processFatherOnce(FatherTypes eFather)
 				// if (pPlot != NULL)
 				//WTP, ray fix for issue Free Water Units - END
 				{
-					initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pPlot->getX_INLINE(), pPlot->getY_INLINE());
+					OOS_LOG("Adding father unit", getTypeStr(eUnit));
+					initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pPlot->coord());
 				}
 				//WTP, ray fix for issue Free Water Units - START
 				else if (pPortPlot != NULL && GC.getUnitInfo(eUnit).getDomainType() == DOMAIN_SEA)
 				{
+					OOS_LOG("Adding father unit", getTypeStr(eUnit));
 					initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pPortPlot->getX_INLINE(), pPortPlot->getY_INLINE());
 				}
 				//WTP, ray fix for issue Free Water Units - END
@@ -7047,7 +6830,7 @@ void CvPlayer::processFatherOnce(FatherTypes eFather)
 						{
 							pUnit->setUnitTravelState(UNIT_TRAVEL_STATE_IN_EUROPE, false);
 							//add unit to map after setting Europe state so that it doesn't bump enemy units
-							pUnit->addToMap(pStartingPlot->getX_INLINE(), pStartingPlot->getY_INLINE());
+							pUnit->addToMap(pStartingPlot->coord());
 						}
 					}
 					else
@@ -7063,9 +6846,9 @@ void CvPlayer::processFatherOnce(FatherTypes eFather)
 	{
 		if (kFatherInfo.isRevealImprovement(iImprovement))
 		{
-			for (int i = 0; i < GC.getMapINLINE().numPlotsINLINE(); ++i)
+			for (int i = 0; i < GC.getMap().numPlotsINLINE(); ++i)
 			{
-				CvPlot* pPlot = GC.getMapINLINE().plotByIndexINLINE(i);
+				CvPlot* pPlot = GC.getMap().plotByIndexINLINE(i);
 
 				if (pPlot->getImprovementType() == iImprovement)
 				{
@@ -7099,7 +6882,7 @@ bool CvPlayer::canBuild(const CvPlot* pPlot, BuildTypes eBuild, bool bTestEra, b
 
 	// CivEffect check
 	// Should be first because of lazy checking optimization. It's just a BoolArray lookup, hence very fast
-	if (!CivEffect()->canUseBuild(eBuild))
+	if (!CivEffect().canUseBuild(eBuild))
 	{
 		return false;
 	}
@@ -7125,7 +6908,7 @@ int CvPlayer::getBuildCost(const CvPlot* pPlot, BuildTypes eBuild) const
 	FAssert(eBuild >= 0 && eBuild < GC.getNumBuildInfos());
 
 	int iCost;
-	
+
 	if (pPlot->getBuildProgress(eBuild) > 0)
 	{
 		iCost = 0;
@@ -7262,7 +7045,7 @@ bool CvPlayer::canDoCivics(CivicTypes eCivic) const
 	}
 
 	// CivEffect check
-	if (!CivEffect()->canUseCivic(eCivic))
+	if (!CivEffect().canUseCivic(eCivic))
 	{
 		return false;
 	}
@@ -7321,6 +7104,17 @@ int CvPlayer::greatAdmiralThreshold() const
 }
 // R&R, ray, Great Admirals - END
 
+// WTP, ray, increase threshold if more than X units waiting on the docks - START
+int CvPlayer::getImmigrationThresholdModifierFromUnitsWaitingOnDock() const
+{
+	int iTooManyUnitsWaitingEurope = std::max(0, getNumEuropeUnits() - GLOBAL_DEFINE_MIN_UNITS_ON_DOCK_BEFORE_THRESHOLD_INCREASED);
+	int iImmigrationThresholdModiferUnitsOnDockBase = GLOBAL_DEFINE_IMMIGRATION_THRESHOLD_MODIFIER_UNITS_ON_DOCK;
+	int ImmigrationThresholdModifierFromUnitsWaitingOnDock = iTooManyUnitsWaitingEurope * iImmigrationThresholdModiferUnitsOnDockBase;
+
+	return ImmigrationThresholdModifierFromUnitsWaitingOnDock;
+}
+// WTP, ray, increase threshold if more than X units waiting on the docks - END
+
 int CvPlayer::immigrationThreshold() const
 {
 	int iThreshold = ((GC.getIMMIGRATION_THRESHOLD() * std::max(0, (getImmigrationThresholdMultiplier()))) / 100);
@@ -7359,6 +7153,11 @@ int CvPlayer::immigrationThreshold() const
 	iThreshold *= GC.getEraInfo(GC.getGameINLINE().getStartEra()).getGrowthPercent();
 	iThreshold /= 100;
 
+	// WTP, ray, increase threshold if more than X units waiting on the docks - START
+	int ImmigrationThresholdModiferUnitsOnDock = getImmigrationThresholdModifierFromUnitsWaitingOnDock();
+	iThreshold *= 100 + ImmigrationThresholdModiferUnitsOnDock;
+	iThreshold /= 100;
+	// WTP, ray, increase threshold if more than X units waiting on the docks - END
 
 	if (!isHuman())
 	{
@@ -7393,7 +7192,7 @@ int CvPlayer::revolutionEuropeUnitThreshold() const
 
 CvPlot* CvPlayer::getStartingPlot() const
 {
-	return GC.getMapINLINE().plotSoren(m_iStartingX, m_iStartingY);
+	return GC.getMap().plotSoren(m_iStartingX, m_iStartingY);
 }
 
 
@@ -7411,7 +7210,7 @@ void CvPlayer::setStartingPlot(CvPlot* pNewValue, bool bUpdateStartDist)
 
 			if (bUpdateStartDist)
 			{
-				GC.getMapINLINE().updateMinOriginalStartDist(pOldStartingPlot->area());
+				GC.getMap().updateMinOriginalStartDist(pOldStartingPlot->area());
 			}
 		}
 
@@ -7429,7 +7228,7 @@ void CvPlayer::setStartingPlot(CvPlot* pNewValue, bool bUpdateStartDist)
 
 			if (bUpdateStartDist)
 			{
-				GC.getMapINLINE().updateMinOriginalStartDist(getStartingPlot()->area());
+				GC.getMap().updateMinOriginalStartDist(getStartingPlot()->area());
 			}
 		}
 	}
@@ -7527,6 +7326,7 @@ void CvPlayer::setGold(int iNewValue)
 	if (getGold() != iNewValue)
 	{
 		m_iGold = iNewValue;
+		OOS_LOG_3("set gold", getID(), m_iGold);
 
 		FAssert(getGold() >= 0);
 
@@ -7869,7 +7669,9 @@ int CvPlayer::getAssets() const
 
 void CvPlayer::changeAssets(int iChange)
 {
+	OOS_LOG_3("Player change assets A", getID(), iChange);
 	m_iAssets += iChange;
+	OOS_LOG_3("Player change assets B", GC.isMainThread() ? 1 : 0, m_iAssets);
 	FAssert(getAssets() >= 0);
 }
 
@@ -7880,7 +7682,9 @@ int CvPlayer::getPower() const
 
 void CvPlayer::changePower(int iChange)
 {
+	OOS_LOG_3("Player change power A", getID(), iChange);
 	m_iPower += iChange;
+	OOS_LOG_3("Player change power B", GC.isMainThread() ? 1 : 0, m_iPower);
 	FAssert(getPower() >= 0);
 }
 
@@ -7983,7 +7787,7 @@ void CvPlayer::setCombatExperience(int iExperience)
 						pBestCity->createGreatGeneral(eGeneralUnit, true);
 						setCombatExperience(getCombatExperience() - iExperienceThreshold);
 					}
-				}	
+				}
 			}
 			// R&R, ray, Great Admirals - END
 		}
@@ -8042,7 +7846,7 @@ void CvPlayer::setSeaCombatExperience(int iExperience)
 			}
 
 			if (pBestCity)
-			{				
+			{
 				UnitTypes eAdmiralUnit = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_GREAT_ADMIRAL"));
 				if (eAdmiralUnit != NO_UNIT)
 				{
@@ -8197,28 +8001,28 @@ bool CvPlayer::isEverAlive() const
 	return m_bEverAlive;
 }
 
-
 void CvPlayer::setAlive(bool bNewValue)
 {
-	CvWString szBuffer;
-	int iI;
-
-	if (isAlive() != bNewValue)
+	if (isAlive() == bNewValue) // no change
+	{
+		return;
+	}
+	else // coming alive or dying
 	{
 		m_bAlive = bNewValue;
-
-		GET_TEAM(getTeam()).changeAliveCount((isAlive()) ? 1 : -1);
 
 		// Report event to Python
 		gDLL->getEventReporterIFace()->setPlayerAlive(getID(), bNewValue);
 
-		if (isAlive())
+		if(isAlive()) // coming alive
 		{
+			GET_TEAM(getTeam()).addAliveMember(getID());
+
 			if (!isEverAlive())
 			{
 				m_bEverAlive = true;
 
-				GET_TEAM(getTeam()).changeEverAliveCount(1);
+				GET_TEAM(getTeam()).addEverAliveMember(getID());
 			}
 
 			if (getNumCities() == 0)
@@ -8233,28 +8037,25 @@ void CvPlayer::setAlive(bool bNewValue)
 
 			gDLL->openSlot(getID());
 		}
-		else
+		else // !isAlive() = we are dying
 		{
+			GET_TEAM(getTeam()).removeAliveMember(getID());
+
 			killUnits();
 			killCities();
 			killAllDeals();
+			// destroy missions and trade posts for colonial players
+			if (getCivCategoryTypes() == CIV_CATEGORY_EUROPEAN)
+			{
+				killMissionsAndTradeposts();
+			}
 
 			// R&R, making peace with all factions, when dying - START
-			if(!isEurope() && isEverAlive())
-			{
-				CvTeamAI& ownTeam= GET_TEAM(getTeam());
-
-				for (int iTeam = 0; iTeam < MAX_TEAMS; ++iTeam)
-				{				
-					if (ownTeam.isAtWar((TeamTypes)iTeam))
-					{
-						if (ownTeam.canChangeWarPeace((TeamTypes)iTeam))
-						{
-							ownTeam.makePeace((TeamTypes) iTeam);
-						}
-					}		
-				}
-			}
+			// WTP, jooe: move "make peace with all on player kill" logic to team kill and remove it here
+			// if (!isEurope() && isEverAlive())
+			// {
+			//	makePeaceWithAll();
+			// }
 			// R&R, making peace with all factions, when dying - END
 
 			setTurnActive(false);
@@ -8277,242 +8078,72 @@ void CvPlayer::setAlive(bool bNewValue)
 
 			if (GC.getGameINLINE().getElapsedGameTurns() > 0)
 			{
-				szBuffer = gDLL->getText("TXT_KEY_MISC_CIV_DESTROYED", getCivilizationAdjectiveKey());
+				CvWString szBuffer = gDLL->getText("TXT_KEY_MISC_CIV_DESTROYED", getCivilizationAdjectiveKey());
 
-				for (iI = 0; iI < MAX_PLAYERS; iI++)
+				for (PlayerTypes ePlayer = FIRST_PLAYER; ePlayer < NUM_PLAYER_TYPES; ePlayer++)
 				{
-					if (GET_PLAYER((PlayerTypes)iI).isAlive())
+					if (GET_PLAYER(ePlayer).isAlive())
 					{
-						gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CIVDESTROYED", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WARNING_TEXT"));
+						gDLL->UI().addPlayerMessage(ePlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CIVDESTROYED", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WARNING_TEXT"));
 					}
 				}
-
 				GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), szBuffer, -1, -1, (ColorTypes)GC.getInfoTypeForString("COLOR_WARNING_TEXT"));
 			}
 		}
-
 		GC.getGameINLINE().setScoreDirty(true);
 	}
 }
 
+// WTP, jooe: move "make peace with all on player kill" logic to team kill and remove it here
+// void CvPlayer::makePeaceWithAll()
+// {
+// 	CvTeamAI& ownTeam = GET_TEAM(getTeam());
+//
+// 	for (TeamTypes eTeam = FIRST_TEAM; eTeam < NUM_TEAM_TYPES; ++eTeam)
+// 	{
+// 		if (ownTeam.isAtWar(eTeam))
+// 		{
+// 			if (ownTeam.canChangeWarPeace(eTeam))
+// 			{
+// 				ownTeam.makePeace(eTeam);
+// 			}
+// 		}
+// 	}
+// }
 
 void CvPlayer::verifyAlive()
 {
-	bool bKill;
-	bool bRespawnDeactivated;
-
 	if (isAlive())
 	{
-		bKill = false;
-		bRespawnDeactivated = false;
+		bool bKill = false;
+		bool bRespawn = false;
 
-		if (!bKill)
+		if (getNumCities() == 0 && !isEurope() && getAdvancedStartPoints() < 0)
 		{
-			if (getNumCities() == 0 && !isEurope() && getAdvancedStartPoints() < 0)
+			if (isNative())
+			{ // Always kill natives if they lose their last city as they cannot conquer one
+				bKill = true;
+			}
+			else
 			{
-				if (isNative() || getNumUnits() == 0)
+				if (!hasAnyChanceOfWinning())
 				{
 					bKill = true;
+					bRespawn = canRespawn();
 				}
-
-				//WTP, ray, make AI elimination threshold XML configurable and also adjust to Gamespeed
-				int iMinTurnForAIRespawningOff = GC.getDefineINT("KI_RESPAWN_OFF_MIN_TURN");
-				int gameSpeedMod =  GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getGrowthPercent();
-				iMinTurnForAIRespawningOff = iMinTurnForAIRespawningOff * gameSpeedMod /100;
-
-				// TAC - RESPAWN Option - Ray - Start
-				// WTP, ray, fix for Colonial AI not being possible to eliminate a Colonial AI - Check for "No more Settler" removed because causing Problems with Settler is Europe
-				// Added veto check for having at least a single settler
-				if (!isNative() && !isHuman() && GC.getGameINLINE().getGameTurn() > iMinTurnForAIRespawningOff && GC.getDefineINT("KI_RESPAWN_OFF") == 1 && AI_getNumAIUnits(UNITAI_SETTLER) == 0 && (getNumUnits() < 5 || AI_getNumAIUnits(UNITAI_TRANSPORT_SEA) == 0))
-				{
-					bKill = true;
-					bRespawnDeactivated = true;
-				}
-				// TAC - RESPAWN Option - Ray - End
 			}
 		}
 
 		//WTP, ray, Settler Professsion - START
 		//only if player is still alive
-		if (!bKill && !bRespawnDeactivated)
-		{
-			// Only Colonial Players, but not Kings, not Natives, not Animals, ...
-			if (getParent() != NO_PLAYER)
-			{
-				// we check that there is no War of Independence and other small things
-				CvPlayer& kEurope = GET_PLAYER(getParent());
-				if(kEurope.isAlive() && kEurope.isEurope() && !::atWar(getTeam(), kEurope.getTeam()) && (GC.getGameINLINE().getAIAutoPlay() == 0 || GC.getGameINLINE().getActivePlayer() != getID()))
-				{
-					//we check if Player needs a new settler, because he lost all Cities and Units in Settler Profession
-					int iNumPlayerCities = getNumCities();
-					int iNumSettlers = AI_getNumAIUnits(UNITAI_SETTLER);
-
-					//we also check if AI is landlocked and needs more cities
-					CvPlayerAI& kPlayer = GET_PLAYER(getID());
-					int iAIdesiredCities = kPlayer.AI_desiredCityCount();
-
-					// no cities and no settlers check
-					if (iNumPlayerCities == 0 && iNumSettlers == 0)
-					{
-						//for Human, we just init a Settler in Europe
-						if(isHuman())
-						{
-							//create a Unit in Profession Settler in Europe - for free, but with tax increase
-							initEuropeSettler(false);
-
-							//sending a text message for King granting a Settler
-							CvWString szBuffer = gDLL->getText("TXT_KEY_NO_MORE_SETTLER", getCivilizationShortDescriptionKey());
-							gDLL->getInterfaceIFace()->addMessage((getID()), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_HIGHLIGHT_TEXT"));
-
-							// King increases tax rate
-							changeTaxRate(1);
-						}
-						// for AI we init Starting Units - because of Problems to transport Settlers from Europe
-						else
-						{
-							//spawn Starting Units
-							initFreeUnits();
-							// King increases tax rate
-							changeTaxRate(1);
-						}
-					}
-
-					// ONLY for AI: landlock check - not necessary anymore if we already spawned in first if
-					else if (!isHuman() && (iAIdesiredCities > (iNumPlayerCities + iNumSettlers)))
-					{
-						if (kPlayer.AI_isLandLocked())
-						{
-							//create a Unit in Profession Settler in Europe - having to pay equipment
-							initEuropeSettler(true);
-						}
-					}
-
-				}
-			}
-		}
-		//WTP, ray, Settler Professsion - END
-
-		if (bKill)
-		{
-			//don't kill colonist players
-			// TAC - RESPAWN Option - Ray - Start -> Logik changed
-			if(getParent() != NO_PLAYER)
-			{
-				CvPlayer& kEurope = GET_PLAYER(getParent());
-				if(kEurope.isAlive() && kEurope.isEurope() && !::atWar(getTeam(), kEurope.getTeam()) && (GC.getGameINLINE().getAIAutoPlay() == 0 || GC.getGameINLINE().getActivePlayer() != getID()))
-				{
-
-					// TAC - RESPAWN Option - Ray - Start
-					if(bRespawnDeactivated)
-					{
-						// When a player is killed, the game deletes all cities and units.
-						// If a unit is removed while being in combat, the combat can't finish and the game freezes.
-						int iLoop;
-						for (CvUnit* pLoopUnit = firstUnit(&iLoop); pLoopUnit != NULL; pLoopUnit = nextUnit(&iLoop))
-						{
-							if (pLoopUnit->isCombat())
-							{
-								// A unit is in combat
-								// Delay killing the player until the combat animation is over
-								return;
-							}
-						}
-
-						//setAlive(false);
-						bKill = true;
-						CvWString szBuffer = gDLL->getText("TXT_KEY_NO_MORE_RESPAWN", getCivilizationShortDescriptionKey());
-
-						for (int iI = 0; iI < MAX_PLAYERS; iI++)
-						{
-							if (GET_PLAYER((PlayerTypes)iI).isAlive())
-							{
-								gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CIVDESTROYED", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_HIGHLIGHT_TEXT"));
-							}
-						}
-
-						//koma13
-						//destroying Missions of that player
-						// WTP, ray, Native Trade Posts - START
-						// now also destroying Trade Posts of the player
-						for (int iI = 0; iI < MAX_PLAYERS; iI++)
-						{
-							if (GET_PLAYER((PlayerTypes)iI).isAlive())
-							{
-								CvPlayer& kLoopPlayer = GET_PLAYER((PlayerTypes) iI);
-								if (kLoopPlayer.isNative()) 
-								{
-									int iLoop;
-									for (CvCity* pLoopCity = kLoopPlayer.firstCity(&iLoop); NULL != pLoopCity; pLoopCity = kLoopPlayer.nextCity(&iLoop))
-									{
-										if (pLoopCity->getMissionaryPlayer() == getID())
-										{
-											pLoopCity->setMissionaryPlayer(NO_PLAYER);
-											pLoopCity->setMissionaryRate(0);
-										}
-
-										// WTP, ray, Native Trade Posts - START
-										if (pLoopCity->getTradePostPlayer() == getID())
-										{
-											pLoopCity->setTradePostPlayer(NO_PLAYER);
-											pLoopCity->setNativeTradeRate(0);
-											pLoopCity->setNativeTradePostGold(0);
-										}
-									}
-								}
-							}
-						}
-						//end
-
-					}
-					//Alter Code in else
-					else
-					{
-						initFreeUnits();
-
-
-						if (isTurnActive())
-						{
-							setEndTurn(true);
-						}
-
-						//change taxrate
-						int iOldTaxRate = getTaxRate();
-
-						/** NBMOD TAX **/
-						/** Original
-						int iNewTaxRate = std::min(99, iOldTaxRate + 1 + GC.getGameINLINE().getSorenRandNum(GC.getDefineINT("TAX_RATE_MAX_INCREASE"), "Tax Rate Increase"));
-						int iChange = iNewTaxRate - iOldTaxRate;
-						changeTaxRate(iChange);
-						**/
-
-						int iNewTaxRate = NBMOD_GetNewTaxRate(std::min(99, iOldTaxRate + 1 + GC.getGameINLINE().getSorenRandNum(GC.getDefineINT("TAX_RATE_MAX_INCREASE"), "Tax Rate Increase")));
-						int iChange = iNewTaxRate - iOldTaxRate;
-
-						if (iChange > 0)
-						{
-						    changeTaxRate(iChange);
-						}
-
-						/** NBMOD TAX **/
-
-						if (isHuman())
-						{
-							CvDiploParameters* pDiplo = new CvDiploParameters(kEurope.getID());
-							pDiplo->setDiploComment((DiploCommentTypes)GC.getInfoTypeForString("AI_DIPLOCOMMENT_KING_REVIVE"));
-							pDiplo->addDiploCommentVariable(iNewTaxRate);
-							pDiplo->setAIContact(true);
-							gDLL->beginDiplomacy(pDiplo, getID());
-						}
-
-						bKill = false;
-					}
-					// TAC - RESPAWN Option - Ray - End
-				}
-			}
-		}
-
 		if (!bKill)
 		{
+			buyEuropeSettlerIfLandlockedAI();
+			//WTP, ray, Settler Professsion - END
+
+			// WTP, jooe: I'm not sure about this check - what is "getMaxCityElimination" anyways?
+			// leaving it in for now, but I'm not sure this is ever triggered
+			// but I'm moving it up above the general kill logic which would otherwise be doubled
 			if (!isNative() && !isEurope())
 			{
 				if (GC.getGameINLINE().getMaxCityElimination() > 0)
@@ -8525,28 +8156,214 @@ void CvPlayer::verifyAlive()
 			}
 		}
 
-		if (bKill)
+		if(bKill && (bRespawn || isHuman())) // we should be killed, but have a respawn chance / human players always respawn
 		{
-			// When a player is killed, the game deletes all cities and units.
-			// If a unit is removed while being in combat, the combat can't finish and the game freezes.
-			int iLoop;
-			for (CvUnit* pLoopUnit = firstUnit(&iLoop); pLoopUnit != NULL; pLoopUnit = nextUnit(&iLoop))
+			initFreeUnits();
+
+			if (isTurnActive())
 			{
-				if (pLoopUnit->isCombat())
+				setEndTurn(true);
+			}
+
+			respawnTaxIncrease();
+			bKill = false; // that was close but we avoided being killed :)
+		}
+
+		// if we should be killed and have no more respawn chances (only colonial players or natives)
+		// WTP, jooe: test if units are in combat
+		if (bKill && (getCivCategoryTypes() == CIV_CATEGORY_EUROPEAN || isNative()))
+		{
+			if (isUnitInActiveCombat())
 				{
-					// A unit is in combat
-					// Delay killing the player until the combat animation is over
 					return;
 				}
-			}
-			setAlive(false);
+			kill();
 		}
 	}
-	else
+	else // !isAlive
 	{
 		if ((getNumCities() > 0) || (getNumUnits() > 0))
 		{
 			setAlive(true);
+		}
+	}
+}
+
+bool CvPlayer::hasAnyChanceOfWinning()
+{
+	//WTP, ray, make AI elimination threshold XML configurable and also adjust to Gamespeed
+	const int iTurn = GC.getGameINLINE().getGameTurn();
+	const int gameSpeedMod =  GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getGrowthPercent();
+	const int iMinTurnForAIRespawningOff = GLOBAL_DEFINE_KI_RESPAWN_OFF_MIN_TURN * gameSpeedMod /100;
+
+	// WTP, jooe: no settlers left? pay for one in Europe!
+	// if we cannot pay, set bKill to true
+	if (AI_getNumAIUnits(UNITAI_SETTLER) == 0)
+	{
+		if (!initEuropeSettler(true))
+		{
+			return false;
+		}
+	}
+
+	// WTP, jooe: no transports left? pay for one in Europe!
+	// if we cannot pay, set bKill to true
+	if (AI_getNumAIUnits(UNITAI_TRANSPORT_SEA) == 0)
+	{
+		if (!initEuropeTransport(true))
+		{
+			return false;
+		}
+	}
+
+	// WTP, jooe: after the respawn threshold timer has passed, check how many units we have left
+	// if they are less than 3 (scaling slowly with time; treasures, wagons, working boat do not count as they won't help fighting or re-founding our colonies)
+	// then set bKill to true
+	if (iTurn > iMinTurnForAIRespawningOff && iMinTurnForAIRespawningOff > 50)
+	{
+		// use 50 turns as a safety fallback (if the setting was changed to a very low value or even 0)
+		// because otherwise we might kill AI off in early game or scale the minimum too fast!
+		const int iUnitsRequiredPercentMultiplier = (100 * iTurn) / ((iMinTurnForAIRespawningOff + 50 * gameSpeedMod) / 100);
+		const int iUnitsRequired = 3*iUnitsRequiredPercentMultiplier / 100;
+		const int iNumUsefulUnits = getNumUnits() - AI_getNumAIUnits(UNITAI_TREASURE) - AI_getNumAIUnits(UNITAI_WAGON) - AI_getNumAIUnits(UNITAI_WORKER_SEA);
+
+		if (iNumUsefulUnits < iUnitsRequired)
+		return false;
+	}
+
+	return true;
+}
+
+bool CvPlayer::canRespawn()
+{
+	const int iTurn = GC.getGameINLINE().getGameTurn();
+	const int gameSpeedMod =  GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getGrowthPercent();
+	const int iMinTurnForAIRespawningOff = GLOBAL_DEFINE_KI_RESPAWN_OFF_MIN_TURN * gameSpeedMod /100;
+
+	if (iTurn <= iMinTurnForAIRespawningOff || GLOBAL_DEFINE_KI_RESPAWN_OFF == 0)
+	{
+		// if we failed one of the tests in hasAnyChanceOfWinning(), but we are before respawn threshold time, just respawn the starting units
+		return true;
+	}
+	return false;
+}
+
+void CvPlayer::buyEuropeSettlerIfLandlockedAI()
+{
+	// Only AI Colonial Players, but not Kings, not Natives, not Animals, ...
+	if (getParent() == NO_PLAYER || getCivCategoryTypes() != CIV_CATEGORY_EUROPEAN || isHuman())
+	{
+		return;
+	}
+
+	const CvPlayer& kParent = GET_PLAYER(getParent());
+	// we check that there is no War of Independence and other small things
+	if (kParent.isAlive() && kParent.isEurope() && !::atWar(getTeam(), kParent.getTeam()) && (GC.getGameINLINE().getAIAutoPlay() == 0 || GC.getGameINLINE().getActivePlayer() != getID()))
+	{
+		//we check if AI is landlocked and needs more cities
+		int iNumPlayerCities = getNumCities();
+		int iNumSettlers = AI_getNumAIUnits(UNITAI_SETTLER);
+		CvPlayerAI& kPlayer = GET_PLAYER(getID());
+		int iAIdesiredCities = kPlayer.AI_desiredCityCount();
+
+		// ONLY for AI: landlock check
+		// WTP, jooe: remove isHuman() check here because this function will only be called for AI
+		if ((iAIdesiredCities > (iNumPlayerCities + iNumSettlers)) && kPlayer.AI_isLandLocked())
+		{
+			//create a Unit in Profession Settler in Europe - having to pay equipment
+			initEuropeSettler(true);
+		}
+	}
+}
+
+void CvPlayer::respawnTaxIncrease()
+{
+	//change taxrate
+	int iOldTaxRate = getTaxRate();
+
+	int iNewTaxRate = NBMOD_GetNewTaxRate(std::min(99, iOldTaxRate + 1 + GC.getGameINLINE().getSorenRandNum(GC.getDefineINT("TAX_RATE_MAX_INCREASE"), "Tax Rate Increase")));
+	int iChange = iNewTaxRate - iOldTaxRate;
+
+	if (iChange > 0)
+	{
+		changeTaxRate(iChange);
+	}
+
+	/** NBMOD TAX **/
+
+	if (isHuman() && getParent() != NO_PLAYER)
+	{
+		CvDiploParameters* pDiplo = new CvDiploParameters(GET_PLAYER(getParent()).getID());
+		pDiplo->setDiploComment((DiploCommentTypes)GC.getInfoTypeForString("AI_DIPLOCOMMENT_KING_REVIVE"));
+		pDiplo->addDiploCommentVariable(iNewTaxRate);
+		pDiplo->setAIContact(true);
+		gDLL->beginDiplomacy(pDiplo, getID());
+	}
+}
+
+bool CvPlayer::isUnitInActiveCombat()
+{
+	// When a player is killed, the game deletes all cities and units.
+	// If a unit is removed while being in combat, the combat can't finish and the game freezes.
+	int iLoop;
+	for (CvUnit* pLoopUnit = firstUnit(&iLoop); pLoopUnit != NULL; pLoopUnit = nextUnit(&iLoop))
+	{
+		if (pLoopUnit->isCombat())
+		{
+			// A unit is in combat
+			// Delay killing the player until the combat animation is over
+			return true;
+		}
+	}
+	return false;
+}
+
+void CvPlayer::kill()
+{
+	// WTP, jooe: why would we not kill players in independence war? commenting this check out
+	// CvPlayer& kEurope = GET_PLAYER(getParent());
+	// if(kEurope.isAlive() && kEurope.isEurope() && !::atWar(getTeam(), kEurope.getTeam()) && (GC.getGameINLINE().getAIAutoPlay() == 0 || GC.getGameINLINE().getActivePlayer() != getID()))
+	// {
+
+	// WTP, jooe: This was commented out, but I think it is the right place for that call
+	setAlive(false);
+
+	if (getCivCategoryTypes() == CIV_CATEGORY_EUROPEAN)
+	{
+		// Send a message that the player was destroyed
+		CvWString szBuffer = gDLL->getText("TXT_KEY_NO_MORE_RESPAWN", getCivilizationShortDescriptionKey());
+		for (PlayerTypes eLoopPlayer = FIRST_PLAYER; eLoopPlayer < NUM_PLAYER_TYPES; eLoopPlayer++)
+		{
+			if (GET_PLAYER(eLoopPlayer).isAlive())
+			{
+				gDLL->UI().addPlayerMessage((eLoopPlayer), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CIVDESTROYED", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_HIGHLIGHT_TEXT"));
+			}
+		}
+	}
+}
+
+void CvPlayer::killMissionsAndTradeposts()
+{
+	for (PlayerTypes eLoopPlayer = FIRST_PLAYER; eLoopPlayer < NUM_PLAYER_TYPES; eLoopPlayer++)
+	{
+		CvPlayer& kLoopPlayer = GET_PLAYER(eLoopPlayer);
+		if (kLoopPlayer.isAlive() && kLoopPlayer.isNative())
+		{
+			int iLoop;
+			for (CvCity* pLoopCity = kLoopPlayer.firstCity(&iLoop); NULL != pLoopCity; pLoopCity = kLoopPlayer.nextCity(&iLoop))
+			{
+				if (pLoopCity->getMissionaryPlayer() == getID())
+				{
+					pLoopCity->setMissionaryPlayer(NO_PLAYER, false);
+					pLoopCity->setMissionaryRate(0);
+				}
+				if (pLoopCity->getTradePostPlayer() == getID())
+				{
+					pLoopCity->setTradePostPlayer(NO_PLAYER, false);
+					pLoopCity->setNativeTradeRate(0);
+					pLoopCity->setNativeTradePostGold(0);
+				}
+			}
 		}
 	}
 }
@@ -8640,7 +8457,7 @@ void CvPlayer::setTurnActive(bool bNewValue, bool bDoTurn)
 				{
 					if (GC.getGameINLINE().isNetworkMultiPlayer())
 					{
-						gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), gDLL->getText("TXT_KEY_MISC_TURN_BEGINS").GetCString(), "AS2D_NEWTURN", MESSAGE_TYPE_DISPLAY_ONLY);
+						gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), gDLL->getText("TXT_KEY_MISC_TURN_BEGINS").GetCString(), "AS2D_NEWTURN", MESSAGE_TYPE_DISPLAY_ONLY);
 					}
 					else
 					{
@@ -8899,7 +8716,7 @@ void CvPlayer::setCurrentEra(EraTypes eNewValue)
 		{
 			if (eEra >= FIRST_ERA && eEra < NUM_ERA_TYPES)
 			{
-				CivEffect()->applyCivEffect(GC.getEraInfo(eEra).getCivEffect());
+				CivEffect().applyCivEffect(GC.getEraInfo(eEra).getCivEffect());
 			}
 		}
 
@@ -8909,15 +8726,15 @@ void CvPlayer::setCurrentEra(EraTypes eNewValue)
 		{
 			if (eEra >= FIRST_ERA && eEra < NUM_ERA_TYPES)
 			{
-				CivEffect()->applyCivEffect(GC.getEraInfo(eEra).getCivEffect(), - 1);
+				CivEffect().applyCivEffect(GC.getEraInfo(eEra).getCivEffect(), - 1);
 			}
 		}
 
 		if (GC.getGameINLINE().getActiveTeam() != NO_TEAM)
 		{
-			for (iI = 0; iI < GC.getMapINLINE().numPlotsINLINE(); iI++)
+			for (iI = 0; iI < GC.getMap().numPlotsINLINE(); iI++)
 			{
-				pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(iI);
+				pLoopPlot = GC.getMap().plotByIndexINLINE(iI);
 				if (pLoopPlot->getRevealedImprovementType(GC.getGameINLINE().getActiveTeam(), true) != NO_IMPROVEMENT)
 				{
 					if ((pLoopPlot->getOwnerINLINE() == getID()) || (!(pLoopPlot->isOwned()) && (getID() == GC.getGameINLINE().getActivePlayer())))
@@ -9277,7 +9094,7 @@ int CvPlayer::getUnHappinessRate() const
 		return 0;
 	}
 
-	// small AI cheat to prevent issues 
+	// small AI cheat to prevent issues
 	if (!isHuman())
 	{
 		return 0;
@@ -9323,7 +9140,7 @@ int CvPlayer::getCrimeRate() const
 		return 0;
 	}
 
-	// small AI cheat to prevent issues 
+	// small AI cheat to prevent issues
 	if (!isHuman())
 	{
 		return 0;
@@ -9871,7 +9688,7 @@ void CvPlayer::setCivic(CivicOptionTypes eIndex, CivicTypes eNewValue)
 							if (GET_TEAM(getTeam()).isHasMet(GET_PLAYER((PlayerTypes)iI).getTeam()))
 							{
 								CvWString szBuffer = gDLL->getText("TXT_KEY_MISC_PLAYER_ADOPTED_CIVIC", getNameKey(), GC.getCivicInfo(getCivic(eIndex)).getTextKeyWide());
-								gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MAJOR_EVENT);
+								gDLL->UI().addPlayerMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MAJOR_EVENT);
 							}
 						}
 					}
@@ -9987,7 +9804,7 @@ void CvPlayer::updateGroupCycle(CvUnit* pUnit)
 		pLoopUnit = ::getUnit(pUnitNode->m_data);
 		pUnitNode = pPlot->nextUnitNode(pUnitNode);
 
-		if (pLoopUnit->isGroupHead())
+		if (pLoopUnit != NULL && pLoopUnit->isGroupHead())
 		{
 			if (pLoopUnit != pUnit)
 			{
@@ -10036,7 +9853,7 @@ void CvPlayer::updateGroupCycle(CvUnit* pUnit)
 			}
 			else
 			{
-				iValue = plotDistance(pUnit->getX_INLINE(), pUnit->getY_INLINE(), pHeadUnit->getX_INLINE(), pHeadUnit->getY_INLINE());
+				iValue = plotDistance(pUnit->coord(), pHeadUnit->coord());
 
 				if (iValue < iBestValue)
 				{
@@ -10287,7 +10104,7 @@ void CvPlayer::loadUnitFromEurope(CvUnit* pUnit, CvUnit* pTransport)
 				m_aEuropeUnits.erase(it);
 				addExistingUnit(pUnit);
 				FAssert(pUnit->getUnitTravelState() == UNIT_TRAVEL_STATE_IN_EUROPE);
-				pUnit->addToMap(pTransport->getX_INLINE(), pTransport->getY_INLINE());
+				pUnit->addToMap(pTransport->coord());
 				pUnit->setTransportUnit(pTransport);
 				gDLL->getInterfaceIFace()->setDirty(EuropeScreen_DIRTY_BIT, true);
 			}
@@ -10370,7 +10187,7 @@ void CvPlayer::loadUnitFromAfrica(CvUnit* pUnit, CvUnit* pTransport)
 				m_aAfricaUnits.erase(it);
 				addExistingUnit(pUnit);
 				FAssert(pUnit->getUnitTravelState() == UNIT_TRAVEL_STATE_IN_AFRICA);
-				pUnit->addToMap(pTransport->getX_INLINE(), pTransport->getY_INLINE());
+				pUnit->addToMap(pTransport->coord());
 				pUnit->setTransportUnit(pTransport);
 				gDLL->getInterfaceIFace()->setDirty(AfricaScreen_DIRTY_BIT, true);
 			}
@@ -10453,7 +10270,7 @@ void CvPlayer::loadUnitFromPortRoyal(CvUnit* pUnit, CvUnit* pTransport)
 				m_aPortRoyalUnits.erase(it);
 				addExistingUnit(pUnit);
 				FAssert(pUnit->getUnitTravelState() == UNIT_TRAVEL_STATE_IN_PORT_ROYAL);
-				pUnit->addToMap(pTransport->getX_INLINE(), pTransport->getY_INLINE());
+				pUnit->addToMap(pTransport->coord());
 				pUnit->setTransportUnit(pTransport);
 				gDLL->getInterfaceIFace()->setDirty(PortRoyalScreen_DIRTY_BIT, true);
 			}
@@ -11126,6 +10943,7 @@ void CvPlayer::doGold()
 
 	FAssert(isHuman() || ((getGold() + iGoldChange) >= 0));
 
+	OOS_LOG("doGold", iGoldChange);
 	changeGold(iGoldChange);
 
 }
@@ -11208,7 +11026,7 @@ int CvPlayer::NBMOD_REF_GetStartValue() const
 int CvPlayer::NBMOD_REF_MakeStartValue()
 {
     double fValue = 0.0;
-    fValue = sqrt(sqrt((double)GC.getMapINLINE().getGridHeightINLINE() * GC.getMapINLINE().getGridWidthINLINE()));
+    fValue = sqrt(sqrt((double)GC.getMap().getGridHeightINLINE() * GC.getMap().getGridWidthINLINE()));
     fValue = fValue * GC.getNBMOD_REF_MAP_COEFFICIENT();
     fValue = fValue * GC.getHandicapInfo(getHandicapType()).NBMOD_GetREFWeight() / 100;
 	// TAC - Reduced REF Option - koma13 - START
@@ -11420,7 +11238,7 @@ void CvPlayer::NBMOD_AddEuropeRandomUnit(bool bDisplay)
             if (bDisplay && m_bNBMOD_REF_Display)
             {
                 CvWString szBuffer = gDLL->getText("TXT_KEY_NEW_EUROPE_ARMY", kParent.getCivilizationShortDescriptionKey(), getCivilizationShortDescriptionKey(), szUnitName, kParent.getCivilizationAdjectiveKey());
-                gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+                gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 
                 m_bNBMOD_REF_Display = false;
                 m_iNBMOD_REF_DisplayTurn = 0;
@@ -11491,7 +11309,7 @@ void CvPlayer::NBMOD_AddEuropeShipUnit(bool bDisplay)
             if (bDisplay)
             {
                 CvWString szBuffer = gDLL->getText("TXT_KEY_NEW_EUROPE_ARMY", kParent.getCivilizationShortDescriptionKey(), getCivilizationShortDescriptionKey(), szUnitName, kParent.getCivilizationAdjectiveKey());
-                gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+                gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
             }
 		}
     }
@@ -11708,7 +11526,7 @@ void CvPlayer::doBells()
 						}
 
 						CvWString szBuffer = gDLL->getText("TXT_KEY_NEW_EUROPE_ARMY_NEW", kParent.getCivilizationShortDescriptionKey(), getCivilizationShortDescriptionKey(), iNumUnits, kParent.getCivilizationAdjectiveKey());
-						gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", GC.getGameINLINE().isDebugMode() ? MESSAGE_TYPE_MAJOR_EVENT : MESSAGE_TYPE_INFO, GC.getLeaderHeadInfo(kParent.getLeaderType()).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+						gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", GC.getGameINLINE().isDebugMode() ? MESSAGE_TYPE_MAJOR_EVENT : MESSAGE_TYPE_INFO, GC.getLeaderHeadInfo(kParent.getLeaderType()).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 					}
 				}
 			}
@@ -11720,9 +11538,9 @@ void CvPlayer::doBells()
             if (GC.getNBMOD_REF_DEBUG() == 1)
             {
                 // DEBUG
-                gDLL->getInterfaceIFace()->addMessage(getID() , true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"(EMW) %d vs. (KMW) %d",NBMOD_GetEuropeMilitaryValue(), NBMOD_GetColonialMilitaryValue()), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
-                gDLL->getInterfaceIFace()->addMessage(getID() , true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"Start-MW: %d",NBMOD_REF_GetStartValue()), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
-//            gDLL->getInterfaceIFace()->addMessage(getID() , true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"Einheiten/Kapazit�t: %d/%d",NBMOD_GetNumEuropeUnits(),NBMOD_GetNumEuropeTransporting()), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+                gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"(EMW) %d vs. (KMW) %d",NBMOD_GetEuropeMilitaryValue(), NBMOD_GetColonialMilitaryValue()), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+                gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"Start-MW: %d",NBMOD_REF_GetStartValue()), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+//            gDLL->UI().addPlayerMessage(getID() , true, GC.getEVENT_MESSAGE_TIME(), CvWString::format(L"Einheiten/Kapazit�t: %d/%d",NBMOD_GetNumEuropeUnits(),NBMOD_GetNumEuropeTransporting()), NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
             }
 
             // Zuerst �berlegt sich der K�nig, ob er seine Schlachtschiffe aufr�sten m�chte
@@ -11864,11 +11682,11 @@ void CvPlayer::doCrosses()
 		{
 			// TAC - short messages for immigration after fist - RAY
 			if (imCount == 0) {
-				doImmigrant(GC.getGameINLINE().getSorenRandNum(CivEffect()->getNumUnitsOnDock(), "pick immigrant"), false);
+				doImmigrant(GC.getGameINLINE().getSorenRandNum(CivEffect().getNumUnitsOnDock(), "pick immigrant"), false);
 				imCount++;
 			}
 			else {
-				doImmigrant(GC.getGameINLINE().getSorenRandNum(CivEffect()->getNumUnitsOnDock(), "pick immigrant"), true);
+				doImmigrant(GC.getGameINLINE().getSorenRandNum(CivEffect().getNumUnitsOnDock(), "pick immigrant"), true);
 			}
 		}
 	}
@@ -11876,12 +11694,17 @@ void CvPlayer::doCrosses()
 
 void CvPlayer::doAdvancedStartAction(AdvancedStartActionTypes eAction, int iX, int iY, int iData, bool bAdd)
 {
+	doAdvancedStartAction(eAction, Coordinates(iX, iY), iData, bAdd);
+}
+
+void CvPlayer::doAdvancedStartAction(AdvancedStartActionTypes eAction, Coordinates coord, int iData, bool bAdd)
+{
 	if (getAdvancedStartPoints() < 0)
 	{
 		return;
 	}
 
-	CvPlot* pPlot = GC.getMap().plot(iX, iY);
+	CvPlot* pPlot = coord.plot();
 
 	if (0 == getNumCities())
 	{
@@ -11957,7 +11780,7 @@ void CvPlayer::doAdvancedStartAction(AdvancedStartActionTypes eAction, int iX, i
 			{
 				if (getAdvancedStartPoints() >= iCost)
 				{
-					CvUnit* pUnit = initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), iX, iY);
+					CvUnit* pUnit = initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), coord);
 					if (NULL != pUnit)
 					{
 						pUnit->finishMoves();
@@ -11978,7 +11801,7 @@ void CvPlayer::doAdvancedStartAction(AdvancedStartActionTypes eAction, int iX, i
 						CvUnit* pLoopUnit = ::getUnit(pUnitNode->m_data);
 						pUnitNode = pPlot->nextUnitNode(pUnitNode);
 
-						if (pLoopUnit->getUnitType() == eUnit)
+						if (pLoopUnit != NULL && pLoopUnit->getUnitType() == eUnit)
 						{
 							pLoopUnit->kill(false);
 							changeAdvancedStartPoints(iCost);
@@ -11993,10 +11816,13 @@ void CvPlayer::doAdvancedStartAction(AdvancedStartActionTypes eAction, int iX, i
 				{
 					CvUnit* pUnit = ::getUnit(pUnitNode->m_data);
 
-					iCost = getAdvancedStartUnitCost(pUnit->getUnitType(), false);
-					FAssertMsg(iCost != -1, "If this is -1 then that means it's going to try to delete a unit which shouldn't exist");
-					pUnit->kill(false);
-					changeAdvancedStartPoints(iCost);
+					if (pUnit != NULL)
+					{
+						iCost = getAdvancedStartUnitCost(pUnit->getUnitType(), false);
+						FAssertMsg(iCost != -1, "If this is -1 then that means it's going to try to delete a unit which shouldn't exist");
+						pUnit->kill(false);
+						changeAdvancedStartPoints(iCost);
+					}
 				}
 			}
 
@@ -12035,7 +11861,7 @@ void CvPlayer::doAdvancedStartAction(AdvancedStartActionTypes eAction, int iX, i
 								if (0 == kPlayer.getNumCities())
 								{
 									FAssert(kPlayer.getStartingPlot() != NULL);
-									int iDistance = plotDistance(iX, iY, kPlayer.getStartingPlot()->getX_INLINE(), kPlayer.getStartingPlot()->getY_INLINE());
+									int iDistance = plotDistance(pPlot, kPlayer.getStartingPlot());
 									if (iDistance < iMinDistance)
 									{
 										eClosestPlayer = kPlayer.getID();
@@ -12055,7 +11881,7 @@ void CvPlayer::doAdvancedStartAction(AdvancedStartActionTypes eAction, int iX, i
 				}
 				if (getAdvancedStartPoints() >= iCost || 0 == getNumCities())
 				{
-					found(iX, iY);
+					found(coord);
 					changeAdvancedStartPoints(-iCost);
 					GC.getGameINLINE().updateColoredPlots();
 					CvCity* pCity = pPlot->getPlotCity();
@@ -12495,7 +12321,7 @@ int CvPlayer::getAdvancedStartUnitCost(UnitTypes eUnit, bool bAdd, CvPlot* pPlot
 				CvUnit* pLoopUnit = ::getUnit(pUnitNode->m_data);
 				pUnitNode = pPlot->nextUnitNode(pUnitNode);
 
-				if (pLoopUnit->getUnitType() == eUnit)
+				if (pLoopUnit != NULL && pLoopUnit->getUnitType() == eUnit)
 				{
 					bUnitFound = true;
 				}
@@ -12555,7 +12381,7 @@ int CvPlayer::getAdvancedStartCityCost(bool bAdd, CvPlot* pPlot)
 		// Need valid plot to found on if adding
 		if (bAdd)
 		{
-			if (!canFound(pPlot->getX(), pPlot->getY(), false))
+			if (!canFound(pPlot->coord(), false))
 			{
 				return -1;
 			}
@@ -12592,7 +12418,7 @@ int CvPlayer::getAdvancedStartCityCost(bool bAdd, CvPlot* pPlot)
 
 					if (NULL != pStartingPlot)
 					{
-						int iDistance = ::plotDistance(pPlot->getX_INLINE(), pPlot->getY_INLINE(), pStartingPlot->getX_INLINE(), pStartingPlot->getY_INLINE());
+						int iDistance = ::plotDistance(pPlot, pStartingPlot);
 						if (iDistance <= GC.getDefineINT("ADVANCED_START_CITY_PLACEMENT_MAX_RANGE"))
 						{
 							if (iDistance < iClosestDistance || (iDistance == iClosestDistance && getTeam() != kPlayer.getTeam()))
@@ -12928,9 +12754,9 @@ int CvPlayer::getAdvancedStartRouteCost(RouteTypes eRoute, bool bAdd, CvPlot* pP
 		int iPlotLoop = 0;
 		CvPlot* pPlot;
 
-		for (iPlotLoop = 0; iPlotLoop < GC.getMapINLINE().numPlots(); iPlotLoop++)
+		for (iPlotLoop = 0; iPlotLoop < GC.getMap().numPlots(); iPlotLoop++)
 		{
-			pPlot = GC.getMapINLINE().plotByIndex(iPlotLoop);
+			pPlot = GC.getMap().plotByIndex(iPlotLoop);
 
 			if (pPlot->getRouteType() == eRoute)
 			{
@@ -13038,9 +12864,9 @@ int CvPlayer::getAdvancedStartImprovementCost(ImprovementTypes eImprovement, boo
 	{
 		int iPlotLoop = 0;
 		CvPlot* pPlot;
-		for (iPlotLoop = 0; iPlotLoop < GC.getMapINLINE().numPlots(); iPlotLoop++)
+		for (iPlotLoop = 0; iPlotLoop < GC.getMap().numPlots(); iPlotLoop++)
 		{
-			pPlot = GC.getMapINLINE().plotByIndex(iPlotLoop);
+			pPlot = GC.getMap().plotByIndex(iPlotLoop);
 			if (pPlot->getImprovementType() == eImprovement)
 			{
 				++iNumImprovements;
@@ -13109,9 +12935,9 @@ int CvPlayer::getAdvancedStartVisibilityCost(bool bAdd, CvPlot* pPlot)
 		int iPlotLoop = 0;
 		CvPlot* pPlot;
 
-		for (iPlotLoop = 0; iPlotLoop < GC.getMapINLINE().numPlots(); iPlotLoop++)
+		for (iPlotLoop = 0; iPlotLoop < GC.getMap().numPlots(); iPlotLoop++)
 		{
-			pPlot = GC.getMapINLINE().plotByIndex(iPlotLoop);
+			pPlot = GC.getMap().plotByIndex(iPlotLoop);
 
 			if (pPlot->isRevealed(getTeam(), false))
 			{
@@ -13146,14 +12972,14 @@ void CvPlayer::doWarnings()
 
 	//update enemy units close to your territory
 	int iMaxCount = range(((getNumCities() + 4) / 7), 2, 5);
-	for (int iI = 0; iI < GC.getMapINLINE().numPlotsINLINE(); iI++)
+	for (int iI = 0; iI < GC.getMap().numPlotsINLINE(); iI++)
 	{
 		if (iMaxCount == 0)
 		{
 			break;
 		}
 
-		CvPlot* pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(iI);
+		CvPlot* pLoopPlot = GC.getMap().plotByIndexINLINE(iI);
 
 		if (pLoopPlot->isAdjacentPlayer(getID()))
 		{
@@ -13164,7 +12990,7 @@ void CvPlayer::doWarnings()
 					CvUnit *pUnit = pLoopPlot->getVisibleEnemyDefender(getID());
 					if (pUnit != NULL)
 					{
-						CvCity* pNearestCity = GC.getMapINLINE().findCity(pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE(), getID(), NO_TEAM, !(pLoopPlot->isWater()));
+						CvCity* pNearestCity = GC.getMap().findCity(pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE(), getID(), NO_TEAM, !(pLoopPlot->isWater()));
 						if (pNearestCity != NULL)
 						{
 							// R&R, ray, changes to Wild Animals - START
@@ -13173,13 +12999,13 @@ void CvPlayer::doWarnings()
 							if (pUnit->isBarbarian() && pUnit->getUnitInfo().isAnimal())
 							{
 								CvWString szBuffer = gDLL->getText("TXT_KEY_ANIMALS_SPOTTED", pNearestCity->getNameKey());
-								gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, NULL, MESSAGE_TYPE_INFO, pUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE(), true, true);
+								gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, pLoopPlot, NULL, MESSAGE_TYPE_INFO, pUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), true, true);
 								iMaxCount--;
 							}
 							else
 							{
 								CvWString szBuffer = gDLL->getText("TXT_KEY_MISC_ENEMY_TROOPS_SPOTTED", pNearestCity->getNameKey());
-								gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_ENEMY_TROOPS", MESSAGE_TYPE_INFO, pUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE(), true, true);
+								gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, pLoopPlot, "AS2D_ENEMY_TROOPS", MESSAGE_TYPE_INFO, pUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), true, true);
 								iMaxCount--;
 							}
 							// R&R, ray, changes to Wild Animals - END
@@ -13196,7 +13022,7 @@ void CvPlayer::processCivics(CivicTypes eCivic, int iChange)
 {
 	CvCivicInfo& kCivicInfo = GC.getCivicInfo(eCivic);
 
-	CivEffect()->applyCivEffect(kCivicInfo.getCivEffect(), iChange);
+	CivEffect().applyCivEffect(kCivicInfo.getCivEffect(), iChange);
 
 	changeGreatGeneralRateModifier(kCivicInfo.getGreatGeneralRateModifier() * iChange);
 	changeDomesticGreatGeneralRateModifier(kCivicInfo.getDomesticGreatGeneralRateModifier() * iChange);
@@ -13224,9 +13050,9 @@ void CvPlayer::processCivics(CivicTypes eCivic, int iChange)
 
 	if (kCivicInfo.getNativeAttitudeChange() != 0)
 	{
-		for (int iPlayer = 0; iPlayer < MAX_PLAYERS; ++iPlayer)
+		for (PlayerTypes eLoopPlayer = FIRST_PLAYER; eLoopPlayer < NUM_PLAYER_TYPES; eLoopPlayer++)
 		{
-			CvPlayer& kLoopPlayer = GET_PLAYER((PlayerTypes) iPlayer);
+			CvPlayer& kLoopPlayer = GET_PLAYER(eLoopPlayer);
 
 			if (kLoopPlayer.isAlive() && kLoopPlayer.isNative())
 			{
@@ -13234,7 +13060,7 @@ void CvPlayer::processCivics(CivicTypes eCivic, int iChange)
 
 				if (iChange > 0 && kCivicInfo.getNativeAttitudeChange() > 0)
 				{
-					GET_TEAM(getTeam()).makePeace(kLoopPlayer.getTeam());
+					forcePeace(eLoopPlayer);
 				}
 			}
 		}
@@ -13373,9 +13199,9 @@ void CvPlayer::setPbemNewTurn(bool bNew)
 	m_bPbemNewTurn = bNew;
 }
 
-void CvPlayer::createGreatGeneral(UnitTypes eGreatGeneralUnit, bool bIncrementExperience, int iX, int iY)
+void CvPlayer::createGreatGeneral(UnitTypes eGreatGeneralUnit, bool bIncrementExperience, const Coordinates coord)
 {
-	CvUnit* pGreatUnit = initUnit(eGreatGeneralUnit, GC.getUnitInfo(eGreatGeneralUnit).getDefaultProfession(), iX, iY);
+	CvUnit* pGreatUnit = initUnit(eGreatGeneralUnit, GC.getUnitInfo(eGreatGeneralUnit).getDefaultProfession(), coord);
 	if (NULL == pGreatUnit)
 	{
 		FAssert(false);
@@ -13398,7 +13224,7 @@ void CvPlayer::createGreatGeneral(UnitTypes eGreatGeneralUnit, bool bIncrementEx
 	}
 
 
-	CvPlot* pPlot = GC.getMapINLINE().plot(iX, iY);
+	CvPlot* pPlot = coord.plot();
 	CvCity* pCity = pPlot->getPlotCity();
 	CvWString szReplayMessage;
 
@@ -13418,7 +13244,7 @@ void CvPlayer::createGreatGeneral(UnitTypes eGreatGeneralUnit, bool bIncrementEx
 			szReplayMessage = gDLL->getText("TXT_KEY_MISC_GP_BORN_FIELD", pGreatUnit->getNameKey());
 		}
 		// TAC, ray, Great General Names - END
-		GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), szReplayMessage, iX, iY, (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+		GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), szReplayMessage, coord.x(), coord.y(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 	}
 
 	for (int iI = 0; iI < MAX_PLAYERS; iI++)
@@ -13427,21 +13253,21 @@ void CvPlayer::createGreatGeneral(UnitTypes eGreatGeneralUnit, bool bIncrementEx
 		{
 			if (pPlot->isRevealed(GET_PLAYER((PlayerTypes)iI).getTeam(), false))
 			{
-				gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szReplayMessage, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, pGreatUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"), iX, iY, true, true);
+				gDLL->UI().addPlayerMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szReplayMessage, coord, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, pGreatUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"), true, true);
 			}
 			else
 			{
 				CvWString szMessage = gDLL->getText("TXT_KEY_MISC_GP_BORN_SOMEWHERE", pGreatUnit->getName().GetCString());
-				gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+				gDLL->UI().addPlayerMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 			}
 		}
 	}
 }
 
 // R&R, ray, Great Admirals - START
-void CvPlayer::createGreatAdmiral(UnitTypes eGreatAdmirallUnit, bool bIncrementExperience, int iX, int iY)
+void CvPlayer::createGreatAdmiral(UnitTypes eGreatAdmirallUnit, bool bIncrementExperience, const Coordinates coord)
 {
-	CvUnit* pGreatUnit = initUnit(eGreatAdmirallUnit, GC.getUnitInfo(eGreatAdmirallUnit).getDefaultProfession(), iX, iY);
+	CvUnit* pGreatUnit = initUnit(eGreatAdmirallUnit, GC.getUnitInfo(eGreatAdmirallUnit).getDefaultProfession(), coord);
 	if (NULL == pGreatUnit)
 	{
 		FAssert(false);
@@ -13464,7 +13290,7 @@ void CvPlayer::createGreatAdmiral(UnitTypes eGreatAdmirallUnit, bool bIncrementE
 	}
 
 
-	CvPlot* pPlot = GC.getMapINLINE().plot(iX, iY);
+	CvPlot* pPlot = coord.plot();
 	CvCity* pCity = pPlot->getPlotCity();
 	CvWString szReplayMessage;
 
@@ -13484,7 +13310,7 @@ void CvPlayer::createGreatAdmiral(UnitTypes eGreatAdmirallUnit, bool bIncrementE
 			szReplayMessage = gDLL->getText("TXT_KEY_MISC_GP_BORN_FIELD", pGreatUnit->getNameKey());
 		}
 		// TAC, ray, Great General Names - END
-		GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), szReplayMessage, iX, iY, (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+		GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), szReplayMessage, coord, (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 	}
 
 	for (int iI = 0; iI < MAX_PLAYERS; iI++)
@@ -13493,27 +13319,27 @@ void CvPlayer::createGreatAdmiral(UnitTypes eGreatAdmirallUnit, bool bIncrementE
 		{
 			if (pPlot->isRevealed(GET_PLAYER((PlayerTypes)iI).getTeam(), false))
 			{
-				gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szReplayMessage, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, pGreatUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"), iX, iY, true, true);
+				gDLL->UI().addPlayerMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szReplayMessage, coord, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, pGreatUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"), true, true);
 			}
 			else
 			{
 				CvWString szMessage = gDLL->getText("TXT_KEY_MISC_GP_BORN_SOMEWHERE", pGreatUnit->getName().GetCString());
-				gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+				gDLL->UI().addPlayerMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 			}
 		}
 	}
 }
 // R&R, ray, Great Admirals - END
-void CvPlayer::createBraveLieutenant(UnitTypes eBraveLieutentantUnit, int iX, int iY)
+void CvPlayer::createBraveLieutenant(UnitTypes eBraveLieutentantUnit, const Coordinates coord)
 {
-	CvUnit* pGreatUnit = initUnit(eBraveLieutentantUnit, GC.getUnitInfo(eBraveLieutentantUnit).getDefaultProfession(), iX, iY);
+	CvUnit* pGreatUnit = initUnit(eBraveLieutentantUnit, GC.getUnitInfo(eBraveLieutentantUnit).getDefaultProfession(), coord);
 	if (NULL == pGreatUnit)
 	{
 		FAssert(false);
 		return;
 	}
 
-	CvPlot* pPlot = GC.getMapINLINE().plot(iX, iY);
+	CvPlot* pPlot = coord.plot();
 	CvCity* pCity = pPlot->getPlotCity();
 	CvWString szReplayMessage;
 
@@ -13529,7 +13355,7 @@ void CvPlayer::createBraveLieutenant(UnitTypes eBraveLieutentantUnit, int iX, in
 		{
 			szReplayMessage = gDLL->getText("TXT_KEY_MISC_BL_BORN_FIELD");
 		}
-		GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), szReplayMessage, iX, iY, (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+		GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), szReplayMessage, coord.x(), coord.y(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 	}
 
 	for (int iI = 0; iI < MAX_PLAYERS; iI++)
@@ -13538,28 +13364,28 @@ void CvPlayer::createBraveLieutenant(UnitTypes eBraveLieutentantUnit, int iX, in
 		{
 			if (pPlot->isRevealed(GET_PLAYER((PlayerTypes)iI).getTeam(), false))
 			{
-				gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szReplayMessage, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, pGreatUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"), iX, iY, true, true);
+				gDLL->UI().addPlayerMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szReplayMessage, coord, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, pGreatUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"), true, true);
 			}
 			else
 			{
 				CvWString szMessage = gDLL->getText("TXT_KEY_MISC_BL_BORN_SOMEWHERE");
-				gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+				gDLL->UI().addPlayerMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 			}
 		}
 	}
 }
 
 
-void CvPlayer::createCapableCaptain(UnitTypes eCapableCaptainUnit, int iX, int iY)
+void CvPlayer::createCapableCaptain(UnitTypes eCapableCaptainUnit, const Coordinates coord)
 {
-	CvUnit* pGreatUnit = initUnit(eCapableCaptainUnit, GC.getUnitInfo(eCapableCaptainUnit).getDefaultProfession(), iX, iY);
+	CvUnit* pGreatUnit = initUnit(eCapableCaptainUnit, GC.getUnitInfo(eCapableCaptainUnit).getDefaultProfession(), coord);
 	if (NULL == pGreatUnit)
 	{
 		FAssert(false);
 		return;
 	}
 
-	CvPlot* pPlot = GC.getMapINLINE().plot(iX, iY);
+	CvPlot* pPlot = coord.plot();
 	CvCity* pCity = pPlot->getPlotCity();
 	CvWString szReplayMessage;
 
@@ -13575,7 +13401,7 @@ void CvPlayer::createCapableCaptain(UnitTypes eCapableCaptainUnit, int iX, int i
 		{
 			szReplayMessage = gDLL->getText("TXT_KEY_MISC_CC_BORN_FIELD");
 		}
-		GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), szReplayMessage, iX, iY, (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+		GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), szReplayMessage, coord.x(), coord.y(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 	}
 
 	for (int iI = 0; iI < MAX_PLAYERS; iI++)
@@ -13584,12 +13410,12 @@ void CvPlayer::createCapableCaptain(UnitTypes eCapableCaptainUnit, int iX, int i
 		{
 			if (pPlot->isRevealed(GET_PLAYER((PlayerTypes)iI).getTeam(), false))
 			{
-				gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szReplayMessage, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, pGreatUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"), iX, iY, true, true);
+				gDLL->UI().addPlayerMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szReplayMessage, coord, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, pGreatUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"), true, true);
 			}
 			else
 			{
 				CvWString szMessage = gDLL->getText("TXT_KEY_MISC_CC_BORN_SOMEWHERE");
-				gDLL->getInterfaceIFace()->addMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+				gDLL->UI().addPlayerMessage(((PlayerTypes)iI), false, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_MAJOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 			}
 		}
 	}
@@ -13719,6 +13545,8 @@ void CvPlayer::setTriggerFired(const EventTriggeredData& kTriggeredData, bool bO
 {
 	FAssert(kTriggeredData.m_eTrigger >= 0 && kTriggeredData.m_eTrigger < GC.getNumEventTriggerInfos());
 
+	Coordinates coord(kTriggeredData.m_iPlotX, kTriggeredData.m_iPlotY);
+
 	CvEventTriggerInfo& kTrigger = GC.getEventTriggerInfo(kTriggeredData.m_eTrigger);
 
 	if (!isTriggerFired(kTriggeredData.m_eTrigger))
@@ -13762,7 +13590,7 @@ void CvPlayer::setTriggerFired(const EventTriggeredData& kTriggeredData, bool bO
 
 	if (bAnnounce && !kTrigger.isTutorial())
 	{
-		CvPlot* pPlot = GC.getMapINLINE().plot(kTriggeredData.m_iPlotX, kTriggeredData.m_iPlotY);
+		CvPlot* pPlot = coord.plot();
 
 		if (!kTriggeredData.m_szGlobalText.empty())
 		{
@@ -13789,27 +13617,27 @@ void CvPlayer::setTriggerFired(const EventTriggeredData& kTriggeredData, bool bO
 
 						if (bShowPlot)
 						{
-							gDLL->getInterfaceIFace()->addMessage((PlayerTypes)iPlayer, false, GC.getEVENT_MESSAGE_TIME(), kTriggeredData.m_szGlobalText, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), kTriggeredData.m_iPlotX, kTriggeredData.m_iPlotY, true, true);
+							gDLL->UI().addPlayerMessage((PlayerTypes)iPlayer, false, GC.getEVENT_MESSAGE_TIME(), kTriggeredData.m_szGlobalText, coord, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 						}
 						else
 						{
-							gDLL->getInterfaceIFace()->addMessage((PlayerTypes)iPlayer, false, GC.getEVENT_MESSAGE_TIME(), kTriggeredData.m_szGlobalText, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT);
+							gDLL->UI().addPlayerMessage((PlayerTypes)iPlayer, false, GC.getEVENT_MESSAGE_TIME(), kTriggeredData.m_szGlobalText, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT);
 						}
 					}
 				}
 			}
 
-			GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), kTriggeredData.m_szGlobalText, kTriggeredData.m_iPlotX, kTriggeredData.m_iPlotY, (ColorTypes)GC.getInfoTypeForString("COLOR_HIGHLIGHT_TEXT"));
+			GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), kTriggeredData.m_szGlobalText, coord.x(), coord.y(), (ColorTypes)GC.getInfoTypeForString("COLOR_HIGHLIGHT_TEXT"));
 		}
 		else if (!kTriggeredData.m_szText.empty())
 		{
 			if (kTrigger.isShowPlot() && NULL != pPlot && pPlot->isRevealed(getTeam(), false))
 			{
-				gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), kTriggeredData.m_szText, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), kTriggeredData.m_iPlotX, kTriggeredData.m_iPlotY, true, true);
+				gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), kTriggeredData.m_szText, coord, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 			}
 			else
 			{
-				gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), kTriggeredData.m_szText, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
+				gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), kTriggeredData.m_szText, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 			}
 		}
 	}
@@ -13831,7 +13659,7 @@ EventTriggeredData* CvPlayer::initTriggeredData(EventTriggerTypes eEventTrigger,
 	{
 		pOtherPlayerCity = GET_PLAYER(eOtherPlayer).getCity(iOtherPlayerCityId);
 	}
-	CvPlot* pPlot = GC.getMapINLINE().plot(iPlotX, iPlotY);
+	CvPlot* pPlot = GC.getMap().plot(iPlotX, iPlotY);
 	CvUnit* pUnit = getUnit(iUnitId);
 
 	std::vector<CvPlot*> apPlots;
@@ -13847,11 +13675,11 @@ EventTriggeredData* CvPlayer::initTriggeredData(EventTriggerTypes eEventTrigger,
 		{
 			if (bPickPlot)
 			{
-				for (int iPlot = 0; iPlot < NUM_CITY_PLOTS; ++iPlot)
+				FOREACH(CityPlot)
 				{
-					if (CITY_HOME_PLOT != iPlot)
+					if (eLoopCityPlot != CITY_HOME_PLOT)
 					{
-						CvPlot* pLoopPlot = pCity->getCityIndexPlot(iPlot);
+						CvPlot* pLoopPlot = pCity->getCityIndexPlot(eLoopCityPlot);
 
 						if (NULL != pLoopPlot)
 						{
@@ -13908,9 +13736,9 @@ EventTriggeredData* CvPlayer::initTriggeredData(EventTriggerTypes eEventTrigger,
 
 		if (bPickPlot)
 		{
-			for (int iPlot = 0; iPlot < GC.getMapINLINE().numPlotsINLINE(); ++iPlot)
+			for (int iPlot = 0; iPlot < GC.getMap().numPlotsINLINE(); ++iPlot)
 			{
-				CvPlot* pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(iPlot);
+				CvPlot* pLoopPlot = GC.getMap().plotByIndexINLINE(iPlot);
 
 				if (pLoopPlot->canTrigger(eEventTrigger, getID()))
 				{
@@ -13929,7 +13757,7 @@ EventTriggeredData* CvPlayer::initTriggeredData(EventTriggerTypes eEventTrigger,
 
 			if (NULL == pCity)
 			{
-				pCity = GC.getMapINLINE().findCity(pPlot->getX_INLINE(), pPlot->getY_INLINE(), getID(), NO_TEAM, false);
+				pCity = GC.getMap().findCity(pPlot->coord(), getID(), NO_TEAM, false);
 			}
 		}
 		else
@@ -13991,15 +13819,15 @@ EventTriggeredData* CvPlayer::initTriggeredData(EventTriggerTypes eEventTrigger,
 
 	else if (kTrigger.getNumUnits() > 0)
 	{
-		int iNumUnits = 0;	
-		
+		int iNumUnits = 0;
+
 		const InfoArray<UnitClassTypes>& ReqUnits = kTrigger.getUnitsRequired();
 		for (int i = 0; i < ReqUnits.getLength(); ++i)
 		{
 			int iNumUnitsFound = getUnitClassCount(ReqUnits.getUnitClass(i));
-			iNumUnits = iNumUnits + iNumUnitsFound;					
+			iNumUnits = iNumUnits + iNumUnitsFound;
 		}
-				
+
 		if (iNumUnits < kTrigger.getNumUnits())
 		{
 			return NULL;
@@ -14087,7 +13915,7 @@ EventTriggeredData* CvPlayer::initTriggeredData(EventTriggerTypes eEventTrigger,
 
 						if (NULL != pCity)
 						{
-							pBestCity = GC.getMapINLINE().findCity(pCity->getX_INLINE(), pCity->getY_INLINE(), (PlayerTypes)i);
+							pBestCity = GC.getMap().findCity(pCity->coord(), (PlayerTypes)i);
 						}
 						else
 						{
@@ -14148,7 +13976,7 @@ EventTriggeredData* CvPlayer::initTriggeredData(EventTriggerTypes eEventTrigger,
 		if (0 == strcmp(kTrigger.getPythonCanDo(), "isPlayable"))
 		{
 			if (!isPlayable())
-			{	
+			{
 				return NULL;
 			}
 		}
@@ -14183,9 +14011,11 @@ EventTriggeredData* CvPlayer::initTriggeredData(EventTriggerTypes eEventTrigger,
 				return NULL;
 			}
 
+			Coordinates coord (pTriggerData->m_iPlotX, pTriggerData->m_iPlotX);
+
 			// python may change pTriggerData
 			pCity = getCity(pTriggerData->m_iCityId);
-			pPlot = GC.getMapINLINE().plot(pTriggerData->m_iPlotX, pTriggerData->m_iPlotY);
+			pPlot = coord.plot();
 			pUnit = getUnit(pTriggerData->m_iUnitId);
 			eOtherPlayer = pTriggerData->m_eOtherPlayer;
 			if (NO_PLAYER != eOtherPlayer)
@@ -14255,6 +14085,8 @@ EventTriggeredData* CvPlayer::initTriggeredData(EventTriggerTypes eEventTrigger,
 
 bool CvPlayer::canDoEvent(EventTypes eEvent, const EventTriggeredData& kTriggeredData) const
 {
+	Coordinates coord(kTriggeredData.m_iPlotX, kTriggeredData.m_iPlotY);
+
 	if (eEvent == NO_EVENT)
 	{
 		FAssert(false);
@@ -14316,7 +14148,7 @@ bool CvPlayer::canDoEvent(EventTypes eEvent, const EventTriggeredData& kTriggere
 
 	if (::isPlotEventTrigger(kTriggeredData.m_eTrigger))
 	{
-		CvPlot* pPlot = GC.getMapINLINE().plotINLINE(kTriggeredData.m_iPlotX, kTriggeredData.m_iPlotY);
+		CvPlot* pPlot = coord.plot();
 		if (NULL != pPlot)
 		{
 			if (!pPlot->canApplyEvent(eEvent))
@@ -14471,11 +14303,13 @@ bool CvPlayer::canDoEvent(EventTypes eEvent, const EventTriggeredData& kTriggere
 
 void CvPlayer::applyEvent(EventTypes eEvent, int iEventTriggeredId, bool bUpdateTrigger)
 {
+	OOS_LOG("Trigger event", getID() + (1000 * iEventTriggeredId));
 	FAssert(eEvent != NO_EVENT);
 
 	int iGrowthPercent = GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getGrowthPercent();
-	
+
 	EventTriggeredData* pTriggeredData = getEventTriggered(iEventTriggeredId);
+	Coordinates coord(pTriggeredData->m_iPlotX, pTriggeredData->m_iPlotY);
 
 	if (NULL == pTriggeredData)
 	{
@@ -14511,13 +14345,15 @@ void CvPlayer::applyEvent(EventTypes eEvent, int iEventTriggeredId, bool bUpdate
 	int iGold = getEventCost(eEvent, pTriggeredData->m_eOtherPlayer, false);
 	int iRandomGold = getEventCost(eEvent, pTriggeredData->m_eOtherPlayer, true);
 	iGold += GC.getGameINLINE().getSorenRandNum(iRandomGold - iGold + 1, "Event random gold");
-	
+
 	if (iGold != 0)
 	{
+		OOS_LOG("Apply event gold A", iGold);
 		changeGold(iGold);
 
 		if (NO_PLAYER != pTriggeredData->m_eOtherPlayer && kEvent.isGoldToPlayer())
 		{
+			OOS_LOG("Apply event gold B", iGold);
 			GET_PLAYER(pTriggeredData->m_eOtherPlayer).changeGold(-iGold);
 		}
 	}
@@ -14597,17 +14433,17 @@ void CvPlayer::applyEvent(EventTypes eEvent, int iEventTriggeredId, bool bUpdate
 			int iNumPillaged = 0;
 			for (int i = 0; i < iNumPillage; ++i)
 			{
-				int iRandOffset = GC.getGameINLINE().getSorenRandNum(GC.getMapINLINE().numPlotsINLINE(), "Pick event pillage plot (any city)");
-				for (int j = 0; j < GC.getMapINLINE().numPlotsINLINE(); ++j)
+				int iRandOffset = GC.getGameINLINE().getSorenRandNum(GC.getMap().numPlotsINLINE(), "Pick event pillage plot (any city)");
+				for (int j = 0; j < GC.getMap().numPlotsINLINE(); ++j)
 				{
-					int iPlot = (j + iRandOffset) % GC.getMapINLINE().numPlotsINLINE();
-					CvPlot* pPlot = GC.getMapINLINE().plotByIndexINLINE(iPlot);
+					int iPlot = (j + iRandOffset) % GC.getMap().numPlotsINLINE();
+					CvPlot* pPlot = GC.getMap().plotByIndexINLINE(iPlot);
 					if (NULL != pPlot && pPlot->getOwnerINLINE() == getID() && pPlot->isCity())
 					{
 						if (NO_IMPROVEMENT != pPlot->getImprovementType() && !GC.getImprovementInfo(pPlot->getImprovementType()).isPermanent())
 						{
 							CvWString szBuffer = gDLL->getText("TXT_KEY_EVENT_CITY_IMPROVEMENT_DESTROYED", GC.getImprovementInfo(pPlot->getImprovementType()).getTextKeyWide());
-							gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_PILLAGED", MESSAGE_TYPE_INFO, GC.getImprovementInfo(pPlot->getImprovementType()).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), pPlot->getX_INLINE(), pPlot->getY_INLINE(), true, true);
+							gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, pPlot, "AS2D_PILLAGED", MESSAGE_TYPE_INFO, GC.getImprovementInfo(pPlot->getImprovementType()).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), true, true);
 							pPlot->setImprovementType(NO_IMPROVEMENT);
 							++iNumPillaged;
 							break;
@@ -14619,7 +14455,7 @@ void CvPlayer::applyEvent(EventTypes eEvent, int iEventTriggeredId, bool bUpdate
 			if (NO_PLAYER != pTriggeredData->m_eOtherPlayer)
 			{
 				CvWString szBuffer = gDLL->getText("TXT_KEY_EVENT_NUM_CITY_IMPROVEMENTS_DESTROYED", iNumPillaged, getCivilizationAdjectiveKey());
-				gDLL->getInterfaceIFace()->addMessage(pTriggeredData->m_eOtherPlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_PILLAGED", MESSAGE_TYPE_INFO);
+				gDLL->UI().addPlayerMessage(pTriggeredData->m_eOtherPlayer, false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_PILLAGED", MESSAGE_TYPE_INFO);
 			}
 		}
 
@@ -14658,10 +14494,10 @@ void CvPlayer::applyEvent(EventTypes eEvent, int iEventTriggeredId, bool bUpdate
 			int iCulture = kEvent.getCulture();
 			iCulture *= iGrowthPercent;
 			iCulture /= 100;
-			
+
 			for (CvCity* pLoopCity = firstCity(&iLoop); NULL != pLoopCity; pLoopCity = nextCity(&iLoop))
 			{
-				
+
 				if (pLoopCity->getCulture(pLoopCity->getOwnerINLINE()) + iCulture > 0)
 				{
 					pLoopCity->changeCulture(pLoopCity->getOwnerINLINE(), iCulture, true);
@@ -14693,18 +14529,62 @@ void CvPlayer::applyEvent(EventTypes eEvent, int iEventTriggeredId, bool bUpdate
 					pUnitCity = getPrimaryCity();
 				}
 
+				// WTP, ray, let us do this for all Ships, it is safer
+				// if (GC.getUnitInfo(eUnit).getDomainType() == DOMAIN_SEA && GC.getUnitInfo(eUnit).getTerrainImpassable(TERRAIN_SHALLOW_COAST))
+				if (GC.getUnitInfo(eUnit).getDomainType() == DOMAIN_SEA)
+				{
+					// let us see if we need to do anything at all
+					bool bFoundCityIsAlreadySuitable = false;
+
+					if (pUnitCity != NULL && pUnitCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()) && pUnitCity->plot()->hasDeepWaterCoast())
+					{
+						// the city is fine, nothing needs to be done
+						bFoundCityIsAlreadySuitable = true;
+					}
+
+					// we try to find a suitable city
+					if (bFoundCityIsAlreadySuitable == false)
+					{
+						// ... will cancel the city selected before and try to find a new one;
+						pUnitCity = NULL;
+						int iLoop;
+						for (CvCity* pLoopCity = firstCity(&iLoop); NULL != pLoopCity; pLoopCity = nextCity(&iLoop))
+						{ // ... and search for a coastal city with deep water coast ...
+							if (pLoopCity->isCoastal(GC.getMIN_WATER_SIZE_FOR_OCEAN()) && pLoopCity->plot()->hasDeepWaterCoast())
+							{
+								pUnitCity = pLoopCity;
+								break;
+							}
+						}
+					}
+				}
+
+				// if we have a suitable city, spawn units there ...
 				if (NULL != pUnitCity)
 				{
 					for (int i = 0; i < kEvent.getNumUnits(); ++i)
 					{
+						OOS_LOG_3("Event add unit at city", CvString(pUnitCity->getName()).c_str(), getTypeStr(eUnit));
 						initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pUnitCity->getX_INLINE(), pUnitCity->getY_INLINE());
+					}
+				}
+				else if (GC.getUnitInfo(eUnit).getDomainType() == DOMAIN_SEA)
+				{ // ... or if there is no such city and units to spawn are ships, spawn them at the starting plot
+
+					CvPlot *pStartingPlot = getStartingPlot();
+					if (pStartingPlot != NULL)
+					{
+						for (int i = 0; i < kEvent.getNumUnits(); ++i)
+						{
+							initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pStartingPlot->coord());
+						}
 					}
 				}
 			}
 		}
 	}
 
-	CvPlot* pPlot = GC.getMapINLINE().plotINLINE(pTriggeredData->m_iPlotX, pTriggeredData->m_iPlotY);
+	CvPlot* pPlot = coord.plot();
 	if (NULL != pPlot)
 	{
 		if (::isPlotEventTrigger(pTriggeredData->m_eTrigger))
@@ -14873,17 +14753,17 @@ void CvPlayer::applyEvent(EventTypes eEvent, int iEventTriggeredId, bool bUpdate
 
 					if (bShowPlot)
 					{
-						gDLL->getInterfaceIFace()->addMessage((PlayerTypes)iPlayer, false, GC.getEVENT_MESSAGE_TIME(), szGlobalText, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), pTriggeredData->m_iPlotX, pTriggeredData->m_iPlotY, true, true);
+						gDLL->UI().addPlayerMessage((PlayerTypes)iPlayer, false, GC.getEVENT_MESSAGE_TIME(), szGlobalText, coord, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 					}
 					else
 					{
-						gDLL->getInterfaceIFace()->addMessage((PlayerTypes)iPlayer, false, GC.getEVENT_MESSAGE_TIME(), szGlobalText, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT);
+						gDLL->UI().addPlayerMessage((PlayerTypes)iPlayer, false, GC.getEVENT_MESSAGE_TIME(), szGlobalText, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT);
 					}
 				}
 			}
 		}
 
-		GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), szGlobalText, pTriggeredData->m_iPlotX, pTriggeredData->m_iPlotY, (ColorTypes)GC.getInfoTypeForString("COLOR_HIGHLIGHT_TEXT"));
+		GC.getGameINLINE().addReplayMessage(REPLAY_MESSAGE_MAJOR_EVENT, getID(), szGlobalText, coord, (ColorTypes)GC.getInfoTypeForString("COLOR_HIGHLIGHT_TEXT"));
 	}
 
 	if (!isEmpty(kEvent.getLocalInfoTextKey()))
@@ -14907,11 +14787,11 @@ void CvPlayer::applyEvent(EventTypes eEvent, int iEventTriggeredId, bool bUpdate
 
 			if (GC.getEventTriggerInfo(pTriggeredData->m_eTrigger).isShowPlot())
 			{
-				gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szLocalText, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), pTriggeredData->m_iPlotX, pTriggeredData->m_iPlotY, true, true);
+				gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szLocalText, coord, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 			}
 			else
 			{
-				gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szLocalText, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
+				gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szLocalText, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 			}
 
 	}
@@ -15041,6 +14921,7 @@ int CvPlayer::getEventCost(EventTypes eEvent, PlayerTypes eOtherPlayer, bool bRa
 
 void CvPlayer::doEvents()
 {
+	OOS_LOG("CvPlayer::doEvents start", getID());
 	MOD_PROFILE("CvPlayer::doEvents");
 
 	if (GC.getGameINLINE().isOption(GAMEOPTION_NO_EVENTS))
@@ -15183,7 +15064,7 @@ void CvPlayer::expireEvent(EventTypes eEvent, const EventTriggeredData& kTrigger
 
 		if (bFail)
 		{
-			gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), gDLL->getText(GC.getEventInfo(eEvent).getQuestFailTextKey()), "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+			gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), gDLL->getText(GC.getEventInfo(eEvent).getQuestFailTextKey()), "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
 		}
 	}
 }
@@ -15269,11 +15150,13 @@ bool CvPlayer::checkExpireEvent(EventTypes eEvent, const EventTriggeredData& kTr
 
 void CvPlayer::trigger(EventTriggerTypes eTrigger)
 {
+	OOS_LOG("Trigger event", getID() + (1000 * eTrigger));
 	initTriggeredData(eTrigger, true);
 }
 
 void CvPlayer::trigger(const EventTriggeredData& kData)
 {
+	OOS_LOG("Trigger event", getID() + (1000 * kData.getID()));
 	if (isHuman())
 	{
 		CvPopupInfo* pInfo = new CvPopupInfo(BUTTONPOPUP_EVENT, kData.getID());
@@ -15343,9 +15226,9 @@ bool CvPlayer::canTrigger(EventTriggerTypes eTrigger, PlayerTypes ePlayer) const
 	{
 		int iCount = 0;
 
-		for (int iI = 0; iI < GC.getMapINLINE().numPlotsINLINE(); ++iI)
+		for (int iI = 0; iI < GC.getMap().numPlotsINLINE(); ++iI)
 		{
-			CvPlot* pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(iI);
+			CvPlot* pLoopPlot = GC.getMap().plotByIndexINLINE(iI);
 
 			if (!pLoopPlot->isWater())
 			{
@@ -15527,7 +15410,7 @@ int CvPlayer::getEventTriggerWeight(EventTriggerTypes eTrigger) const
 		}
 	}
 
-	if (GC.getMapINLINE().getNumLandAreas() < kTrigger.getMinMapLandmass())
+	if (GC.getMap().getNumLandAreas() < kTrigger.getMinMapLandmass())
 	{
 		return 0;
 	}
@@ -15537,7 +15420,7 @@ int CvPlayer::getEventTriggerWeight(EventTriggerTypes eTrigger) const
 		int iNumLandmass = 0;
 
 		int iLoop;
-		for (CvArea* pArea = GC.getMapINLINE().firstArea(&iLoop); NULL != pArea; pArea = GC.getMapINLINE().nextArea(&iLoop))
+		for (CvArea* pArea = GC.getMap().firstArea(&iLoop); NULL != pArea; pArea = GC.getMap().nextArea(&iLoop))
 		{
 			if (!pArea->isWater())
 			{
@@ -16084,7 +15967,7 @@ void CvPlayer::setYieldBuyPrice(YieldTypes eYield, int iPrice, bool bMessage)
 					eYield = YIELD_VANILLA_PODS;
 					iPrice = getYieldBuyPrice(YIELD_VANILLA_PODS) - 1;
 				}
-				break;	
+				break;
 			case YIELD_CHOCOLATE:
 				if (getYieldBuyPrice(eYield) - (getYieldBuyPrice(YIELD_COCOA) + getYieldBuyPrice(YIELD_SUGAR)) <= price_diff)
 				{
@@ -16250,7 +16133,7 @@ void CvPlayer::setYieldBuyPrice(YieldTypes eYield, int iPrice, bool bMessage)
 				// if (kLoopPlayer.isAlive() && GET_TEAM(getTeam()).isHasMet(kLoopPlayer.getTeam()))
 				if (kLoopPlayer.isAlive() && kLoopPlayer.getParent() == getID())
 				{
-					gDLL->getInterfaceIFace()->addMessage(kLoopPlayer.getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_ADVISOR_SUGGEST", MESSAGE_TYPE_INFO, NULL);
+					gDLL->UI().addPlayerMessage(kLoopPlayer.getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_ADVISOR_SUGGEST", MESSAGE_TYPE_INFO, NULL);
 				}
 			}
 		}
@@ -16309,10 +16192,10 @@ void CvPlayer::sellYieldUnitToEurope(CvUnit* pUnit, int iAmount, int iCommission
 					{
 						CvPlayer& kPlayerEurope = GET_PLAYER(getParent());
 						int price = kPlayerEurope.getYieldBuyPrice(eYield);
-						iProfit = iAmount * price  * (100 - iBribe) / 100;						
+						iProfit = iAmount * price  * (100 - iBribe) / 100;
 						iSellPrice = price; // R&R, vetiarvind, Price dependent tax rate change
 					}
-					
+
 				}
 				else
 				{
@@ -16321,15 +16204,15 @@ void CvPlayer::sellYieldUnitToEurope(CvUnit* pUnit, int iAmount, int iCommission
 				}
 				// R&R, ray, Smuggling - END
 				changeGold(iProfit * getExtraTradeMultiplier(kPlayerEurope.getID()) / 100);
-				
+
 				// R&R, vetiarvind, Price dependent tax rate change - Start
 				//changeYieldTradedTotal(eYield, iAmount);
-				//kPlayerEurope.changeYieldTradedTotal(eYield, iAmount);				
+				//kPlayerEurope.changeYieldTradedTotal(eYield, iAmount);
 				changeYieldTradedTotal(eYield, iAmount, iSellPrice);
 				kPlayerEurope.changeYieldTradedTotal(eYield, iAmount, iSellPrice);
-				
+
 				// R&R, vetiarvind, Price dependent tax rate change - End
-				
+
 				GC.getGameINLINE().changeYieldBoughtTotal(kPlayerEurope.getID(), eYield, -iAmount);
 
 				pUnit->setYieldStored(pUnit->getYieldStored() - iAmount);
@@ -16366,7 +16249,7 @@ void CvPlayer::sellYieldUnitToEurope(CvUnit* pUnit, int iAmount, int iCommission
 				m_aiTradeMessageCommissions.push_back(iCommission);
 				// TAC - Trade Messages - koma13 - END
 
-				gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
+				gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
 
 				gDLL->getInterfaceIFace()->setDirty(EuropeScreen_DIRTY_BIT, true);
 
@@ -16395,7 +16278,7 @@ void CvPlayer::sellYieldUnitToEurope(CvUnit* pUnit, int iAmount, int iCommission
 			m_aiTradeMessageCommissions.push_back(iCommission);
 			// TAC - Trade Messages - koma13 - END
 
-			gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
+			gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
 
 			gDLL->getInterfaceIFace()->setDirty(EuropeScreen_DIRTY_BIT, true);
 		}
@@ -16462,7 +16345,7 @@ CvUnit* CvPlayer::buyYieldUnitFromEurope(YieldTypes eYield, int iAmount, CvUnit*
 		pUnit->setUnitTravelState(UNIT_TRAVEL_STATE_IN_EUROPE, false);
 		UnitAITypes eUnitAI = pUnit->AI_getUnitAIType();
 		pUnit->removeFromMap(); //needs to match addToMap
-		pUnit->addToMap(pTransport->getX_INLINE(), pTransport->getY_INLINE());
+		pUnit->addToMap(pTransport->coord());
 		pUnit->AI_setUnitAIType(eUnitAI);
 
 		//unit possibly killed after joining other cargo
@@ -16493,7 +16376,7 @@ CvUnit* CvPlayer::buyYieldUnitFromEurope(YieldTypes eYield, int iAmount, CvUnit*
 		m_aiTradeMessageCommissions.push_back(0);
 		// TAC - Trade Messages - koma13 - END
 
-		gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
+		gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
 
 		gDLL->getInterfaceIFace()->setDirty(EuropeScreen_DIRTY_BIT, true);
 
@@ -16523,9 +16406,16 @@ int CvPlayer::getEuropeUnitBuyPrice(UnitTypes eUnit, bool bIncrease) const
 	//iCost += GET_TEAM(getTeam()).getEuropeUnitsPurchased((UnitClassTypes) kUnit.getUnitClassType()) * kUnit.getEuropeCostIncrease();
 	if (bIncrease)
 	{
-		iCost += GET_TEAM(getTeam()).getUnitsPurchasedHistory((UnitClassTypes) kUnit.getUnitClassType()) * kUnit.getEuropeCostIncrease();
+		iCost += GET_TEAM(getTeam()).getUnitsPurchasedHistory(kUnit.getUnitClassType()) * kUnit.getEuropeCostIncrease();
 	}
 	// TAC - AI purchases military units - koma13 - END
+
+	// WTP, ray, capping UnitBuyPrices at 200 percent - START
+	if (iCost > kUnit.getEuropeCost() * 2)
+	{
+		iCost = kUnit.getEuropeCost() * 2;
+	}
+	// WTP, ray, capping UnitBuyPrices at 200 percent - END
 
 	iCost *= GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getTrainPercent();
 	iCost /= 100;
@@ -16972,7 +16862,7 @@ void CvPlayer::setYieldAfricaBuyPrice(YieldTypes eYield, int iPrice, bool bMessa
 				// if (kLoopPlayer.isAlive() && GET_TEAM(getTeam()).isHasMet(kLoopPlayer.getTeam()))
 				if (kLoopPlayer.isAlive() && kLoopPlayer.getParent() == getID())
 				{
-					gDLL->getInterfaceIFace()->addMessage(kLoopPlayer.getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_ADVISOR_SUGGEST", MESSAGE_TYPE_INFO, NULL);
+					gDLL->UI().addPlayerMessage(kLoopPlayer.getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_ADVISOR_SUGGEST", MESSAGE_TYPE_INFO, NULL);
 				}
 			}
 		}*/
@@ -17034,7 +16924,7 @@ CvUnit* CvPlayer::buyYieldUnitFromAfrica(YieldTypes eYield, int iAmount, CvUnit*
 		pUnit->setUnitTravelState(UNIT_TRAVEL_STATE_IN_AFRICA, false);
 		UnitAITypes eUnitAI = pUnit->AI_getUnitAIType();
 		pUnit->removeFromMap(); //needs to match addToMap
-		pUnit->addToMap(pTransport->getX_INLINE(), pTransport->getY_INLINE());
+		pUnit->addToMap(pTransport->coord());
 		pUnit->AI_setUnitAIType(eUnitAI);
 
 		//unit possibly killed after joining other cargo
@@ -17050,9 +16940,9 @@ CvUnit* CvPlayer::buyYieldUnitFromAfrica(YieldTypes eYield, int iAmount, CvUnit*
 		kPlayerEurope.changeYieldTradedTotalAfrica(eYield, iAmount, iBuyValue); // WTP, ray, Yields Traded Total for Africa and Port Royal - START
 		//changeYieldTradedTotal(eYield, iAmount);
 		//kPlayerEurope.changeYieldTradedTotal(eYield, iAmount);
-		// R&R, vetiarvind, Price dependent tax rate change - End		
+		// R&R, vetiarvind, Price dependent tax rate change - End
 		GC.getGameINLINE().changeYieldBoughtTotalAfrica(kPlayerEurope.getID(), eYield, iAmount); // WTP, ray, Yields Traded Total for Africa and Port Royal - START
-		 
+
 		CvWStringBuffer szMessage;
 		GAMETEXT.setEuropeYieldBoughtHelp(szMessage, *this, eYield, iAmount);
 		m_aszTradeMessages.push_back(szMessage.getCString());
@@ -17064,7 +16954,7 @@ CvUnit* CvPlayer::buyYieldUnitFromAfrica(YieldTypes eYield, int iAmount, CvUnit*
 		m_aiTradeMessageCommissions.push_back(0);
 		// TAC - Trade Messages - koma13 - END
 
-		gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
+		gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
 
 		gDLL->getInterfaceIFace()->setDirty(AfricaScreen_DIRTY_BIT, true);
 
@@ -17136,13 +17026,13 @@ void CvPlayer::sellYieldUnitToAfrica(CvUnit* pUnit, int iAmount, int iCommission
 				}
 				// R&R, ray, Smuggling - END
 				changeGold(iProfit * getExtraTradeMultiplier(kPlayerEurope.getID()) / 100);
-				// R&R, vetiarvind, Price dependent tax rate change - Start				
+				// R&R, vetiarvind, Price dependent tax rate change - Start
 				changeYieldTradedTotalAfrica(eYield, iAmount, iSellPrice); // WTP, ray, Yields Traded Total for Africa and Port Royal - START
 				kPlayerEurope.changeYieldTradedTotalAfrica(eYield, iAmount, iSellPrice); // WTP, ray, Yields Traded Total for Africa and Port Royal - START
 				//changeYieldTradedTotal(eYield, iAmount);
 				//kPlayerEurope.changeYieldTradedTotal(eYield, iAmount);
 				// R&R, vetiarvind, Price dependent tax rate change - End
-				
+
 				GC.getGameINLINE().changeYieldBoughtTotalAfrica(kPlayerEurope.getID(), eYield, -iAmount); // WTP, ray, Yields Traded Total for Africa and Port Royal - START
 
 				pUnit->setYieldStored(pUnit->getYieldStored() - iAmount);
@@ -17179,7 +17069,7 @@ void CvPlayer::sellYieldUnitToAfrica(CvUnit* pUnit, int iAmount, int iCommission
 				m_aiTradeMessageCommissions.push_back(iCommission);
 				// TAC - Trade Messages - koma13 - END
 
-				gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
+				gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
 
 				gDLL->getInterfaceIFace()->setDirty(AfricaScreen_DIRTY_BIT, true);
 
@@ -17208,7 +17098,7 @@ void CvPlayer::sellYieldUnitToAfrica(CvUnit* pUnit, int iAmount, int iCommission
 			m_aiTradeMessageCommissions.push_back(iCommission);
 			// TAC - Trade Messages - koma13 - END
 
-			gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
+			gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
 
 			gDLL->getInterfaceIFace()->setDirty(AfricaScreen_DIRTY_BIT, true);
 		}
@@ -17634,7 +17524,7 @@ void CvPlayer::setYieldPortRoyalBuyPrice(YieldTypes eYield, int iPrice, bool bMe
 				// if (kLoopPlayer.isAlive() && GET_TEAM(getTeam()).isHasMet(kLoopPlayer.getTeam()))
 				if (kLoopPlayer.isAlive() && kLoopPlayer.getParent() == getID())
 				{
-					gDLL->getInterfaceIFace()->addMessage(kLoopPlayer.getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_ADVISOR_SUGGEST", MESSAGE_TYPE_INFO, NULL);
+					gDLL->UI().addPlayerMessage(kLoopPlayer.getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_ADVISOR_SUGGEST", MESSAGE_TYPE_INFO, NULL);
 				}
 			}
 		}*/
@@ -17696,7 +17586,7 @@ CvUnit* CvPlayer::buyYieldUnitFromPortRoyal(YieldTypes eYield, int iAmount, CvUn
 		pUnit->setUnitTravelState(UNIT_TRAVEL_STATE_IN_PORT_ROYAL, false);
 		UnitAITypes eUnitAI = pUnit->AI_getUnitAIType();
 		pUnit->removeFromMap(); //needs to match addToMap
-		pUnit->addToMap(pTransport->getX_INLINE(), pTransport->getY_INLINE());
+		pUnit->addToMap(pTransport->coord());
 		pUnit->AI_setUnitAIType(eUnitAI);
 
 		//unit possibly killed after joining other cargo
@@ -17726,7 +17616,7 @@ CvUnit* CvPlayer::buyYieldUnitFromPortRoyal(YieldTypes eYield, int iAmount, CvUn
 		m_aiTradeMessageCommissions.push_back(0);
 		// TAC - Trade Messages - koma13 - END
 
-		gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
+		gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
 
 		gDLL->getInterfaceIFace()->setDirty(PortRoyalScreen_DIRTY_BIT, true);
 
@@ -17759,8 +17649,8 @@ void CvPlayer::sellYieldUnitToPortRoyal(CvUnit* pUnit, int iAmount, int iCommiss
 				iAmount = std::min(iAmount, pUnit->getYieldStored());
 
 				int iProfit = getSellToPortRoyalProfit(eYield, iAmount * (100 - iCommission) / 100);
-				int iSellPrice = kPlayerEurope.getYieldPortRoyalBuyPrice(eYield); 	
-				changeGold(iProfit * getExtraTradeMultiplier(kPlayerEurope.getID()) / 100);	
+				int iSellPrice = kPlayerEurope.getYieldPortRoyalBuyPrice(eYield);
+				changeGold(iProfit * getExtraTradeMultiplier(kPlayerEurope.getID()) / 100);
 
 				changeYieldTradedTotalPortRoyal(eYield, iAmount, iSellPrice);
 				kPlayerEurope.changeYieldTradedTotalPortRoyal(eYield, iAmount, iSellPrice);
@@ -17790,7 +17680,7 @@ void CvPlayer::sellYieldUnitToPortRoyal(CvUnit* pUnit, int iAmount, int iCommiss
 				m_aiTradeMessageCommissions.push_back(iCommission);
 				// TAC - Trade Messages - koma13 - END
 
-				gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
+				gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
 				gDLL->getInterfaceIFace()->setDirty(PortRoyalScreen_DIRTY_BIT, true);
 				gDLL->getEventReporterIFace()->yieldSoldToEurope(getID(), eYield, iAmount); // was this the problem ?
 			}
@@ -17817,7 +17707,7 @@ void CvPlayer::sellYieldUnitToPortRoyal(CvUnit* pUnit, int iAmount, int iCommiss
 			m_aiTradeMessageCommissions.push_back(iCommission);
 			// TAC - Trade Messages - koma13 - END
 
-			gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
+			gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage.getCString(), "AS2D_BUILD_BANK", MESSAGE_TYPE_LOG_ONLY);
 
 			gDLL->getInterfaceIFace()->setDirty(PortRoyalScreen_DIRTY_BIT, true);
 		}
@@ -17867,7 +17757,7 @@ CvUnit* CvPlayer::buyEuropeUnit(UnitTypes eUnit, int iPriceModifier)
 		{
 			pUnit->setUnitTravelState(UNIT_TRAVEL_STATE_IN_EUROPE, false);
 			//add unit to map after setting Europe state so that it doesn't bump enemy units
-			pUnit->addToMap(pStartingPlot->getX_INLINE(), pStartingPlot->getY_INLINE());
+			pUnit->addToMap(pStartingPlot->coord());
 		}
 	}
 	else
@@ -17881,7 +17771,7 @@ CvUnit* CvPlayer::buyEuropeUnit(UnitTypes eUnit, int iPriceModifier)
 		changeGold(-iPrice);
 		GET_TEAM(getTeam()).changeUnitsPurchasedHistory(pUnit->getUnitClassType(), 1);
 		gDLL->getEventReporterIFace()->unitBoughtFromEurope(getID(), pUnit->getID());
-		if (gPlayerLogLevel >= 1) logBBAI(" Player %d (%S) buys Unit:%S Gold:%d", 
+		if (gPlayerLogLevel >= 1) logBBAI(" Player %d (%S) buys Unit:%S Gold:%d",
 			getID(), getCivilizationDescription(0), pUnit->getNameAndProfession().GetCString(), iPrice);
 	}
 
@@ -17900,7 +17790,14 @@ int CvPlayer::getAfricaUnitBuyPrice(UnitTypes eUnit) const
 		return iCost;
 	}
 
-	iCost += GET_TEAM(getTeam()).getUnitsPurchasedHistory((UnitClassTypes) kUnit.getUnitClassType()) * kUnit.getAfricaCostIncrease();
+	iCost += GET_TEAM(getTeam()).getUnitsPurchasedHistory(kUnit.getUnitClassType()) * kUnit.getAfricaCostIncrease();
+
+	// WTP, ray, capping UnitBuyPrices at 200 percent - START
+	if (iCost > kUnit.getAfricaCost() * 2)
+	{
+		iCost = kUnit.getAfricaCost() * 2;
+	}
+	// WTP, ray, capping UnitBuyPrices at 200 percent - END
 
 	iCost *= GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getTrainPercent();
 	iCost /= 100;
@@ -17959,7 +17856,7 @@ CvUnit* CvPlayer::buyAfricaUnit(UnitTypes eUnit, int iPriceModifier)
 		gDLL->getInterfaceIFace()->setDirty(AfricaScreen_DIRTY_BIT, true);
 		return NULL;
 	}
-	
+
 	CvUnit* pUnit = NULL;
 	CvPlot* pStartingPlot = getStartingPlot();
 	if (GC.getUnitInfo(eUnit).getDomainType() == DOMAIN_SEA && pStartingPlot != NULL)
@@ -17969,7 +17866,7 @@ CvUnit* CvPlayer::buyAfricaUnit(UnitTypes eUnit, int iPriceModifier)
 		{
 			pUnit->setUnitTravelState(UNIT_TRAVEL_STATE_IN_AFRICA, false);
 			//add unit to map after setting Europe state so that it doesn't bump enemy units
-			pUnit->addToMap(pStartingPlot->getX_INLINE(), pStartingPlot->getY_INLINE());
+			pUnit->addToMap(pStartingPlot);
 		}
 	}
 	else
@@ -18000,7 +17897,14 @@ int CvPlayer::getPortRoyalUnitBuyPrice(UnitTypes eUnit) const
 		return iCost;
 	}
 
-	iCost += GET_TEAM(getTeam()).getUnitsPurchasedHistory((UnitClassTypes) kUnit.getUnitClassType()) * kUnit.getPortRoyalCostIncrease();
+	iCost += GET_TEAM(getTeam()).getUnitsPurchasedHistory(kUnit.getUnitClassType()) * kUnit.getPortRoyalCostIncrease();
+
+	// WTP, ray, capping UnitBuyPrices at 200 percent - START
+	if (iCost > kUnit.getPortRoyalCost() * 2)
+	{
+		iCost = kUnit.getPortRoyalCost() * 2;
+	}
+	// WTP, ray, capping UnitBuyPrices at 200 percent - END
 
 	iCost *= GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getTrainPercent();
 	iCost /= 100;
@@ -18059,7 +17963,7 @@ CvUnit* CvPlayer::buyPortRoyalUnit(UnitTypes eUnit, int iPriceModifier)
 		gDLL->getInterfaceIFace()->setDirty(PortRoyalScreen_DIRTY_BIT, true);
 		return NULL;
 	}
-	
+
 	CvUnit* pUnit = NULL;
 	CvPlot* pStartingPlot = getStartingPlot();
 	if (GC.getUnitInfo(eUnit).getDomainType() == DOMAIN_SEA && pStartingPlot != NULL)
@@ -18069,7 +17973,7 @@ CvUnit* CvPlayer::buyPortRoyalUnit(UnitTypes eUnit, int iPriceModifier)
 		{
 			pUnit->setUnitTravelState(UNIT_TRAVEL_STATE_IN_PORT_ROYAL, false);
 			//add unit to map after setting Europe state so that it doesn't bump enemy units
-			pUnit->addToMap(pStartingPlot->getX_INLINE(), pStartingPlot->getY_INLINE());
+			pUnit->addToMap(pStartingPlot->coord());
 		}
 	}
 	else
@@ -18193,25 +18097,25 @@ int CvPlayer::getYieldScoreTotal(YieldTypes eYield) const
 void CvPlayer::setYieldScoreTotal(YieldTypes eYield, int iValue)
 {
 	FAssert(eYield >= 0);
-	FAssert(eYield < NUM_YIELD_TYPES);	
+	FAssert(eYield < NUM_YIELD_TYPES);
 
 	m_em_iYieldScoreTotal.set(eYield, iValue);
-	
+
 }
 
 void CvPlayer::changeYieldTradedTotal(YieldTypes eYield, int iChange, int iUnitPrice)
 {
 	if(iUnitPrice == -1)	//default parameter declared in header
-	{		
-			iUnitPrice = 10;//default score functionality 
+	{
+			iUnitPrice = 10;//default score functionality
 			if (getParent() != NO_PLAYER)
 			{
-				CvPlayer& kEurope = GET_PLAYER(getParent());		
+				CvPlayer& kEurope = GET_PLAYER(getParent());
 				if (kEurope.isEurope())
-					iUnitPrice = kEurope.getYieldBuyPrice(eYield); 
-			}		
+					iUnitPrice = kEurope.getYieldBuyPrice(eYield);
+			}
 	}
-	
+
 	double iMultiplier = iUnitPrice*0.1;
 	setYieldScoreTotal(eYield, getYieldScoreTotal(eYield) + (int)(iChange*iMultiplier));
 	setYieldTradedTotal(eYield, getYieldTradedTotal(eYield) + iChange);
@@ -18221,16 +18125,16 @@ void CvPlayer::changeYieldTradedTotal(YieldTypes eYield, int iChange, int iUnitP
 void CvPlayer::changeYieldTradedTotalAfrica(YieldTypes eYield, int iChange, int iUnitPrice)
 {
 	if(iUnitPrice == -1)	//default parameter declared in header
-	{		
-			iUnitPrice = 10;//default score functionality 
+	{
+			iUnitPrice = 10;//default score functionality
 			if (getParent() != NO_PLAYER)
 			{
-				CvPlayer& kEurope = GET_PLAYER(getParent());		
+				CvPlayer& kEurope = GET_PLAYER(getParent());
 				if (kEurope.isEurope())
-					iUnitPrice = kEurope.getYieldAfricaBuyPrice(eYield); 
-			}		
+					iUnitPrice = kEurope.getYieldAfricaBuyPrice(eYield);
+			}
 	}
-	
+
 	double iMultiplier = iUnitPrice*0.1;
 	setYieldScoreTotal(eYield, getYieldScoreTotal(eYield) + (int)(iChange*iMultiplier));
 	setYieldTradedTotalAfrica(eYield, getYieldTradedTotalAfrica(eYield) + iChange);
@@ -18239,16 +18143,16 @@ void CvPlayer::changeYieldTradedTotalAfrica(YieldTypes eYield, int iChange, int 
 void CvPlayer::changeYieldTradedTotalPortRoyal(YieldTypes eYield, int iChange, int iUnitPrice)
 {
 	if(iUnitPrice == -1)	//default parameter declared in header
-	{		
-			iUnitPrice = 10;//default score functionality 
+	{
+			iUnitPrice = 10;//default score functionality
 			if (getParent() != NO_PLAYER)
 			{
-				CvPlayer& kEurope = GET_PLAYER(getParent());		
+				CvPlayer& kEurope = GET_PLAYER(getParent());
 				if (kEurope.isEurope())
-					iUnitPrice = kEurope.getYieldPortRoyalBuyPrice(eYield); 
-			}		
+					iUnitPrice = kEurope.getYieldPortRoyalBuyPrice(eYield);
+			}
 	}
-	
+
 	double iMultiplier = iUnitPrice*0.1;
 	setYieldScoreTotal(eYield, getYieldScoreTotal(eYield) + (int)(iChange*iMultiplier));
 	setYieldTradedTotalPortRoyal(eYield, getYieldTradedTotalPortRoyal(eYield) + iChange);
@@ -18400,7 +18304,7 @@ void CvPlayer::changeTaxRate(int iChange)
 		for(int i=0;i<NUM_YIELD_TYPES;i++)
 		{
 			setYieldTradedTotal((YieldTypes) i, 0);
-			setYieldScoreTotal((YieldTypes) i, 0);// R&R, vetiarvind, price dependent tax rate change						 
+			setYieldScoreTotal((YieldTypes) i, 0);// R&R, vetiarvind, price dependent tax rate change
 		}
 
 		PlayerTypes eParent = getParent();
@@ -18408,7 +18312,7 @@ void CvPlayer::changeTaxRate(int iChange)
 		{
 			CvString szTextKey = (iOldRate < getTaxRate() ? "TXT_KEY_TAX_RATE_CHANGED" : "TXT_KEY_TAX_RATE_LOWERED");
 			CvWString szBuffer = gDLL->getText(szTextKey.GetCString(), GET_PLAYER(eParent).getNameKey(), iOldRate, getTaxRate());
-			gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_REVOLTSTART", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
+			gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_REVOLTSTART", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_RED"));
 		}
 	}
 }
@@ -18440,7 +18344,7 @@ void CvPlayer::changeDominateNativeBordersCount(int iChange)
 		m_iDominateNativeBordersCount += iChange;
 		FAssert(getDominateNativeBordersCount() >= 0);
 
-		GC.getMapINLINE().updateCulture();
+		GC.getMap().updateCulture();
 	}
 }
 
@@ -18548,7 +18452,7 @@ void CvPlayer::doAction(PlayerActionTypes eAction, int iData1, int iData2, int i
 		setCivic((CivicOptionTypes) iData1, (CivicTypes) iData2);
 		break;
 	case PLAYER_ACTION_RECEIVE_GOODY:
-		receiveRandomGoody(GC.getMapINLINE().plotByIndexINLINE(iData2), (GoodyTypes) iData1, getUnit(iData3));
+		receiveRandomGoody(GC.getMap().plotByIndexINLINE(iData2), (GoodyTypes) iData1, getUnit(iData3));
 		break;
 	case PLAYER_ACTION_BUY_UNITS_FROM_KING:
 		buyUnitsFromKing();
@@ -18598,6 +18502,12 @@ void CvPlayer::doAction(PlayerActionTypes eAction, int iData1, int iData2, int i
 	// R&R, ray, Port Royal - END
 	case PLAYER_ACTION_NETWORK_DESYNC_LOG_WRITE:
 		GC.getGameINLINE().writeDesyncLog();
+		break;
+	case PLAYER_ACTION_NETWORK_canDoEvent:
+		testOOSanDoEvent((EventTypes)iData1, iData2);
+		break;
+	case PLAYER_ACTION_NETWORK_canDoGoody:
+		testOOSanDoGoody((GoodyTypes)iData1, iData2, iData3);
 		break;
 	default:
 		FAssertMsg(false, "Unknown action");
@@ -18764,14 +18674,14 @@ void CvPlayer::applyMissionaryPoints(CvCity* pCity)
 				UnitTypes eUnit = (UnitTypes) GC.getCivilizationInfo(GET_PLAYER(ePlayer).getCivilizationType()).getCivilizationUnits(eUnitClass);
 				if (eUnit != NO_UNIT)
 				{
-					CvUnit* pUnit = GET_PLAYER(ePlayer).initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pCity->getX_INLINE(), pCity->getY_INLINE());
+					CvUnit* pUnit = GET_PLAYER(ePlayer).initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pCity->coord());
 					if(pUnit != NULL)
 					{
 						bUnitCreated = true;
 						gDLL->getEventReporterIFace()->missionaryConvertedUnit(pUnit);
 
 						CvWString szBuffer = gDLL->getText("TXT_KEY_NATIVES_CONVERTED", pCity->getNameKey());
-						gDLL->getInterfaceIFace()->addMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"), pCity->getX_INLINE(), pCity->getY_INLINE(), true, true);
+						gDLL->UI().addPlayerMessage(ePlayer, true, GC.getEVENT_MESSAGE_TIME(), szBuffer, pCity, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"), true, true);
 
 						changeMissionaryPoints(ePlayer, -iThreshold);
 						setMissionaryThresholdMultiplier(ePlayer, (getMissionaryThresholdMultiplier(ePlayer) * (100 + GC.getDefineINT("MISSIONARY_THRESHOLD_INCREASE"))) / 100);
@@ -18832,6 +18742,7 @@ void CvPlayer::burnMissions(PlayerTypes ePlayer)
 	{
 		if (pCity->getMissionaryPlayer() == ePlayer)
 		{
+			pCity->setMissionaryRate(0);
 			pCity->setMissionaryPlayer(NO_PLAYER);
 		}
 	}
@@ -18896,6 +18807,7 @@ void CvPlayer::burnTradePosts(PlayerTypes ePlayer)
 		if (pCity->getTradePostPlayer() == ePlayer)
 		{
 			pCity->setTradePostPlayer(NO_PLAYER);
+			pCity->setNativeTradeRate(0);
 			pCity->setNativeTradePostGold(0);
 		}
 	}
@@ -19002,6 +18914,7 @@ void CvPlayer::setProfessionEquipmentModifier(ProfessionTypes eProfession, int i
 	int iChange = iValue - getProfessionEquipmentModifier(eProfession);
 	if (iChange != 0)
 	{
+		OOS_LOG_3("set profession equipment modifier", getTypeStr(eProfession), iValue);
 		std::vector<CvUnit*> aProfessionUnits;
 		int iLoop;
 		for (CvUnit* pUnit = firstUnit(&iLoop); pUnit != NULL; pUnit = nextUnit(&iLoop))
@@ -19072,10 +18985,17 @@ int CvPlayer::getYieldEquipmentAmountUncached(ProfessionTypes eProfession, Yield
 
 	int iAmount = GC.getProfessionInfo(eProfession).getYieldEquipmentAmount(eYield);
 
+	if (iAmount <= 0)
+	{
+		// the rest are modifiers. 0 + modifiers will always be 0
+		return 0;
+	}
+
 	iAmount *= GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getTrainPercent();
 	iAmount /= 100;
 
-	if (!isHuman())
+	// can't use CvPlayer::isHuman as that would make enabling autoplay alter cost
+	if (!GC.getInitCore().getHuman(getID()))
 	{
 		iAmount *= GC.getHandicapInfo(GC.getGameINLINE().getHandicapType()).getAITrainPercent();
 		iAmount /= 100;
@@ -19088,16 +19008,27 @@ int CvPlayer::getYieldEquipmentAmountUncached(ProfessionTypes eProfession, Yield
 }
 
 // cache CvPlayer::getYieldEquipmentAmount - start - Nightinggale
-void CvPlayer::Update_cache_YieldEquipmentAmount(ProfessionTypes eProfession)
+bool CvPlayer::Update_cache_YieldEquipmentAmount(ProfessionTypes eProfession)
 {
-	for (int iYield = 0; iYield < NUM_YIELD_TYPES; iYield++) {
-		m_cache_YieldEquipmentAmount[eProfession].set(getYieldEquipmentAmountUncached(eProfession, (YieldTypes)iYield), iYield);
+	bool bAltered = false;
+	for (YieldTypes eYield = FIRST_YIELD; eYield < NUM_YIELD_TYPES; ++eYield)
+	{
+		int iNewCost = getYieldEquipmentAmountUncached(eProfession, eYield);
+		if (m_cache_YieldEquipmentAmount[eProfession].get(eYield) != iNewCost)
+		{
+			bAltered = true;
+		}
+		m_cache_YieldEquipmentAmount[eProfession].set(iNewCost, eYield);
 	}
 	m_cache_YieldEquipmentAmount[eProfession].isEmpty(); // This will release the array if it's empty
+
+	return bAltered;
 }
 
 void CvPlayer::Update_cache_YieldEquipmentAmount()
 {
+	bool bAltered = false;
+
 	///TKs Nightinggale fix
 	if (m_eID <= NO_PLAYER || GC.getGameINLINE().getHandicapType() == NO_HANDICAP)
 	{
@@ -19105,8 +19036,17 @@ void CvPlayer::Update_cache_YieldEquipmentAmount()
 		return;
 	}
 
-	for (int iProfession = 0; iProfession < GC.getNumProfessionInfos(); iProfession++) {
-		Update_cache_YieldEquipmentAmount((ProfessionTypes)iProfession);
+	for (ProfessionTypes eProfession = FIRST_PROFESSION; eProfession < NUM_PROFESSION_TYPES; ++eProfession)
+	{
+		if (Update_cache_YieldEquipmentAmount(eProfession))
+		{
+			bAltered = true;
+		}
+	}
+	if (bAltered)
+	{
+		// altered cost means chance of altered power. Recalculate it from scratch to be sure it's correct
+		checkPower(true);
 	}
 }
 // cache CvPlayer::getYieldEquipmentAmount - end - Nightinggale
@@ -19115,7 +19055,7 @@ bool CvPlayer::isProfessionValid(ProfessionTypes eProfession, UnitTypes eUnit) c
 	if (eProfession != NO_PROFESSION)
 	{
 		// CivEffect check
-		if (!CivEffect()->canUseProfession(eProfession))
+		if (!CivEffect().canUseProfession(eProfession))
 		{
 			return false;
 		}
@@ -19146,19 +19086,18 @@ bool CvPlayer::isProfessionValid(ProfessionTypes eProfession, UnitTypes eUnit) c
 					return false;
 				}
 				// R&R, ray, High Sea Fishing
-				else if (eProfession == (ProfessionTypes)GC.getPROFESSION_WHALING_BOAT_WORKING() && GC.getUnitInfo(eUnit).getUnitClassType() != (UnitClassTypes)GC.getUNITCLASS_WHALING_BOAT())
+				else if (eProfession == PROFESSION_WHALING_BOAT_WORKING && GC.getUnitInfo(eUnit).getUnitClassType() != UNITCLASS_WHALING_BOAT)
 				{
 					return false;
 				}
-				else if (eProfession == (ProfessionTypes)GC.getPROFESSION_FISHING_BOAT_WORKING() && GC.getUnitInfo(eUnit).getUnitClassType() != (UnitClassTypes)GC.getUNITCLASS_FISHING_BOAT())
+				else if (eProfession == PROFESSION_FISHING_BOAT_WORKING && GC.getUnitInfo(eUnit).getUnitClassType() != UNITCLASS_FISHING_BOAT)
 				{
 					return false;
 				}
 			}
 		}
 		// R&R, ray, High Sea Fishing
-		//else if (eProfession == (ProfessionTypes)GC.getDefineINT("PROFESSION_WHALING_BOAT_WORKING"))
-		else if (eProfession == (ProfessionTypes)GC.getPROFESSION_WHALING_BOAT_WORKING() || eProfession == (ProfessionTypes)GC.getPROFESSION_FISHING_BOAT_WORKING())
+		else if (eProfession == PROFESSION_WHALING_BOAT_WORKING || eProfession == PROFESSION_FISHING_BOAT_WORKING)
 		{
 			return false;
 		}
@@ -19171,6 +19110,7 @@ bool CvPlayer::isProfessionValid(ProfessionTypes eProfession, UnitTypes eUnit) c
 
 void CvPlayer::doPrices()
 {
+	OOS_LOG("CvPlayer::doPrices start", getID());
 	if (isEurope())
 	{
 		for (int iYield = 0; iYield < NUM_YIELD_TYPES; ++iYield)
@@ -19206,7 +19146,7 @@ void CvPlayer::doPrices()
 		{
 			if (getHighestTradedYield() != NO_YIELD)
 			{
-				// R&R, vetiarvind, Price dependent tax rate change - START				
+				// R&R, vetiarvind, Price dependent tax rate change - START
 				/*
 				int iTotalTraded = 0;
 				for (int i = 0; i < NUM_YIELD_TYPES; i++)
@@ -19216,7 +19156,7 @@ void CvPlayer::doPrices()
 						iTotalTraded += getYieldTradedTotal((YieldTypes) i);
 					}
 				}*/
-				int iTotalScore = 0; 
+				int iTotalScore = 0;
 				for (int i = 0; i < NUM_YIELD_TYPES; i++)
 				{
 					if (isYieldEuropeTradable((YieldTypes)i))
@@ -19243,11 +19183,11 @@ void CvPlayer::doPrices()
 
 				// R&R, vetiarvind, Price dependent tax rate change - START
 				//if (iTotalTraded * 10000 > GC.getTAX_TRADE_THRESHOLD() * std::max(100, iMultiplier) * GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getGrowthPercent())
-				
+
 				//compare total traded with trade threshold
-				if (iTotalScore * 10000 > GC.getTAX_TRADE_THRESHOLD() * std::max(100, iMultiplier) * GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getGrowthPercent())								
+				if (iTotalScore * 10000 > GC.getTAX_TRADE_THRESHOLD() * std::max(100, iMultiplier) * GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getGrowthPercent())
 				{
-					// R&R, vetiarvind, Price dependent tax rate change - END				
+					// R&R, vetiarvind, Price dependent tax rate change - END
 					//random chance to raise tax rate
 					// R&R, ray, Improvements to Tax Mechanism - START
 					int iTaxIncreaseChanceModifierFromKingAttitude = GET_PLAYER(eParent).AI_getAttitudeVal(getID()) * GC.getTAX_TRADE_INCREASE_CHANCE_KING_ATTITUDE_BASE();
@@ -19324,6 +19264,7 @@ void CvPlayer::doPrices()
 // R&R, ray, Africa
 void CvPlayer::doAfricaPrices()
 {
+	OOS_LOG("CvPlayer::doAfricaPrices start", getID());
 	if (isEurope())
 	{
 		for (int iYield = 0; iYield < NUM_YIELD_TYPES; ++iYield)
@@ -19358,6 +19299,7 @@ void CvPlayer::doAfricaPrices()
 // R&R, ray, Port Royal
 void CvPlayer::doPortRoyalPrices()
 {
+	OOS_LOG("CvPlayer::DoPortRoyalPrices start", getID());
 	if (isEurope())
 	{
 		for (int iYield = 0; iYield < NUM_YIELD_TYPES; ++iYield)
@@ -19434,11 +19376,11 @@ UnitTypes CvPlayer::pickBestImmigrant()
 	std::vector<int> aiWeights(NUM_UNIT_TYPES, 0);
 	for (UnitTypes eUnit = FIRST_UNIT; eUnit < NUM_UNIT_TYPES; ++eUnit)
 	{
-		if (CivEffect()->canUseUnit(eUnit) && CivEffect()->canUseImmigrant(eUnit))
+		if (CivEffect().canUseUnit(eUnit) && CivEffect().canUseImmigrant(eUnit))
 		{
 			const CvUnitInfo& kInfo = GC.getUnitInfo(eUnit);
 			int iWeight = kInfo.getImmigrationWeight();
-			for (int i = 0; i < getUnitClassImmigrated(static_cast<UnitClassTypes>(kInfo.getUnitClassType())); ++i)
+			for (int i = 0; i < getUnitClassImmigrated(kInfo.getUnitClassType()); ++i)
 			{
 				iWeight *= std::max(0, 100 - kInfo.getImmigrationWeightDecay());
 				iWeight /= 100;
@@ -19452,7 +19394,7 @@ UnitTypes CvPlayer::pickBestImmigrant()
 	FAssert(NO_UNIT != eBestUnit);
 	if (eBestUnit != NO_UNIT)
 	{
-		changeUnitClassImmigrated((UnitClassTypes) GC.getUnitInfo(eBestUnit).getUnitClassType(), 1);
+		changeUnitClassImmigrated(GC.getUnitInfo(eBestUnit).getUnitClassType(), 1);
 	}
 
 	return eBestUnit;
@@ -19511,6 +19453,7 @@ void CvPlayer::hurry(HurryTypes eHurry, int iIndex)
 
 		if (kHurry.getGoldPerCross() > 0)
 		{
+			OOS_LOG("hurry gold", getHurryGold(eHurry, iIndex));
 			changeGold(-getHurryGold(eHurry, iIndex));
 			changeCrossesStored(immigrationThreshold() - getCrossesStored());
 			// TAC - short messages for immigration after fist - RAY
@@ -19527,7 +19470,35 @@ int CvPlayer::getHurryGold(HurryTypes eHurry, int iIndex) const
 	iGold += GC.getHurryInfo(eHurry).getFlatGold() * GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getGrowthPercent() / 100;
 	if (iIndex != -1)
 	{
-		int iImmigrationPrice = std::abs(getEuropeUnitBuyPrice(getDocksNextUnit(iIndex))) * iCrossesLeft / std::max(1, iThreshold);
+		// WTP, ray, disconnect hurry Gold on Docks from Unit Buy Price - START
+		// instead hurrying will never be more expensive than original buy price
+		int iMaxBuyPriceHurry = GC.getUnitInfo(getDocksNextUnit(iIndex)).getEuropeCost();
+		iMaxBuyPriceHurry *= GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getTrainPercent();
+		iMaxBuyPriceHurry /= 100;
+
+		iMaxBuyPriceHurry *= GC.getEraInfo(GC.getGameINLINE().getStartEra()).getTrainPercent();
+		iMaxBuyPriceHurry /= 100;
+
+		for (int iTrait = 0; iTrait < GC.getNumTraitInfos(); ++iTrait)
+		{
+			if (hasTrait((TraitTypes) iTrait))
+			{
+				iMaxBuyPriceHurry *= std::max(0, (100 - GC.getTraitInfo((TraitTypes) iTrait).getRecruitPriceDiscount()));
+				iMaxBuyPriceHurry /= 100;
+			}
+		}
+
+		if (!isHuman())
+		{
+			iMaxBuyPriceHurry *= GC.getHandicapInfo(GC.getGameINLINE().getHandicapType()).getAITrainPercent();
+			iMaxBuyPriceHurry /= 100;
+
+			iMaxBuyPriceHurry *= std::max(0, ((GC.getHandicapInfo(GC.getGameINLINE().getHandicapType()).getAIPerEraModifier() * getCurrentEra()) + 100));
+			iMaxBuyPriceHurry /= 100;
+		}
+
+		int iImmigrationPrice = std::abs(iMaxBuyPriceHurry) * iCrossesLeft / std::max(1, iThreshold);
+		// WTP, ray, disconnect hurry Gold on Docks from Unit Buy Price - END
 		iGold = std::min(iGold, iImmigrationPrice);
 	}
 
@@ -19576,7 +19547,7 @@ void CvPlayer::doImmigrant(int iIndex, bool shortmessage)
 				szBuffer = gDLL->getText("TXT_KEY_NEW_IMMIGRANT_AVAILABLE", GC.getCivilizationInfo(GET_PLAYER(getParent()).getCivilizationType()).getShortDescriptionKey(),  GC.getUnitInfo(eBestUnit).getTextKeyWide());
 			}
 
-			gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eBestUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+			gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eBestUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 
 			gDLL->getInterfaceIFace()->setDirty(EuropeScreen_DIRTY_BIT, true);
 
@@ -19605,11 +19576,13 @@ void CvPlayer::buyLand(CvPlot* pPlot, bool bFree)
 		pPlot->setCulture(eOldOwner, 0, false);
 		if (!GET_TEAM(pPlot->getTeam()).isAtWar(getTeam()))
 		{
+			OOS_LOG("buy land war", pPlot->getTeam());
 			GET_PLAYER(eOldOwner).changeGold((iGoldCost * GC.getDefineINT("BUY_PLOT_SELLER_INCOME_PERCENT")) / 100);
 			GET_PLAYER(getID()).AI_changeGoldTradedTo(eOldOwner, iGoldCost);
 		}
 	}
 
+	OOS_LOG("buy land", iGoldCost);
 	pPlot->changeCulture(getID(), iCulture, true);
 	changeGold(-iGoldCost);
 }
@@ -19704,7 +19677,6 @@ void CvPlayer::buildTradeTable(PlayerTypes eOtherPlayer, CLinkList<TradeData>& o
 		{
 		case TRADE_YIELD:
 
-			FAssert(0 < GC.getNUM_YIELD_TYPES());
 			{
 				CvUnit* pTransport = ::getUnit(kTransport);
 				if (pTransport != NULL)
@@ -20064,6 +20036,7 @@ void CvPlayer::changeProfessionEurope(int iUnitId, ProfessionTypes eProfession)
 			}
 		}
 		pUnit->setProfession(eProfession);
+		OOS_LOG_3("change profession Europe", getTypeStr(eProfession), iCost);
 		changeGold(-iCost);
 		gDLL->getInterfaceIFace()->setDirty(EuropeScreen_DIRTY_BIT, true);
 	}
@@ -20101,7 +20074,7 @@ bool CvPlayer::checkPopulation() const
 		}
 	}
 	/**************************************/
-	
+
 	// R&R, ray, Port Royal
 	for (uint i = 0; i < m_aPortRoyalUnits.size(); ++i)
 	{
@@ -20151,7 +20124,7 @@ bool CvPlayer::checkPower(bool bReset)
 		iAsset += m_aAfricaUnits[i]->getAsset();
 	}
 	/**************************************/
-	
+
 	// R&R, ray, Port Royal
 	for (uint i = 0; i < m_aPortRoyalUnits.size(); ++i)
 	{
@@ -20192,6 +20165,9 @@ bool CvPlayer::checkPower(bool bReset)
 		mapAreaPower[pCity->area()->getID()] += iCityPower;
 	}
 
+	OOS_LOG_3("check power old", getPower(), getAssets());
+	OOS_LOG_3("check power new", iPower, iAsset);
+
 	bool bCheck = true;
 	if (iPower != getPower())
 	{
@@ -20211,7 +20187,7 @@ bool CvPlayer::checkPower(bool bReset)
 		bCheck = false;
 	}
 
-	for (CvArea* pArea = GC.getMapINLINE().firstArea(&iLoop); pArea != NULL; pArea = GC.getMapINLINE().nextArea(&iLoop))
+	for (CvArea* pArea = GC.getMap().firstArea(&iLoop); pArea != NULL; pArea = GC.getMap().nextArea(&iLoop))
 	{
 		if (mapAreaPower[pArea->getID()] != pArea->getPower(getID()))
 		{
@@ -20255,7 +20231,7 @@ void CvPlayer::interceptEuropeUnits()
 			CvUnit* pUnit = apEuropeUnits[i];
 			CvPlot* pPlot = pUnit->plot();
 			CvWString szMessage = gDLL->getText("TXT_KEY_YOU_UNITS_EUROPE_INTERCEPTED", pUnit->getNameOrProfessionKey());
-			gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage, "AS2D_COMBAT", MESSAGE_TYPE_DISPLAY_ONLY, pUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), pPlot->getX_INLINE(), pPlot->getY_INLINE(), true);
+			gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szMessage, pPlot, "AS2D_COMBAT", MESSAGE_TYPE_DISPLAY_ONLY, pUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), true);
 			pUnit->kill(false);
 		}
 
@@ -20332,20 +20308,9 @@ void CvPlayer::gainAchievement(AchieveTypes eAchieve, bool bAnnounce, CvPlot* pP
 				CvWString szBuffer = gDLL->getText(GC.getAchieveInfo(eAchieve).getDescription());
 				if (pPlot != NULL)
 				{
-					//Codeaenderung RAY
-					//Alter Code
-					//gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), pPlot->getX_INLINE(), pPlot->getY_INLINE(), true, true);
-					//Neuer Code
-					gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, false, false);
-					//Ende Codeaenderung RAY
-
+					gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, pPlot, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 				} else {
-					//Codeaenderung RAY
-					//Alter Code
-					//gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, true, true);
-					//Neuer Code
-					gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, false, false);
-					//Ende Codeaenderung RAY
+					gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, NULL, MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 				}
 				if (!GC.getGameINLINE().isGameMultiPlayer())
 				{
@@ -20389,7 +20354,7 @@ void CvPlayer::doAchievements(bool afterMove)
 	int iI, iJ, iK;
 	int count;
 //	CvWString szBuffer = gDLL->getText("TXT_KEY_DALETEST", GC.getGameINLINE().getGameTurn());
-//	gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, true, true);
+//	gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CIVIC_ADOPT", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), NULL, NULL, true, true);
 	for (iI = 0; iI < GC.getNumAchieveInfos(); iI++)
 	{
 		bGained = false;
@@ -20401,49 +20366,51 @@ void CvPlayer::doAchievements(bool afterMove)
 				{
 					if (GC.getAchieveInfo((AchieveTypes)iI).isLandDiscovered())
 					{
-						for (iJ = 0; iJ < GC.getMapINLINE().numPlotsINLINE(); iJ++)
+						for (iJ = 0; iJ < GC.getMap().numPlotsINLINE(); iJ++)
 						{
-							pPlot = GC.getMapINLINE().plotByIndexINLINE(iJ);
+							pPlot = GC.getMap().plotByIndexINLINE(iJ);
 							if (pPlot->isRevealed(getTeam(), false))
 							{
 								if (!pPlot->isWater())
 								{
 									bGained = true;
-									iJ = GC.getMapINLINE().numPlotsINLINE();
+									iJ = GC.getMap().numPlotsINLINE();
 								}
 							}
 						}
 					}
 					if (GC.getAchieveInfo((AchieveTypes)iI).isDiscoverEast())
 					{
-						for (iJ = 0; iJ < GC.getMapINLINE().numPlotsINLINE(); iJ++)
+						for (iJ = 0; iJ < GC.getMap().numPlotsINLINE(); iJ++)
 						{
-							pPlot = GC.getMapINLINE().plotByIndexINLINE(iJ);
+							pPlot = GC.getMap().plotByIndexINLINE(iJ);
 							if (pPlot->isRevealed(getTeam(), false))
 							{
 								// WTP, ray, fixing issue for Europe East / West Achievement
-								// used 0 because EUROPE_EAST somehow did not work - related to Enum probably
-								if (pPlot->isEurope() && pPlot->getEurope() == 0)
+								// we only trigger if there is no Improvement on it to prevent Reveal Goody Bug
+								// I have no idea why I cannot use EUROPE_EAST
+								if (pPlot->isEurope() && pPlot->getEurope() == EUROPE_EAST && pPlot->getImprovementType() == NO_IMPROVEMENT)
 								{
 									bGained = true;
-									iJ = GC.getMapINLINE().numPlotsINLINE();
+									iJ = GC.getMap().numPlotsINLINE();
 								}
 							}
 						}
 					}
 					if (GC.getAchieveInfo((AchieveTypes)iI).isDiscoverWest())
 					{
-						for (iJ = 0; iJ < GC.getMapINLINE().numPlotsINLINE(); iJ++)
+						for (iJ = 0; iJ < GC.getMap().numPlotsINLINE(); iJ++)
 						{
-							pPlot = GC.getMapINLINE().plotByIndexINLINE(iJ);
+							pPlot = GC.getMap().plotByIndexINLINE(iJ);
 							if (pPlot->isRevealed(getTeam(), false))
 							{
 								// WTP, ray, fixing issue for Europe East / West Achievement
-								// used 1 because EUROPE_WEST somehow did not work - related to Enum probably
-								if (pPlot->isEurope() && pPlot->getEurope() == 1)
+								// we only trigger if there is no Improvement on it to prevent Reveal Goody Bug
+								// I have no idea why I cannot use EUROPE_WEST
+								if (pPlot->isEurope() && pPlot->getEurope() == EUROPE_WEST && pPlot->getImprovementType() == NO_IMPROVEMENT)
 								{
 									bGained = true;
-									iJ = GC.getMapINLINE().numPlotsINLINE();
+									iJ = GC.getMap().numPlotsINLINE();
 								}
 							}
 						}
@@ -20543,7 +20510,7 @@ void CvPlayer::doAchievements(bool afterMove)
 									{
 										check = true;
 									}
-								}			
+								}
 
 //								if (pCity->isHasSpecialBuilding(GC.getBuildingInfo((BuildingTypes)iK).getSpecialBuildingType()))
 //								if (pCity->isHasBuilding((BuildingTypes)iK))
@@ -20669,7 +20636,7 @@ void CvPlayer::doAIImmigrant(int iIndex)
 			m_aDocksNextUnits[iIndex] = pickBestImmigrant();
 			CvUnit* pUnit = initEuropeUnit(eBestUnit);
 			CvWString szBuffer = gDLL->getText("TXT_KEY_NEW_IMMIGRANT_AVAILABLE", GC.getCivilizationInfo(GET_PLAYER(getParent()).getCivilizationType()).getShortDescriptionKey(),  GC.getUnitInfo(eBestUnit).getTextKeyWide());
-			gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eBestUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+			gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eBestUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 			gDLL->getInterfaceIFace()->setDirty(EuropeScreen_DIRTY_BIT, true);
 
 			FAssert(pUnit != NULL);
@@ -20685,11 +20652,11 @@ void CvPlayer::doAIImmigrant(int iIndex)
 
 // TAC - AI Economy - Ray - START
 // R&R, ray improvement redistribution
-void CvPlayer::redistributeWood() 
+void CvPlayer::redistributeWood()
 {
 	// do nothing if Player has no cities or just one
 	int citycount = getNumCities();
-	if (citycount <= 1) 
+	if (citycount <= 1)
 	{
 		return;
 	}
@@ -20762,7 +20729,7 @@ void CvPlayer::redistributeWood()
 		{
 			// bigger cities get more
 			int iPopulationOfThisCity = pLoopCity->getPopulation();
-		
+
 			// we distribute accordign to the Population Size
 			int woodtodistribute = woodToDisbributePerCitizen * iPopulationOfThisCity;
 			int hardwoodtodistribute = hardwoodToDisbributePerCitizen * iPopulationOfThisCity;
@@ -20854,7 +20821,7 @@ bool CvPlayer::LbD_try_become_expert(CvUnit* convUnit, int base, int increase, i
 		calculatedChance = calculatedChance * ki_modifier / 100;
 	}
 
-	calculatedChance = calculatedChance * CivEffect()->getLearningByDoingModifier() / 100; // CivEffects - Nightinggale
+	calculatedChance = calculatedChance * CivEffect().getLearningByDoingModifier() / 100; // CivEffects - Nightinggale
 
 	//Schmiddie, added LbD modifier for Sophisticated Trait ENDE
 
@@ -20874,6 +20841,7 @@ bool CvPlayer::LbD_try_become_expert(CvUnit* convUnit, int base, int increase, i
 	FAssert(expertUnitType != NO_UNIT);
 	// R&R, ray, small fix
 	//CvUnit* expertUnit = initUnit(expertUnitType, convUnit->getProfession(), convUnit->getX_INLINE(), convUnit->getY_INLINE(), convUnit->AI_getUnitAIType());
+	OOS_LOG("LbD", getTypeStr(expertUnitType));
 	CvUnit* expertUnit = initUnit(expertUnitType, GC.getCivilizationInfo(getCivilizationType()).getDefaultProfession(), convUnit->getX_INLINE(), convUnit->getY_INLINE());
 	FAssert(expertUnit != NULL);
 	expertUnit->joinGroup(convUnit->getGroup());
@@ -20881,7 +20849,7 @@ bool CvPlayer::LbD_try_become_expert(CvUnit* convUnit, int base, int increase, i
 
 	// AddMessage
 	CvWString szBuffer = gDLL->getText("TXT_KEY_LBD_EXPERT", expertUnit->getUnitInfo().getDescription());
-	gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, expertUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), expertUnit->getX(), expertUnit->getY(), true, true);
+	gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, expertUnit, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, expertUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 
 	return true;
 }
@@ -20907,7 +20875,7 @@ bool CvPlayer::LbD_try_get_free(CvUnit* convUnit, int base, int increase, int pr
 	}
 
 	//cases criminal or servant
-	int modcase = convUnit->getUnitInfo().getUnitClassType();
+	const UnitClassTypes modcase = convUnit->getUnitInfo().getUnitClassType();
 
 	//default case is servant
 	int mod = mod_serv;
@@ -20935,13 +20903,13 @@ bool CvPlayer::LbD_try_get_free(CvUnit* convUnit, int base, int increase, int pr
 	FAssert(DefaultUnitType != NO_UNIT);
 	// R&R, ray, small fix
 	//CvUnit* DefaultUnit = initUnit(DefaultUnitType, convUnit->getProfession(), convUnit->getX_INLINE(), convUnit->getY_INLINE(), convUnit->AI_getUnitAIType());
-	CvUnit* DefaultUnit = initUnit(DefaultUnitType, GC.getUnitInfo(DefaultUnitType).getDefaultProfession(), convUnit->getX_INLINE(), convUnit->getY_INLINE());
+	CvUnit* DefaultUnit = initUnit(DefaultUnitType, GC.getUnitInfo(DefaultUnitType).getDefaultProfession(), convUnit->coord());
 	FAssert(DefaultUnit != NULL);
 	DefaultUnit->joinGroup(convUnit->getGroup());
 	DefaultUnit->convert(convUnit, true);
 	// AddMessage
 	CvWString szBuffer = gDLL->getText("TXT_KEY_LBD_FREE");
-	gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, DefaultUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), DefaultUnit->getX(), DefaultUnit->getY(), true, true);
+	gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, DefaultUnit, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, DefaultUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 
 	return true;
 }
@@ -21008,12 +20976,13 @@ void CvPlayer::doLbD()
 						// convert Unit to Veteran Unit of the Profession
 						int expert = GC.getProfessionInfo(pLoopUnit->getProfession()).LbD_getExpert();
 						UnitTypes expertUnitType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(expert);
+						OOS_LOG("doLbD", getTypeStr(expertUnitType));
 						CvUnit* expertUnit = initUnit(expertUnitType, GC.getCivilizationInfo(getCivilizationType()).getDefaultProfession(), pLoopUnit->getX_INLINE(), pLoopUnit->getY_INLINE());
 						expertUnit->joinGroup(pLoopUnit->getGroup());
 						expertUnit->convert(pLoopUnit, true);
 						// AddMessage
 						CvWString szBuffer = gDLL->getText("TXT_KEY_LBD_VETERAN_BY_MILITARY_SERVICE", expertUnit->getUnitInfo().getDescription());
-						gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, expertUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), expertUnit->getX(), expertUnit->getY(), true, true);
+						gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, expertUnit, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, expertUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 
 						lbd_expert_successful = true;
 					}
@@ -21025,12 +20994,13 @@ void CvPlayer::doLbD()
 					{
 						// convert Unit to Free Settler
 						UnitTypes DefaultUnitType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("DEFAULT_POPULATION_UNIT"));
+						OOS_LOG("doLbD", getTypeStr(DefaultUnitType));
 						CvUnit* DefaultUnit = initUnit(DefaultUnitType, GC.getUnitInfo(DefaultUnitType).getDefaultProfession(), pLoopUnit->getX_INLINE(), pLoopUnit->getY_INLINE());
 						DefaultUnit->joinGroup(pLoopUnit->getGroup());
 						DefaultUnit->convert(pLoopUnit, true);
 						// AddMessage
 						CvWString szBuffer = gDLL->getText("TXT_KEY_LBD_FREE_BY_MILITARY_SERVICE");
-						gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, DefaultUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), DefaultUnit->getX(), DefaultUnit->getY(), true, true);
+						gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, DefaultUnit, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, DefaultUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 					}
 				}
 
@@ -21121,9 +21091,8 @@ void CvPlayer::checkForNativeMercs()
 				//simple logik for AI
 				if (!isHuman())
 				{
-					CvPlayerAI& kPlayerAI = GET_PLAYER((PlayerTypes) getID());
 					// TAC - AI Military Buildup - koma13
-					if (!kPlayerAI.AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
+					if (!AI().AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
 					{
 						int iMercRand = GC.getGameINLINE().getSorenRandNum(100, "AI should buy Mercenaries?");
 						if (iMercRand < GC.getDefineINT("AI_CHANCE_FOR_BUYING_MERCENARIES"))
@@ -21220,13 +21189,12 @@ void CvPlayer::checkForNativeSlaves()
 				}
 				int totalslaveprice = baseslaveprice - discount;
 				totalslaveprice = totalslaveprice * gamespeedMod / 100;
-				
+
 				//simple logik for AI
 				if (!isHuman())
-				{			
-					CvPlayerAI& kPlayerAI = GET_PLAYER((PlayerTypes) getID());
+				{
 					// TAC - AI Military Buildup - koma13
-					if (!kPlayerAI.AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
+					if (!AI().AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
 					{
 						if (getGold() > totalslaveprice * 2)
 						{
@@ -21243,6 +21211,7 @@ void CvPlayer::checkForNativeSlaves()
 							}
 
 							//exchanging gold
+							OOS_LOG("CvPlayer::checkForNativeSlaves AI", totalslaveprice);
 							potentialSlavePlayer.changeGold(totalslaveprice);
 							changeGold(-totalslaveprice);
 							m_iTimerNativeSlave = GC.getTIMER_NATIVE_SLAVE() * gamespeedMod / 100; // WTP, ray, small correction in balancing
@@ -21250,7 +21219,7 @@ void CvPlayer::checkForNativeSlaves()
 							//creating unit
 							UnitTypes DefaultSlaveUnitType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_NATIVE_SLAVE"));
 							FAssert(DefaultSlaveUnitType != NO_UNIT);
-							CvUnit* SlaveUnit = initUnit(DefaultSlaveUnitType, GC.getUnitInfo(DefaultSlaveUnitType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+							CvUnit* SlaveUnit = initUnit(DefaultSlaveUnitType, GC.getUnitInfo(DefaultSlaveUnitType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 						}
 					}
 				}
@@ -21317,7 +21286,7 @@ void CvPlayer::checkForAfricanSlaves()
 	CvCity* pLoopCity = NULL;
 	CvCity* locationToAppear = NULL;
 	int iLoop;
-	locationToAppear = firstCity(&iLoop); 
+	locationToAppear = firstCity(&iLoop);
 
 	//for safety
 	if (locationToAppear == NULL)
@@ -21346,23 +21315,23 @@ void CvPlayer::checkForAfricanSlaves()
 	int totalslavesprice = baseslaveprice - discount;
 	totalslavesprice = numSlavesOffered * totalslavesprice * gamespeedMod / 100;
 
-	//simple logik for AI
+	//simple logic for AI
 	if (!isHuman())
 	{
 		if (getGold() > totalslavesprice * 2)
 		{
-			CvPlayerAI& kPlayerAI = GET_PLAYER((PlayerTypes) getID());
 			// TAC - AI Military Buildup - koma13
-			if (!kPlayerAI.AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
+			if (!AI().AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
 			{
 				//create the prisoners
 				UnitTypes SlaveType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_AFRICAN_SLAVE"));
 				CvUnit* SlaveUnit;
 				for (int i=0;i<numSlavesOffered;i++)
 				{
-					SlaveUnit = initUnit(SlaveType, GC.getUnitInfo(SlaveType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+					SlaveUnit = initUnit(SlaveType, GC.getUnitInfo(SlaveType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 				}
 				//pay the king
+				OOS_LOG("CvPlayer::checkForAfricanSlaves AI", totalslavesprice);
 				King.changeGold(totalslavesprice);
 				King.AI_changeAttitudeExtra(getID(), 1);
 				changeGold(-totalslavesprice);
@@ -21407,7 +21376,7 @@ void CvPlayer::checkForPrisonsCrowded()
 		return;
 	}
     int gamespeedMod = GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getTrainPercent();
-	
+
 	//check if min round for feature activation has been reached
 	if(GC.getGame().getGameTurn() < GC.getMIN_ROUND_PRISONS_CROWDED()*gamespeedMod/100)
 	{
@@ -21424,7 +21393,7 @@ void CvPlayer::checkForPrisonsCrowded()
 	CvCity* pLoopCity = NULL;
 	CvCity* locationToAppear = NULL;
 	int iLoop;
-	locationToAppear = firstCity(&iLoop); 
+	locationToAppear = firstCity(&iLoop);
 
     //for safety
 	if (locationToAppear == NULL)
@@ -21454,23 +21423,23 @@ void CvPlayer::checkForPrisonsCrowded()
 
 	totalprisonersprice = numPrisonersOffered * totalprisonersprice * gamespeedMod / 100;
 
-	//simple logik for AI
+	//simple logic for AI
 	if (!isHuman())
 	{
 		if (getGold() > totalprisonersprice * 2)
 		{
-			CvPlayerAI& kPlayerAI = GET_PLAYER((PlayerTypes) getID());
 			// TAC - AI Military Buildup - koma13
-			if (!kPlayerAI.AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
+			if (!AI().AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
 			{
 				//create the prisoners
 				UnitTypes PrisonerType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_PRISONER"));
 				CvUnit* PrisonerUnit;
 				for (int i=0;i<numPrisonersOffered;i++)
 				{
-					PrisonerUnit = initUnit(PrisonerType, GC.getUnitInfo(PrisonerType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+					PrisonerUnit = initUnit(PrisonerType, GC.getUnitInfo(PrisonerType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 				}
 				//pay the king
+				OOS_LOG("CvPlayer::checkForPrisonsCrowded AI", totalprisonersprice);
 				King.changeGold(totalprisonersprice);
 				King.AI_changeAttitudeExtra(getID(), 1);
 				changeGold(-totalprisonersprice);
@@ -21533,7 +21502,7 @@ void CvPlayer::checkForRevolutionaryNoble()
 	CvCity* pLoopCity = NULL;
 	CvCity* locationToAppear = NULL;
 	int iLoop;
-	locationToAppear = firstCity(&iLoop); 
+	locationToAppear = firstCity(&iLoop);
 
     //for safety
 	if (locationToAppear == NULL)
@@ -21560,20 +21529,20 @@ void CvPlayer::checkForRevolutionaryNoble()
 	randompart = GC.getGameINLINE().getSorenRandNum(randompart, "NobleRandomPart");
 	int pricetopay = basenobleprice - randompart;
 
-	//simple logik for AI
+	//simple logic for AI
 	if (!isHuman())
 	{
 		if (getGold() > pricetopay * 2)
 		{
-			CvPlayerAI& kPlayerAI = GET_PLAYER((PlayerTypes) getID());
 			// TAC - AI Military Buildup - koma13
-			if (!kPlayerAI.AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
+			if (!AI().AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
 			{
 				//create the noble
 				UnitTypes NobleType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_NOBLE"));
 				CvUnit* NobleUnit;
-				NobleUnit = initUnit(NobleType, GC.getUnitInfo(NobleType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+				NobleUnit = initUnit(NobleType, GC.getUnitInfo(NobleType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 				//pay the king
+				OOS_LOG("CvPlayer::checkForRevolutionNoble AI", pricetopay);
 				GET_PLAYER(getParent()).changeGold(pricetopay);
 				GET_PLAYER(getParent()).AI_changeAttitudeExtra(getID(), 5);
 				changeGold(-pricetopay);
@@ -21650,7 +21619,7 @@ void CvPlayer::checkForBishop()
 	CvCity* pLoopCity = NULL;
 	CvCity* locationToAppear = NULL;
 	int iLoop;
-	locationToAppear = firstCity(&iLoop); 
+	locationToAppear = firstCity(&iLoop);
 
     //for safety
 	if (locationToAppear == NULL)
@@ -21678,20 +21647,20 @@ void CvPlayer::checkForBishop()
 	randompart = GC.getGameINLINE().getSorenRandNum(randompart, "BishopRandomPart");
 	int pricetopay = basebishopprice - randompart;
 
-	//simple logik for AI
+	//simple logic for AI
 	if (!isHuman())
 	{
 		if (getGold() > pricetopay * 2)
 		{
-			CvPlayerAI& kPlayerAI = GET_PLAYER((PlayerTypes) getID());
 			// TAC - AI Military Buildup - koma13
-			if (!kPlayerAI.AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
+			if (!AI().AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
 			{
 				//create the bishop
 				UnitTypes BishopType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_BISHOP"));
 				CvUnit* BishopUnit;
-				BishopUnit = initUnit(BishopType, GC.getUnitInfo(BishopType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+				BishopUnit = initUnit(BishopType, GC.getUnitInfo(BishopType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 				//pay the king
+				OOS_LOG("CvPlayer::checkForBishop AI", pricetopay);
 				Church.changeGold(pricetopay);
 				changeGold(-pricetopay);
 				m_iTimerBishop = GC.getTIMER_BISHOP()*gamespeedMod/100;
@@ -21728,31 +21697,7 @@ void CvPlayer::checkForBishop()
 
 void CvPlayer::buyNativeMercs(PlayerTypes sellingPlayer, int price, bool mightbeangry)
 {
-	CvPlayer& Seller = GET_PLAYER(sellingPlayer);
-
-	//get City
-	CvCity* pLoopCity = NULL;
-	CvCity* locationToAppear = NULL;
-	int iLoop;
-	locationToAppear = firstCity(&iLoop); 
-
-	//for safety stop if no city
-	// R&R, ray safe mechanism to ensure that player gold never is negative
-	if (locationToAppear == NULL || getGold() < price)
-	{
-		return;
-	}
-
-	//exchanging gold
-	Seller.changeGold(price);
-	changeGold(-price);
-
-	//creating unit
-	//UnitTypes DefaultMercUnitType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("DEFAULT_MERC_UNIT_CLASS_ID"));
-	UnitTypes DefaultMercUnitType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_NATIVE_MERC"));
-	//UnitTypes DefaultMercUnitType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("DEFAULT_POPULATION_UNIT"));
-	FAssert(DefaultMercUnitType != NO_UNIT);
-	CvUnit* MercUnit = initUnit(DefaultMercUnitType, GC.getUnitInfo(DefaultMercUnitType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+	buyUnitFromPlayer(sellingPlayer, UNITCLASS_NATIVE_MERC, 1, "TXT_KEY_BOUGHT_NATIVE_MERC", price, LocationFlags::LocationFlagNone);
 
 	//now lets see if this player is angry because of low price
 	if(mightbeangry)
@@ -21760,13 +21705,9 @@ void CvPlayer::buyNativeMercs(PlayerTypes sellingPlayer, int price, bool mightbe
 		int randomAngryBecauseLowPrice = GC.getGameINLINE().getSorenRandNum(10, "Angry Low Native Merc Price");
 		if (randomAngryBecauseLowPrice > 5)
 		{
-			Seller.AI_changeAttitudeExtra(getID(), -1);
+			GET_PLAYER(sellingPlayer).AI_changeAttitudeExtra(getID(), -1);
 		}
 	}
-
-	CvWString szBuffer = gDLL->getText("TXT_KEY_BOUGHT_NATIVE_MERC");
-	gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, MercUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), MercUnit->getX(), MercUnit->getY(), true, true);
-
 }
 //End TAC Native Mercs
 
@@ -21790,7 +21731,7 @@ void CvPlayer::checkForRevolutionSupport()
 		{
 			locationToAppear = pLoopCity;
 			break;
-		}			
+		}
 	}
 
 	//for safety stop if no city
@@ -21809,7 +21750,7 @@ void CvPlayer::checkForRevolutionSupport()
 		{
 			// Erik: We also require that the player is on good terms with the potential supporter's king
 			if (potentialRevSupporter.getParent() != NO_PLAYER && GET_PLAYER(potentialRevSupporter.getParent()).AI_getAttitude(getID(), false) >= GC.getDefineINT("MIN_ATTITUDE_FOR_SUPPORT"))
-			{ 
+			{
 				//checking random chance for merc
 				int randomSupportValue = GC.getGameINLINE().getSorenRandNum(1000, "Rev Support");
 				int supportChance = GC.getDefineINT("BASE_CHANCE_FOR_SUPPORT");
@@ -21840,7 +21781,7 @@ void CvPlayer::checkForRevolutionSupport()
 						//creating the units
 						for (int i=0;i<supportAmount;i++)
 						{
-							CvUnit* SupportUnit = initUnit(DefaultSupportType, GC.getUnitInfo(DefaultSupportType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+							CvUnit* SupportUnit = initUnit(DefaultSupportType, GC.getUnitInfo(DefaultSupportType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 						}
 					}
 
@@ -21911,7 +21852,7 @@ void CvPlayer::checkForEuropeanWars()
 		{
 			locationToAppear = pLoopCity;
 			break;
-		}			
+		}
 	}
 
 	//for safety stop if no city
@@ -21950,7 +21891,7 @@ void CvPlayer::checkForEuropeanWars()
 			KingReinforcementType = (UnitTypes)GC.getCivilizationInfo(GET_PLAYER(getParent()).getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_KING_REINFORCEMENT_LAND"));
 		}
 		FAssert(KingReinforcementType != NO_UNIT);
-		CvUnit* ReinforcementUnit = initUnit(KingReinforcementType, GC.getUnitInfo(KingReinforcementType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+		CvUnit* ReinforcementUnit = initUnit(KingReinforcementType, GC.getUnitInfo(KingReinforcementType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 		m_iTimerEuropeanWars = GC.getTIMER_EUROPEAN_WARS()*gamespeedMod/100;
 	}
 
@@ -22009,7 +21950,7 @@ void CvPlayer::checkForStealingImmigrant()
 
 	// get price
 	int priceStealingImmigrant = GC.getDefineINT("BASE_STEALING_IMMIGRANT_PRICE");
-	
+
 	priceStealingImmigrant = priceStealingImmigrant * gamespeedMod / 100;
 
 	// simple case for AI
@@ -22021,7 +21962,7 @@ void CvPlayer::checkForStealingImmigrant()
 		// simply buy immigrant for cheaper price if AI has enough gold
 		if (getGold() > priceStealingImmigrant * 3)
 		{
-			int randomUnitSelectOnDock = GC.getGameINLINE().getSorenRandNum(CivEffect()->getNumUnitsOnDock(), "pick immigrant");
+			int randomUnitSelectOnDock = GC.getGameINLINE().getSorenRandNum(CivEffect().getNumUnitsOnDock(), "pick immigrant");
 			UnitTypes eBestUnit = getDocksNextUnit(randomUnitSelectOnDock);
 			if (NO_UNIT != eBestUnit)
 			{
@@ -22030,7 +21971,7 @@ void CvPlayer::checkForStealingImmigrant()
 
 				//CvWString szBuffer;
 				//szBuffer = gDLL->getText("TXT_KEY_NEW_IMMIGRANT_AVAILABLE_SHORT", GC.getCivilizationInfo(GET_PLAYER(getParent()).getCivilizationType()).getShortDescriptionKey(),  GC.getUnitInfo(eBestUnit).getTextKeyWide());
-				//gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eBestUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
+				//gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_UNIT_GREATPEOPLE", MESSAGE_TYPE_INFO, GC.getUnitInfo(eBestUnit).getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_UNIT_TEXT"));
 
 				gDLL->getInterfaceIFace()->setDirty(EuropeScreen_DIRTY_BIT, true);
 
@@ -22040,6 +21981,7 @@ void CvPlayer::checkForStealingImmigrant()
 					gDLL->getEventReporterIFace()->emmigrantAtDocks(getID(), pUnit->getID());
 				}
 
+				OOS_LOG("CvPlayer::checkForStealingImmigrants AI", priceStealingImmigrant);
 				changeGold(-priceStealingImmigrant);
 			}
 		}
@@ -22075,7 +22017,7 @@ void CvPlayer::checkForStealingImmigrant()
 		{
 			pDiplo->setDiploComment((DiploCommentTypes)GC.getInfoTypeForString("AI_DIPLOCOMMENT_STEALING_IMMIGRANT_CANT_AFFORD"));
 		}
-	
+
 		pDiplo->addDiploCommentVariable(GC.getCivilizationInfo(GET_PLAYER(potentialVictim.getParent()).getCivilizationType()).getShortDescriptionKey()); //getting Parent of Enemy for text
 		pDiplo->addDiploCommentVariable(priceStealingImmigrant); // price for text
 
@@ -22084,7 +22026,7 @@ void CvPlayer::checkForStealingImmigrant()
 		pDiplo->setData(potentialVictim.getID());
 
 		pDiplo->setAIContact(true);
-		gDLL->beginDiplomacy(pDiplo, getID());		
+		gDLL->beginDiplomacy(pDiplo, getID());
 	}
 
 	return;
@@ -22152,7 +22094,7 @@ void CvPlayer::checkForSmugglers()
 		{
 			locationToAppear = pLoopCity;
 			break;
-		}			
+		}
 	}
 
 	if (locationToAppear == NULL)
@@ -22163,15 +22105,15 @@ void CvPlayer::checkForSmugglers()
 	// simple logic for AI
 	if (!isHuman())
 	{
-		CvPlayerAI& kPlayerAI = GET_PLAYER((PlayerTypes) getID());
 		// TAC - AI Military Buildup - koma13
-		if (!kPlayerAI.AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
+		if (!AI().AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
 		{
 			//create the smuggling ship
 			UnitTypes SmugglingShipType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_SMUGGLING_SHIP"));
 			CvUnit* SmugglingShipUnit;
-			SmugglingShipUnit = initUnit(SmugglingShipType, GC.getUnitInfo(SmugglingShipType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+			SmugglingShipUnit = initUnit(SmugglingShipType, GC.getUnitInfo(SmugglingShipType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 			//pay
+			OOS_LOG("CvPlayer::checkForSmugglers AI", pricetopay);
 			changeGold(-pricetopay);
 			m_iTimerSmugglingShip = GC.getTIMER_SMUGGLING_SHIP()*gamespeedMod/100;
 		}
@@ -22195,7 +22137,7 @@ void CvPlayer::checkForSmugglers()
 
 // R&R, ray, Rangers - START
 void CvPlayer::checkForRangers()
-{	
+{
 	// not in Revolution
 	if(isInRevolution())
 	{
@@ -22240,24 +22182,23 @@ void CvPlayer::checkForRangers()
 	}
 
 	int gamespeedMod = GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getTrainPercent();
-    
+
 	int pricetopay = GC.getDefineINT("PRICE_RANGERS") * gamespeedMod / 100;
-	
+
 	// simple logic for AI
 	if (!isHuman())
 	{
-		CvPlayerAI& kPlayerAI = GET_PLAYER((PlayerTypes) getID());
 		// TAC - AI Military Buildup - koma13
 		if (getGold() > pricetopay)
 		{
-			if (!kPlayerAI.AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
+			if (!AI().AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
 			{
 				m_iTimerRanger = GC.getTIMER_RANGER() * gamespeedMod/100;
 				//create the ranger
 				UnitTypes RangerType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_RANGER"));
-				CvUnit* RangerUnit;
-				RangerUnit = initUnit(RangerType, GC.getUnitInfo(RangerType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+				CvUnit* RangerUnit = initUnit(RangerType, GC.getUnitInfo(RangerType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 				//pay
+				OOS_LOG("CvPlayer::checkForRangers AI", pricetopay);
 				changeGold(-pricetopay);
 			}
 		}
@@ -22289,7 +22230,7 @@ void CvPlayer::checkForRangers()
 
 // R&R, ray, Conquistadors - START
 void CvPlayer::checkForConquistadors()
-{	
+{
 	// not in Revolution
 	if(isInRevolution())
 	{
@@ -22314,7 +22255,7 @@ void CvPlayer::checkForConquistadors()
 		{
 			hasWarWithNatives = true;
 			break;
-		}	
+		}
 	}
 
 	if (!hasWarWithNatives)
@@ -22356,20 +22297,19 @@ void CvPlayer::checkForConquistadors()
 	// simple logic for AI
 	if (!isHuman())
 	{
-		CvPlayerAI& kPlayerAI = GET_PLAYER((PlayerTypes) getID());
 		// TAC - AI Military Buildup - koma13
-		if (!kPlayerAI.AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
-		{	
+		if (!AI().AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
+		{
 			int iMercRand = GC.getGameINLINE().getSorenRandNum(100, "AI should buy Mercenaries?");
 			if (iMercRand < GC.getDefineINT("AI_CHANCE_FOR_BUYING_MERCENARIES"))
 			{
 				int iMercPriceAI = pricetopay * GC.getDefineINT("AI_PRICE_PERCENT_FOR_BUYING_MERCENARIES") / 100;
 				if (getGold() > iMercPriceAI)
-				{								
+				{
 					m_iTimerConquistador = GC.getTIMER_CONQUISTADOR() * gamespeedMod /100 ;
 					//create the conquistador
 					UnitTypes ConquistadorType;
-					int conquistUnitRand = GC.getGameINLINE().getSorenRandNum(3, "Conquistadors Available");	
+					int conquistUnitRand = GC.getGameINLINE().getSorenRandNum(3, "Conquistadors Available");
 					if (conquistUnitRand == 1)
 					{
 						ConquistadorType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_MOUNTED_CONQUISTADOR"));
@@ -22379,8 +22319,9 @@ void CvPlayer::checkForConquistadors()
 						ConquistadorType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_CONQUISTADOR"));
 					}
 					CvUnit* ConquistadorUnit;
-					ConquistadorUnit = initUnit(ConquistadorType, GC.getUnitInfo(ConquistadorType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+					ConquistadorUnit = initUnit(ConquistadorType, GC.getUnitInfo(ConquistadorType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 					//pay
+					OOS_LOG("CvPlayer::checkForConquistadors AI", pricetopay);
 					changeGold(-iMercPriceAI);
 				}
 			}
@@ -22456,7 +22397,7 @@ void CvPlayer::checkForPirates()
 		{
 			locationToAppear = pLoopCity;
 			break;
-		}			
+		}
 	}
 
 	if (locationToAppear == NULL)
@@ -22491,15 +22432,15 @@ void CvPlayer::checkForPirates()
 	// simple logic for AI
 	if (!isHuman())
 	{
-		CvPlayerAI& kPlayerAI = GET_PLAYER((PlayerTypes) getID());
 		// TAC - AI Military Buildup - koma13
-		if (!kPlayerAI.AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
+		if (!AI().AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
 		{
 			//create the pirate ship
 			UnitTypes PirateShipType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_PIRATE_FRIGATE"));
 			CvUnit* PirateShipUnit;
-			PirateShipUnit = initUnit(PirateShipType, GC.getUnitInfo(PirateShipType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+			PirateShipUnit = initUnit(PirateShipType, GC.getUnitInfo(PirateShipType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 			//pay
+			OOS_LOG("CvPlayer::checkForPirates AI", pricetopay);
 			changeGold(-pricetopay);
 			m_iTimerPirates = GC.getTIMER_PIRATES() * GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getTrainPercent() / 100;
 		}
@@ -22535,8 +22476,24 @@ void CvPlayer::checkForEuropeanPeace()
 		return;
 	}
 
+	//WTP, ray, fix to prevent European Peace triggering directly after European Wars - START
+	//if there was European Wars triggered at least half to the timer needs to have passed
+	if(m_iTimerEuropeanWars > GC.getTIMER_EUROPEAN_WARS() / 2)
+	{
+		return;
+	}
+	//WTP, ray, fix to prevent European Peace triggering directly after European Wars - END
+
+	//WTP, ray, fix to prevent European Peace triggering directly after Royal Interventions - START
+	//if there was Royal Interventions triggered at least half to the timer needs to have passed
+	if(m_iTimerRoyalInterventions > GC.getTIMER_ROYAL_INTERVENTIONS() / 2)
+	{
+		return;
+	}
+	//WTP, ray, fix to prevent European Peace triggering directly after Royal Interventions - START
+
 	int gamespeedMod = GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getTrainPercent();
-    
+
 	int randomEuropePeaceValue = GC.getGameINLINE().getSorenRandNum(1000, "European Peace");
 	int peaceChance = GC.getBASE_CHANCE_EUROPE_PEACE();
 
@@ -22550,7 +22507,7 @@ void CvPlayer::checkForEuropeanPeace()
 	CvCity* pLoopCity = NULL;
 	CvCity* locationToAppear = NULL;
 	int iLoop;
-	locationToAppear = firstCity(&iLoop); 
+	locationToAppear = firstCity(&iLoop);
 
     //for safety
 	if (locationToAppear == NULL)
@@ -22626,7 +22583,15 @@ void CvPlayer::checkForRoyalIntervention()
 		m_iTimerRoyalInterventions = (m_iTimerRoyalInterventions - 1);
 		return;
 	}
-    
+
+	//WTP, ray, fix to prevent Royal Intervention triggering directly after European Wars - START
+	//if there was European Wars triggered at least half to the timer needs to have passed
+	if(m_iTimerEuropeanWars > GC.getTIMER_EUROPEAN_WARS() / 2)
+	{
+		return;
+	}
+	//WTP, ray, fix to prevent European Peace triggering directly after European Wars - END
+
 	int randomRoyalInterventionValue = GC.getGameINLINE().getSorenRandNum(1000, "Royal Interventions");
 	int iRoyalInterventionChance = GC.getBASE_CHANCE_ROYAL_INTERVENTIONS();
 
@@ -22640,7 +22605,7 @@ void CvPlayer::checkForRoyalIntervention()
 	CvCity* pLoopCity = NULL;
 	CvCity* locationToAppear = NULL;
 	int iLoop;
-	locationToAppear = firstCity(&iLoop); 
+	locationToAppear = firstCity(&iLoop);
 
     //for safety
 	if (locationToAppear == NULL)
@@ -22671,7 +22636,7 @@ void CvPlayer::checkForRoyalIntervention()
 	int gamespeedMod = GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getTrainPercent();
 	m_iTimerRoyalInterventions = GC.getTIMER_ROYAL_INTERVENTIONS() * gamespeedMod /100;
 
-	// we need the following variables: 
+	// we need the following variables:
 	// 1) Other colony at war : eColonialAtWarWith
 	// 2) Gold Price to pay : ROYAL_INTERVENTIONS_GOLD_PRICE, ROYAL_INTERVENTIONS_PERCENT_GOLD_PRICE_CHANGE_PER_ATTITUDE_POINT
 	// 3) Alternative Tax increase: ROYAL_INTERVENTIONS_TAX_INCREASE
@@ -22694,7 +22659,7 @@ void CvPlayer::checkForRoyalIntervention()
 	// Human Case
 	// handle this by DiploEvent with own king
 	if (isHuman())
-	{	
+	{
 		// only if we have enough Gold
 		if (getGold() > iGoldModifiedByAttitude)
 		{
@@ -22717,35 +22682,28 @@ void CvPlayer::checkForRoyalIntervention()
 	// directly handle it in logic
 	else
 	{
-		// if AI has the money
-		if (getGold() > iGoldModifiedByAttitude)
+		LocationFlags location;
+		location.deepCoastal = true;
+		location.europe = true;
+
+		if (buyUnitFromParentPlayer(getParent(), "UNITCLASS_ROYAL_INTERVENTIONS_SHIP", 1, "", 0, location, false, false))
 		{
-			changeGold(-iGoldModifiedByAttitude);
+			// it is possible to buy the ship from the parent player
+			buyUnitFromParentPlayer(getParent(), "UNITCLASS_ROYAL_INTERVENTIONS_LAND_UNIT_1", 1, "", 0, location, false, false);
+			buyUnitFromParentPlayer(getParent(), "UNITCLASS_ROYAL_INTERVENTIONS_LAND_UNIT_2", 1, "", 0, location, false, false);
+
+			// if AI has the money
+			if (getGold() > iGoldModifiedByAttitude)
+			{
+				OOS_LOG("CvPlayer::checkForRoyalIntervention AI", iGoldModifiedByAttitude);
+				changeGold(-iGoldModifiedByAttitude);
+			}
+			// otherwise AI needs to accept the tax
+			else
+			{
+				changeTaxRate(iAlternativeTaxIncrease);
+			}
 		}
-
-		// otherwise AI needs to accept the tax
-		else
-		{
-			changeTaxRate(iAlternativeTaxIncrease);
-		}
-
-		// we try to get the UnitTypes from the Parent to be save
-		UnitTypes RoyalInterventionShip = (UnitTypes)GC.getCivilizationInfo(GET_PLAYER(getParent()).getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_ROYAL_INTERVENTIONS_SHIP"));
-		UnitTypes RoyalInterventionLandUnit1 =(UnitTypes)GC.getCivilizationInfo(GET_PLAYER(getParent()).getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_ROYAL_INTERVENTIONS_LAND_UNIT_1"));
-		UnitTypes RoyalInterventionLandUnit2 =(UnitTypes)GC.getCivilizationInfo(GET_PLAYER(getParent()).getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_ROYAL_INTERVENTIONS_LAND_UNIT_2"));
-
-		//get City
-		int iLoop;
-		CvCity* locationToAppear = firstCity(&iLoop);
-
-		//just for safety
-		if (locationToAppear != NULL) 
-		{
-			//creating the units
-			CvUnit* RoyalInterventionShipUnit = initUnit(RoyalInterventionShip, GC.getUnitInfo(RoyalInterventionShip).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-			CvUnit* RoyalInterventionLandUnitA = initUnit(RoyalInterventionLandUnit1, GC.getUnitInfo(RoyalInterventionLandUnit1).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-			CvUnit* RoyalInterventionLandUnitB = initUnit(RoyalInterventionLandUnit2, GC.getUnitInfo(RoyalInterventionLandUnit2).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
-		}	
 	}
 	return;
 }
@@ -22850,7 +22808,7 @@ void CvPlayer::withDrawAllPrivateersToPortRoyal()
 		{
 			// these Units would now have to be withdrawn to Port Royal
 			// put them on the Starting Plot because from here the Unit can sail to Port Royal
-			pLoopUnit->setXY(pStartingPlot->getX_INLINE(), pStartingPlot->getY_INLINE());
+			pLoopUnit->jumpTo(pStartingPlot->coord());
 			pLoopUnit->sailToPortRoyal();
 		}
 	}
@@ -22905,7 +22863,7 @@ bool CvPlayer::tryGetNewBargainPriceBuy()
 	int attitudeLevel = GET_PLAYER(bargainPartner).AI_getAttitude(getID(), false);
 	int gamespeedMod = GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getTrainPercent();
 	int randomBase = 1000 + attitudeChanceImprovement * attitudeLevel;
-	
+
 	/// random network fix - start - Nightinggale
 	//int randomValue = GC.getGameINLINE().getSorenRandNum(randomBase, "Bargaining Buy");
 	int randomValue = std::rand() % randomBase;
@@ -22951,7 +22909,7 @@ int CvPlayer::AI_getAttitudeValue(PlayerTypes ePlayer)
 // R&R, ray, Pirates - START
 void CvPlayer::createEnemyPirates()
 {
-	// WTP, ray, for safety 
+	// WTP, ray, for safety
 	if (GC.getGameINLINE().getBarbarianPlayer() == NO_PLAYER)
 	{
 		return;
@@ -22987,18 +22945,18 @@ void CvPlayer::createEnemyPirates()
 	CvPlot* pBestPlot = NULL;
 	int iBestValue = MAX_INT;
 
-	for (int iI = 0; iI < GC.getMapINLINE().numPlotsINLINE(); iI++)
+	for (int iI = 0; iI < GC.getMap().numPlotsINLINE(); iI++)
 	{
-		CvPlot* pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(iI);
+		CvPlot* pLoopPlot = GC.getMap().plotByIndexINLINE(iI);
 
 		// WTP, ray, fix for Pirates being spawned on ice - we ensure they never spawn on a Terain Feature
 		if (pLoopPlot->getTeam() == NO_TEAM && pLoopPlot->isWater() && pLoopPlot->getTerrainType() != TERRAIN_LARGE_RIVERS && pLoopPlot->getTerrainType() != TERRAIN_LAKE && pLoopPlot->getTerrainType() != TERRAIN_ICE_LAKE && pLoopPlot->area()->hasEurope() && pLoopPlot->getNumUnits() == 0 && pLoopPlot->getFeatureType() == NO_FEATURE)
 		{
-			int iValue = (plotDistance(cityToAttack->getX_INLINE(), cityToAttack->getY_INLINE(), pLoopPlot->getX_INLINE(), pLoopPlot->getY_INLINE()) * 2);
+			int iValue = (plotDistance(cityToAttack->coord(), pLoopPlot->coord()) * 2);
 			if (pLoopPlot->area() != cityToAttack->area())
 			{
 				iValue *= 3;
-			}	
+			}
 			if (iValue < iBestValue)
 			{
 				iBestValue = iValue;
@@ -23085,7 +23043,7 @@ void CvPlayer::checkForContinentalGuard()
 				//continentalGuardDonator = (PlayerTypes) iPlayer;
 				bestvalue = randnum;
 			}
-			
+
 		}
 	}
 
@@ -23094,17 +23052,17 @@ void CvPlayer::checkForContinentalGuard()
 		return;
 	}
 
-	//simple logik for AI
+	//simple logic for AI
 	if (!isHuman())
 	{
-		CvPlayerAI& kPlayerAI = GET_PLAYER((PlayerTypes) getID());
-		if (!kPlayerAI.AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
+		if (!AI().AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
 		{
 			//create the Continental Guard
 			UnitTypes ContinentalGuardType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_CONTINENTAL_GUARD"));
 			CvUnit* ContinentalGuardUnit;
-			ContinentalGuardUnit = initUnit(ContinentalGuardType, GC.getUnitInfo(ContinentalGuardType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+			ContinentalGuardUnit = initUnit(ContinentalGuardType, GC.getUnitInfo(ContinentalGuardType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 			//pay
+			OOS_LOG("CvPlayer::checkForMortar AI1", pricetopay);
 			changeGold(-pricetopay);
 			m_iTimerContinentalGuard = GC.getTIMER_CONTINENTAL_GUARD()*gamespeedMod/100;
 		}
@@ -23202,7 +23160,7 @@ void CvPlayer::checkForMortar()
 				mortarDonator = potentialRevSupporter.getParent();
 				bestvalue = randnum;
 			}
-			
+
 		}
 	}
 
@@ -23211,17 +23169,17 @@ void CvPlayer::checkForMortar()
 		return;
 	}
 
-	//simple logik for AI
+	//simple logic for AI
 	if (!isHuman())
 	{
-		CvPlayerAI& kPlayerAI = GET_PLAYER((PlayerTypes) getID());
-		if (!kPlayerAI.AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
+		if (!AI().AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
 		{
 			//create the Mortar
 			UnitTypes MortarType = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_MORTAR"));
 			CvUnit* MortarUnit;
-			MortarUnit = initUnit(MortarType, GC.getUnitInfo(MortarType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+			MortarUnit = initUnit(MortarType, GC.getUnitInfo(MortarType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 			//pay
+			OOS_LOG("CvPlayer::checkForMortar AI2", pricetopay);
 			changeGold(-pricetopay);
 			m_iTimerMortar = GC.getTIMER_MORTAR()*gamespeedMod/100;
 		}
@@ -23285,30 +23243,32 @@ void CvPlayer::checkForMilitiaOrUnrest()
 				{
 					int randomMilitiaValue = GC.getGameINLINE().getSorenRandNum(1000, "Militia Rand");
 					int randomUnrestValue = GC.getGameINLINE().getSorenRandNum(1000, "Unrest Rand");
-					
+
 					if (chanceForMilitia > randomMilitiaValue && getGold() >= pricetopay && pLoopCity->getYieldStored(YIELD_FOOD) > foodQty)
 					{
 						//create the Militia
+						OOS_LOG_3("Creating militia", CvString(pLoopCity->getName()).c_str(), getTypeStr(MilitiaType));
 						CvUnit* MilitiaUnit = initUnit(MilitiaType, GC.getUnitInfo(MilitiaType).getDefaultProfession(), pLoopCity->getX_INLINE(), pLoopCity->getY_INLINE(), NO_UNITAI);
 						//pay
+						OOS_LOG("CvPlayer::checkForMilitiaOrUnrest Human get militia", pricetopay);
 						changeGold(-pricetopay);
 						pLoopCity->changeYieldStored(YIELD_FOOD, -foodQty);
 						// add message
 						CvWString szBuffer = gDLL->getText("TXT_KEY_CITY_LEVIED_MILITIA_FOR_PROTECTION", pLoopCity->getNameKey());
-						gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, MilitiaUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), MilitiaUnit->getX(), MilitiaUnit->getY(), true, true);
+						gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, MilitiaUnit, "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_MINOR_EVENT, MilitiaUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 					}
-	
+
 					else if(chanceForUnrest > randomUnrestValue)
 					{
 						int unrestTime = (pLoopCity->getPopulation() / 10);
-						if (unrestTime < 2) 
+						if (unrestTime < 2)
 						{
 							unrestTime = 2;
 						}
 						pLoopCity->setOccupationTimer(unrestTime);
 						// add message
 						CvWString szBuffer = gDLL->getText("TXT_KEY_CITY_UNREST_BECAUSE_MISSING_PROTECTION", pLoopCity->getNameKey());
-						gDLL->getInterfaceIFace()->addMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_CITYCAPTURED", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), pLoopCity->getX_INLINE(), pLoopCity->getY_INLINE(), true, true);
+						gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, pLoopCity, "AS2D_CITYCAPTURED", MESSAGE_TYPE_MAJOR_EVENT, ARTFILEMGR.getInterfaceArtInfo("WORLDBUILDER_CITY_EDIT")->getPath(), (ColorTypes)GC.getInfoTypeForString("COLOR_RED"), true, true);
 					}
 				}
 
@@ -23318,8 +23278,9 @@ void CvPlayer::checkForMilitiaOrUnrest()
 					if (getGold() > pricetopay && pLoopCity->getYieldStored(YIELD_FOOD) > foodQty)
 					{
 						//create the Militia
-						CvUnit* MilitiaUnit = initUnit(MilitiaType, GC.getUnitInfo(MilitiaType).getDefaultProfession(), pLoopCity->getX_INLINE(), pLoopCity->getY_INLINE(), NO_UNITAI);
+						CvUnit* MilitiaUnit = initUnit(MilitiaType, GC.getUnitInfo(MilitiaType).getDefaultProfession(), pLoopCity->coord(), NO_UNITAI);
 						//pay
+						OOS_LOG("CvPlayer::checkForMilitiaOrUnrest AI get militia", pricetopay);
 						changeGold(-pricetopay);
 						pLoopCity->changeYieldStored(YIELD_FOOD, -foodQty);
 					}
@@ -23367,7 +23328,7 @@ void CvPlayer::checkForChurchContact()
 	CvCity* pLoopCity = NULL;
 	CvCity* locationToAppear = NULL;
 	int iLoop;
-	locationToAppear = firstCity(&iLoop); 
+	locationToAppear = firstCity(&iLoop);
 
     //for safety
 	if (locationToAppear == NULL)
@@ -23400,14 +23361,14 @@ void CvPlayer::checkForChurchContact()
 	{
 		if (getGold() > pricetopay * 2)
 		{
-			CvPlayerAI& kPlayerAI = GET_PLAYER((PlayerTypes) getID());
 			// TAC - AI Military Buildup - koma13
-			if (!kPlayerAI.AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
+			if (!AI().AI_isStrategy(STRATEGY_MILITARY_BUILDUP))
 			{
 				// reward is to lower immigration threshold multiplier
 				setImmigrationThresholdMultiplier(((getImmigrationThresholdMultiplier() * 90) / 100));
 
 				// pay
+				OOS_LOG("CvPlayer::checkForChurchContact", pricetopay);
 				ChurchPlayer.changeGold(pricetopay);
 				changeGold(-pricetopay);
 
@@ -23460,16 +23421,21 @@ int CvPlayer::getChurchFavourPrice()
 // R&R, ray, Church Favours - END
 
 //WTP, ray Kings Used Ship - START
-void CvPlayer::cacheUsedShipData(int iUsedShipPrice, int iUsedShipClassType)
-{
-	m_iCachedUsedShipPrice = iUsedShipPrice;
-	m_iCachedUsedShipClassTypeID = iUsedShipClassType;
-	return;
-}
-
-int CvPlayer::getUsedShipPrice(int iUsedShipClassType)
+int CvPlayer::getUsedShipPrice(UnitClassTypes iUsedShipClassType) const
 {
 	int iPrice = 0;
+
+	CvRandom aSyncRandom;
+	aSyncRandom.reseed(m_ulRandomSeed);
+
+	for (int i = 0; i < getParent(); ++i)
+	{
+		aSyncRandom.get(5);
+		aSyncRandom.get(5);
+		aSyncRandom.get(5);
+		aSyncRandom.get(5);
+		aSyncRandom.get(5);
+	}
 
 	UnitTypes eUnit = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(iUsedShipClassType);
 	if (eUnit != NO_UNIT)
@@ -23479,8 +23445,8 @@ int CvPlayer::getUsedShipPrice(int iUsedShipClassType)
 		// we now calculate the discount percent
 		int iMinDiscountForNewShipsPercent = GC.getDefineINT("MIN_DISCOUNT_USED_SHIP_PERCENT");
 		int iMaxDiscountForNewShipsPercent = GC.getDefineINT("MAX_DISCOUNT_USED_SHIP_PERCENT");
-		
-		int iDiscountRandPercent = std::max(iMinDiscountForNewShipsPercent, GC.getGameINLINE().getSorenRandNum(iMaxDiscountForNewShipsPercent, "random used ship discount"));
+
+		int iDiscountRandPercent = std::max(iMinDiscountForNewShipsPercent, (int)aSyncRandom.get(iMaxDiscountForNewShipsPercent));
 
 		// we modify the price by the attitude of the King
 		int iKingsAttitude = GET_PLAYER(getParent()).AI_getAttitudeVal(getID());
@@ -23498,20 +23464,30 @@ int CvPlayer::getUsedShipPrice(int iUsedShipClassType)
 	return iPrice;
 }
 
-int CvPlayer::getRandomUsedShipClassTypeID()
+UnitClassTypes CvPlayer::getRandomUsedShipClassTypeID() const
 {
 	UnitClassTypes eBestUnitClass = NO_UNITCLASS;
 	int iBestLastCompareValue = 0;
 
-	for (int iI = 0; iI < NUM_UNITCLASS_TYPES; ++iI)
+	CvRandom aSyncRandom;
+	aSyncRandom.reseed(m_ulRandomSeed);
+
+	for (int i = 0; i < getParent(); ++i)
 	{
-		int iUnitClassCompareRand = GC.getGameINLINE().getSorenRandNum(100, "Used Ship Class Rand");
+		aSyncRandom.get(5);
+		aSyncRandom.get(5);
+		aSyncRandom.get(5);
+	}
+
+	for (UnitClassTypes iI = FIRST_UNITCLASS; iI < NUM_UNITCLASS_TYPES; ++iI)
+	{
+		int iUnitClassCompareRand = aSyncRandom.get(836);
 		if (iUnitClassCompareRand > iBestLastCompareValue)
 		{
 			UnitTypes eUnit = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(iI);
 			if (eUnit != NULL && GC.getUnitInfo(eUnit).getDomainType() == DOMAIN_SEA && GC.getUnitInfo(eUnit).getEuropeCost() > 0 && getGold() > GC.getUnitInfo(eUnit).getEuropeCost())
 			{
-				eBestUnitClass = (UnitClassTypes)iI;
+				eBestUnitClass = iI;
 				// we perfer weaker combat vessels, so we substract combat value so a Trade Vessel might get a better value
 				iBestLastCompareValue = iUnitClassCompareRand - (GC.getUnitInfo(eUnit).getCombat() / 2);
 			}
@@ -23543,7 +23519,7 @@ bool CvPlayer::isKingWillingToTradeUsedShips()
 	// here we check first turn
 	int iDefaultFirstTurnForNewShips = GC.getDefineINT("FIRST_TURN_USED_SHIPS_AVAILABLE");
 	int iGameSpeedModifier = GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getStoragePercent();
-	int iFirstTurnForNewShips = iDefaultFirstTurnForNewShips * iGameSpeedModifier / 100; 
+	int iFirstTurnForNewShips = iDefaultFirstTurnForNewShips * iGameSpeedModifier / 100;
 	if (GC.getGameINLINE().getElapsedGameTurns() < iFirstTurnForNewShips)
 	{
 		return false;
@@ -23575,14 +23551,14 @@ void CvPlayer::decreaseCounterForUsedShipDeals()
 		{
 			// we post a message that Used Ships may be available
 			CvWString szBuffer = gDLL->getText("TXT_KEY_USED_SHIP_BARGAIN_AVAILABLE");
-			gDLL->getInterfaceIFace()->addMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_POSITIVE_DINK", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
+			gDLL->UI().addPlayerMessage(getID(), true, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_POSITIVE_DINK", MESSAGE_TYPE_MINOR_EVENT, NULL, (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"));
 		}
 	}
 }
 
 void CvPlayer::doAILogicforUsedShipDeals()
 {
-	// comment: 
+	// comment:
 	// The call to this function already checks that it is not Human
 	// isKingWillingToTradeUsedShips should check the rest - should also catch non-European
 
@@ -23623,7 +23599,7 @@ void CvPlayer::doAILogicforUsedShipDeals()
 
 	// we count the Cities
 	int iNumCities = getNumCities();
-	
+
 	// we exit if there are no Cities, and no other Ships
 	if (iNumCities == 0)
 	{
@@ -23631,7 +23607,7 @@ void CvPlayer::doAILogicforUsedShipDeals()
 	}
 
 	// now let us check the Ship and the Price it would cost
-	int iShipClassTypeID = getRandomUsedShipClassTypeID();
+	UnitClassTypes iShipClassTypeID = getRandomUsedShipClassTypeID();
 
 	// we did not get any ship
 	if (iShipClassTypeID == -1)
@@ -23691,7 +23667,7 @@ void CvPlayer::resetCounterForUsedShipDeals()
 	return;
 }
 
-void CvPlayer::acquireUsedShip(int iUsedShipClassType, int iPrice)
+void CvPlayer::acquireUsedShip(UnitClassTypes iUsedShipClassType, int iPrice)
 {
 	// we leave if there is no City, just for safety, otherwise AI might potentially also have issues using the Ship
 	// we spawn however in Europe
@@ -23716,16 +23692,16 @@ void CvPlayer::acquireUsedShip(int iUsedShipClassType, int iPrice)
 	CvPlot* pStartingPlot = getStartingPlot();
 
 	if (NO_UNIT != eUnit && NULL != pStartingPlot)
-	{	
+	{
 		// we init the Used Ship as Unit from its Unit Class in Europe
 		// code below in comments would be in Colonies - as alternative
-		// CvUnit* pUnit = initUnit(eUnit, NO_PROFESSION, pCity->getX_INLINE(), pCity->getY_INLINE());
+		// CvUnit* pUnit = initUnit(eUnit, NO_PROFESSION, pCity->coord());
 		CvUnit* pUnit = initUnit(eUnit, NO_PROFESSION, INVALID_PLOT_COORD, INVALID_PLOT_COORD);
         if (pUnit != NULL)
 		{
 			pUnit->setUnitTravelState(UNIT_TRAVEL_STATE_IN_EUROPE, false);
 			//add unit to map after setting Europe state so that it doesn't bump enemy units
-			pUnit->addToMap(pStartingPlot->getX_INLINE(), pStartingPlot->getY_INLINE());
+			pUnit->addToMap(pStartingPlot->coord());
 
 			// we damage the Ship a tiny bit
 			int iMin_Damage_UsedShips = GC.getDefineINT("MIN_DAMAGE_PERCENT_USED_SHIPS");
@@ -23742,13 +23718,15 @@ void CvPlayer::acquireUsedShip(int iUsedShipClassType, int iPrice)
 			int iXPRand = std::max(iMin_XP_UsedShips, GC.getGameINLINE().getSorenRandNum(iMax_XP_UsedShips, "random used ship XP"));
 			pUnit->setExperience(iXPRand);
 
+			OOS_LOG_3("CvPlayer::acquireUsedShip", getTypeStr(eUnit), iPrice);
+
 			// we pay the Gold
 			changeGold(-iPrice);
 
 			// we post a message
 			CvWString szBuffer;
 			szBuffer = gDLL->getText("TXT_KEY_USED_SHIP_BOUGHT", pUnit->getNameKey(), pUnit->getUnitInfo().getTextKeyWide(), iPrice);
-			gDLL->getInterfaceIFace()->addMessage(pUnit->getOwnerINLINE(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_POSITIVE_DINK", MESSAGE_TYPE_MINOR_EVENT, pUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), pStartingPlot->getX_INLINE(), pStartingPlot->getY_INLINE(), true, true);
+			gDLL->UI().addPlayerMessage(pUnit->getOwnerINLINE(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, pStartingPlot, "AS2D_POSITIVE_DINK", MESSAGE_TYPE_MINOR_EVENT, pUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
 		}
 	}
 
@@ -23758,16 +23736,18 @@ void CvPlayer::acquireUsedShip(int iUsedShipClassType, int iPrice)
 
 
 // WTP, ray, Foreign Kings, buy Immigrants - START
-void CvPlayer::cacheForeignImmigrantData(int iForeignImmigrantPrice, int iForeignImmigrantClassTypeID)
-{
-	m_iCachedForeignImmigrantPrice = iForeignImmigrantPrice;
-	m_iCachedForeignImmigrantClassTypeID = iForeignImmigrantClassTypeID;
-	return;
-}
-
-int CvPlayer::getForeignImmigrantPrice(int iForeignImmigrantClassType, int iForeignKingID)
+int CvPlayer::getForeignImmigrantPrice(UnitClassTypes iForeignImmigrantClassType, int iForeignKingID) const
 {
 	int iPrice = 0;
+
+	CvRandom aSyncRandom;
+	aSyncRandom.reseed(m_ulRandomSeed);
+
+	for (int i = 0; i < iForeignKingID; ++i)
+	{
+		aSyncRandom.get(5);
+		aSyncRandom.get(5);
+	}
 
 	UnitTypes eUnit = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(iForeignImmigrantClassType);
 	if (eUnit != NO_UNIT)
@@ -23777,8 +23757,8 @@ int CvPlayer::getForeignImmigrantPrice(int iForeignImmigrantClassType, int iFore
 		// we now calculate the discount percent
 		int iMinDiscountForeignImmigrantPercent = GC.getDefineINT("MIN_DISCOUNT_FOREIGN_IMMIGRANTS_PERCENT");
 		int iMaxDiscountForeignImmigrantPercent = GC.getDefineINT("MAX_DISCOUNT_FOREIGN_IMMIGRANTS_PERCENT");
-		
-		int iDiscountRandPercent = std::max(iMinDiscountForeignImmigrantPercent, GC.getGameINLINE().getSorenRandNum(iMaxDiscountForeignImmigrantPercent, "random foreign immigrant discount"));
+
+		int iDiscountRandPercent = std::max(iMinDiscountForeignImmigrantPercent, (int)aSyncRandom.get(iMaxDiscountForeignImmigrantPercent));
 
 		// we modify the price by the attitude of the King
 		int iKingsAttitude = GET_PLAYER((PlayerTypes) iForeignKingID).AI_getAttitudeVal(getID());
@@ -23796,24 +23776,34 @@ int CvPlayer::getForeignImmigrantPrice(int iForeignImmigrantClassType, int iFore
 	return iPrice;
 }
 
-int CvPlayer::getRandomForeignImmigrantClassTypeID()
+UnitClassTypes CvPlayer::getRandomForeignImmigrantClassTypeID(int iKingID) const
 {
 	UnitClassTypes eBestUnitClass = NO_UNITCLASS;
 	int iBestLastCompareValue = 0;
 
-	for (int iI = 0; iI < NUM_UNITCLASS_TYPES; ++iI)
+	CvRandom aSyncRandom;
+	aSyncRandom.reseed(m_ulRandomSeed);
+	for (int i = 0; i < iKingID; i++)
 	{
-		int iUnitClassCompareRand = GC.getGameINLINE().getSorenRandNum(100, "Foreign Immigrant Class Rand");
+		// move the random seed a bit
+		aSyncRandom.get(1);
+		aSyncRandom.get(2);
+		aSyncRandom.get(3);
+	}
+
+	for (UnitClassTypes iI = FIRST_UNITCLASS; iI < NUM_UNITCLASS_TYPES; ++iI)
+	{
+		int iUnitClassCompareRand = aSyncRandom.get(438);
 		if (iUnitClassCompareRand > iBestLastCompareValue)
 		{
 			UnitTypes eUnit = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(iI);
-			
+
 			if (eUnit != NULL && GC.getUnitInfo(eUnit).getDomainType() == DOMAIN_LAND && GC.getUnitInfo(eUnit).getEuropeCost() > 0 && getGold() > GC.getUnitInfo(eUnit).getEuropeCost())
 			{
 				// we are looking only for Experts, but also for Colonists thus check isFound
 				if (!GC.getUnitInfo(eUnit).LbD_canBecomeExpert() && !GC.getUnitInfo(eUnit).LbD_canEscape() && !GC.getUnitInfo(eUnit).LbD_canGetFree() && GC.getUnitInfo(eUnit).isFound())
 				{
-					eBestUnitClass = (UnitClassTypes)iI;
+					eBestUnitClass = iI;
 					iBestLastCompareValue = iUnitClassCompareRand;
 				}
 			}
@@ -23876,7 +23866,7 @@ bool CvPlayer::isForeignKingWillingToTradeImmigrants(int iForeignKingID)
 	// here we check first turn
 	int iDefaultFirstForeignImmigrants = GC.getDefineINT("FIRST_TURN_FOREIGN_IMMIGRANTS_AVAILABLE");
 	int iGameSpeedModifier = GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getStoragePercent();
-	int iFirstTurnForForeignImmigrants = iDefaultFirstForeignImmigrants * iGameSpeedModifier / 100; 
+	int iFirstTurnForForeignImmigrants = iDefaultFirstForeignImmigrants * iGameSpeedModifier / 100;
 	if (GC.getGameINLINE().getElapsedGameTurns() < iFirstTurnForForeignImmigrants)
 	{
 		return false;
@@ -23911,7 +23901,7 @@ void CvPlayer::decreaseCounterForForeignKingImmigrantsDeals()
 
 void CvPlayer::doAILogicforForeignImmigrants()
 {
-	// comment: 
+	// comment:
 	// The call to this function already checks that it is not Human
 
 	if(!isPlayable())
@@ -23940,7 +23930,7 @@ void CvPlayer::doAILogicforForeignImmigrants()
 	// here we check first turn
 	int iDefaultFirstForeignImmigrants = GC.getDefineINT("FIRST_TURN_FOREIGN_IMMIGRANTS_AVAILABLE");
 	int iGameSpeedModifier = GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getStoragePercent();
-	int iFirstTurnForForeignImmigrants = iDefaultFirstForeignImmigrants * iGameSpeedModifier / 100; 
+	int iFirstTurnForForeignImmigrants = iDefaultFirstForeignImmigrants * iGameSpeedModifier / 100;
 	if (GC.getGameINLINE().getElapsedGameTurns() < iFirstTurnForForeignImmigrants)
 	{
 		return;
@@ -23955,10 +23945,10 @@ void CvPlayer::doAILogicforForeignImmigrants()
 	}
 
 	// now let us check the Immigrant and the Price it would cost
-	int iForeignImmigrantTypeID = getRandomForeignImmigrantClassTypeID();
+	UnitClassTypes iForeignImmigrantTypeID = getRandomForeignImmigrantClassTypeID(-1);
 
 	// we did not get any ship
-	if (iForeignImmigrantTypeID == -1)
+	if (iForeignImmigrantTypeID == NO_UNITCLASS)
 	{
 		return;
 	}
@@ -23972,7 +23962,7 @@ void CvPlayer::doAILogicforForeignImmigrants()
 	{
 		acquireForeignImmigrant(iForeignImmigrantTypeID, iForeignImmigrantPrice);
 		resetCounterForForeignImmigrantsDeals(); // here we reset our own timer
-	} 
+	}
 
 	return;
 }
@@ -23980,7 +23970,7 @@ void CvPlayer::doAILogicforForeignImmigrants()
 
 // this is the counter at the Foreign King Player, it is reset from Python logic
 void CvPlayer::resetCounterForForeignImmigrantsDeals()
-{	
+{
 	// we increase the timer, to prevent Ship directly being bought again or save-scumming --> better in Diplo-Event that asks
 	int iDefaultForeignImmigrantTimer = GC.getDefineINT("FOREIGN_IMMIGRANTS_TIMER");
 	int iGameSpeedModifier = GC.getGameSpeedInfo(GC.getGameINLINE().getGameSpeedType()).getStoragePercent();
@@ -23989,7 +23979,7 @@ void CvPlayer::resetCounterForForeignImmigrantsDeals()
 	return;
 }
 
-void CvPlayer::acquireForeignImmigrant(int iForeignImmigrantClassType, int iPrice)
+void CvPlayer::acquireForeignImmigrant(UnitClassTypes iForeignImmigrantClassType, int iPrice)
 {
 	// we leave if there is no City, just for safety
 	int iLoop;
@@ -24011,15 +24001,16 @@ void CvPlayer::acquireForeignImmigrant(int iForeignImmigrantClassType, int iPric
 	// check the Colonization Specific Unit
 	UnitTypes eUnit = (UnitTypes)GC.getCivilizationInfo(getCivilizationType()).getCivilizationUnits(iForeignImmigrantClassType);
 
+	OOS_LOG_3("CvPlayer::acquireForeignImmigrant", getTypeStr(eUnit), iPrice);
+
 	// We simply spawn in the colonies
-	CvUnit* pUnit = initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pCity->getX_INLINE(), pCity->getY_INLINE(), NO_UNITAI);
+	CvUnit* pUnit = initUnit(eUnit, GC.getUnitInfo(eUnit).getDefaultProfession(), pCity->coord(), NO_UNITAI);
 
 	// we post a message
 	CvWString szBuffer;
 	szBuffer = gDLL->getText("TXT_KEY_FOREIGN_COLONIST_HIRED", pUnit->getUnitInfo().getTextKeyWide(), pCity->getNameKey());
-	gDLL->getInterfaceIFace()->addMessage(pUnit->getOwnerINLINE(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, "AS2D_POSITIVE_DINK", MESSAGE_TYPE_MINOR_EVENT, pUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), pCity->getX_INLINE(), pCity->getY_INLINE(), true, true);
-	
-	
+	gDLL->getInterfaceIFace()->addPlayerMessage(pUnit->getOwnerINLINE(), false, GC.getEVENT_MESSAGE_TIME(), szBuffer, pCity, "AS2D_POSITIVE_DINK", MESSAGE_TYPE_MINOR_EVENT, pUnit->getButton(), (ColorTypes)GC.getInfoTypeForString("COLOR_WHITE"), true, true);
+
 	return;
 }
 // WTP, ray, Foreign Kings, buy Immigrants - END
@@ -24062,14 +24053,14 @@ void CvPlayer::checkForChurchWar()
 	CvCity* pLoopCity = NULL;
 	CvCity* locationToAppear = NULL;
 	int iLoop;
-	locationToAppear = firstCity(&iLoop); 
+	locationToAppear = firstCity(&iLoop);
 
     //for safety
 	if (locationToAppear == NULL)
 	{
 		return;
 	}
-	
+
 
 	// check randoms
 	int randomValue = GC.getGameINLINE().getSorenRandNum(1000, "Church WAR");
@@ -24118,7 +24109,7 @@ void CvPlayer::checkForChurchWar()
 			ChurchReinforcementType = (UnitTypes)GC.getCivilizationInfo(GET_PLAYER(getParent()).getCivilizationType()).getCivilizationUnits(GC.getDefineINT("UNITCLASS_MOUNTED_CONQUISTADOR"));
 		}
 		//FAssert(ChurchReinforcementType != NO_UNIT);
-		CvUnit* ReinforcementUnit = initUnit(ChurchReinforcementType, GC.getUnitInfo(ChurchReinforcementType).getDefaultProfession(), locationToAppear->getX_INLINE(), locationToAppear->getY_INLINE(), NO_UNITAI);
+		CvUnit* ReinforcementUnit = initUnit(ChurchReinforcementType, GC.getUnitInfo(ChurchReinforcementType).getDefaultProfession(), locationToAppear->coord(), NO_UNITAI);
 
 		// reset timer
 		m_iTimerChurchWar = GC.getTIMER_CHURCH_WAR()*gamespeedMod/100;
@@ -24154,7 +24145,7 @@ void CvPlayer::checkForColonialInterventionInNativeWar()
 	{
 		return;
 	}
-	
+
 	// only if not in revolution
 	if(isInRevolution())
 	{
@@ -24247,7 +24238,7 @@ void CvPlayer::checkForColonialInterventionInNativeWar()
 	pDiplo->setData(kNativeAtWarWith.getID());
 	pDiplo->setAIContact(true);
 	gDLL->beginDiplomacy(pDiplo, getID());
-	
+
 	return;
 }
 //WTP, ray, Colonial Intervention In Native War - END
@@ -24260,7 +24251,7 @@ void CvPlayer::checkForColonialAndNativeAlliesWar()
 	{
 		return;
 	}
-	
+
 	// only if not in revolution
 	if(isInRevolution())
 	{
@@ -24317,49 +24308,54 @@ void CvPlayer::checkForColonialAndNativeAlliesWar()
 	// but is not at war with us or the Colonial Player
 	PlayerTypes eFirstNativeDiploPlayer = NO_PLAYER;
 
-	for (int iPlayer = 0; iPlayer < MAX_PLAYERS; ++iPlayer)
+	for (PlayerTypes ePlayer = FIRST_PLAYER; ePlayer < NUM_PLAYER_TYPES; ++ePlayer)
 	{
-		CvPlayer& kFirstNativePlayer = GET_PLAYER((PlayerTypes) iPlayer);
-		CvPlayer& kColonialPlayer = GET_PLAYER((PlayerTypes) eColonialPlayerAtWarWith);
+		CvPlayer& kFirstNativePlayer = GET_PLAYER(ePlayer);
+		CvPlayer& kColonialPlayer = GET_PLAYER(eColonialPlayerAtWarWith);
 		if (kFirstNativePlayer.isAlive() && kFirstNativePlayer.isNative() && !GET_TEAM(kFirstNativePlayer.getTeam()).isAtWar(getTeam()) && !GET_TEAM(kFirstNativePlayer.getTeam()).isAtWar(kColonialPlayer.getTeam()))
 		{
 			if (kFirstNativePlayer.canContact((PlayerTypes) getID()) && kFirstNativePlayer.canContact(eColonialPlayerAtWarWith))
 			{
 				// we also check attitudes, Native should like us and not like other Colonial AI
-				bool bFirstNativePlayerLikesUs = kFirstNativePlayer.AI_getAttitude((PlayerTypes) getID(), false) >= ATTITUDE_CAUTIOUS;
-				bool bFirstNativePlayerDislikesEnemy = kFirstNativePlayer.AI_getAttitude((PlayerTypes) kColonialPlayer.getID(), false) <= ATTITUDE_CAUTIOUS;
+				bool bFirstNativePlayerLikesUs = kFirstNativePlayer.AI_getAttitude(getID(), false) >= ATTITUDE_CAUTIOUS;
+				bool bFirstNativePlayerDislikesEnemy = kFirstNativePlayer.AI_getAttitude(kColonialPlayer.getID(), false) <= ATTITUDE_CAUTIOUS;
 				if (bFirstNativePlayerLikesUs && bFirstNativePlayerDislikesEnemy)
 				{
-					eFirstNativeDiploPlayer = (PlayerTypes) iPlayer;
+					eFirstNativeDiploPlayer = ePlayer;
 					break;
 				}
 			}
 		}
 	}
 
+	if (eFirstNativeDiploPlayer == NO_PLAYER)
+	{
+		return;
+	}
+
 	// now we need to find the second Native Player that knows both us and the Colonial Player
 	// but is not at war with us or the Colonial Player
 	PlayerTypes eSecondNativeDiploPlayer = NO_PLAYER;
 
-	for (int iPlayer = 0; iPlayer < MAX_PLAYERS; ++iPlayer)
+	for (PlayerTypes ePlayer = FIRST_PLAYER; ePlayer < NUM_PLAYER_TYPES; ++ePlayer)
 	{
 		// it must be a different one than the first Native Player of course
-		if ((PlayerTypes) iPlayer != eFirstNativeDiploPlayer)
+		if (ePlayer != eFirstNativeDiploPlayer)
 		{
-			CvPlayer& kSecondNativePlayer = GET_PLAYER((PlayerTypes) iPlayer);
-			CvPlayer& kFirstNativePlayerToCompare = GET_PLAYER((PlayerTypes) eFirstNativeDiploPlayer);
-			CvPlayer& kColonialPlayer = GET_PLAYER((PlayerTypes) eColonialPlayerAtWarWith);
+			CvPlayer& kSecondNativePlayer = GET_PLAYER(ePlayer);
+			CvPlayer& kFirstNativePlayerToCompare = GET_PLAYER(eFirstNativeDiploPlayer);
+			CvPlayer& kColonialPlayer = GET_PLAYER(eColonialPlayerAtWarWith);
 			// here we also check that the 2 Native Players are not at war
 			if (kSecondNativePlayer.isAlive() && kSecondNativePlayer.isNative() && !GET_TEAM(kSecondNativePlayer.getTeam()).isAtWar(getTeam()) && !GET_TEAM(kSecondNativePlayer.getTeam()).isAtWar(kColonialPlayer.getTeam()) && !GET_TEAM(kSecondNativePlayer.getTeam()).isAtWar(kFirstNativePlayerToCompare.getTeam()))
 			{
 				// we check if all of the players at least know each other - chances are high that they are on the same continent then
-				if (kSecondNativePlayer.canContact((PlayerTypes) getID()) && kSecondNativePlayer.canContact(eColonialPlayerAtWarWith) && kSecondNativePlayer.canContact(eFirstNativeDiploPlayer))
+				if (kSecondNativePlayer.canContact(getID()) && kSecondNativePlayer.canContact(eColonialPlayerAtWarWith) && kSecondNativePlayer.canContact(eFirstNativeDiploPlayer))
 				{
 					// here we also check attitudes but jus for our own, the other Native AI should not like us, max cautious
-					bool bSecondNativePlayerDisklikesUs = kSecondNativePlayer.AI_getAttitude((PlayerTypes) getID(), false) <= ATTITUDE_CAUTIOUS;
+					bool bSecondNativePlayerDisklikesUs = kSecondNativePlayer.AI_getAttitude(getID(), false) <= ATTITUDE_CAUTIOUS;
 					if (bSecondNativePlayerDisklikesUs)
 					{
-						eSecondNativeDiploPlayer = (PlayerTypes) iPlayer;
+						eSecondNativeDiploPlayer = ePlayer;
 						break;
 					}
 				}
@@ -24368,7 +24364,7 @@ void CvPlayer::checkForColonialAndNativeAlliesWar()
 	}
 
 	// we stop if we did not find 2 suitable Native Players
-	if (eFirstNativeDiploPlayer == NO_PLAYER || eSecondNativeDiploPlayer == NO_PLAYER)
+	if (eSecondNativeDiploPlayer == NO_PLAYER)
 	{
 		return;
 	}
@@ -24403,12 +24399,12 @@ void CvPlayer::checkForColonialAndNativeAlliesWar()
 
 	// reset timer
 	m_iTimerColoniesAndNativeAlliesWar = GC.getTIMER_COLONIES_AND_NATIVE_ALLIES_WAR()*gamespeedMod/100;
-	
+
 	CvDiploParameters* pDiplo = new CvDiploParameters(eFirstNativeDiploPlayer);
 	pDiplo->setDiploComment((DiploCommentTypes)GC.getInfoTypeForString("AI_DIPLOCOMMENT_COLONIES_AND_NATIVE_ALLIES_WAR"));
 
 	// now, let us fill the variables in the text above
-	
+
 	//getting Colonial Enemy Civ for text
 	CvPlayer& kColonialAtWarWith = GET_PLAYER((PlayerTypes) eColonialPlayerAtWarWith);
 	pDiplo->addDiploCommentVariable(kColonialAtWarWith.getCivilizationDescription());
@@ -24423,14 +24419,14 @@ void CvPlayer::checkForColonialAndNativeAlliesWar()
 
 	//setting ID of Colonial Enemy as Data
 	pDiplo->setData(kColonialAtWarWith.getID());
-	
+
 	//found no better way than to cash it like this without breaking the game
 	m_iDSecondPlayerFrenchNativeWar = kNativeAtWarWith.getID();
 
 	// letus then start the dialogue
 	pDiplo->setAIContact(true);
 	gDLL->beginDiplomacy(pDiplo, getID());
-	
+
 	return;
 }
 
@@ -24527,7 +24523,7 @@ bool CvPlayer::isYieldPortRoyalTradable(YieldTypes eYield) const
 {
 	FAssert(eYield >= 0 && eYield < NUM_YIELD_TYPES);
 
-	if (getParent() == NO_PLAYER) 
+	if (getParent() == NO_PLAYER)
 	{
 		return false;
 	}
@@ -24546,7 +24542,7 @@ bool CvPlayer::isYieldPortRoyalTradable(YieldTypes eYield) const
 	{
 		return false;
 	}
-	
+
 	return true; // Port Royal is not under the rule of your king
 	//return m_em_bYieldEuropeTradable[eYield];
 }
@@ -24574,12 +24570,12 @@ void CvPlayer::updateTransportThreshold(YieldTypes eYield)
 
 // R&R mod, vetiarvind, trade groups - start
 
-int CvPlayer::addTradeRouteGroup(const std::wstring groupName)
+int CvPlayer::addTradeRouteGroup(const std::wstring& groupName)
 {
 	for (CvIdVector<CvTradeRouteGroup>::iterator it = m_aTradeGroups.begin(); it != m_aTradeGroups.end(); ++it)
 	{
 		CvTradeRouteGroup* pTradeRouteGroup = it->second;
-		if (pTradeRouteGroup->getName(0).compare(groupName) == 0)			
+		if (pTradeRouteGroup->getName(0).compare(groupName) == 0)
 		{
 			pTradeRouteGroup->clearRoutes();
 			return pTradeRouteGroup->getID();
@@ -24587,7 +24583,7 @@ int CvPlayer::addTradeRouteGroup(const std::wstring groupName)
 	}
 
 	CvTradeRouteGroup* pTradeRouteGroup = m_aTradeGroups.addNew();
-	pTradeRouteGroup->setName(groupName.c_str());	
+	pTradeRouteGroup->setName(groupName.c_str());
 	if (getID() == GC.getGameINLINE().getActivePlayer())
 	{
 		gDLL->getInterfaceIFace()->setDirty(Domestic_Advisor_DIRTY_BIT, true);
@@ -24597,7 +24593,7 @@ int CvPlayer::addTradeRouteGroup(const std::wstring groupName)
 }
 
 
-bool CvPlayer::editTradeRouteGroup(int iId, const std::wstring groupName)
+bool CvPlayer::editTradeRouteGroup(int iId, const std::wstring& groupName)
 {
 	CvTradeRouteGroup* pTradeRouteGroup = getTradeRouteGroup(iId);
 	if (pTradeRouteGroup == NULL)
@@ -24605,36 +24601,36 @@ bool CvPlayer::editTradeRouteGroup(int iId, const std::wstring groupName)
 		return false;
 	}
 
-	for (CvIdVector<CvTradeRouteGroup>::iterator it = m_aTradeGroups.begin(); it != m_aTradeGroups.end(); ++it)	
+	for (CvIdVector<CvTradeRouteGroup>::iterator it = m_aTradeGroups.begin(); it != m_aTradeGroups.end(); ++it)
 	{
 		CvTradeRouteGroup* pLoopTradeRouteGroup = it->second;
-		if (pTradeRouteGroup->getName(0).compare(groupName) == 0)		
+		if (pTradeRouteGroup->getName(0).compare(groupName) == 0)
 		{
 			return false;
 		}
 	}
 
-	pTradeRouteGroup->setName(groupName.c_str());	
+	pTradeRouteGroup->setName(groupName.c_str());
 
 	return true;
 }
 
 
 bool CvPlayer::removeTradeRouteGroup(int iId)
-{	
-	return m_aTradeGroups.removeById(iId);	
+{
+	return m_aTradeGroups.removeById(iId);
 }
 
 
 
 CvTradeRouteGroup* CvPlayer::getTradeRouteGroupById(int tradeGroupId) const
-{		
+{
 	return m_aTradeGroups.getById(tradeGroupId);
 }
 
 CvTradeRouteGroup* CvPlayer::getTradeRouteGroup(int iIndex) const
-{		
-	FAssert(iIndex >= 0 && iIndex < getNumTradeGroups());	
+{
+	FAssert(iIndex >= 0 && iIndex < getNumTradeGroups());
 	int i = 0;
 	for (CvIdVector<CvTradeRouteGroup>::const_iterator it = m_aTradeGroups.begin(); it != m_aTradeGroups.end(); ++it)
 	{
@@ -24648,12 +24644,55 @@ CvTradeRouteGroup* CvPlayer::getTradeRouteGroup(int iIndex) const
 }
 
 int CvPlayer::getNumTradeGroups() const
-{	
+{
 	return m_aTradeGroups.size();
 }
 
 // R&R mod, vetiarvind, trade groups - end
 
+CvCivilizationInfo& CvPlayer::getCivilizationInfo() const
+{
+	return GC.getCivilizationInfo(getCivilizationType());
+}
+
+BuildingTypes CvPlayer::getBuildingType(BuildingClassTypes eBuildingClass) const
+{
+	return (BuildingTypes)getCivilizationInfo().getCivilizationBuildings(eBuildingClass);
+}
+
+UnitTypes CvPlayer::getUnitType(UnitClassTypes eUnitClass) const
+{
+	return (UnitTypes)getCivilizationInfo().getCivilizationUnits(eUnitClass);
+}
+
+void CvPlayer::testOOSanDoEvent(EventTypes eEvent, bool bSuccess) const
+{
+	EventTriggeredData kTriggeredData;
+	bool bLocalSuccess = canDoEvent(eEvent, kTriggeredData);
+	if (!bLocalSuccess != !bSuccess)
+	{
+		char szMessage[1024];
+
+		sprintf(szMessage, "OOS detected in CvPlayer::canDoEvent: %s", getTypeStr(eEvent));
+		gDLL->MessageBox(szMessage, "OOS Error");
+	}
+}
+
+void CvPlayer::testOOSanDoGoody(GoodyTypes eGoody, int iUnitID, bool bSuccess) const
+{
+	CvUnit* pUnit = getUnit(iUnitID);
+	if (pUnit != NULL)
+	{
+		bool bLocalSuccess = canReceiveGoody(pUnit->plot(), eGoody, pUnit);
+		if (!bLocalSuccess != !bSuccess)
+		{
+			char szMessage[1024];
+
+			sprintf(szMessage, "OOS detected in CvPlayer::canReceiveGoody: %s", getTypeStr(eGoody));
+			gDLL->MessageBox(szMessage, "OOS Error");
+		}
+	}
+}
 
 namespace
 {
@@ -24662,7 +24701,9 @@ namespace
 		// Erik: Sort the units by the absolute value
 		// since some units may have a negative cost
 		// to signify that they cannot be purchased
-		return abs(pUnitA->getUnitInfo().getEuropeCost()) > abs(pUnitB->getUnitInfo().getEuropeCost());
+		const int iUnitValueA = pUnitA->canFound(NULL) ? INT_MAX : abs(pUnitA->getUnitInfo().getEuropeCost());
+		const int iUnitValueB = pUnitB->canFound(NULL) ? INT_MAX : abs(pUnitB->getUnitInfo().getEuropeCost());
+		return iUnitValueA > iUnitValueB;
 	}
 }
 
@@ -24670,6 +24711,58 @@ void CvPlayer::sortEuropeUnits()
 {
 	std::sort(m_aEuropeUnits.begin(), m_aEuropeUnits.end(), compareUnitValue);
 }
+
+void CvPlayer::postLoadFixes()
+{
+	checkPower(true);
+
+	// prepare list of city professions (aka citizens)
+	if (getCivilizationType() != NO_CIVILIZATION)
+	{
+		m_validCityJobProfessions.clear();
+		// Notes from Nightinggale
+		// The xml data (all files) is ready at the end of CvXMLLoadUtility::readXMLfiles when bFirst is False
+		// CvXMLLoadUtility::readXMLfiles is in CvXMLLoadUtilitySet.cpp
+		//
+		// The CivEffect branch affects this in two ways:
+		// 1: it adds CvPlayer::canUseProfession (which might change during the game due to CivEffects)
+		// 2: it adds a class where the intended purpose is precisely what kValidCityJobs does (but it stores ProfessionTypes, not int)
+		//    Combine those two and CvPlayer can generate/cache kValidCityJobs whenever CivEffects change (rare event)
+		//
+		// Proposal: split kValidCityJobs into two and use bIndoorOnly to pick which one to use.
+		//    Looks like a simple way to reduce the number of professions to look at and overhead is minimal if cached in CvPlayer.
+		for (ProfessionTypes eProfession = FIRST_PROFESSION; eProfession < NUM_PROFESSION_TYPES; ++eProfession)
+		{
+			if (GC.getCivilizationInfo(getCivilizationType()).isValidProfession(eProfession) && GC.getProfessionInfo(eProfession).isCitizen())
+			{
+				m_validCityJobProfessions.push_back(eProfession);
+			}
+		}
+
+		m_em_iUnitClassMaking.reset();
+
+		int iLoop;
+		for (CvCity* pLoopCity = firstCity(&iLoop); pLoopCity != NULL; pLoopCity = nextCity(&iLoop))
+		{
+			const int iLength = pLoopCity->getOrderQueueLength();
+			for (int i = 0; i < iLength; ++i)
+			{
+				OrderData *order = pLoopCity->getOrderFromQueue(i);
+				if (order->getType() == ORDER_TRAIN)
+				{
+					const CvUnitInfo& kUnitInfo = GC.getUnitInfo(order->unit());
+					const UnitClassTypes eUnitType = kUnitInfo.getUnitClassType();
+					if (eUnitType != NO_UNITCLASS)
+					{
+						m_em_iUnitClassMaking.add(eUnitType, 1);
+					}
+				}
+			}
+		}
+	}
+	recalculatePlayerOppressometer();
+}
+
 
 void CvPlayer::writeDesyncLog(FILE *f) const
 {
@@ -24697,6 +24790,43 @@ void CvPlayer::writeDesyncLog(FILE *f) const
 		fprintf(f, "\tCity %d %S\n", iLoop, pLoopCity->getName().c_str());
 		pLoopCity->writeDesyncLog(f);
 	}
+}
+
+void CvPlayer::changeOppressometerDiscriminationModifier(int iChange)
+{
+	m_iOppressometerDiscriminationModifier += iChange;
+	FAssert(m_iOppressometerDiscriminationModifier > 0);
+}
+
+void CvPlayer::changeOppressometerForcedLaborModifier(int iChange)
+{
+	m_iOppressometerForcedLaborModifier += iChange;
+	FAssert(m_iOppressometerForcedLaborModifier > 0);
+}
+
+
+void CvPlayer::recalculatePlayerOppressometer()
+{
+	long long lOldPlayerOppressometer = m_lPlayerOppressometer;
+	m_lPlayerOppressometer = 0;
+	int iLoop;
+	for (CvCity *pLoopCity = firstCity(&iLoop); pLoopCity != NULL; pLoopCity = nextCity(&iLoop))
+	{
+		m_lPlayerOppressometer += pLoopCity->getOppressometer();
+	}
+
+	// capping to MAX_INT because possibly the game can not handle larger numbers
+	if (m_lPlayerOppressometer > MAX_INT)
+	{
+		m_lPlayerOppressometer = MAX_INT;
+	}
+	if (lOldPlayerOppressometer > MAX_INT)
+	{
+		lOldPlayerOppressometer = MAX_INT;
+	}
+
+	// debug message - delete later!
+	// gDLL->UI().addPlayerMessage(getID(), false, GC.getEVENT_MESSAGE_TIME(), gDLL->getText("TXT_KEY_OPPRESSOMETER_RECALCULATION_PLAYER", static_cast<int>(lOldPlayerOppressometer), static_cast<int>(getPlayerOppressometer())), Coordinates::invalidCoord(), "AS2D_DEAL_CANCELLED", MESSAGE_TYPE_INFO);
 }
 
 void CvPlayer::read(FDataStreamBase* pStream)

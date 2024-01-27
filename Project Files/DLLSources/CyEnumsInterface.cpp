@@ -6,9 +6,39 @@
 //
 // Python interface for free enums
 //
+
+template<typename T>
+static void addEnumValues(T value, const char* szName, const char* szNoType, const char* szNumTypes)
+{
+	boost::python::enum_<T> enumTable = python::enum_<T>(szName)
+		.value(szNumTypes, VARINFO<T>::END);
+	if (szNoType != NULL)
+	{
+		enumTable.value(szNoType, static_cast<T>(-1));
+	}
+	for (T eLoopVar = VARINFO<T>::FIRST; eLoopVar < VARINFO<T>::END; ++eLoopVar)
+	{
+		enumTable.value(getTypeStr(eLoopVar), eLoopVar);
+	}
+}
+
 void CyEnumsPythonInterface()
 {
 	OutputDebugString("Python Extension Module - CyEnumsPythonInterface\n");
+
+	// list all the enums, which autogenerate the python interface based on xml
+	// arguments:
+	// 1: any variable of the enum type. Which one doesn't matter as it is only used to set the template type
+	// 2: name of enum in python
+	// 3: name of NO_ type. Skipped if it is set to NULL
+	// 4 name of NUM_
+	addEnumValues(NO_CONCEPT           , "ConceptTypes"       , "NO_CONCEPT"       , "NUM_CONCEPT_TYPES"        );
+	addEnumValues(MAX_NUM_SYMBOLS      , "FontSymbols"        , NULL               , "MAX_NUM_SYMBOLS"          );
+	addEnumValues(NO_TERRAIN           , "TerrainTypes"       , "NO_TERRAIN"       , "NUM_TERRAIN_TYPES"        );
+	addEnumValues(NO_WORLDSIZE         , "WorldSizeTypes"     , "NO_WORLDSIZE"     , "NUM_WORLDSIZE_TYPES"      );
+	addEnumValues(NO_YIELD             , "YieldTypes"         , "NO_YIELD"         , "NUM_YIELD_TYPES"          );
+
+
 	python::enum_<GameStateTypes>("GameStateTypes")
 		.value("GAMESTATE_ON", GAMESTATE_ON)
 		.value("GAMESTATE_OVER", GAMESTATE_OVER)
@@ -123,6 +153,8 @@ void CyEnumsPythonInterface()
 		.value("INTERFACEMODE_ROUTE_TO", INTERFACEMODE_ROUTE_TO)
 		.value("INTERFACEMODE_PYTHON_PICK_PLOT", INTERFACEMODE_PYTHON_PICK_PLOT)
 		.value("INTERFACEMODE_SAVE_PLOT_NIFS", INTERFACEMODE_SAVE_PLOT_NIFS)
+		.value("INTERFACEMODE_ROUTE_TO_ROAD", INTERFACEMODE_ROUTE_TO_ROAD)
+		.value("INTERFACEMODE_ROUTE_TO_COUNTRY_ROAD", INTERFACEMODE_ROUTE_TO_COUNTRY_ROAD)
 		.value("NUM_INTERFACEMODE_TYPES", NUM_INTERFACEMODE_TYPES)
 		;
 	python::enum_<InterfaceMessageTypes>("InterfaceMessageTypes")
@@ -316,6 +348,7 @@ void CyEnumsPythonInterface()
 		.value("WIDGET_MISSION_CHAR", WIDGET_MISSION_CHAR)
 		.value("WIDGET_HELP_HARBOUR_SYSTEM", WIDGET_HELP_HARBOUR_SYSTEM) // WTP, ray, Widgets for Harbour System and Barracks System - START
 		.value("WIDGET_HELP_BARRACKS_SYSTEM", WIDGET_HELP_BARRACKS_SYSTEM) // WTP, ray, Widgets for Harbour System and Barracks System - START
+		.value("WIDGET_HELP_SHOW_OR_HIDE_YIELDS", WIDGET_HELP_SHOW_OR_HIDE_YIELDS)
 		.value("NUM_WIDGET_TYPES", NUM_WIDGET_TYPES)
 		;
 	python::enum_<ButtonPopupTypes>("ButtonPopupTypes")
@@ -369,7 +402,7 @@ void CyEnumsPythonInterface()
 		.value("BUTTONPOPUP_GOTO_MENU", BUTTONPOPUP_GOTO_MENU)		// TAC - Goto Menu - koma13
 		.value("BUTTONPOPUP_PURCHASE_AFRICA_UNIT", BUTTONPOPUP_PURCHASE_AFRICA_UNIT) /*** TRIANGLETRADE 10/15/08 by DPII ***/
 		.value("BUTTONPOPUP_PURCHASE_PORT_ROYAL_UNIT", BUTTONPOPUP_PURCHASE_PORT_ROYAL_UNIT) // R&R, ray, Port Royal
-		.value("BUTTONPOPUP_SAVE_TRADEGROUP", BUTTONPOPUP_SAVE_TRADEGROUP) //R&R mod, vetiarvind, trade groups 
+		.value("BUTTONPOPUP_SAVE_TRADEGROUP", BUTTONPOPUP_SAVE_TRADEGROUP) //R&R mod, vetiarvind, trade groups
 		.value("NUM_BUTTONPOPUP_TYPES", NUM_BUTTONPOPUP_TYPES)
 		;
 	python::enum_<ClimateTypes>("ClimateTypes")
@@ -381,24 +414,6 @@ void CyEnumsPythonInterface()
 	python::enum_<CustomMapOptionTypes>("CustomMapOptionTypes")
 		.value("NO_CUSTOM_MAPOPTION", NO_CUSTOM_MAPOPTION)
 		;
-	python::enum_<WorldSizeTypes>("WorldSizeTypes")
-		.value("NO_WORLDSIZE", NO_WORLDSIZE)
-		.value("WORLDSIZE_TINY", WORLDSIZE_TINY)
-		.value("WORLDSIZE_SMALL", WORLDSIZE_SMALL)
-		.value("WORLDSIZE_STANDARD", WORLDSIZE_STANDARD)
-		.value("WORLDSIZE_LARGE", WORLDSIZE_LARGE)
-		.value("WORLDSIZE_HUGE", WORLDSIZE_HUGE)
-		.value("WORLDSIZE_GIGANTIC", WORLDSIZE_GIGANTIC)
-		.value("NUM_WORLDSIZE_TYPES", NUM_WORLDSIZE_TYPES)
-		;
-	python::enum_<TerrainTypes>("TerrainTypes")
-		// WTP, ray, making at least fresh water terraubs available to Python
-		.value("TERRAIN_LARGE_RIVERS", TERRAIN_LARGE_RIVERS)
-		.value("TERRAIN_LAKE", TERRAIN_LAKE)
-		.value("TERRAIN_ICE_LAKE", TERRAIN_ICE_LAKE)
-		.value("NO_TERRAIN", NO_TERRAIN)
-		.value("NUM_TERRAIN_TYPES", NUM_TERRAIN_TYPES)
-		;
 	python::enum_<PlotTypes>("PlotTypes")
 		.value("NO_PLOT", NO_PLOT)
 		.value("PLOT_PEAK", PLOT_PEAK)
@@ -406,119 +421,6 @@ void CyEnumsPythonInterface()
 		.value("PLOT_LAND", PLOT_LAND)
 		.value("PLOT_OCEAN", PLOT_OCEAN)
 		.value("NUM_PLOT_TYPES", NUM_PLOT_TYPES)
-		;
-	python::enum_<YieldTypes>("YieldTypes")
-		.value("NO_YIELD", NO_YIELD)
-		.value("YIELD_FOOD", YIELD_FOOD)
-		.value("YIELD_LUMBER", YIELD_LUMBER)
-		.value("YIELD_HARDWOOD", YIELD_HARDWOOD)
-		.value("YIELD_STONE", YIELD_STONE)
-		.value("YIELD_CLAY", YIELD_CLAY)
-		.value("YIELD_HEMP", YIELD_HEMP)
-		.value("YIELD_FLAX", YIELD_FLAX)
-		.value("YIELD_ORE", YIELD_ORE)
-		.value("YIELD_COAL", YIELD_COAL)
-		.value("YIELD_CHAR_COAL", YIELD_CHAR_COAL)
-		.value("YIELD_PEAT", YIELD_PEAT)
-		.value("YIELD_SHEEP", YIELD_SHEEP)
-		.value("YIELD_GOATS", YIELD_GOATS)
-		.value("YIELD_PIGS", YIELD_PIGS)
-		.value("YIELD_CATTLE", YIELD_CATTLE)
-		.value("YIELD_CHICKEN", YIELD_CHICKEN)
-		.value("YIELD_GEESE", YIELD_GEESE)
-		.value("YIELD_HORSES", YIELD_HORSES)
-		.value("YIELD_COCOA_FRUITS", YIELD_COCOA_FRUITS)
-		.value("YIELD_COFFEE_BERRIES", YIELD_COFFEE_BERRIES)
-		.value("YIELD_PEANUTS", YIELD_PEANUTS)
-		.value("YIELD_MILK", YIELD_MILK)
-		.value("YIELD_TOBACCO", YIELD_TOBACCO)
-		.value("YIELD_YERBA_LEAVES", YIELD_YERBA_LEAVES)
-		.value("YIELD_COTTON", YIELD_COTTON)
-		.value("YIELD_INDIGO", YIELD_INDIGO)
-		.value("YIELD_LOGWOOD", YIELD_LOGWOOD)
-		.value("YIELD_COCHINEAL", YIELD_COCHINEAL)
-		.value("YIELD_WOOL", YIELD_WOOL)
-		.value("YIELD_GOAT_HIDES", YIELD_GOAT_HIDES)
-		.value("YIELD_PIG_SKIN", YIELD_PIG_SKIN)
-		.value("YIELD_HIDES", YIELD_HIDES)
-		.value("YIELD_DOWNS", YIELD_DOWNS)
-		.value("YIELD_FUR", YIELD_FUR)
-		.value("YIELD_PREMIUM_FUR", YIELD_PREMIUM_FUR)
-		.value("YIELD_RAW_SALT", YIELD_RAW_SALT)
-		.value("YIELD_RED_PEPPER", YIELD_RED_PEPPER)
-		.value("YIELD_VANILLA_PODS", YIELD_VANILLA_PODS)
-		.value("YIELD_BARLEY", YIELD_BARLEY)
-		.value("YIELD_SUGAR", YIELD_SUGAR)
-		.value("YIELD_FRUITS", YIELD_FRUITS)
-		.value("YIELD_GRAPES", YIELD_GRAPES)
-		.value("YIELD_OLIVES", YIELD_OLIVES)
-		.value("YIELD_RAPE", YIELD_RAPE)
-		.value("YIELD_WHALE_BLUBBER", YIELD_WHALE_BLUBBER)
-		.value("YIELD_VALUABLE_WOOD", YIELD_VALUABLE_WOOD)
-		.value("YIELD_TRADE_GOODS", YIELD_TRADE_GOODS)
-		.value("YIELD_BAKERY_GOODS", YIELD_BAKERY_GOODS)
-		.value("YIELD_ROPE", YIELD_ROPE)
-		.value("YIELD_SAILCLOTH", YIELD_SAILCLOTH)
-		.value("YIELD_TOOLS", YIELD_TOOLS)
-		.value("YIELD_BLADES", YIELD_BLADES)
-		.value("YIELD_MUSKETS", YIELD_MUSKETS)
-		.value("YIELD_CANNONS", YIELD_CANNONS)
-		.value("YIELD_BLACK_POWDER", YIELD_BLACK_POWDER)
-		.value("YIELD_WILD_FEATHERS", YIELD_WILD_FEATHERS)
-		.value("YIELD_SILVER", YIELD_SILVER)
-		.value("YIELD_GOLD", YIELD_GOLD)
-		.value("YIELD_GEMS", YIELD_GEMS)
-		.value("YIELD_RICE", YIELD_RICE)
-		.value("YIELD_CASSAVA", YIELD_CASSAVA)
-		.value("YIELD_COCA_LEAVES", YIELD_COCA_LEAVES)
-		.value("YIELD_MAPLE_SIRUP", YIELD_MAPLE_SIRUP)
-		.value("YIELD_KAUTSCHUK", YIELD_KAUTSCHUK)
-		.value("YIELD_COCOA", YIELD_COCOA)
-		.value("YIELD_COFFEE", YIELD_COFFEE)
-		.value("YIELD_ROASTED_PEANUTS", YIELD_ROASTED_PEANUTS)
-		.value("YIELD_CHEESE", YIELD_CHEESE)
-		.value("YIELD_CIGARS", YIELD_CIGARS)
-		.value("YIELD_YERBA_TEA", YIELD_YERBA_TEA)
-		.value("YIELD_CLOTH", YIELD_CLOTH)
-		.value("YIELD_COLOURED_CLOTH", YIELD_COLOURED_CLOTH)
-		.value("YIELD_FESTIVE_CLOTHES", YIELD_FESTIVE_CLOTHES)
-		.value("YIELD_WOOL_CLOTH", YIELD_WOOL_CLOTH)
-		.value("YIELD_COLOURED_WOOL_CLOTH", YIELD_COLOURED_WOOL_CLOTH)
-		.value("YIELD_EVERYDAY_CLOTHES", YIELD_EVERYDAY_CLOTHES)
-		.value("YIELD_PIG_LEATHER", YIELD_PIG_LEATHER)
-		.value("YIELD_LEATHER", YIELD_LEATHER)
-		.value("YIELD_GOAT_HIDE_BOOTS", YIELD_GOAT_HIDE_BOOTS)
-		.value("YIELD_PADDED_LEATHER_COATS", YIELD_PADDED_LEATHER_COATS)
-		.value("YIELD_COATS", YIELD_COATS)
-		.value("YIELD_PREMIUM_COATS", YIELD_PREMIUM_COATS)
-		.value("YIELD_SALT", YIELD_SALT)
-		.value("YIELD_SPICES", YIELD_SPICES)
-		.value("YIELD_VANILLA", YIELD_VANILLA)
-		.value("YIELD_CHOCOLATE", YIELD_CHOCOLATE)
-		.value("YIELD_BEER", YIELD_BEER)
-		.value("YIELD_RUM", YIELD_RUM)
-		.value("YIELD_HOOCH", YIELD_HOOCH)
-		.value("YIELD_WINE", YIELD_WINE)
-		.value("YIELD_OLIVE_OIL", YIELD_OLIVE_OIL)
-		.value("YIELD_RAPE_OIL", YIELD_RAPE_OIL)
-		.value("YIELD_WHALE_OIL", YIELD_WHALE_OIL)
-		.value("YIELD_POTTERY", YIELD_POTTERY)
-		.value("YIELD_FURNITURE", YIELD_FURNITURE)
-		.value("YIELD_PADDED_FURNITURE", YIELD_PADDED_FURNITURE)
-		.value("YIELD_FIELD_WORKER_TOOLS", YIELD_FIELD_WORKER_TOOLS)
-		.value("YIELD_HOUSEHOLD_GOODS", YIELD_HOUSEHOLD_GOODS)
-		.value("YIELD_LUXURY_GOODS", YIELD_LUXURY_GOODS)
-		.value("YIELD_HAMMERS", YIELD_HAMMERS)
-		.value("YIELD_BELLS", YIELD_BELLS)
-		.value("YIELD_CROSSES", YIELD_CROSSES)
-		.value("YIELD_CULTURE", YIELD_CULTURE)
-		.value("YIELD_HEALTH", YIELD_HEALTH)
-		.value("YIELD_EDUCATION", YIELD_EDUCATION)
-		.value("YIELD_HAPPINESS", YIELD_HAPPINESS) // WTP, ray, Happiness - START
-		.value("YIELD_UNHAPPINESS", YIELD_UNHAPPINESS) // WTP, ray, Happiness - START
-		.value("YIELD_LAW", YIELD_LAW) // WTP, ray, Crime and Law - START
-		.value("YIELD_CRIME", YIELD_CRIME) // WTP, ray, Crime and Law - START
-		.value("NUM_YIELD_TYPES", NUM_YIELD_TYPES)
 		;
 	python::enum_<EmphasizeTypes>("EmphasizeTypes")
 		.value("NO_EMPHASIZE", NO_EMPHASIZE)
@@ -618,6 +520,7 @@ void CyEnumsPythonInterface()
 		;
 	python::enum_<FeatureTypes>("FeatureTypes")
 		.value("NO_FEATURE", NO_FEATURE)
+		.value("NUM_FEATURE_TYPES", NUM_FEATURE_TYPES)
 		;
 	python::enum_<BonusTypes>("BonusTypes")
 		.value("NO_BONUS", NO_BONUS)
@@ -633,56 +536,6 @@ void CyEnumsPythonInterface()
 		;
 	python::enum_<BuildTypes>("BuildTypes")
 		.value("NO_BUILD", NO_BUILD)
-		;
-	python::enum_<FontSymbols>("FontSymbols")
-		.value("HAPPY_CHAR", HAPPY_CHAR)
-		.value("UNHAPPY_CHAR", UNHAPPY_CHAR)
-		.value("HEALTHY_CHAR", HEALTHY_CHAR)
-		.value("UNHEALTHY_CHAR", UNHEALTHY_CHAR)
-		.value("BULLET_CHAR", BULLET_CHAR)
-		.value("STRENGTH_CHAR", STRENGTH_CHAR)
-		.value("MOVES_CHAR", MOVES_CHAR)
-		.value("RELIGION_CHAR", RELIGION_CHAR)
-		.value("STAR_CHAR", STAR_CHAR)
-		.value("SILVER_STAR_CHAR", SILVER_STAR_CHAR)
-		.value("TRADE_CHAR", TRADE_CHAR)
-		.value("DEFENSE_CHAR", DEFENSE_CHAR)
-		.value("GREAT_PEOPLE_CHAR", GREAT_PEOPLE_CHAR)
-		.value("BAD_GOLD_CHAR", BAD_GOLD_CHAR)
-		.value("BAD_FOOD_CHAR", BAD_FOOD_CHAR)
-		.value("EATEN_FOOD_CHAR", EATEN_FOOD_CHAR)
-		.value("GOLDEN_AGE_CHAR", GOLDEN_AGE_CHAR)
-		.value("ANGRY_POP_CHAR", ANGRY_POP_CHAR)
-		.value("OPEN_BORDERS_CHAR", OPEN_BORDERS_CHAR)
-		.value("DEFENSIVE_PACT_CHAR", DEFENSIVE_PACT_CHAR)
-		.value("MAP_CHAR", MAP_CHAR)
-		.value("OCCUPATION_CHAR", OCCUPATION_CHAR)
-		.value("REBEL_CHAR", REBEL_CHAR)
-		.value("GOLD_CHAR", GOLD_CHAR)
-		.value("POWER_CHAR", POWER_CHAR)
-		// End of vanilla
-		.value("ATTITUDE_FURIOUS_CHAR", ATTITUDE_FURIOUS_CHAR)
-		.value("ATTITUDE_ANNOYED_CHAR", ATTITUDE_ANNOYED_CHAR)
-		.value("ATTITUDE_CAUTIOUS_CHAR", ATTITUDE_CAUTIOUS_CHAR)
-		.value("ATTITUDE_PLEASED_CHAR", ATTITUDE_PLEASED_CHAR)
-		.value("ATTITUDE_FRIENDLY_CHAR", ATTITUDE_FRIENDLY_CHAR)
-		// TAC - Trade Routes Advisor - koma13 - START
-		.value("CHECKBOX_CHAR", CHECKBOX_CHAR)
-		.value("CHECKBOX_SELECTED_CHAR", CHECKBOX_SELECTED_CHAR)
-		.value("EXPORT_CHAR", EXPORT_CHAR)
-		.value("IMPORT_CHAR", IMPORT_CHAR)
-		.value("EXPORT_IMPORT_CHAR", EXPORT_IMPORT_CHAR)
-		.value("ANCHOR_CHAR", ANCHOR_CHAR)
-		.value("NO_ANCHOR_CHAR", NO_ANCHOR_CHAR)
-		.value("ANCHOR_EUROPE_CHAR", ANCHOR_EUROPE_CHAR)
-		// TAC - Trade Routes Advisor - koma13 - END
-		.value("BARRACKS_CHAR", BARRACKS_CHAR) // WTP, ray, new Barracks System - START
-		.value("NO_BARRACKS_CHAR", NO_BARRACKS_CHAR) // WTP, ray, new Barracks System - START
-		.value("BOMBARD_CHAR", BOMBARD_CHAR) // WTP, ray, Cannons to Professions - START
-		.value("POSITIVE_DOMESTIC_MARKET_EVENT_CHAR", POSITIVE_DOMESTIC_MARKET_EVENT_CHAR) // WTP, ray Domestic Market Events - START
-		.value("NEGATIVE_DOMESTIC_MARKET_EVENT_CHAR", NEGATIVE_DOMESTIC_MARKET_EVENT_CHAR) // WTP, ray Domestic Market Events - START
-		.value("OVERFLOW_CHAR", OVERFLOW_CHAR) // WTP, ray, Overflow Icon in Billboard - START
-		.value("MAX_NUM_SYMBOLS", MAX_NUM_SYMBOLS)
 		;
 	python::enum_<HandicapTypes>("HandicapTypes")
 		.value("NO_HANDICAP", NO_HANDICAP)
@@ -842,9 +695,6 @@ void CyEnumsPythonInterface()
 		.value("HEALTHBAR_DEAD", HEALTHBAR_DEAD)
 		.value("NUM_HEALTHBAR_TYPES", NUM_HEALTHBAR_TYPES)
 		;
-	python::enum_<ConceptTypes>("ConceptTypes")
-		.value("NO_CONCEPT", NO_CONCEPT)
-		;
 	python::enum_<CalendarTypes>("CalendarTypes")
 		.value("CALENDAR_DEFAULT", CALENDAR_DEFAULT)
 		.value("CALENDAR_BI_YEARLY", CALENDAR_BI_YEARLY)
@@ -968,6 +818,8 @@ void CyEnumsPythonInterface()
 		.value("NO_MISSION", NO_MISSION)
 		.value("MISSION_MOVE_TO", MISSION_MOVE_TO)
 		.value("MISSION_ROUTE_TO", MISSION_ROUTE_TO)
+		.value("MISSION_ROUTE_TO_ROAD", MISSION_ROUTE_TO)
+		.value("MISSION_ROUTE_TO_COUNTRY_ROAD", MISSION_ROUTE_TO)
 		.value("MISSION_MOVE_TO_UNIT", MISSION_MOVE_TO_UNIT)
 		.value("MISSION_SKIP", MISSION_SKIP)
 		.value("MISSION_SLEEP", MISSION_SLEEP)

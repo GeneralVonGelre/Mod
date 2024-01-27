@@ -7,11 +7,13 @@ import CvScreenEnums
 
 import BuildingAdvisor
 import DomesticDemandAdvisor
+import HappinessAdvisor
 import ImportExportAdvisor
 import ProductionAdvisor
 import NativeAdvisor
 import WarehouseAdvisor
 import TeacherAdvisor
+import DebugTerrainAdvisor
 
 
 
@@ -126,9 +128,11 @@ class CvDomesticAdvisor:
 		# Button generation
 		
 		self.GAME_FONT_STATE = -1
+		self.TERRAIN_STATE = -1
 		
 		self.GENERAL_STATE            = self.addButton("GeneralState",           "INTERFACE_CITY_MAP_BUTTON")
 		self.DOMESTIC_DEMAND_STATE    = self.addButton("DomesticDemandState",    "INTERFACE_DOMESTIC_DEMAND_BUTTON"  , DomesticDemandAdvisor.DomesticDemandAdvisor(self))
+		self.HAPPINESS_STATE          = self.addButton("HappinessState",         "INTERFACE_HAPPINESS_BUTTON"        , HappinessAdvisor.HappinessAdvisor(self))
 		self.PRODUCTION_STATE         = self.addButton("ProductionState",        "INTERFACE_NET_YIELD_BUTTON"        , ProductionAdvisor.ProductionAdvisor(self))
 		self.WAREHOUSE_STATE          = self.addButton("WareHouseState",         "INTERFACE_STORES_BUTTON"           , WarehouseAdvisor.WarehouseAdvisor(self))
 		self.BUILDING_STATE           = self.addButton("BuildingState",          "INTERFACE_CITY_BUILD_BUTTON"       , BuildingAdvisor.BuildingAdvisor(self))
@@ -146,9 +150,17 @@ class CvDomesticAdvisor:
 		
 		if (gc.getUserSettings().getDebugMaxGameFont() > 0):
 			self.GAME_FONT_STATE      = self.addButton("GameFontState",          "INTERFACE_CITY_MAP_BUTTON")
+			self.TERRAIN_STATE        = self.addButton("TerrainState",           "INTERFACE_NET_YIELD_BUTTON"        , DebugTerrainAdvisor.DebugTerrainAdvisor(self))
 			self.GameFontSet = False
 		
 		self.YieldPages = set([self.WAREHOUSE_STATE])
+		
+		
+		spaceForButtons = self.nScreenWidth - (self.X_EXIT - self.nScreenWidth)
+		spaceForButtons -= 150 # making room for the exit text as it's right aligned
+		spaceForEachButton = spaceForButtons // len(self.StateButtons)
+		if spaceForEachButton < self.iButtonSpacing:
+			self.iButtonSpacing = spaceForEachButton
 		
 		## R&R, Robert Surcouf,  Domestic Advisor Screen START
 		
@@ -182,7 +194,7 @@ class CvDomesticAdvisor:
 			if iState != self.TRADEROUTE_STATE and iState != self.NATIVE_STATE and iState != self.GAME_FONT_STATE:
 				self.initPage(iState, 0)
 
-		self.createSubpage(self.GENERAL_STATE, 3)
+		self.createSubpage(self.GENERAL_STATE, 1)
 		
 		#GeneralState Headers
 		szListName = self.StatePages[self.GENERAL_STATE][0] + "ListBackground"
@@ -218,47 +230,6 @@ class CvDomesticAdvisor:
 		# Culture Column
 		screen.setTableColumnHeader( szListName, 3, "<font=2>" + localText.getText("TXT_KEY_ADVISOR_CULTURE", ()).upper() + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 4 )
 		## R&R, Robert Surcouf,  Domestic Advisor Screen END
-		
-		## R&R, Robert Surcouf, Domestic Market display START
-		szListName = self.StatePages[self.GENERAL_STATE][2] + "ListBackground"
-		iStartYield=gc.getDefineINT("DOMESTIC_MARKET_SCREEN_START_YIELD_ID")
-		for iYield in range(iStartYield, YieldTypes.YIELD_LUXURY_GOODS + 1):
-			screen.setTableColumnHeader(szListName, iYield-iStartYield + 2, "<font=2>" + (u" %c" % gc.getYieldInfo(iYield).getChar()) + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 18 + 1)
-		## R&R, Robert Surcouf, Domestic Market display End
-		
-		#GeneralState Headers
-		szListName = self.StatePages[self.GENERAL_STATE][3] + "ListBackground"
-		# Total Happiness
-		screen.setTableColumnHeader( szListName, 2, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_HAPPINESS).getChar()) +"(TOTAL)" +"</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )#
-		# Happiness from Crosses
-		screen.setTableColumnHeader( szListName, 5, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_HAPPINESS).getChar()) +"(" +(u" %c" % gc.getYieldInfo(YieldTypes.YIELD_CROSSES).getChar()) +")" + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )
-		# Happiness from Bells
-		screen.setTableColumnHeader( szListName, 6, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_HAPPINESS).getChar()) +"(" +(u" %c" % gc.getYieldInfo(YieldTypes.YIELD_BELLS).getChar()) +")" + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )
-		# Happiness from Health
-		screen.setTableColumnHeader( szListName, 7, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_HAPPINESS).getChar()) +"(" +(u" %c" % CyGame().getSymbolID(FontSymbols.HEALTHY_CHAR)) +")" + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )
-		# Happiness from Culture
-		screen.setTableColumnHeader( szListName, 8, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_HAPPINESS).getChar()) +"(" +(u" %c" % gc.getYieldInfo(YieldTypes.YIELD_CULTURE).getChar()) +")" + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )
-		# Happiness from Law
-		screen.setTableColumnHeader( szListName, 9, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_HAPPINESS).getChar()) +"(" +(u" %c" % gc.getYieldInfo(YieldTypes.YIELD_LAW).getChar()) +")" + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )
-		# Happiness from Education
-		screen.setTableColumnHeader( szListName, 10, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_HAPPINESS).getChar()) +"(" +(u" %c" % gc.getYieldInfo(YieldTypes.YIELD_EDUCATION).getChar()) +")" + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )
-		# Happiness from Domestic Market
-		screen.setTableColumnHeader( szListName, 11, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_HAPPINESS).getChar()) +"("  +(u" %c" % (8580)) +")" + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )
-		# Happiness from Treates
-		screen.setTableColumnHeader( szListName, 12, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_HAPPINESS).getChar()) +"(" +(u" %c" % CyGame().getSymbolID(FontSymbols.TRADE_CHAR)) +")" + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )
-
-		# Unhappiness from Population
-		screen.setTableColumnHeader( szListName, 13, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_UNHAPPINESS).getChar()) +"(" +(u" %c" % CyGame().getSymbolID(FontSymbols.ANGRY_POP_CHAR)) +")" + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )
-		# Unhappiness from Crime
-		screen.setTableColumnHeader( szListName, 14, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_UNHAPPINESS).getChar()) +"(" +(u" %c" % gc.getYieldInfo(YieldTypes.YIELD_CRIME).getChar()) +")" + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )
-		# Unhappiness from Slavery
-		screen.setTableColumnHeader( szListName, 15, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_UNHAPPINESS).getChar()) +"(" +(u" %c" % CyGame().getSymbolID(FontSymbols.OCCUPATION_CHAR)) +")" +"</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )
-		# Unhappiness from Wars
-		screen.setTableColumnHeader( szListName, 16, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_UNHAPPINESS).getChar()) +"(" +(u" %c" % gc.getYieldInfo(YieldTypes.YIELD_BLADES).getChar()) +")" + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )
-		# Unhappiness from Missing Defense
-		screen.setTableColumnHeader( szListName, 17, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_UNHAPPINESS).getChar()) +"(" +(u" %c" % CyGame().getSymbolID(FontSymbols.DEFENSE_CHAR)) +")" + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )
-		# Unhappiness from Tax Rate
-		screen.setTableColumnHeader( szListName, 18, "<font=2>" + (u" %c" % gc.getYieldInfo(YieldTypes.YIELD_UNHAPPINESS).getChar()) +"(" +(u" %c" % CyGame().getSymbolID(FontSymbols.GOLD_CHAR)) +")" + "</font>", (self.nTableWidth - self.CITY_NAME_COLUMN_WIDTH) / 14 )
 
 		#WareHouseState Headers
 #VET NewCapacity - begin 3/4
@@ -324,10 +295,10 @@ class CvDomesticAdvisor:
 					screen.setImageButton("HighlightButton", ArtFileMgr.getInterfaceArtInfo("INTERFACE_HIGHLIGHTED_BUTTON").getPath(), (self.iButtonSpacing * iState) + (self.iButtonSpacing / 2) - ((self.iButtonSize * RelativeButtonSize / 100) / 2) + (self.iButtonSize / 2), self.Y_LOWER_ROW - ((self.iButtonSize * RelativeButtonSize / 100) / 2) + (self.iButtonSize / 2), self.iButtonSize * RelativeButtonSize / 100, self.iButtonSize * RelativeButtonSize / 100, WidgetTypes.WIDGET_GENERAL, iState, -1 )
 				
 				
-				# auto-generated list creation - Nightinggale
-				# Added hardcoded button values 100 and 102
-				screen.setImageButton("MainLeftButton", ArtFileMgr.getInterfaceArtInfo(self.StateButtons[len(self.StateButtons)-2]).getPath(), 15, 20, 2*self.iButtonSize/3, 2*self.iButtonSize/3, WidgetTypes.WIDGET_GENERAL, 100, -1 )
-				screen.setImageButton("MainRightButton", ArtFileMgr.getInterfaceArtInfo(self.StateButtons[len(self.StateButtons)-1]).getPath(), self.nScreenWidth -50, 20, 2*self.iButtonSize/3, 2*self.iButtonSize/3, WidgetTypes.WIDGET_GENERAL, 102, -1 )
+		# auto-generated list creation - Nightinggale
+		# Added hardcoded button values 100 and 102
+		screen.setImageButton("MainLeftButton", ArtFileMgr.getInterfaceArtInfo(self.StateButtons[len(self.StateButtons)-2]).getPath(), 15, 20, 2*self.iButtonSize/3, 2*self.iButtonSize/3, WidgetTypes.WIDGET_GENERAL, 100, -1 )
+		screen.setImageButton("MainRightButton", ArtFileMgr.getInterfaceArtInfo(self.StateButtons[len(self.StateButtons)-1]).getPath(), self.nScreenWidth -50, 20, 2*self.iButtonSize/3, 2*self.iButtonSize/3, WidgetTypes.WIDGET_GENERAL, 102, -1 )
 			## R&R, Robert Surcouf,  Domestic Advisor Screen END
 	# Function to draw the contents of the cityList passed in
 	def drawContents (self):
@@ -678,7 +649,7 @@ class CvDomesticAdvisor:
 
 			screen.setTableText(szState + "ListBackground", 0, iRow, "<font=4>" + pRoute.getSourceCityName() + "</font>", "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_LEFT_JUSTIFY)
 			screen.setTableText(szState + "ListBackground", 1, iRow, "<font=4>" + pRoute.getDestinationCityName() + "</font>", "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_LEFT_JUSTIFY )
-			screen.setTableText(szState + "ListBackground", 2, iRow, u"<font=2>%c</font>" % gc.getYieldInfo(pRoute.getYield()).getChar(), "", WidgetTypes.WIDGET_GENERAL, -1, -1, CvUtil.FONT_LEFT_JUSTIFY )
+			screen.setTableText(szState + "ListBackground", 2, iRow, u"<font=2>%c</font>" % gc.getYieldInfo(pRoute.getYield()).getChar(), "", WidgetTypes.WIDGET_PEDIA_JUMP_TO_YIELDS, pRoute.getYield(), 1, CvUtil.FONT_LEFT_JUSTIFY )
 
 			screen.addPanel("RoutePanel" + str(iRow), u"", u"", True, False, 0, 0, (390 * self.nTableWidth) / self.nNormalizedTableWidth, 30, PanelStyles.PANEL_STYLE_EMPTY, WidgetTypes.WIDGET_GENERAL, iRoute, -1)
 			screen.attachControlToTableCell("RoutePanel" + str(iRow), szState + "ListBackground", iRow, 4 )
@@ -997,6 +968,8 @@ class CvDomesticAdvisor:
 				return localText.getText("TXT_KEY_DOMESTIC_ADVISOR_STATE_GENERAL", ())
 			elif iData1 == self.DOMESTIC_DEMAND_STATE:
 				return localText.getText("TXT_KEY_DOMESTIC_ADVISOR_STATE_DOMESTIC_MARKET", ())
+			elif iData1 == self.HAPPINESS_STATE:
+				return localText.getText("TXT_KEY_DOMESTIC_ADVISOR_STATE_HAPPINESS", ())
 			elif iData1 == self.PRODUCTION_STATE:
 				return localText.getText("TXT_KEY_CONCEPT_PRODUCTION", ())
 			elif iData1 == self.BUILDING_STATE:
@@ -1016,6 +989,8 @@ class CvDomesticAdvisor:
 			# total production page - end - Nightinggale
 			elif iData1 == self.TRADEROUTE_STATE:
 				return localText.getText("TXT_KEY_DOMESTIC_ADVISOR_STATE_TRADEROUTE", ())
+			elif iData1 == self.TEACHER_STATE:
+				return localText.getText("TXT_KEY_DOMESTIC_ADVISOR_STATE_TEACHER", ())
 			elif iData1 == self.NATIVE_STATE:
 				return localText.getText("TXT_KEY_DOMESTIC_ADVISOR_STATE_NATIVE", ())
 			elif iData1 == 10001:
@@ -1024,6 +999,8 @@ class CvDomesticAdvisor:
 					return CyGameTextMgr().getSpecificUnitHelp(unit, true, false)
 			elif iData1 == self.GAME_FONT_STATE and iData1 != -1:
 				return "DEBUG: GameFont"
+			elif iData1 == self.TERRAIN_STATE and iData1 != -1:
+				return "DEBUG: terrain count"
 		if eWidgetType == WidgetTypes.WIDGET_MISSION_CHAR:
 			return gc.getPlayer(iData1).getCivilizationAdjective(0)
 			

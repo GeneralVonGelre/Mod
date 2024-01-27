@@ -66,8 +66,7 @@ enum SavegameVariableTypes
 	UnitSave_ID,
 	UnitSave_GroupID,
 	UnitSave_HotKeyNumber,
-	UnitSave_X,
-	UnitSave_Y,
+	UnitSave_Coordinates,
 	UnitSave_LastMoveTurn,
 	UnitSave_GameTurnCreated,
 	UnitSave_Damage,
@@ -80,14 +79,12 @@ enum SavegameVariableTypes
 	UnitSave_CombatTimer,
 	UnitSave_CombatDamage,
 	UnitSave_FortifyTurns,
-	
+
 	UnitSave_ExtraVisibilityRange,
-	
+
 	UnitSave_ImmobileTimer,
 	UnitSave_YieldStored,
-	UnitSave_ExtraWorkRate, // not used
 	UnitSave_UnitTravelTimer,
-	UnitSave_BadCityDefenderCount, // not used
 	UnitSave_PostCombatPlotIndex,
 	UnitSave_LbDrounds,
 	UnitSave_AmountForNativeTrade,
@@ -137,8 +134,7 @@ const char* getSavedEnumNameUnit(SavegameVariableTypes eType)
 	case UnitSave_ID: return "UnitSave_ID";
 	case UnitSave_GroupID: return "UnitSave_GroupID";
 	case UnitSave_HotKeyNumber: return "UnitSave_HotKeyNumber";
-	case UnitSave_X: return "UnitSave_X";
-	case UnitSave_Y: return "UnitSave_Y";
+	case UnitSave_Coordinates: return "UnitSave_Coordinates";
 	case UnitSave_LastMoveTurn: return "UnitSave_LastMoveTurn";
 	case UnitSave_GameTurnCreated: return "UnitSave_GameTurnCreated";
 	case UnitSave_Damage: return "UnitSave_Damage";
@@ -153,12 +149,10 @@ const char* getSavedEnumNameUnit(SavegameVariableTypes eType)
 	case UnitSave_FortifyTurns: return "UnitSave_FortifyTurns";
 
 	case UnitSave_ExtraVisibilityRange: return "UnitSave_ExtraVisibilityRange";
-	
+
 	case UnitSave_ImmobileTimer: return "UnitSave_ImmobileTimer";
 	case UnitSave_YieldStored: return "UnitSave_YieldStored";
-	case UnitSave_ExtraWorkRate: return "UnitSave_ExtraWorkRate";
 	case UnitSave_UnitTravelTimer: return "UnitSave_UnitTravelTimer";
-	case UnitSave_BadCityDefenderCount: return "UnitSave_BadCityDefenderCount";
 	case UnitSave_PostCombatPlotIndex: return "UnitSave_PostCombatPlotIndex";
 	case UnitSave_LbDrounds: return "UnitSave_LbDrounds";
 	case UnitSave_LbDroundsBefore: return "UnitSave_LbDroundsBefore";
@@ -194,6 +188,7 @@ const char* getSavedEnumNameUnit(SavegameVariableTypes eType)
 	case UnitSave_HasRealPromotion: return "UnitSave_HasRealPromotion";
 	case UnitSave_FreePromotionCount: return "UnitSave_FreePromotionCount";
 }
+	FAssertMsg(0, "Missing case");
 	return "";
 }
 
@@ -212,8 +207,7 @@ void CvUnit::resetSavedData(int iID, UnitTypes eUnit, PlayerTypes eOwner, bool b
 	m_iID = iID;
 	m_iGroupID = defaultGroupID;
 	m_iHotKeyNumber = defaultHotKeyNumber;
-	m_iX = defaultX;
-	m_iY = defaultY;
+	m_coord.set(defaultX, defaultY);
 	m_iLastMoveTurn = defaultLastMoveTurn;
 	m_iGameTurnCreated = defaultGameTurnCreated;
 	m_iDamage = defaultDamage;
@@ -226,7 +220,7 @@ void CvUnit::resetSavedData(int iID, UnitTypes eUnit, PlayerTypes eOwner, bool b
 	m_iCombatTimer = defaultCombatTimer;
 	m_iCombatDamage = defaultCombatDamage;
 	m_iFortifyTurns = defaultFortifyTurns;
-	
+
 	m_iImmobileTimer = defaultImmobileTimer;
 	m_iYieldStored = defaultYieldStored;
 	m_iExtraWorkRate = defaultExtraWorkRate;
@@ -238,9 +232,9 @@ void CvUnit::resetSavedData(int iID, UnitTypes eUnit, PlayerTypes eOwner, bool b
 	m_iAmountForNativeTrade = defaultAmountForNativeTrade;
 	m_iMoneyToBuyLand = defaultMoneyToBuyLand;
 
-	m_bMadeAttack = defaultMadeAttack;	
-	m_bPromotionReady = defaultPromotionReady;	
-	m_bDeathDelay = defaultDeathDelay;	
+	m_bMadeAttack = defaultMadeAttack;
+	m_bPromotionReady = defaultPromotionReady;
+	m_bDeathDelay = defaultDeathDelay;
 	m_bCombatFocus = defaultCombatFocus;
 	m_bColonistLocked = defaultColonistLocked;
 	m_bGatheringResource = defaultGatheringResource;
@@ -298,8 +292,7 @@ void CvUnit::read(CvSavegameReader reader)
 		case UnitSave_ID: reader.Read(m_iID); break;
 		case UnitSave_GroupID: reader.Read(m_iGroupID); break;
 		case UnitSave_HotKeyNumber: reader.Read(m_iHotKeyNumber); break;
-		case UnitSave_X: reader.Read(m_iX); break;
-		case UnitSave_Y: reader.Read(m_iY); break;
+		case UnitSave_Coordinates: reader.Read(m_coord); break;
 		case UnitSave_LastMoveTurn: reader.Read(m_iLastMoveTurn); break;
 		case UnitSave_GameTurnCreated: reader.Read(m_iGameTurnCreated); break;
 		case UnitSave_Damage: reader.Read(m_iDamage); break;
@@ -313,7 +306,7 @@ void CvUnit::read(CvSavegameReader reader)
 		case UnitSave_CombatDamage: reader.Read(m_iCombatDamage); break;
 		case UnitSave_FortifyTurns: reader.Read(m_iFortifyTurns); break;
 
-		case UnitSave_ExtraVisibilityRange: 
+		case UnitSave_ExtraVisibilityRange:
 		{
 			//reader.Read(m_iExtraVisibilityRange); break;
 			int iTemp = 0;
@@ -322,9 +315,7 @@ void CvUnit::read(CvSavegameReader reader)
 		}
 		case UnitSave_ImmobileTimer: reader.Read(m_iImmobileTimer); break;
 		case UnitSave_YieldStored: reader.Read(m_iYieldStored); break;
-		case UnitSave_ExtraWorkRate: reader.Discard<int>(); break;
 		case UnitSave_UnitTravelTimer: reader.Read(m_iUnitTravelTimer); break;
-		case UnitSave_BadCityDefenderCount: reader.Discard<int>(); break;
 		case UnitSave_PostCombatPlotIndex: reader.Read(m_iPostCombatPlotIndex); break;
 		case UnitSave_LbDrounds: reader.Read(m_iLbDrounds); break;
 		case UnitSave_LbDroundsBefore: reader.Read(m_iLbDroundsBefore); break;
@@ -361,7 +352,7 @@ void CvUnit::read(CvSavegameReader reader)
 		case UnitSave_FreePromotionCount: reader.Read(m_ja_iFreePromotionCount); break;
 		}
 	}
-	
+
 	// The unit is loaded. Now set up the cache according to the read data.
 
 	FAssert(NO_UNIT != m_eUnitType);
@@ -373,7 +364,7 @@ void CvUnit::read(CvSavegameReader reader)
 	// unit yield cache - end - Nightinggale
 
 	// clear garbage from the savegame
-	// due to the visibility range chache in CvPlot, this can't be done by simply not saving the data 
+	// due to the visibility range chache in CvPlot, this can't be done by simply not saving the data
 	resetPromotions();
 
 	// update profession/promotion cache
@@ -388,6 +379,8 @@ void CvUnit::read(CvSavegameReader reader)
 
 void CvUnit::write(CvSavegameWriter writer)
 {
+	LogIntentHelper helper(writer, "CvUnit");
+
 	writer.AssignClassType(SAVEGAME_CLASS_UNIT);
 
 	// Write the data.
@@ -401,8 +394,7 @@ void CvUnit::write(CvSavegameWriter writer)
 	writer.Write(UnitSave_ID, m_iID, defaultID);
 	writer.Write(UnitSave_GroupID, m_iGroupID, defaultGroupID);
 	writer.Write(UnitSave_HotKeyNumber, m_iHotKeyNumber, defaultHotKeyNumber);
-	writer.Write(UnitSave_X, m_iX, defaultX);
-	writer.Write(UnitSave_Y, m_iY, defaultY);
+	writer.Write(UnitSave_Coordinates, m_coord);
 	writer.Write(UnitSave_LastMoveTurn, m_iLastMoveTurn, defaultLastMoveTurn);
 	writer.Write(UnitSave_GameTurnCreated, m_iGameTurnCreated, defaultGameTurnCreated);
 	writer.Write(UnitSave_Damage, m_iDamage, defaultDamage);

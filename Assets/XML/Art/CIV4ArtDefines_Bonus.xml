@@ -440,7 +440,7 @@
             <fScale>1.5</fScale>
             <fInterfaceScale>1.3</fInterfaceScale>
             <NIF>Art/Terrain/Resources/Holz/Timber.nif</NIF>
-            <KFM>Art/Terrain/Resources/Wheat/Wheat.kfm</KFM>
+            <KFM/>
             <Button>,Art/colonization_atlas_professions_bonus.dds,6,10</Button>
             <FontButtonIndex>38</FontButtonIndex>
             <bShadowCastor>1</bShadowCastor>
@@ -472,8 +472,8 @@
             <Type>ART_DEF_BONUS_POTATO</Type>
             <fScale>1.0</fScale>
             <fInterfaceScale>1.0</fInterfaceScale>
-            <NIF>Art/Terrain/Resources/Potato/Wheat.nif</NIF>
-            <KFM>Art/Terrain/Resources/Potato/Wheat.kfm</KFM>
+            <NIF>Art/Terrain/Resources/Potato/potato.nif</NIF>
+            <KFM/>
             <Button>,Art/colonization_atlas_professions_bonus.dds,2,10</Button>
             <FontButtonIndex>41</FontButtonIndex>
             <bShadowCastor>1</bShadowCastor>
@@ -517,7 +517,7 @@
             <fScale>1.0</fScale>
             <fInterfaceScale>1.0</fInterfaceScale>
             <NIF>Art/Terrain/Resources/Yerba/Cnq.nif</NIF>
-            <KFM>Art/Terrain/Resources/Yerba/Cnq.kfm</KFM>
+            <KFM/>
             <Button>Art/Interface/Buttons/Yerba_Button.dds</Button>
             <FontButtonIndex>99</FontButtonIndex>
             <bShadowCastor>0</bShadowCastor>
@@ -1000,10 +1000,21 @@
             <Type>ART_DEF_BONUS_BARLEY</Type>
             <fScale>1.0</fScale>
             <fInterfaceScale>0.8</fInterfaceScale>
-            <NIF>Art/Terrain/Resources/Wheat2/wheat.nif</NIF>
-            <KFM>Art/Terrain/Resources/Wheat2/wheat.kfm</KFM>
+            <NIF>Art/Terrain/Resources/Barley/wheat.nif</NIF>
+            <KFM>Art/Terrain/Resources/Barley/wheat.kfm</KFM>
             <Button>,Art/colonization_atlas_professions_bonus.dds,1,12</Button>
             <FontButtonIndex>19</FontButtonIndex>
+            <bShadowCastor>1</bShadowCastor>
+            <bRefractionCastor>0</bRefractionCastor>
+        </BonusArtInfo>
+        <BonusArtInfo>
+            <Type>ART_DEF_BONUS_WHEAT</Type>
+            <fScale>1.0</fScale>
+            <fInterfaceScale>0.8</fInterfaceScale>
+            <NIF>Art/Terrain/Resources/Wheat_new/wheat.nif</NIF>
+            <KFM>Art/Terrain/Resources/Barley/wheat.kfm</KFM>
+            <Button>Art/Interface/Buttons/Wheat_Button.dds</Button>
+            <FontButtonIndex>107</FontButtonIndex>
             <bShadowCastor>1</bShadowCastor>
             <bRefractionCastor>0</bRefractionCastor>
         </BonusArtInfo>
@@ -1144,7 +1155,7 @@
             <fScale>1.0</fScale>
             <fInterfaceScale>1.0</fInterfaceScale>
             <NIF>Art/Terrain/Resources/Huckle_Berries/dye.nif</NIF>
-            <KFM>Art/Terrain/Resources/Huckle_Berries/dye.kfm</KFM>
+            <KFM/>
             <Button>Art/interface/buttons/Huckle_Berry_Button.dds</Button>
             <FontButtonIndex>75</FontButtonIndex>
             <bShadowCastor>1</bShadowCastor>
@@ -1155,7 +1166,7 @@
             <fScale>1.0</fScale>
             <fInterfaceScale>1.0</fInterfaceScale>
             <NIF>Art/Terrain/Resources/Blue_Berries/dye.nif</NIF>
-            <KFM>Art/Terrain/Resources/Blue_Berries/dye.kfm</KFM>
+            <KFM/>
             <Button>Art/interface/buttons/Blue_Berry_Button.dds</Button>
             <FontButtonIndex>76</FontButtonIndex>
             <bShadowCastor>1</bShadowCastor>
@@ -1188,7 +1199,7 @@
             <fScale>1.0</fScale>
             <fInterfaceScale>0.8</fInterfaceScale>
             <NIF>Art/Terrain/Resources/rice/rice.nif</NIF>
-            <KFM/>
+            <KFM>Art/Terrain/Resources/Barley/wheat.kfm</KFM>
             <Button>Art/Interface/Buttons/Rice_Button.dds</Button>
             <FontButtonIndex>17</FontButtonIndex>
             <bShadowCastor>1</bShadowCastor>

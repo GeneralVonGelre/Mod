@@ -55,6 +55,7 @@ const char* getSavedEnumNamePopupInfo(SavegameVariableTypes eType)
 	case PopupInfoSave_PythonModule: return "PopupInfoSave_PythonModule";
 	case PopupInfoSave_PythonButtons: return "PopupInfoSave_PythonButtons";
 	}
+	FAssertMsg(0, "Missing case");
 	return "";
 }
 
@@ -124,6 +125,8 @@ void CvPopupInfo::read(CvSavegameReader reader)
 
 void CvPopupInfo::write(CvSavegameWriter writer) const
 {
+	LogIntentHelper helper(writer, "CvPopupInfo");
+
 	writer.AssignClassType(SAVEGAME_CLASS_POPUPINFO);
 
 	// Write the data.

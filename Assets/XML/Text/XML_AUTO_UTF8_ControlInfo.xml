@@ -7,10 +7,12 @@
         <German>Ereignischronik</German>
         <Italian>Cronaca</Italian>
         <Spanish>Crónica</Spanish>
+        <Russian>Летопись</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_ACHIEVE_SCREEN_HELP</Tag>
         <English>????</English>
+        <Russian>Описание всех знаковых событий</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_DIPLOMACY</Tag>
@@ -19,10 +21,12 @@
         <German>Diplomatische Verhandlungen beginnen</German>
         <Italian>Avvia diplomazia</Italian>
         <Spanish>Iniciar diplomacia</Spanish>
+        <Russian>Дипломатия</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_DIPLOMACY_HELP</Tag>
         <English>????</English>
+        <Russian>Общение с другими Лидерами</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_TURN_LOG</Tag>
@@ -31,10 +35,12 @@
         <German>Ereignis-Log</German>
         <Italian>Registro degli eventi</Italian>
         <Spanish>Historial de sucesos</Spanish>
+        <Russian>Журнал событий</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_TURN_LOG_HELP</Tag>
         <English>????</English>
+        <Russian>Хронология большинства игровых событий</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_MAIN_MENU</Tag>
@@ -43,6 +49,7 @@
         <German>[COLOR_HIGHLIGHT_TEXT]Hauptmenü öffnen[COLOR_REVERT] [COLOR:140:255:40:255]&lt; Esc &gt;[COLOR_REVERT]</German>
         <Italian>[COLOR_HIGHLIGHT_TEXT]Apri menu principale[COLOR_REVERT] [COLOR:140:255:40:255]&lt; Esc &gt;[COLOR_REVERT]</Italian>
         <Spanish>[COLOR_HIGHLIGHT_TEXT]Abrir menú principal[COLOR_REVERT] [COLOR:140:255:40:255]&lt; Esc &gt;[COLOR_REVERT]</Spanish>
+        <Russian>[COLOR_HIGHLIGHT_TEXT]Открыть игровое меню[COLOR_REVERT] [COLOR:140:255:40:255]&lt; Esc &gt;[COLOR_REVERT]</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_CIVILOPEDIA</Tag>
@@ -51,10 +58,12 @@
         <German>Colopädie</German>
         <Italian>Colopedia</Italian>
         <Spanish>Colopedia</Spanish>
+        <Russian>Колонопедия</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_CIVILOPEDIA_HELP</Tag>
         <English>????</English>
+        <Russian>Обширная справочная информация обо всем, что есть в игре</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_DOMESTIC_SCREEN</Tag>
@@ -63,10 +72,12 @@
         <German>Stadtliste</German>
         <Italian>Consigliere interno</Italian>
         <Spanish>Consejero de Interior</Spanish>
+        <Russian>Советник по внутренним делам</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_DOMESTIC_SCREEN_HELP</Tag>
         <English>????</English>
+        <Russian>Информация о строительстве, добыче ресурсов, производстве и т.д.</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_EUROPE_SCREEN</Tag>
@@ -75,10 +86,12 @@
         <German>Europa</German>
         <Italian>Europe</Italian>
         <Spanish>Europe</Spanish>
+        <Russian>Европа</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_EUROPE_SCREEN_HELP</Tag>
         <English>????</English>
+        <Russian>Отправляйтесь в столицу вашей страны, чтобы продать товары из Нового света, приобрести корабли, нанять войска и лучших специалистов для своих поселений.</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_AFRICA_SCREEN</Tag>
@@ -87,10 +100,12 @@
         <German>Afrika</German>
         <Italian>Africa</Italian>
         <Spanish>África</Spanish>
+        <Russian>Африка</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_AFRICA_SCREEN_HELP</Tag>
         <English>????</English>
+        <Russian>Черный континент славится своими трудолюбивыми (хе-хе) жителями. А также теми, кто может заставить их работать, пока солнце еще высоко. Да и корабли там можно прикупить.</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_PORT_ROYAL_SCREEN</Tag>
@@ -99,10 +114,12 @@
         <German>Port Royal</German>
         <Italian>Port Royal</Italian>
         <Spanish>Port Royal</Spanish>
+        <Russian>Порт Ройал</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_PORT_ROYAL_SCREEN_HELP</Tag>
         <English>????</English>
+        <Russian>Веселые бродяги с удовольствием пойдут к вам на службу за тугой кошель звонких монет. Йо-хо-хо, и бутылка рома!</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_REVOLUTION_SCREEN</Tag>
@@ -111,10 +128,12 @@
         <German>Revolution</German>
         <Italian>Consigliere per la rivoluzione</Italian>
         <Spanish>Consejero de la Revolución</Spanish>
+        <Russian>Революционный советник</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_REVOLUTION_SCREEN_HELP</Tag>
         <English>????</English>
+        <Russian>Информация о готовности к началу Войны за независимость</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_FOREIGN_SCREEN</Tag>
@@ -123,10 +142,12 @@
         <German>Diplomatie</German>
         <Italian>Consigliere estero</Italian>
         <Spanish>Consejero de Asuntos Exteriores</Spanish>
+        <Russian>Советник по иностранным делам</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_FOREIGN_SCREEN_HELP</Tag>
         <English>????</English>
+        <Russian>Информация обо всех известных зарубежных контактах</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_MILITARY_SCREEN</Tag>
@@ -135,6 +156,7 @@
         <German>Einheitenliste</German>
         <Italian>Consigliere militare</Italian>
         <Spanish>Consejero militar</Spanish>
+        <Russian>Военный советник</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_MILITARY_SCREEN_HELP</Tag>
@@ -147,10 +169,12 @@
         <German>Gründerväter</German>
         <Italian>Padri Fondatori</Italian>
         <Spanish>Padres fundadores</Spanish>
+        <Russian>Отцы основатели</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_FATHER_SCREEN_HELP</Tag>
         <English>????</English>
+        <Russian>Информация обо всех Отцах основателях</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_CONGRESS_SCREEN</Tag>
@@ -159,10 +183,12 @@
         <German>Kontinentalkongress</German>
         <Italian>Congresso continentale</Italian>
         <Spanish>Congreso Continental</Spanish>
+        <Russian>Континетальный конгресс</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_CONGRESS_SCREEN_HELP</Tag>
         <English>????</English>
+        <Russian>Список Отцов основателей, входящих в состав вашего конгресса</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_VICTORY_SCREEN</Tag>
@@ -171,6 +197,7 @@
         <German>Siegbedingungen</German>
         <Italian>Condizioni di vittoria</Italian>
         <Spanish>Condiciones para la victoria</Spanish>
+        <Russian>Условия победы</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_VICTORY_SCREEN_HELP</Tag>
@@ -183,6 +210,7 @@
         <German>Statistik</German>
         <Italian>Schermata delle informazioni</Italian>
         <Spanish>Pantalla de información</Spanish>
+        <Russian>Статистическая информация</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_INFO_HELP</Tag>
@@ -195,6 +223,7 @@
         <German>Spiel laden</German>
         <Italian>Carica partita</Italian>
         <Spanish>Cargar partida</Spanish>
+        <Russian>Загрузить игру</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_LOAD_GAME_HELP</Tag>
@@ -207,6 +236,7 @@
         <German>Spiel speichern</German>
         <Italian>Salva partita</Italian>
         <Spanish>Guardar partida</Spanish>
+        <Russian>Сохранить игру</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_SAVE_NORMAL_HELP</Tag>
@@ -219,6 +249,7 @@
         <German>Spieldetails</German>
         <Italian>Dettagli partita</Italian>
         <Spanish>Detalles de la partida</Spanish>
+        <Russian>Подробнее об игре</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_ADMIN_DETAILS_HELP</Tag>
@@ -231,6 +262,7 @@
         <German>Euer Steckbrief</German>
         <Italian>I tuoi dettagli</Italian>
         <Spanish>Detalles</Spanish>
+        <Russian>Подробнее об игроке</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_DETAILS_HELP</Tag>
@@ -243,6 +275,7 @@
         <German>Alle automatisierten Züge auslösen</German>
         <Italian>Attiva tutti i movimenti automatici</Italian>
         <Spanish>Activa todos los movimientos automatizados</Spanish>
+        <Russian>Запускает все автоматические движения</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_AUTOMOVES_HELP</Tag>
@@ -255,10 +288,12 @@
         <German>Auf Auswahl zentrieren</German>
         <Italian>Centra sulla selezione</Italian>
         <Spanish>Centrar en selección</Spanish>
+        <Russian>Отцентрировать выбор</Russian> 
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_CENTERONSELECTION_HELP</Tag>
         <English>????</English>
+        <Russian>Выбранный юнит окажется в центре экрана</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_CHAT_ALL</Tag>
@@ -267,6 +302,7 @@
         <German>Chat-Log</German>
         <Italian>Registro chat</Italian>
         <Spanish>Historial del chat</Spanish>
+        <Russian>Журнал чата</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_CHAT_ALL_HELP</Tag>
@@ -371,6 +407,7 @@
         <German>Rundenende</German>
         <Italian>Fine del turno</Italian>
         <Spanish>Fin del turno</Spanish>
+        <Russian>Конец хода</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_ENDTURN_HELP</Tag>
@@ -383,6 +420,7 @@
         <German>Rundenende ([COLOR:140:255:40:255]&lt; Alt &gt;[COLOR_REVERT])</German>
         <Italian>Fine del turno ([COLOR:140:255:40:255]&lt; Alt &gt;[COLOR_REVERT])</Italian>
         <Spanish>Fin del turno ([COLOR:140:255:40:255]&lt; Alt &gt;[COLOR_REVERT])</Spanish>
+        <Russian>Конец хода ([COLOR:140:255:40:255]&lt; Alt &gt;[COLOR_REVERT])</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_ENDTURN_ALT_HELP</Tag>
@@ -427,6 +465,7 @@
         <German>Annalen</German>
         <Italian>Categoria Dei Migliori</Italian>
         <Spanish>Ver Salón de la Fama</Spanish>
+        <Russian>Посмотреть Зал славы</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_HALL_OF_FAME_HELP</Tag>
@@ -451,6 +490,7 @@
         <German>Nächste Siedlung</German>
         <Italian>Insediamento successivo</Italian>
         <Spanish>Asentamiento siguiente</Spanish>
+        <Russian>Следующее поселение</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_NEXTCITY_HELP</Tag>
@@ -463,6 +503,7 @@
         <German>Vorherige Siedlung</German>
         <Italian>Insediamento precedente</Italian>
         <Spanish>Asentamiento anterior</Spanish>
+        <Russian>Предыдущее поселение</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_PREVCITY_HELP</Tag>
@@ -491,6 +532,7 @@
         <German>Optionen</German>
         <Italian>Schermata delle opzioni</Italian>
         <Spanish>Pantalla de opciones</Spanish>
+        <Russian>Окно настроек</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_OPTIONS_SCREEN_HELP</Tag>
@@ -531,6 +573,7 @@
         <German>Schnell laden</German>
         <Italian>Caricamento rapido</Italian>
         <Spanish>Carga rápida</Spanish>
+        <Russian>Быстрая загрузка игры</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_QUICK_LOAD_HELP</Tag>
@@ -543,6 +586,7 @@
         <German>Schnell speichern</German>
         <Italian>Salvataggio rapido</Italian>
         <Spanish>Guardado rápido</Spanish>
+        <Russian>Быстрое сохранение игры</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_QUICK_SAVE_HELP</Tag>
@@ -579,6 +623,7 @@
         <German>Hauptstadt wählen</German>
         <Italian>Seleziona città</Italian>
         <Spanish>Seleccionar capital</Spanish>
+        <Russian>Выбрать столицу</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_SELECTCAPITAL_HELP</Tag>
@@ -591,6 +636,7 @@
         <German>Siedlung wählen</German>
         <Italian>Seleziona insediamento</Italian>
         <Spanish>Seleccionar asentamiento</Spanish>
+        <Russian>Выбрать поселение</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_SELECTCITY_HELP</Tag>
@@ -603,6 +649,7 @@
         <German>Alle Einheiten auswählen</German>
         <Italian>Seleziona tutte le unità</Italian>
         <Spanish>Seleccionar todas las unidades</Spanish>
+        <Russian>Выбрать все юниты</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_SELECTYUNITALL_HELP</Tag>
@@ -615,6 +662,7 @@
         <German>Alle Einheiten vom gleichen Typ auswählen</German>
         <Italian>Seleziona tutte le unità (dello stesso tipo)</Italian>
         <Spanish>Seleccionar todas las unidades (del mismo tipo)</Spanish>
+        <Russian>Выбрать все юниты (данного типа)</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_SELECTYUNITTYPE_HELP</Tag>
@@ -675,6 +723,7 @@
         <German>Runde beenden [COLOR:140:255:40:255]&lt; UMSCHALTEN-EINGABETASTE &gt;[COLOR_REVERT]</German>
         <Italian>Fine turno [COLOR:140:255:40:255]&lt; MAIUSC-INVIO &gt;[COLOR_REVERT]</Italian>
         <Spanish>Terminar turno [COLOR:140:255:40:255]&lt; MAYÚS-INTRO &gt;[COLOR_REVERT]</Spanish>
+        <Russian>Конец хода [COLOR:140:255:40:255]&lt; SHIFT-ENTER &gt;[COLOR_REVERT]</Russian>
     </TEXT>
     <TEXT>
         <Tag>SYSTEM_END_TURN</Tag>
@@ -683,6 +732,7 @@
         <German>Runde beenden mit [COLOR:140:255:40:255]&lt; EINGABETASTE &gt;[COLOR_REVERT] ...</German>
         <Italian>Premi [COLOR:140:255:40:255]&lt; INVIO &gt;[COLOR_REVERT] per terminare il turno...</Italian>
         <Spanish>Pulsar [COLOR:140:255:40:255]&lt; INTRO &gt;[COLOR_REVERT] para terminar el turno...</Spanish>
+        <Russian>Нажмите [COLOR:140:255:40:255]&lt; ENTER &gt;[COLOR_REVERT] для завершения хода.</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_SCORES</Tag>
@@ -691,6 +741,7 @@
         <German>Punkteanzeige ein/aus</German>
         <Italian>Abilita/disabilita la 'Finestra dei punteggi'</Italian>
         <Spanish>Activar visor de puntuaciones</Spanish>
+        <Russian>Окно результатов</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_SCORES_HELP</Tag>
@@ -699,6 +750,7 @@
         <German>Punktestand ein-/ausblenden</German>
         <Italian>Attiva/disattiva la visibilità del punteggio.</Italian>
         <Spanish>Activa la visibilidad de la puntuación</Spanish>
+        <Russian>Показать/скрыть окно результатов</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_YIELDS</Tag>
@@ -707,6 +759,7 @@
         <German>Rohstoffsymbole ein/aus</German>
         <Italian>Abilita/disabilita la visualizzazione della produzione</Italian>
         <Spanish>Activar visor de rendimiento</Spanish>
+        <Russian>Доходность клеток</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_YIELDS_HELP</Tag>
@@ -715,6 +768,7 @@
         <German>Symbole für Rohstoffe auf Karte ein-/ausblenden</German>
         <Italian>Attiva/disattiva la visualizzazione delle icone della produzione sulla mappa</Italian>
         <Spanish>Alternar iconos de rendimiento del terreno en el mapa</Spanish>
+        <Russian>Показать/скрыть доходность клеток</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_GLOBELAYER</Tag>
@@ -723,6 +777,7 @@
         <German>Vogelperspektive ein/aus</German>
         <Italian>Visuale del pianeta</Italian>
         <Spanish>Vista global</Spanish>
+        <Russian>Переключить вид</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_GLOBELAYER_HELP</Tag>
@@ -731,6 +786,7 @@
         <German>Zwischen Nahansicht und Fernsicht aus der Vogelperspektive umschalten</German>
         <Italian>Informazioni dettagliate sul mondo della partita</Italian>
         <Spanish>Hace que aparezca información detallada sobre el mundo de la partida</Spanish>
+        <Russian>Выводит подробную информацию о мире вашей игры</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_RESOURCE_ALL</Tag>
@@ -739,6 +795,7 @@
         <German>Bonusressourcensymbole ein/aus</German>
         <Italian>Abilita/disabilita la finestra 'Mostra tutte le risorse'</Italian>
         <Spanish>Activar visor de todos los recursos</Spanish>
+        <Russian>Ресурсы на карте</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_RESOURCE_ALL_HELP</Tag>
@@ -747,6 +804,7 @@
         <German>Symbole für Bonusressourcen auf Karte ein-/ausblenden</German>
         <Italian>Mostra/nascondi i simboli delle risorse bonus sulla mappa</Italian>
         <Spanish>Mostrar/ocultar los símbolos de los recursos de bonificación en el mapa</Spanish>
+        <Russian>Показать/скрыть иконки всех ресурсов</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_BARE_MAP</Tag>
@@ -755,6 +813,7 @@
         <German>Leere Karte ein/aus</German>
         <Italian>Abilita/disabilita la mappa semplificata</Italian>
         <Spanish>Activar mapa limpio</Spanish>
+        <Russian>Пустая карта</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_BARE_MAP_HELP</Tag>
@@ -763,6 +822,7 @@
         <German>Erleichtert die Sicht auf die Landschaft</German>
         <Italian>Agevola la visione del panorama</Italian>
         <Spanish>Hace que ver el paisaje sea más fácil</Spanish>
+        <Russian>Убирает с карты все юниты для лучшего обзора местности</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_GRID</Tag>
@@ -771,6 +831,7 @@
         <German>Geländefelder anzeigen ein/aus</German>
         <Italian>Abilita/disabilita le caselle</Italian>
         <Spanish>Activar casillas</Spanish>
+        <Russian>Сетка ячеек карты</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_GRID_HELP</Tag>
@@ -779,6 +840,7 @@
         <German>Rasterlinien ein-/ausblenden</German>
         <Italian>Attiva/disattiva la griglia</Italian>
         <Spanish>Activar cuadrícula</Spanish>
+        <Russian>Показать/скрыть сетку, разграничивающую плитки карты</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_UNIT_ICONS</Tag>
@@ -787,6 +849,7 @@
         <German>Einheitensymbole ein/aus</German>
         <Italian>Abilita/Disabilita la visualizzazione delle unità nemiche</Italian>
         <Spanish>Activar el visor de unidades enemigas</Spanish>
+        <Russian>Отображение военных юнитов</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CONTROL_UNIT_ICONS_HELP</Tag>
@@ -795,5 +858,6 @@
         <German>Einheitensymbole ein-/ausblenden</German>
         <Italian>Attiva/Disattiva la visualizzazione della posizione delle unità</Italian>
         <Spanish>Alterna el visor de posicionamiento de unidades</Spanish>
+        <Russian>Показать/скрыть отображение позиций всех военных юнитов</Russian>
     </TEXT>
 </Civ4GameText>

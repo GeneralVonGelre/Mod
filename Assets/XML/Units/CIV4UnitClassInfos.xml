@@ -12,6 +12,11 @@
             <DefaultUnit>UNIT_CRIMINAL</DefaultUnit>
         </UnitClassInfo>
         <UnitClassInfo>
+            <Type>UNITCLASS_PRISONER_OF_WAR</Type>
+            <Description>TXT_KEY_UNITCLASS_PRISONER_OF_WAR</Description>
+            <DefaultUnit>UNIT_PRISONER_OF_WAR</DefaultUnit>
+        </UnitClassInfo>
+        <UnitClassInfo>
             <Type>UNITCLASS_INDENTURED_SERVANT</Type>
             <Description>TXT_KEY_UNITCLASS_INDENTURED_SERVANT</Description>
             <DefaultUnit>UNIT_INDENTURED_SERVANT</DefaultUnit>
@@ -437,6 +442,11 @@
             <DefaultUnit>UNIT_DOCTOR</DefaultUnit>
         </UnitClassInfo>
         <UnitClassInfo>
+            <Type>UNITCLASS_ECCENTRIC_ARCHITECT</Type>
+            <Description>TXT_KEY_UNITCLASS_ECCENTRIC_ARCHITECT</Description>
+            <DefaultUnit>UNIT_ECCENTRIC_ARCHITECT</DefaultUnit>
+        </UnitClassInfo>
+        <UnitClassInfo>
             <Type>UNITCLASS_JUDGE</Type>
             <Description>TXT_KEY_UNITCLASS_JUDGE</Description>
             <DefaultUnit>UNIT_JUDGE</DefaultUnit>
@@ -465,6 +475,16 @@
             <Type>UNITCLASS_EXPERT_TRADER</Type>
             <Description>TXT_KEY_UNITCLASS_EXPERT_TRADER</Description>
             <DefaultUnit>UNIT_EXPERT_TRADER</DefaultUnit>
+        </UnitClassInfo>
+        <UnitClassInfo>
+            <Type>UNITCLASS_SEASONED_TRADER</Type>
+            <Description>TXT_KEY_UNITCLASS_SEASONED_TRADER</Description>
+            <DefaultUnit>UNIT_SEASONED_TRADER</DefaultUnit>
+        </UnitClassInfo>
+        <UnitClassInfo>
+            <Type>UNITCLASS_FAILED_TRADER</Type>
+            <Description>TXT_KEY_UNITCLASS_FAILED_TRADER</Description>
+            <DefaultUnit>UNIT_FAILED_TRADER</DefaultUnit>
         </UnitClassInfo>
         <UnitClassInfo>
             <Type>UNITCLASS_NOBLE</Type>
@@ -600,6 +620,11 @@
             <Type>UNITCLASS_REVOLTING_CRIMINAL</Type>
             <Description>TXT_KEY_UNITCLASS_REVOLTING_CRIMINAL</Description>
             <DefaultUnit>UNIT_REVOLTING_CRIMINAL</DefaultUnit>
+        </UnitClassInfo>
+        <UnitClassInfo>
+            <Type>UNITCLASS_REVOLTING_PRISONER_OF_WAR</Type>
+            <Description>TXT_KEY_UNITCLASS_REVOLTING_PRISONER_OF_WAR</Description>
+            <DefaultUnit>UNIT_REVOLTING_PRISONER_OF_WAR</DefaultUnit>
         </UnitClassInfo>
         <UnitClassInfo>
             <Type>UNITCLASS_HOSTILE_NATIVE</Type>

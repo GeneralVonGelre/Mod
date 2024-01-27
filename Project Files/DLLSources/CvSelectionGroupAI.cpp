@@ -63,10 +63,13 @@ void CvSelectionGroupAI::AI_separate()
 		pLoopUnit = ::getUnit(pEntityNode->m_data);
 		pEntityNode = nextUnitNode(pEntityNode);
 
-		pLoopUnit->joinGroup(NULL);
-		if (pLoopUnit->plot()->getTeam() == getTeam())
+		if (pLoopUnit != NULL)
 		{
-			pLoopUnit->getGroup()->pushMission(MISSION_SKIP);
+			pLoopUnit->joinGroup(NULL);
+			if (pLoopUnit->plot()->getTeam() == getTeam())
+			{
+				pLoopUnit->getGroup()->pushMission(MISSION_SKIP);
+			}
 		}
 	}
 }
@@ -82,7 +85,7 @@ void CvSelectionGroupAI::AI_seperateNonAI(UnitAITypes eUnitAI)
 	{
 		pLoopUnit = ::getUnit(pEntityNode->m_data);
 		pEntityNode = nextUnitNode(pEntityNode);
-		if (pLoopUnit->AI_getUnitAIType() != eUnitAI)
+		if (pLoopUnit != NULL && pLoopUnit->AI_getUnitAIType() != eUnitAI)
 		{
 			pLoopUnit->joinGroup(NULL);
 			if (pLoopUnit->plot()->getTeam() == getTeam())
@@ -104,7 +107,7 @@ void CvSelectionGroupAI::AI_seperateAI(UnitAITypes eUnitAI)
 	{
 		pLoopUnit = ::getUnit(pEntityNode->m_data);
 		pEntityNode = nextUnitNode(pEntityNode);
-		if (pLoopUnit->AI_getUnitAIType() == eUnitAI)
+		if (pLoopUnit != NULL && pLoopUnit->AI_getUnitAIType() == eUnitAI)
 		{
 			pLoopUnit->joinGroup(NULL);
 			// TAC - AI Assault Sea - koma13, jdog5000(BBAI)
@@ -130,7 +133,7 @@ void CvSelectionGroupAI::AI_separateEmptyTransports()
 	{
 		pLoopUnit = ::getUnit(pEntityNode->m_data);
 		pEntityNode = nextUnitNode(pEntityNode);
-		if ((pLoopUnit->AI_getUnitAIType() == UNITAI_ASSAULT_SEA) && (pLoopUnit->getCargo() == 0))
+		if (pLoopUnit != NULL && (pLoopUnit->AI_getUnitAIType() == UNITAI_ASSAULT_SEA) && (pLoopUnit->getCargo() == 0))
 		{
 			pLoopUnit->joinGroup(NULL);
 			if (pLoopUnit->plot()->getTeam() == getTeam())
@@ -258,7 +261,10 @@ bool CvSelectionGroupAI::AI_update()
 					pLoopUnit = ::getUnit(pEntityNode->m_data);
 					pEntityNode = nextUnitNode(pEntityNode);
 
-					pLoopUnit->AI_europeUpdate();
+					if (pLoopUnit != NULL)
+					{
+						pLoopUnit->AI_europeUpdate();
+					}
 				}
 			}
 		}
@@ -277,7 +283,7 @@ bool CvSelectionGroupAI::AI_update()
 					pLoopUnit = ::getUnit(pEntityNode->m_data);
 					pEntityNode = nextUnitNode(pEntityNode);
 
-					if (pLoopUnit->canMove())
+					if (pLoopUnit != NULL && pLoopUnit->canMove())
 					{
 						if (pLoopUnit->AI_follow())
 						{
@@ -372,7 +378,7 @@ CvUnit* CvSelectionGroupAI::AI_getBestGroupAttacker(const CvPlot* pPlot, bool bP
 		pLoopUnit = ::getUnit(pUnitNode->m_data);
 		pUnitNode = nextUnitNode(pUnitNode);
 
-		if (!pLoopUnit->isDead())
+		if (pLoopUnit != NULL && !pLoopUnit->isDead())
 		{
 			bool bCanAttack = false;
 			bCanAttack = pLoopUnit->canAttack();
@@ -381,7 +387,7 @@ CvUnit* CvSelectionGroupAI::AI_getBestGroupAttacker(const CvPlot* pPlot, bool bP
 			{
 				bCanAttack = false;
 			}
-			
+
 			// attack bug fix - start - Nightinggale
 			if (bCanAttack && !pLoopUnit->canMoveInto(*pPlot, true))
 			{
@@ -429,7 +435,7 @@ CvUnit* CvSelectionGroupAI::AI_getBestGroupSacrifice(const CvPlot* pPlot, bool b
 		CvUnit* pLoopUnit = ::getUnit(pUnitNode->m_data);
 		pUnitNode = nextUnitNode(pUnitNode);
 
-		if (!pLoopUnit->isDead())
+		if (pLoopUnit != NULL && !pLoopUnit->isDead())
 		{
 			bool bCanAttack = false;
 			bCanAttack = pLoopUnit->canAttack();
@@ -507,7 +513,7 @@ int CvSelectionGroupAI::AI_sumStrength(const CvPlot* pAttackedPlot, DomainTypes 
 		pLoopUnit = ::getUnit(pUnitNode->m_data);
 		pUnitNode = nextUnitNode(pUnitNode);
 
-		if (!pLoopUnit->isDead())
+		if (pLoopUnit != NULL && !pLoopUnit->isDead())
 		{
 			bool bCanAttack = pLoopUnit->canAttack();
 
@@ -628,7 +634,7 @@ bool CvSelectionGroupAI::AI_isDeclareWar(const CvPlot* pPlot)
 
 CvPlot* CvSelectionGroupAI::AI_getMissionAIPlot()
 {
-	return GC.getMapINLINE().plotSoren(m_iMissionAIX, m_iMissionAIY);
+	return GC.getMap().plotSoren(m_iMissionAIX, m_iMissionAIY);
 }
 
 
@@ -700,7 +706,7 @@ bool CvSelectionGroupAI::AI_isFull()
 		{
 			pLoopUnit = ::getUnit(pUnitNode->m_data);
 			pUnitNode = nextUnitNode(pUnitNode);
-			if (pLoopUnit->AI_getUnitAIType() == eUnitAI)
+			if (pLoopUnit != NULL && pLoopUnit->AI_getUnitAIType() == eUnitAI)
 			{
 				if (pLoopUnit->cargoSpace() > 0)
 				{
@@ -727,7 +733,7 @@ bool CvSelectionGroupAI::AI_isFull()
 				pLoopUnit = ::getUnit(pUnitNode->m_data);
 				pUnitNode = nextUnitNode(pUnitNode);
 
-				if (pLoopUnit->AI_getUnitAIType() == eUnitAI)
+				if (pLoopUnit != NULL && pLoopUnit->AI_getUnitAIType() == eUnitAI)
 				{
 					if (!(pLoopUnit->isFull()))
 					{
@@ -757,7 +763,7 @@ bool CvSelectionGroupAI::AI_launchAssault(CvPlot* pTargetCityPlot)
 		pLoopUnit = ::getUnit(pUnitNode->m_data);
 		pUnitNode = plot()->nextUnitNode(pUnitNode);
 
-        if (pLoopUnit->isCargo())
+        if (pLoopUnit != NULL && pLoopUnit->isCargo())
         {
             if (pLoopUnit->getTransportUnit()->getGroup() == this)
             {
@@ -834,14 +840,14 @@ void CvSelectionGroupAI::AI_groupBombard()
 		pLoopUnit = ::getUnit(pEntityNode->m_data);
 		pEntityNode = nextUnitNode(pEntityNode);
 
-		if (pLoopUnit->canBombard(plot()))
+		if (pLoopUnit != NULL && pLoopUnit->canBombard(plot()))
 		{
 		    pLoopUnit->bombard();
 		}
 	}
 }
 
-// Erik: I've changed this function to return the total amount of yields stored 
+// Erik: I've changed this function to return the total amount of yields stored
 // rather than the amount of treasure since that wasn't used anyway
 int CvSelectionGroupAI::AI_getYieldsLoaded(short* piYields) const
 {
@@ -869,7 +875,7 @@ int CvSelectionGroupAI::AI_getYieldsLoaded(short* piYields) const
 				piYields[pLoopUnit->getYield()] += pLoopUnit->getYieldStored();
 				iAmount += pLoopUnit->getYieldStored();
 			}
-		}		
+		}
 	}
 
 	return iAmount;
@@ -968,14 +974,13 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 			CvCity* pSourceCity = ::getCity(pRoute->getSourceCity());
 			CvArea* pSourceWaterArea = pSourceCity->waterArea();
 			// R&R, vetiarvind, max trade capacity  - start
-			DomainTypes domainType = getDomainType();
+			const DomainTypes domainType = getDomainType();
 			// R&R, vetiarvind, max trade capacity  - end
 
-			
 			if ((pSourceCity != NULL) && ((domainType != DOMAIN_SEA) || (pSourceWaterArea != NULL)))
 			{
 				int iSourceArea = (domainType == DOMAIN_SEA) ? pSourceWaterArea->getID() : pSourceCity->getArea();
-				if (domainType == DOMAIN_SEA ? plot()->isAdjacentToArea(iSourceArea) : (iSourceArea == getArea()) || 
+				if (domainType == DOMAIN_SEA ? plot()->isAdjacentToArea(iSourceArea) : (iSourceArea == getArea()) ||
 					domainType == DOMAIN_LAND && plot()->getTerrainType() == TERRAIN_LARGE_RIVERS && plot()->isAdjacentToArea(pSourceCity->getArea()))
 				{
 					if ((domainType == DOMAIN_SEA) || (pRoute->getDestinationCity() != kEurope))
@@ -1063,18 +1068,18 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 			unloadToCity(pPlotCity, units[i], UnloadMode::Force);
 			// R&R mod, vetiarvind, max yield import limit - end
 		}
-	
+
 		// It may happen that the destination has stopped importing the yield, if so search for
 		// another nearby city that imports the yield. If that fails, force unload the yield
 		// as a last resort if not a single city imports this yield so that we can free up
 		// the storage space
 		// Note that this is very rate since the presence of a port city in any given area
 		// will act as a "sink" for excess yields of any type
-	
+
 	}
 
 	short aiYieldsLoaded[NUM_YIELD_TYPES];
-	
+
 	std::fill(aiYieldsLoaded, aiYieldsLoaded + NUM_YIELD_TYPES, 0);
 	const bool bNoCargo = (AI_getYieldsLoaded(aiYieldsLoaded) == 0);
 
@@ -1087,19 +1092,19 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 			if ((pDestinationCity != NULL) && (pDestinationCity != pPlotCity))
 			{
 				// R&R mod, vetiarvind, max yield import limit - start
-				
+
 				YieldTypes eYield = routes[i]->getYield();
 				int yieldsToUnload = aiYieldsLoaded[eYield];
 				if(pDestinationCity != NULL && pDestinationCity->getMaxImportAmount(eYield) > 0)
 				{
-					int turnsToReach = 0; 
+					int turnsToReach = 0;
 					generatePath(plot(), pDestinationCity->plot(), (bIgnoreDanger ? MOVE_IGNORE_DANGER : MOVE_NO_ENEMY_TERRITORY), true, &turnsToReach);
 					yieldsToUnload = std::min(yieldsToUnload, estimateYieldsToLoad(pDestinationCity, 9999, eYield, turnsToReach, 0));
 				}
 				//int iRouteValue = kOwner.AI_transferYieldValue(routes[i]->getDestinationCity(), routes[i]->getYield(), aiYieldsLoaded[routes[i]->getYield()]);
 				int iRouteValue = kOwner.AI_transferYieldValue(routes[i]->getDestinationCity(), routes[i]->getYield(), yieldsToUnload);
 				// R&R mod, vetiarvind, max yield import limit - end
-				
+
 				if (iRouteValue > 0)
 				{
 					cityValues[routes[i]->getDestinationCity()] += iRouteValue;
@@ -1124,7 +1129,7 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 		{
 			CvCity* pDestinationCity = ::getCity(routes[i]->getDestinationCity());
 			YieldTypes eYield = routes[i]->getYield();
-			
+
 			// transport feeder - start - Nightinggale
 			//int iAmount = pSourceCity->getYieldStored(eYield) - pSourceCity->getMaintainLevel(eYield);
 			int iAmount = pSourceCity->getYieldStored(eYield) - pSourceCity->getAutoMaintainThreshold(eYield);
@@ -1132,7 +1137,7 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 			// R&R mod, vetiarvind, max yield import limit - start
 			if(pDestinationCity != NULL &&   pDestinationCity->getMaxImportAmount(eYield) > 0)
 			{
-				int turnsToReachToSource = 0, turnsToReachFromSourceToDest = 0; 
+				int turnsToReachToSource = 0, turnsToReachFromSourceToDest = 0;
 				const bool bSourceOk = generatePath(plot(), pSourceCity->plot(), (bIgnoreDanger ? MOVE_IGNORE_DANGER : MOVE_NO_ENEMY_TERRITORY), true, &turnsToReachToSource);
 				const bool bDestOk = generatePath(pSourceCity->plot(), pDestinationCity->plot(), (bIgnoreDanger ? MOVE_IGNORE_DANGER : MOVE_NO_ENEMY_TERRITORY), true, &turnsToReachFromSourceToDest);
 
@@ -1159,7 +1164,7 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 					// other transports, consumption changes at the destination etc.
 					turnsRequired = std::max(turnsToReachToSource, turnsToReachFromSourceToDest);
 				}
-				
+
 				iAmount = estimateYieldsToLoad(pDestinationCity, iAmount, eYield, turnsRequired, aiYieldsLoaded[eYield]);
 			}
 			// Note that Europe has no import limit!
@@ -1169,7 +1174,7 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 				// TODO: Check that there is actually a route to Europe!
 				bNoRoute = false;
 			}
-			
+
 			// R&R mod, vetiarvind, max yield import limit - end
 			if (iAmount > 0)
 			{
@@ -1227,7 +1232,7 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 				// TAC - Trade Routes Advisor - koma13 - END
 				{
 					iValue /= 1 + kOwner.AI_plotTargetMissionAIs(pDestinationCityPlot, MISSIONAI_TRANSPORT, this, 0);
-				
+
 					if (bCoastalTransport)
 					{
 						// Erik: Eventually these tuning factors should not be hard-coded!
@@ -1235,10 +1240,10 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 						const int CoastalTransportDifferentAreaMultiplier = 2;
 
 						// Erik: If this is a coastal transport, avoid routes that are much longer than land routes unless there are no other wagons in this area
-					
+
 						// Erik: If the destination city is in a different area, then this is a more attractive route (wagons cannot cross coast!)
 						// Note: We don't have to check for the areas being coastally reachable, since that already checked
-						
+
 						const CvArea* pDestinationArea = pDestinationCityPlot->area();
 						const CvArea* pPlotArea = plot()->area();
 
@@ -1247,7 +1252,7 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 							// Erik: Double the value of the route. Even if we encourage transportion between areas we don't want to sail around the world!
 							// so we make that less attractive
 							iValue *= CoastalTransportDifferentAreaMultiplier;
-							iValue /=  std::max(1, iTurns - (CoastalTransportRangeThreshold * CoastalTransportDifferentAreaMultiplier));					
+							iValue /=  std::max(1, iTurns - (CoastalTransportRangeThreshold * CoastalTransportDifferentAreaMultiplier));
 						}
 						else
 						{
@@ -1306,12 +1311,12 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 					// transport feeder - end - Nightinggale
 
 
-					// R&R mod, vetiarvind, max yield import limit - start				
+					// R&R mod, vetiarvind, max yield import limit - start
 					int iOriginalAmount = iAmount;
 					int bDestinationHasImportLimit = pDestinationCity != NULL && pDestinationCity->getMaxImportAmount(eYield) > 0;
 					if(bDestinationHasImportLimit)
 					{
-						int turnsToReach = 0; 
+						int turnsToReach = 0;
 						iOriginalAmount = iAmount = std::min(GC.getGameINLINE().getCargoYieldCapacity(), iAmount);
 						const bool r1 = generatePath(pSourceCity->plot(), pDestinationCity->plot(), (bIgnoreDanger ? MOVE_IGNORE_DANGER : MOVE_NO_ENEMY_TERRITORY), true, &turnsToReach);
 						FAssertMsg(r1, "Path must be valid!");
@@ -1319,7 +1324,7 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 						turnsToReach = std::max(0, turnsToReach - 1);
 						iAmount = estimateYieldsToLoad(pDestinationCity, iAmount, eYield, turnsToReach, aiYieldsLoaded[eYield]);
 					}
-					
+
 					// R&R mod, vetiarvind, max yield import limit - end
 					if (iAmount > 0)
 					{
@@ -1341,9 +1346,8 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 			} //end of for loop of routes
 
 			if (iBestRouteValue > 0)
-			{				
+			{
 				CLLNode<IDInfo>* pUnitNode = headUnitNode();
-				
 				while (pUnitNode != NULL)
 				{
 					CvUnit* pLoopUnit = ::getUnit(pUnitNode->m_data);
@@ -1353,22 +1357,19 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 					{
 						if (pLoopUnit->canLoadYield(plot(), routes[iBestRoute]->getYield(), false) ) 			// R&R mod, vetiarvind, max yield import limit fix
 						{
-							// R&R mod, vetiarvind, max yield import limit - start
 							//pLoopUnit->loadYield(routes[iBestRoute]->getYield(), false);
 							int loaded = 0;
 							if(bImportLimitUsed)
 								loaded = pLoopUnit->loadYieldAmount(routes[iBestRoute]->getYield(), iBestRouteYieldAmount, false);
 							else
 								loaded = pLoopUnit->loadYield(routes[iBestRoute]->getYield(), false);
-							
+
 							// R&R mod, vetiarvind, max yield import limit - end
-							
 							aiYieldsLoaded[routes[iBestRoute]->getYield()] += loaded;
 							break;
 						}
 					}
 				}
-				
 			}
 			else
 			{
@@ -1419,13 +1420,17 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 				{
 					pLoopUnit = ::getUnit(pUnitNode->m_data);
 					pUnitNode = plot()->nextUnitNode(pUnitNode);
-					YieldTypes eYield = pLoopUnit->getYield();
 
-					if ((eYield != NO_YIELD) && pLoopUnit->isCargo())
+					if (pLoopUnit != NULL)
 					{
-						if (pLoopUnit->getTransportUnit()->getGroup() == this && pLoopUnit->canUnload())
+						const YieldTypes eYield = pLoopUnit->getYield();
+
+						if ((eYield != NO_YIELD) && pLoopUnit->isCargo())
 						{
-							units.push_back(pLoopUnit);
+							if (pLoopUnit->getTransportUnit()->getGroup() == this && pLoopUnit->canUnload())
+							{
+								units.push_back(pLoopUnit);
+							}
 						}
 					}
 				}
@@ -1437,7 +1442,6 @@ bool CvSelectionGroupAI::AI_tradeRoutes()
 					// R&R mod, vetiarvind, max yield import limit - end
 				}
 			}
-			
 			return true;
 		}
 	}
@@ -1468,7 +1472,7 @@ CvUnit* CvSelectionGroupAI::AI_ejectBestDefender(CvPlot* pDefendPlot)
 		pLoopUnit = ::getUnit(pEntityNode->m_data);
 		pEntityNode = nextUnitNode(pEntityNode);
 
-		if (!pLoopUnit->noDefensiveBonus())
+		if (pLoopUnit != NULL && !pLoopUnit->noDefensiveBonus())
 		{
 			int iValue = pLoopUnit->currEffectiveStr(pDefendPlot, NULL) * 100;
 
@@ -1506,13 +1510,13 @@ CvUnit* CvSelectionGroupAI::AI_ejectBestDefender(CvPlot* pDefendPlot)
 bool CvSelectionGroupAI::getIgnoreDangerStatus() const
 {
 	bool bIgnoreDanger = false;
-	
+
 	CLLNode<IDInfo>* pUnitNode = headUnitNode();
 	while (pUnitNode != NULL)
 	{
 		CvUnit* pLoopUnit = ::getUnit(pUnitNode->m_data);
 		pUnitNode = nextUnitNode(pUnitNode);
-		
+
 		if (pLoopUnit != NULL && !pLoopUnit->isCargo())
 		{
 			if (pLoopUnit->isIgnoreDanger())
@@ -1532,8 +1536,8 @@ bool CvSelectionGroupAI::getIgnoreDangerStatus() const
 int CvSelectionGroupAI::estimateYieldsToLoad(CvCity* pDestinationCity, int maxYieldsToLoad, YieldTypes eYield, int turnsToReach, int alreadyLoaded) const
 {
 	if(maxYieldsToLoad <= 0) return 0; // R&R mod, vetiarvind, max yield import limit fix
-	int yieldsToLoad = maxYieldsToLoad;	
-		
+	int yieldsToLoad = maxYieldsToLoad;
+
 	int importLimit = pDestinationCity->getMaxImportAmount(eYield);
 	if(importLimit > 0)
 	{
@@ -1541,7 +1545,7 @@ int CvSelectionGroupAI::estimateYieldsToLoad(CvCity* pDestinationCity, int maxYi
 		int yieldRate = pDestinationCity->getYieldRate(eYield);
 		yieldsToLoad = std::min(yieldsToLoad,
 			std::max(0, importLimit - (stored + alreadyLoaded + yieldRate * turnsToReach)));
-	}		
+	}
 	return yieldsToLoad;
 }
 

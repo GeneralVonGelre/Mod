@@ -24,7 +24,10 @@ class CvXMLLoadUtility;
 //			the base description and type strings
 //
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-class CvInfoBase : private boost::noncopyable
+class CvInfoBase
+#ifdef COMPILE_STATIC_TEST
+	: private boost::noncopyable
+#endif
 {
 //---------------------------------------PUBLIC INTERFACE---------------------------------
 public:
@@ -245,7 +248,7 @@ public:
 	int getCityDefensePercent() const;
 	int getHillsAttackPercent() const;
 	int getHillsDefensePercent() const;
-	int getDomesticBonusPercent() const;	
+	int getDomesticBonusPercent() const;
 	int getCommandType() const;
 	void setCommandType(int iNewType);
 	int getPillageChange() const;
@@ -308,7 +311,7 @@ protected:
 	int m_iCityDefensePercent;
 	int m_iHillsAttackPercent;
 	int m_iHillsDefensePercent;
-	int m_iDomesticBonusPercent;	
+	int m_iDomesticBonusPercent;
 	int m_iCommandType;
 	int m_iPillageChange;
 	int m_iAnimalGoldChange; //WTP, ray, Animal Promotions increase gold from Animals
@@ -383,7 +386,7 @@ public:
 	bool isWater() const;
 	bool isScout() const;
 	bool isCanCrossLargeRivers() const; //WTP, ray, Large Rivers
-	bool isCanEnterPeaks() const; //WTP, ray, Large Rivers		
+	bool isCanEnterPeaks() const; //WTP, ray, Large Rivers
 	bool isCityDefender() const;
 	bool canFound() const;
 	bool isUnarmed() const;
@@ -711,6 +714,7 @@ public:
 	int getMoves() const;
 	int getWorkRate() const;
 	int getWorkRateModifier() const;
+	int getGoldFromGoodiesAndChiefsModifier() const; // WTP, ray, Scout Gold Modifier for Goodies and Chiefs at Unit - START
 	int getMissionaryRateModifier() const;
 	int getNativeTradeRateModifier() const; // WTP, ray, Native Trade Posts - START
 	int getCombat() const;
@@ -722,7 +726,7 @@ public:
 	int getCityDefenseModifier() const;
 	int getHillsAttackModifier() const;
 	int getHillsDefenseModifier() const;
-	int getDomesticBonusModifier() const;	
+	int getDomesticBonusModifier() const;
 	int getBombardRate() const;
 	int getSpecialCargo() const;
 	int getDomainCargo() const;
@@ -731,11 +735,11 @@ public:
 	int getRequiredTransportSize() const;
 	int getAssetValue() const;
 	int getPowerValue() const;
-	DllExport int getUnitClassType() const;
+	UnitClassTypes getUnitClassType() const;
 	int getSpecialUnitType() const;
 	int getUnitCaptureClassType() const;
 	int getUnitCombatType() const;
-	DllExport int getDomainType() const;
+	int getDomainType() const;
 	ProfessionTypes getDefaultProfession() const;
 	int getDefaultUnitAIType() const;
 	int getInvisibleType() const;
@@ -795,7 +799,7 @@ public:
 	// WTP, ray, LbD Slaves Revolt and Free - END
 
 	bool isCapturesCargo() const;
-	int getCaptureShipsChanceIncrease() const; 
+	int getCaptureShipsChanceIncrease() const;
 	// TAC Capturing Ships - ray
 	bool isCapturesShips() const;
 	// TAC Capturing Ships - ray -END
@@ -862,7 +866,7 @@ public:
 	DllExport const char* getFormationType() const;
 	const char* getButton() const;
 	void updateArtDefineButton();
-	DllExport const CvArtInfoUnit* getArtInfo(int i, int iProfession) const;
+	const CvArtInfoUnit* getArtInfo(int i, int iProfession) const;
 	//Androrc UnitArtStyles
 	const CvArtInfoUnit* getUnitArtStylesArtInfo(int i, int iProfession, int iStyle = -1) const;
 	//Androrc End
@@ -870,9 +874,6 @@ public:
 	void read(FDataStreamBase* );
 	void write(FDataStreamBase* );
 	bool read(CvXMLLoadUtility* pXML);
-
-	// EXE/python access functions
-	DllExport int EXE_getDefaultProfession() const;
 
 	int PYgetYieldCost(int i) const;
 
@@ -909,6 +910,7 @@ protected:
 	int m_iMoves;
 	int m_iWorkRate;
 	int m_iWorkRateModifier;
+	int m_iGoldFromGoodiesAndChiefsModifier; // WTP, ray, Scout Gold Modifier for Goodies and Chiefs at Unit - START
 	int m_iMissionaryRateModifier;
 	int m_iNativeTradeRateModifier; // WTP, ray, Native Trade Posts - START
 	int m_iCombat;
@@ -919,7 +921,7 @@ protected:
 	int m_iCityDefenseModifier;
 	int m_iHillsAttackModifier;
 	int m_iHillsDefenseModifier;
-	int m_iDomesticBonusModifier;	
+	int m_iDomesticBonusModifier;
 	int m_iBombardRate;
 	int m_iSpecialCargo;
 	int m_iDomainCargo;
@@ -927,7 +929,7 @@ protected:
 	int m_iRequiredTransportSize;
 	int m_iAssetValue;
 	int m_iPowerValue;
-	int m_iUnitClassType;
+	UnitClassTypes m_eUnitClassType;
 	int m_iSpecialUnitType;
 	int m_iUnitCaptureClassType;
 	int m_iUnitCombatType;
@@ -973,7 +975,7 @@ protected:
 	// R&R, ray, Changes for Treasures, START
 	bool m_bNoRevealMap;
 	// R&R, ray, Changes for Treasures, END
-	
+
 	// TAC - LbD - Ray - START
 	bool m_canBecomeExpert;
 	bool m_canGetFree;
@@ -1308,7 +1310,7 @@ public:
 	int getMilitaryProductionModifier() const;
 	int getAssetValue() const;
 	int getPowerValue() const;
-	int getYieldStorage() const; 
+	int getYieldStorage() const;
 	int getMaxHarbourSpaceProvided() const; // WTP, ray, new Harbour System - START
 	int getMaxBarracksSpaceProvided() const; // WTP, ray, new Barracks System - START
 	int getSpecialBuildingType() const;
@@ -1701,18 +1703,18 @@ public:
 	bool isValidProfession(int i) const;
 	bool hasTrait(int i) const;
 
-	std::string getCityNames(int i) const;
+	CvWString getCityNames(int i) const;
 
 	// TAC - Great General Names - Ray - START
-	std::string getGeneralNames(int i) const;
+	CvWString getGeneralNames(int i) const;
 	// TAC - Great General Names - Ray - END
 
 	// R&R, ray, Great Admirals - START
-	std::string getAdmiralNames(int i) const;
+	CvWString getAdmiralNames(int i) const;
 	// R&R, ray, Great Admirals - END
 
 	// TAC - Ship Names - Ray - START
-	std::string getShipNames(int i) const;
+	CvWString getShipNames(int i) const;
 	// TAC - Ship Names - Ray - END
 
 	DllExport const CvArtInfoCivilization* getArtInfo() const;
@@ -1738,17 +1740,14 @@ protected:
 
 	// TAC - Great General Names - Ray - START
 	int m_iNumGeneralNames;
-	CvString* m_paszGeneralNames;
 	// TAC - Great General Names - Ray - END
 
 	// R&R, ray, Great Admirals - START
 	int m_iNumAdmiralNames;
-	CvString* m_paszAdmiralNames;
 	// R&R, ray, Great Admirals - END
 
 	// TAC - Ship Names - Ray - Start
 	int m_iNumShipNames;
-	CvString* m_paszShipNames;
 	// TAC - Ship Names - Ray - END
 
 	int m_iNumCityNames;
@@ -1798,7 +1797,6 @@ protected:
 	bool* m_abCivilizationFreeBuildingClass;
 	bool* m_abValidProfessions;
 	bool* m_abTraits;
-	CvString* m_paszCityNames;
 
 	mutable std::vector<CvWString> m_szCachedShortDescription;
 	mutable std::vector<CvWString> m_szCachedAdjective;
@@ -1869,9 +1867,8 @@ inline Ta CvCivilizationInfo::getCivSpecificForClass(Tb eVar) const
 	// do not access member data from this call
 	// InfoArray calls this while the this pointer is NULL
 	// As such treat it as static even though it isn't due to the specialized functions
-	const bool bTypeCheck = boost::is_same<Ta, Tb>::value;
-	BOOST_STATIC_ASSERT(bTypeCheck);
-	return (Ta)eVar;
+	BOOST_STATIC_ASSERT((boost::is_same<Ta, Tb>::value));
+	return eVar;
 }
 
 template<>
@@ -1966,7 +1963,7 @@ public:
 	int getAIImmigration() const;
 	int getAIMaxTaxrate() const;
 	// TAC - AI More Immigrants - koma13 - END
-	
+
 	// TAC: ray Starting Location Start
 	int getStartingLocationPercent() const;
 	// TAC: ray Starting Location End
@@ -2015,7 +2012,9 @@ public:
 	int getNumWaves();
 	int getWaves(int index);
 	// TAC - AI Revolution - koma13 - END
-	
+
+	int getOppressometerGrowthHandicap() const;
+
 	// Arrays
 	int getGoodies(int i) const;
 
@@ -2077,8 +2076,11 @@ protected:
 	int m_iMissionFailureThresholdPercent;
 	int m_iKingNumUnitMultiplier;
 	int m_iKingGoldThresholdPercent;
+
+	int m_iOppressometerGrowthHandicap;
+
 	CvString m_szHandicapName;
-	
+
 	// TAC - AI Revolution - koma13 - START
 	int m_iWaveTurns;
 	std::vector<int> m_aWaves;
@@ -2180,13 +2182,14 @@ public:
 	int getCost() const;
 	int getImprovement() const;
 	int getPrereqTerrain() const; // R&R, ray, Terraforming Features
-	int getResultTerrain() const; // R&R, ray, Terraforming Features 
+	int getResultTerrain() const; // R&R, ray, Terraforming Features
 	int getResultFeature() const; // R&R, ray, Terraforming Features
 	int getRoute() const;
 	DllExport int getEntityEvent() const;
 	DllExport int getMissionType() const;
 	void setMissionType(int iNewType);
 	bool isKill() const;
+	bool isRoute() const;
 
 	// Arrays
 	int getFeatureTime(int i) const;
@@ -2391,6 +2394,7 @@ public:
 	int getToolsModifierForCity() const; // WTP, ray, Improvements give Bonus to their City - PART 2 - START
 	int getStorageModifierForCity() const; // WTP, ray, Improvements give Bonus to their City - PART 3 - START
 	int getPillageGold() const;
+	int getHealModifier() const;	// WTP, ray, Plot Heal Modifier for Improvements - START
 	int getImprovementPillage() const;
 	void setImprovementPillage(int i);
 	int getImprovementUpgrade() const;
@@ -2469,6 +2473,7 @@ protected:
 	int m_iToolsModifierForCity;  // WTP, ray, Improvements give Bonus to their City - PART 2 - START
 	int m_iStorageModifierForCity;  // WTP, ray, Improvements give Bonus to their City - PART 3 - START
 	int m_iPillageGold;
+	int m_iHealModifier; // WTP, ray, Plot Heal Modifier for Improvements - START
 	int m_iImprovementPillage;
 	int m_iImprovementUpgrade;
 	// Super Forts begin *XML*
@@ -2686,7 +2691,7 @@ public:
 	void setArtDefineTag(const char* szTag);
 
 	DllExport int getWorldSoundscapeScriptId() const;
-	const char* getEffectType() const;
+	EffectTypes getEffectType() const;
 	int getEffectProbability() const;
 	// Arrays
 	int getYieldChange(int i) const;
@@ -2737,7 +2742,7 @@ protected:
 	bool m_bVisibleAlways;
 	CvString m_szOnUnitChangeTo;
 	int m_iWorldSoundscapeScriptId;
-	CvString m_szEffectType;
+	EffectTypes m_eEffectType;
 	int m_iEffectProbability;
 	// Arrays
 	int* m_aiYieldChange;
@@ -3297,8 +3302,8 @@ public:
 	int getUnhappinessFromSlavesModifier() const; // WTP, ray, Happiness - START
 	int getChiefGoldModifier() const;
 	int getNativeAttitudeChange() const;
-	int getEuropeanAttitudeChange() const; // R&R, ray, new Attribute in Traits 
-	int getKingAttitudeChange() const; // R&R, ray, new Attribute in Traits 
+	int getEuropeanAttitudeChange() const; // R&R, ray, new Attribute in Traits
+	int getKingAttitudeChange() const; // R&R, ray, new Attribute in Traits
 	int getCityDefense() const;
 	int getLandPriceDiscount() const;
 	int getRecruitPriceDiscount() const;
@@ -3622,8 +3627,8 @@ class CvArtInfoAsset : 	public CvAssetInfoBase
 public:
 	CvArtInfoAsset() {}
 	virtual ~CvArtInfoAsset() {}
-	DllExport const char* getNIF() const;
-	DllExport const char* getKFM() const;
+	const char* getNIF() const;
+	const char* getKFM() const;
 
 	void setNIF(const char* szDesc);
 	void setKFM(const char* szDesc);
@@ -4155,7 +4160,7 @@ public:
 	bool read(CvXMLLoadUtility* pXML, bool bUTF8, const char *szFileName, const TCHAR* szLanguage);
 
 	static int getNumLanguagesStatic();
-	static const TCHAR* CvGameText::getLanguageName(int iLanguageID);
+	static const TCHAR* getLanguageName(int iLanguageID);
 	static int getLanguageAtIndex(int iIndex);
 	static bool readLanguages(CvXMLLoadUtility* pXML);
 	static void setChangeLanguage();
@@ -4165,6 +4170,7 @@ public:
 
 
 	static bool readString(CvXMLLoadUtility* pXML, CvWString &szString, const char* szTagName, bool bUTF8, const char *szFileName, bool bLanguageFound, const char* szType);
+	static CvWString convertFromUTF8(const CvString sourceString, bool bFallback, const char *szFileName, const char* szType);
 
 protected:
 
@@ -4990,7 +4996,7 @@ public:
 	inline const InfoArray<RouteTypes        , int>& getAllowedRoutes               () const { return m_info_AllowRoutes       ; }
 	inline const InfoArray<UnitClassTypes    , int>& getAllowedUnitClasses          () const { return m_info_AllowUnits        ; }
 	inline const InfoArray<YieldTypes        , int>& getAllowedYields               () const { return m_info_AllowYields       ; }
-	
+
 	inline const bool getAllowFoundCity                    () const { return m_iAllowFoundCity        ; }
 
 	// city
@@ -5021,7 +5027,7 @@ protected:
 	InfoArray<RouteTypes        , int> m_info_AllowRoutes;
 	InfoArray<UnitClassTypes    , int> m_info_AllowUnits;
 	InfoArray<YieldTypes        , int> m_info_AllowYields;
-	
+
 	int m_iAllowFoundCity;
 
 	// city

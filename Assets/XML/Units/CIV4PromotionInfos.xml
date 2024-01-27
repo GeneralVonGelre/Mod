@@ -1424,15 +1424,15 @@
             <iVisibilityChange>0</iVisibilityChange>
             <iMovesChange>0</iMovesChange>
             <iMoveDiscountChange>0</iMoveDiscountChange>
-            <iWithdrawalChange>20</iWithdrawalChange>
+            <iWithdrawalChange>0</iWithdrawalChange>
             <iCargoChange>0</iCargoChange>
             <iBombardRateChange>0</iBombardRateChange>
             <iEnemyHealChange>0</iEnemyHealChange>
-            <iNeutralHealChange>0</iNeutralHealChange>
-            <iFriendlyHealChange>0</iFriendlyHealChange>
+            <iNeutralHealChange>10</iNeutralHealChange>
+            <iFriendlyHealChange>20</iFriendlyHealChange>
             <iSameTileHealChange>0</iSameTileHealChange>
             <iAdjacentTileHealChange>0</iAdjacentTileHealChange>
-            <iCombatPercent>-10</iCombatPercent>
+            <iCombatPercent>0</iCombatPercent>
             <iCityAttack>0</iCityAttack>
             <iCityDefense>0</iCityDefense>
             <iHillsAttack>0</iHillsAttack>
@@ -1463,7 +1463,7 @@
                 </UnitCombat>
                 <UnitCombat>
                     <UnitCombatType>UNITCOMBAT_NAVAL_MILITARY</UnitCombatType>
-                    <bUnitCombat>1</bUnitCombat>
+                    <bUnitCombat>0</bUnitCombat>
                 </UnitCombat>
                 <UnitCombat>
                     <UnitCombatType>UNITCOMBAT_NAVAL_PIRACY</UnitCombatType>
@@ -1515,7 +1515,7 @@
             <iFriendlyHealChange>0</iFriendlyHealChange>
             <iSameTileHealChange>0</iSameTileHealChange>
             <iAdjacentTileHealChange>0</iAdjacentTileHealChange>
-            <iCombatPercent>-10</iCombatPercent>
+            <iCombatPercent>0</iCombatPercent>
             <iCityAttack>0</iCityAttack>
             <iCityDefense>0</iCityDefense>
             <iHillsAttack>0</iHillsAttack>
@@ -1546,7 +1546,7 @@
                 </UnitCombat>
                 <UnitCombat>
                     <UnitCombatType>UNITCOMBAT_NAVAL_MILITARY</UnitCombatType>
-                    <bUnitCombat>1</bUnitCombat>
+                    <bUnitCombat>0</bUnitCombat>
                 </UnitCombat>
                 <UnitCombat>
                     <UnitCombatType>UNITCOMBAT_NAVAL_PIRACY</UnitCombatType>
@@ -4920,7 +4920,7 @@
                 </UnitCombat>
                 <UnitCombat>
                     <UnitCombatType>UNITCOMBAT_SIEGE</UnitCombatType>
-                    <bUnitCombat>0</bUnitCombat>
+                    <bUnitCombat>1</bUnitCombat>
                 </UnitCombat>
                 <UnitCombat>
                     <UnitCombatType>UNITCOMBAT_GUN</UnitCombatType>
@@ -7758,7 +7758,7 @@
             <iDomesticBonus>0</iDomesticBonus>
             <iPillageChange>0</iPillageChange>
             <iAnimalGoldChange>0</iAnimalGoldChange>
-            <iSlaveRevoltReductionBonus>25</iSlaveRevoltReductionBonus>
+            <iSlaveRevoltReductionBonus>20</iSlaveRevoltReductionBonus>
             <iUpgradeDiscount>0</iUpgradeDiscount>
             <iExperiencePercent>0</iExperiencePercent>
             <TerrainAttacks/>
@@ -7876,7 +7876,7 @@
             <iDomesticBonus>0</iDomesticBonus>
             <iPillageChange>0</iPillageChange>
             <iAnimalGoldChange>0</iAnimalGoldChange>
-            <iSlaveRevoltReductionBonus>25</iSlaveRevoltReductionBonus>
+            <iSlaveRevoltReductionBonus>20</iSlaveRevoltReductionBonus>
             <iUpgradeDiscount>0</iUpgradeDiscount>
             <iExperiencePercent>0</iExperiencePercent>
             <TerrainAttacks/>
@@ -7994,7 +7994,7 @@
             <iDomesticBonus>0</iDomesticBonus>
             <iPillageChange>0</iPillageChange>
             <iAnimalGoldChange>0</iAnimalGoldChange>
-            <iSlaveRevoltReductionBonus>25</iSlaveRevoltReductionBonus>
+            <iSlaveRevoltReductionBonus>20</iSlaveRevoltReductionBonus>
             <iUpgradeDiscount>0</iUpgradeDiscount>
             <iExperiencePercent>0</iExperiencePercent>
             <TerrainAttacks/>
@@ -8112,7 +8112,7 @@
             <iDomesticBonus>0</iDomesticBonus>
             <iPillageChange>0</iPillageChange>
             <iAnimalGoldChange>0</iAnimalGoldChange>
-            <iSlaveWorkerProductionBonus>25</iSlaveWorkerProductionBonus>
+            <iSlaveWorkerProductionBonus>20</iSlaveWorkerProductionBonus>
             <iUpgradeDiscount>0</iUpgradeDiscount>
             <iExperiencePercent>0</iExperiencePercent>
             <TerrainAttacks/>
@@ -8230,7 +8230,7 @@
             <iDomesticBonus>0</iDomesticBonus>
             <iPillageChange>0</iPillageChange>
             <iAnimalGoldChange>0</iAnimalGoldChange>
-            <iSlaveWorkerProductionBonus>25</iSlaveWorkerProductionBonus>
+            <iSlaveWorkerProductionBonus>20</iSlaveWorkerProductionBonus>
             <iUpgradeDiscount>0</iUpgradeDiscount>
             <iExperiencePercent>0</iExperiencePercent>
             <TerrainAttacks/>
@@ -8348,7 +8348,7 @@
             <iDomesticBonus>0</iDomesticBonus>
             <iPillageChange>0</iPillageChange>
             <iAnimalGoldChange>0</iAnimalGoldChange>
-            <iSlaveWorkerProductionBonus>25</iSlaveWorkerProductionBonus>
+            <iSlaveWorkerProductionBonus>20</iSlaveWorkerProductionBonus>
             <iUpgradeDiscount>0</iUpgradeDiscount>
             <iExperiencePercent>0</iExperiencePercent>
             <TerrainAttacks/>
@@ -8526,6 +8526,10 @@
                     <UnitCombatType>UNITCOMBAT_MELEE</UnitCombatType>
                     <bUnitCombat>1</bUnitCombat>
                 </UnitCombat>
+                <UnitCombat>
+                    <UnitCombatType>UNITCOMBAT_GUN</UnitCombatType>
+                    <bUnitCombat>1</bUnitCombat>
+                </UnitCombat>
             </UnitCombats>
             <HotKey/>
             <bAltDown>0</bAltDown>
@@ -8628,6 +8632,10 @@
                     <UnitCombatType>UNITCOMBAT_MELEE</UnitCombatType>
                     <bUnitCombat>1</bUnitCombat>
                 </UnitCombat>
+                <UnitCombat>
+                    <UnitCombatType>UNITCOMBAT_GUN</UnitCombatType>
+                    <bUnitCombat>1</bUnitCombat>
+                </UnitCombat>
             </UnitCombats>
             <HotKey/>
             <bAltDown>0</bAltDown>
@@ -8728,6 +8736,10 @@
             <UnitCombats>
                 <UnitCombat>
                     <UnitCombatType>UNITCOMBAT_MELEE</UnitCombatType>
+                    <bUnitCombat>1</bUnitCombat>
+                </UnitCombat>
+                <UnitCombat>
+                    <UnitCombatType>UNITCOMBAT_GUN</UnitCombatType>
                     <bUnitCombat>1</bUnitCombat>
                 </UnitCombat>
             </UnitCombats>

@@ -55,6 +55,7 @@ const char* getSavedEnumNameDiploParameters(SavegameVariableTypes eType)
 	case DiploParametersSave_Transport: return "DiploParametersSave_Transport";
 	case DiploParametersSave_City: return "DiploParametersSave_City";
 	}
+	FAssertMsg(0, "Missing case");
 	return "";
 }
 
@@ -126,6 +127,8 @@ void CvDiploParameters::read(CvSavegameReader reader)
 
 void CvDiploParameters::write(CvSavegameWriter writer) const
 {
+	LogIntentHelper helper(writer, "CvDiploParameters");
+
 	writer.AssignClassType(SAVEGAME_CLASS_DIPLOPARAMETERS);
 
 	// Write the data.

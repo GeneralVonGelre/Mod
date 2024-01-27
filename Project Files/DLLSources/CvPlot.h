@@ -74,6 +74,7 @@ public:
 	bool isAdjacentToLand() const;
 	bool isCoastalLand(int iMinWaterSize = -1) const;
 	bool hasDeepWaterCoast() const;
+	bool hasOtherAdjacentOceanOrDeepWaterCoast() const; //WTP, ray, Safety Check for Deep Water Coast if there is Ocean or Deep Coast adjacent - START
 	bool isAdjacentWaterPassable(CvPlot* pPlot) const;
 
 	bool isVisibleWorked() const;
@@ -97,7 +98,7 @@ public:
 	int getPlotVisibility() const;
 	int getUnitVisibilityBonus() const;
 	void changeAdjacentSight(TeamTypes eTeam, int iRange, bool bIncrement, CvUnit* pUnit);
-	bool canSeePlot(CvPlot *plot, TeamTypes eTeam, int iRange, DirectionTypes eFacingDirection) const;
+	bool canSeePlot(const CvPlot *plot, TeamTypes eTeam, int iRange, DirectionTypes eFacingDirection) const;
 	bool canSeeDisplacementPlot(TeamTypes eTeam, int dx, int dy, int originalDX, int originalDY, bool firstPlot, bool outerRing) const;
 	bool shouldProcessDisplacementPlot(int dx, int dy, DirectionTypes eFacingDirection) const;
 	void updateSight(bool bIncrement);
@@ -218,22 +219,29 @@ public:
 #ifdef _USRDLL
 	inline int getX_INLINE() const
 	{
-		return m_iX;
+		// return m_iX;
+		return m_coord.x();
 	}
 #endif
 	DllExport int getY() const;
 #ifdef _USRDLL
 	inline int getY_INLINE() const
 	{
-		return m_iY;
+		// return m_iY;
+		return m_coord.y();
 	}
 #endif
+	inline const Coordinates& coord() const
+	{
+		return m_coord;
+	}
 	bool at(int iX, int iY) const;
+	bool at(Coordinates coord) const;
 	int getIndex() const;
 	int getLatitude() const;
-	int getSignedLatitude() const; //ray, Norther and Southern Hemisphere, using hint of f1rpo 
-	bool isSouthernHemisphere() const; //ray, Norther and Southern Hemisphere, using hint of f1rpo 
-	bool isNorthernHemisphere() const; //ray, Norther and Southern Hemisphere, using hint of f1rpo 
+	int getSignedLatitude() const; //ray, Norther and Southern Hemisphere, using hint of f1rpo
+	bool isSouthernHemisphere() const; //ray, Norther and Southern Hemisphere, using hint of f1rpo
+	bool isNorthernHemisphere() const; //ray, Norther and Southern Hemisphere, using hint of f1rpo
 	int getFOWIndex() const;
 	CvArea* area() const;
 	CvArea* waterArea() const;
@@ -325,6 +333,7 @@ public:
 	void setOwner(PlayerTypes eNewValue, bool bCheckUnits);
 	PlotTypes getPlotType() const;
 	DllExport bool isWater() const;
+	bool hasLargeRiver() const;
 	bool isEurope() const;
 	bool isFlatlands() const;
 	DllExport bool isHills() const;
@@ -361,7 +370,7 @@ public:
 	void changeRiverCrossingCount(int iChange);
 	const EnumMap<YieldTypes, short> getYield() const;
 	DllExport int getYield(YieldTypes eIndex) const;
-	
+
 	// TAC - AI Improved Naval AI - koma13 - START
 	int getDangerMap(PlayerTypes eIndex) const;
 	void setDangerMap(PlayerTypes eIndex, int iNewValue);
@@ -512,8 +521,7 @@ protected:
 
 	void updateImpassable();
 
-	short m_iX;
-	short m_iY;
+	Coordinates m_coord;
 	int m_iArea;
 	mutable CvArea *m_pPlotArea;
 	short m_iFeatureVariety;
@@ -606,12 +614,12 @@ protected:
 
 	void processArea(CvArea* pArea, int iChange);
 	void doImprovementUpgrade();
-	// R&R, ray, Monasteries and Forts - START	
+	// R&R, ray, Monasteries and Forts - START
 	void doFort();
 	void doMonastery();
-	// R&R, ray, Monasteries and Forts - END	
+	// R&R, ray, Monasteries and Forts - END
 	//R&R mod, vetiarvind, super forts merge, refactor checks for activating monastery and forts - start
-	void doUpgradeNonWorkerImprovements();// R&R mod, vetiarvind, monasteries and forts upgrade bug fix 
+	void doUpgradeNonWorkerImprovements();// R&R mod, vetiarvind, monasteries and forts upgrade bug fix
 	//R&R mod, vetiarvind, super forts merge, refactor checks for activating monastery and forts - end
 	ColorTypes plotMinimapColor();
 

@@ -258,7 +258,7 @@ class CvPediaMain( CvPediaScreen.CvPediaScreen ):
 					list.remove(item)
 
 		ButtonSize = 24
-		nColumns = 2
+		nColumns = 4
 		nEntries = len(list)
 		nRows = nEntries // nColumns
 		if (nEntries % nColumns):
@@ -290,7 +290,7 @@ class CvPediaMain( CvPediaScreen.CvPediaScreen ):
 		list = self.getSortedList( gc.getNumProfessionInfos(), gc.getProfessionInfo )
 
 		ButtonSize = 24
-		nColumns = 2
+		nColumns = 4
 		nEntries = len(list)
 		nEntries -= 1	# TAC - Hide Whaling Profession - koma13
 		nRows = nEntries // nColumns
@@ -327,7 +327,7 @@ class CvPediaMain( CvPediaScreen.CvPediaScreen ):
 					list.remove(item)
 
 		ButtonSize = 24
-		nColumns = 2
+		nColumns = 4
 		nEntries = len(list)
 		nRows = nEntries // nColumns
 		if (nEntries % nColumns):
@@ -356,7 +356,7 @@ class CvPediaMain( CvPediaScreen.CvPediaScreen ):
 		list = self.getSortedList( gc.getNumBonusInfos(), gc.getBonusInfo )
 
 		ButtonSize = 24
-		nColumns = 2
+		nColumns = 3
 		nEntries = len(list)
 		nRows = nEntries // nColumns
 		if (nEntries % nColumns):
@@ -385,7 +385,7 @@ class CvPediaMain( CvPediaScreen.CvPediaScreen ):
 		list = self.getSortedList( gc.getNumImprovementInfos(), gc.getImprovementInfo )
 
 		ButtonSize = 24
-		nColumns = 1
+		nColumns = 2
 		nEntries = len(list)
 		nRows = nEntries // nColumns
 		if (nEntries % nColumns):
@@ -414,7 +414,7 @@ class CvPediaMain( CvPediaScreen.CvPediaScreen ):
 		list = self.getSortedList( gc.getNumPromotionInfos(), gc.getPromotionInfo )
 
 		ButtonSize = 24
-		nColumns = 2
+		nColumns = 3
 		nEntries = len(list)
 		nRows = nEntries // nColumns
 		if (nEntries % nColumns):
@@ -585,7 +585,7 @@ class CvPediaMain( CvPediaScreen.CvPediaScreen ):
 		list = self.getSortedList( gc.getNumYieldInfos(), gc.getYieldInfo )
 
 		ButtonSize = 24
-		nColumns = 1
+		nColumns = 3
 		nEntries = len(list)
 		nRows = nEntries // nColumns
 		if (nEntries % nColumns):
@@ -614,7 +614,7 @@ class CvPediaMain( CvPediaScreen.CvPediaScreen ):
 		list = self.getSortedList( gc.getNumFeatureInfos(), gc.getFeatureInfo )
 
 		ButtonSize = 24
-		nColumns = 1
+		nColumns = 2
 		nEntries = len(list)
 		nRows = nEntries // nColumns
 		if (nEntries % nColumns):
@@ -643,7 +643,7 @@ class CvPediaMain( CvPediaScreen.CvPediaScreen ):
 		list = self.getSortedList( gc.getNumFatherInfos(), gc.getFatherInfo )
 
 		ButtonSize = 24
-		nColumns = 2
+		nColumns = 4
 		nEntries = len(list)
 		nRows = nEntries // nColumns
 		if (nEntries % nColumns):
@@ -922,11 +922,32 @@ class CvPediaMain( CvPediaScreen.CvPediaScreen ):
 					list.append("raystuttgart")
 					list.append("Schmiddie")
 					list.append("Mr.ZorG")
-					list.append("TXT_KEY_CREDITS_FURSTBISCHOF")
 					list.append("Kendon")
 					list.append("TXT_KEY_CREDITS_RAUWURGER")
+					list.append("Liet")
+					list.append("Tucker8")
+					list.append("Aemon")
+					list.append("sneed")
+					list.append("Barthoze")
+					list.append("victorxucp")
+					list.append("TXT_KEY_CREDITS_FURSTBISCHOF")
+					list.append("jooe")
+					list.append("FlaviusBelisarius")
 					
 					szTextData += localText.getText("TXT_KEY_CREDITS_WTP", ())
+					szTextData += localText.getText("[NEWLINE]", ())
+					
+					for szName in (list):
+						szTextData += localText.getText("[ICON_BULLET] ", ())
+						szTextData += localText.getText(szName, ())
+						szTextData += localText.getText("[NEWLINE]", ())
+					
+					# special credits
+					list = []
+					list.append("TXT_KEY_CREDITS_f1rpo")
+					list.append("TXT_KEY_CREDITS_karadoc")
+					
+					szTextData += localText.getText("TXT_KEY_CREDITS_SPECIAL", ())
 					szTextData += localText.getText("[NEWLINE]", ())
 					
 					for szName in (list):

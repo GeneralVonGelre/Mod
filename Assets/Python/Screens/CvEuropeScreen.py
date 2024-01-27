@@ -911,7 +911,12 @@ class CvEuropeScreen:
 				return localText.getText("TXT_KEY_ECON_GOLD_RESERVE" , ())
 			elif iData1 == self.HELP_CROSS_RATE:
 				#  WTP, ray, Happiness
-				return localText.getText("TXT_KEY_YIELD_RATE_CROSSES_HAPPINESS_UNHAPPINESS", (player.getYieldRate(YieldTypes.YIELD_CROSSES), gc.getYieldInfo(YieldTypes.YIELD_CROSSES).getChar(), player.getHappinessRate(), gc.getYieldInfo(YieldTypes.YIELD_HAPPINESS).getChar(), player.getUnHappinessRate(), gc.getYieldInfo(YieldTypes.YIELD_UNHAPPINESS).getChar(), player.getLawRate(), gc.getYieldInfo(YieldTypes.YIELD_LAW).getChar(), player.getCrimeRate(), gc.getYieldInfo(YieldTypes.YIELD_CRIME).getChar()))
+				# WTP, ray, increase threshold if more than X units waiting on the docks - START
+				textForCrossRateHelp = localText.getText("TXT_KEY_YIELD_RATE_CROSSES_HAPPINESS_UNHAPPINESS", (player.getYieldRate(YieldTypes.YIELD_CROSSES), gc.getYieldInfo(YieldTypes.YIELD_CROSSES).getChar(), player.getHappinessRate(), gc.getYieldInfo(YieldTypes.YIELD_HAPPINESS).getChar(), player.getUnHappinessRate(), gc.getYieldInfo(YieldTypes.YIELD_UNHAPPINESS).getChar(), player.getLawRate(), gc.getYieldInfo(YieldTypes.YIELD_LAW).getChar(), player.getCrimeRate(), gc.getYieldInfo(YieldTypes.YIELD_CRIME).getChar()))
+				iImmigrationThresholdModifierFromUnitsWaitingOnDock = player.getImmigrationThresholdModifierFromUnitsWaitingOnDock()
+				if (iImmigrationThresholdModifierFromUnitsWaitingOnDock > 0):
+					textForCrossRateHelp = textForCrossRateHelp + localText.getText("TXT_KEY_HIGHER_IMMIGRATION_THRESHOLD_DUE_TO_UNITS_ON_DOCK", (iImmigrationThresholdModifierFromUnitsWaitingOnDock, ))
+				return textForCrossRateHelp
 			elif iData1 == self.TRAVEL_INFO or iData1 == self.RECALL:
 				return self.cargoMessage(iData2)
 			elif iData1 == self.TRADE_LOG:
@@ -949,12 +954,14 @@ class CvEuropeScreen:
 		if self.bBookIntro or self.bBookOutro:
 			return 0
 		
-		screen = self.getScreen()		
+		screen = self.getScreen()
 		player = gc.getPlayer(gc.getGame().getActivePlayer())
 		pTransport = player.getUnit(iUnit)
-				
-		if self.EuropePlotList == []:
-			self.getPlotLists(pTransport)
+		
+		# WTP, ray, this is a problem now if we have different rules for Ships sailing to the new world
+		# the Plot List needs to be regenerated every time, not just if it is empty
+		#if self.EuropePlotList == []:
+		self.getPlotLists(pTransport)
 				
 		self.createBox(self.DIALOG_X, self.DIALOG_Y, self.DIALOG_W, self.DIALOG_H, true)
 		
@@ -1173,33 +1180,33 @@ class CvEuropeScreen:
 		europePlotListSectorsEast_All = [[] for _ in range(6)] 
 		europePlotListSectorsWest_All = [[] for _ in range(6)]
 		mapWidth = CyMap().getGridWidth()
-		mapHeight = CyMap().getGridHeight()			
-		## R&R, vetiarvind, navigation sectors - END		
+		mapHeight = CyMap().getGridHeight()
+		## R&R, vetiarvind, navigation sectors - END
 		for i in range(CyMap().numPlots()):
 			pLoopPlot = CyMap().plotByIndex(i)
 			curX = pLoopPlot.getX()
 			curY = pLoopPlot.getY()
 			if CyMap().isPlot(curX, curY):
 				if pLoopPlot.isRevealed(player.getTeam(), false):
-					if pLoopPlot.isEurope():						
-		## R&R, vetiarvind, navigation sectors - START						
+					if pLoopPlot.isEurope():
+		## R&R, vetiarvind, navigation sectors - START
 						#if pLoopPlot.getX() >= CyMap().getGridWidth() / 2:
-						#	self.EuropePlotListEast.append(pLoopPlot)																					
+						#	self.EuropePlotListEast.append(pLoopPlot)
 						#else:
 						#	self.EuropePlotListWest.append(pLoopPlot)
 						isEuropeEdgePlot = False
 						if pLoopPlot.getX() >= mapWidth >> 1:
-							self.EuropePlotListEast.append(pLoopPlot)														
-							sectorList = self.EuropePlotListSectorsEast	
+							self.EuropePlotListEast.append(pLoopPlot)
+							sectorList = self.EuropePlotListSectorsEast
 							allPlotsInSector = europePlotListSectorsEast_All
-							if CyMap().isPlot(curX-1,curY):							
+							if CyMap().isPlot(curX-1,curY):
 								isEuropeEdgePlot = not CyMap().plotByIndex(CyMap().plotNum(curX-1,curY)).isEurope()
 						else:
 							self.EuropePlotListWest.append(pLoopPlot)
-							sectorList = self.EuropePlotListSectorsWest		
+							sectorList = self.EuropePlotListSectorsWest
 							allPlotsInSector = europePlotListSectorsWest_All
-							if CyMap().isPlot(curX+1,curY):							
-								isEuropeEdgePlot = not CyMap().plotByIndex(CyMap().plotNum(curX+1,curY)).isEurope()						
+							if CyMap().isPlot(curX+1,curY):
+								isEuropeEdgePlot = not CyMap().plotByIndex(CyMap().plotNum(curX+1,curY)).isEurope()
 												
 						if curY < (mapHeight / 6):
 							sectorIndex = 5
@@ -1214,9 +1221,9 @@ class CvEuropeScreen:
 						else:
 							sectorIndex = 0
 							
-						if not isEuropeEdgePlot:							
+						if not isEuropeEdgePlot:
 							allPlotsInSector[sectorIndex].append(pLoopPlot)
-						else:						
+						else:
 							sectorList[sectorIndex].append(pLoopPlot)
 		for i in range(6):
 			if not self.EuropePlotListSectorsEast[i]:
@@ -1224,7 +1231,7 @@ class CvEuropeScreen:
 			if not self.EuropePlotListSectorsWest[i]:
 				self.EuropePlotListSectorsWest[i].extend(europePlotListSectorsWest_All[i])
 		
-		## R&R, vetiarvind, navigation sectors - END		
+		## R&R, vetiarvind, navigation sectors - END
 		pCenterPlot = self.getCenterPlot()
 		
 		self.pPlotEast = self.getNextOceanPlot(pCenterPlot, self.EuropePlotListEast)
@@ -1445,10 +1452,11 @@ class CvEuropeScreen:
 		return iBoycottPrice
 		
 	## R&R, vetiarvind, Price dependent tax increase - START
-	
-	def getYieldScore(self, iYield):		
+	def getYieldScore(self, iYield):
 		player = gc.getPlayer(gc.getGame().getActivePlayer())
-		iScore = player.getYieldScoreTotalINT(iYield)
+		# WTP, ray fixing that the value is read from wrong player
+		playerEurope = gc.getPlayer(player.getParent())
+		iScore = playerEurope.getYieldScoreTotalINT(iYield)
 		return iScore
 	
 	def getTotalYieldsScore(self):

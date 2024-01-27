@@ -1,9 +1,27 @@
 #include "CvGameCoreDLL.h"
 
+#include "CvDLLEngineIFaceBase.h"
+
 #include "CvSavegame.h"
 #include "FVariableSystem.h"
 #include "CvPopupInfo.h"
 #include "CvDiploParameters.h"
+#include "CvPlotFunctions.h"
+
+static bool bWRITE_LOG = false;
+
+
+/* The exe calls some read() and write() functions, which in turn calls the others. The exe calling order is as follows:
+ * CvInitCore
+ * CvGameAI
+ * CvMap
+ * CvTeamAI
+ * CvPlayerAI
+ *
+ * The last two loops through the entire array and the loop control is in the exe
+ */
+
+
 
 //
 // Classes to handle savegames
@@ -45,6 +63,7 @@ const int XML_ENUM_OFFSET = 6;
 // name says it all. It's a shortcut for cleaner code rather than calculating with the offset each time the number is needed.
 const int XML_ENUM_MAX_LENGTH_ONE_BYTE = 0x100 - XML_ENUM_OFFSET;
 
+const char* getSavedEnumNameArea(SavegameVariableTypes eType);
 const char* getSavedEnumNameMap(SavegameVariableTypes eType);
 const char* getSavedEnumNamePlot(SavegameVariableTypes eType);
 const char* getSavedEnumNameUnit(SavegameVariableTypes eType);
@@ -71,6 +90,7 @@ const char* getSavedEnumName(SavegameClassTypes eClass, SavegameVariableTypes eT
 {
 	switch (eClass)
 	{
+	case SAVEGAME_CLASS_AREA: return getSavedEnumNameArea(eType);
 	case SAVEGAME_CLASS_MAP: return getSavedEnumNameMap(eType);
 	case SAVEGAME_CLASS_PLOT: return getSavedEnumNamePlot(eType);
 	case SAVEGAME_CLASS_UNIT: return getSavedEnumNameUnit(eType);
@@ -94,7 +114,7 @@ const char* getSavedEnumName(SavegameClassTypes eClass, SavegameVariableTypes eT
 	case SAVEGAME_CLASS_TEAM_AI: return getSavedEnumNameTeamAI(eType);
 
 	}
-
+	FAssertMsg(0, "Missing case");
 	return "";
 }
 
@@ -186,6 +206,11 @@ CvSavegameReader::CvSavegameReader(const CvSavegameReader& reader)
 bool CvSavegameReader::isDebug() const
 {
 	return m_ReaderBase.isDebug();
+}
+
+unsigned int CvSavegameReader::getSavegameVersion()
+{
+	return CvSavegameReaderBase::getSavegameVersion();
 }
 
 void CvSavegameReader::AssignClassType(SavegameClassTypes eType)
@@ -299,7 +324,7 @@ void CvSavegameReader::Read(CvWString& szString)
 	}
 }
 
-void CvSavegameReader::Read(char* szString)
+void CvSavegameReader::Read(char*& szString)
 {
 	CvString szBuffer;
 	Read(szBuffer);
@@ -309,7 +334,7 @@ void CvSavegameReader::Read(char* szString)
 	szString[szBuffer.length()] = 0;
 }
 
-void CvSavegameReader::Read(wchar* szString)
+void CvSavegameReader::Read(wchar*& szString)
 {
 	CvWString szBuffer;
 	Read(szBuffer);
@@ -322,6 +347,12 @@ void CvSavegameReader::Read(wchar* szString)
 	{
 		szString[i] = szFrom[i];
 	}
+}
+
+void CvSavegameReader::Read(Coordinates& variable)
+{
+	Read(variable.m_iX);
+	Read(variable.m_iY);
 }
 
 void CvSavegameReader::Read(CvTurnScoreMap& Map)
@@ -471,6 +502,7 @@ void CvSavegameReader::Read(CvTradeRouteGroup     & variable) { variable.read(*t
 CvSavegameWriter::CvSavegameWriter(CvSavegameWriterBase& writerbase)
 	: m_vector(writerbase.m_vector)
 	, m_writerbase(writerbase)
+	, m_iLogIntent(0)
 {
 	m_eClassType = NUM_SAVEGAME_CLASS_TYPES;
 #ifdef WITH_DEBUG_WRITE_SAVEGAME
@@ -482,6 +514,7 @@ CvSavegameWriter::CvSavegameWriter(CvSavegameWriterBase& writerbase)
 CvSavegameWriter::CvSavegameWriter(const CvSavegameWriter& writer)
 	: m_vector(writer.m_vector)
 	, m_writerbase(writer.m_writerbase)
+	, m_iLogIntent(0)
 {
 	m_eClassType = NUM_SAVEGAME_CLASS_TYPES;
 }
@@ -654,6 +687,20 @@ void CvSavegameWriter::Write(SavegameVariableTypes eType, CvRandom& rand)
 	Write(rand);
 }
 
+void CvSavegameWriter::Write(SavegameVariableTypes eType, const Coordinates &variable)
+{
+	if (!variable.isInvalidPlotCoord())
+	{
+		if (isLogWriting())
+		{
+			CvString line = CvString::format("%s: (%d, %d)", getEnumName(eType), variable.x(), variable.y());
+			Log(line.c_str());
+		}
+		Write(eType);
+		Write(variable);
+	}
+}
+
 #ifndef WITH_DEBUG_WRITE_SAVEGAME
 void CvSavegameWriter::Write(byte* var, unsigned int iSize)
 {
@@ -746,12 +793,63 @@ void CvSavegameWriter::WriteXmlEnum(int iVariable, JITarrayTypes eType)
 	}
 }
 
+void CvSavegameWriter::Write(const Coordinates &variable)
+{
+	Write(variable.m_iX);
+	Write(variable.m_iY);
+}
+
 void CvSavegameWriter::Write(FVariable            &variable) { variable.write(*this); }
 void CvSavegameWriter::Write(CvDiploParameters    &variable) { variable.write(*this); }
 void CvSavegameWriter::Write(CvPopupButtonPython  &variable) { variable.write(*this); }
 void CvSavegameWriter::Write(CvPopupInfo          &variable) { variable.write(*this); }
 void CvSavegameWriter::Write(CvTalkingHeadMessage &variable) { variable.write(*this); }
 void CvSavegameWriter::Write(CvTradeRouteGroup    &variable) { variable.write(*this); }
+
+
+bool CvSavegameWriter::isLogWriting() const
+{
+	return bWRITE_LOG;
+}
+
+const char* CvSavegameWriter::getEnumName(SavegameVariableTypes eType) const
+{
+	return getSavedEnumName(m_eClassType, eType);
+}
+
+void CvSavegameWriter::Log(const char* name) const
+{
+	if (!isLogWriting())
+	{
+		return;
+	}
+	CvString line;
+	for (int i = 0; i < m_iLogIntent; ++i)
+	{
+		line.append("\t");
+	}
+	line.append(name);
+	gDLL->logMsg(getLogFile(), line.c_str(), false, false);
+}
+
+void CvSavegameWriter::Log(const char* name, const char* value) const
+{
+	if (!isLogWriting())
+	{
+		return;
+	}
+	CvString line;
+	line
+		.append(name)
+		.append(": ")
+		.append(value);
+	Log(line.c_str());
+}
+
+const char* CvSavegameWriter::getLogFile() const
+{
+	return "GameStateDump.log";
+}
 
 
 ///
@@ -780,10 +878,26 @@ bool CvSavegameBase::isCompressed() const
 	return HasBit(m_iFlag, Savegame_baseclass_flags_compressed);
 }
 
+unsigned int CvSavegameReaderBase::m_iSavegameVersion = 0;
+
 CvSavegameReaderBase::CvSavegameReaderBase(FDataStreamBase* pStream)
 	: m_pStream(pStream),
 	m_MemoryAllocation(NULL),
 	m_iRead(0)
+{
+	init();
+}
+
+CvSavegameReaderBase::CvSavegameReaderBase(FDataStreamBase* pStream, unsigned int iSavegameVersion)
+	: m_pStream(pStream),
+	m_MemoryAllocation(NULL),
+	m_iRead(0)
+{
+	m_iSavegameVersion = iSavegameVersion;
+	init();
+}
+
+void CvSavegameReaderBase::init()
 {
 	m_pStream->Read(&m_iFlag);
 	m_pStream->Read(&m_iSize);
@@ -794,6 +908,11 @@ CvSavegameReaderBase::CvSavegameReaderBase(FDataStreamBase* pStream)
 		int iReturnVal = ReadChunk();
 		FAssert(iReturnVal);
 	}
+}
+
+unsigned int CvSavegameReaderBase::getSavegameVersion()
+{
+	return m_iSavegameVersion;
 }
 
 int CvSavegameReaderBase::ReadChunk()
@@ -872,6 +991,11 @@ CvSavegameWriterBase::CvSavegameWriterBase(FDataStreamBase* pStream)
 
 void CvSavegameWriterBase::WriteFile()
 {
+	if (m_pStream == NULL)
+	{
+		return;
+	}
+
 	m_pStream->Write(m_iFlag);
 
 	unsigned int iSize = m_vector.size();
@@ -1099,3 +1223,33 @@ bool CvSavegameWriter::DEBUG_compare() const
 	return false;
 }
 #endif
+
+LogIntentHelper::LogIntentHelper(CvSavegameWriter& kWriter, const char* title)
+	: m_kWriter(kWriter)
+{
+	m_kWriter.Log(title);
+	m_kWriter.m_iLogIntent += 1;
+}
+LogIntentHelper::LogIntentHelper(CvSavegameWriter& kWriter, const char* title, const char* name)
+	: m_kWriter(kWriter)
+{
+	m_kWriter.Log(title, name);
+	m_kWriter.m_iLogIntent += 1;
+}
+LogIntentHelper::~LogIntentHelper()
+{
+	m_kWriter.m_iLogIntent -= 1;
+}
+
+void CreateOOSSavegame()
+{
+	CvString filename = gDLL->getModName();
+	filename.append(CvString::format("Desync save for player %d.ColonizationSave", GC.getGameINLINE().getActivePlayer()));
+
+	// remove the savegame file if it exist. Let it silently fail if it's not there.
+	remove(filename.c_str());
+
+	bWRITE_LOG = true;
+	gDLL->getEngineIFace()->SaveGame(filename);
+	bWRITE_LOG = false;
+}

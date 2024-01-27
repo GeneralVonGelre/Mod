@@ -168,63 +168,63 @@
 			<bInGeneric>1</bInGeneric>
 		</SoundData>
 		<SoundData>
-			<SoundID>SONG_WTP_1</SoundID>
+			<SoundID>SONG_WTP_01</SoundID>
 			<Filename>Sounds/Soundtrack/Muse</Filename>
 			<LoadType>STREAMED</LoadType>
 			<bIsCompressed>1</bIsCompressed>
 			<bInGeneric>1</bInGeneric>
 		</SoundData>
 		<SoundData>
-			<SoundID>SONG_WTP_2</SoundID>
+			<SoundID>SONG_WTP_02</SoundID>
 			<Filename>Sounds/Soundtrack/A_Celtic_Tale</Filename>
 			<LoadType>STREAMED</LoadType>
 			<bIsCompressed>1</bIsCompressed>
 			<bInGeneric>1</bInGeneric>
 		</SoundData>
 		<SoundData>
-			<SoundID>SONG_WTP_3</SoundID>
+			<SoundID>SONG_WTP_03</SoundID>
 			<Filename>Sounds/Soundtrack/Ambassadors</Filename>
 			<LoadType>STREAMED</LoadType>
 			<bIsCompressed>1</bIsCompressed>
 			<bInGeneric>1</bInGeneric>
 		</SoundData>
 		<SoundData>
-			<SoundID>SONG_WTP_4</SoundID>
+			<SoundID>SONG_WTP_04</SoundID>
 			<Filename>Sounds/Soundtrack/Ancient Storm</Filename>
 			<LoadType>STREAMED</LoadType>
 			<bIsCompressed>1</bIsCompressed>
 			<bInGeneric>1</bInGeneric>
 		</SoundData>
 		<SoundData>
-			<SoundID>SONG_WTP_5</SoundID>
+			<SoundID>SONG_WTP_05</SoundID>
 			<Filename>Sounds/Soundtrack/Benedicite</Filename>
 			<LoadType>STREAMED</LoadType>
 			<bIsCompressed>1</bIsCompressed>
 			<bInGeneric>1</bInGeneric>
 		</SoundData>
 		<SoundData>
-			<SoundID>SONG_WTP_6</SoundID>
+			<SoundID>SONG_WTP_06</SoundID>
 			<Filename>Sounds/Soundtrack/Burial</Filename>
 			<LoadType>STREAMED</LoadType>
 			<bIsCompressed>1</bIsCompressed>
 			<bInGeneric>1</bInGeneric>
 		</SoundData>
 		<SoundData>
-			<SoundID>SONG_WTP_7</SoundID>
+			<SoundID>SONG_WTP_07</SoundID>
 			<Filename>Sounds/Soundtrack/Deep_Memory</Filename>
 			<LoadType>STREAMED</LoadType>
 			<bIsCompressed>1</bIsCompressed>
 			<bInGeneric>1</bInGeneric>
 		</SoundData>
 		<SoundData>
-			<SoundID>SONG_WTP_8</SoundID>
+			<SoundID>SONG_WTP_08</SoundID>
 			<Filename>Sounds/Soundtrack/Despair</Filename>
 			<LoadType>STREAMED</LoadType>
 			<bIsCompressed>1</bIsCompressed>
 			<bInGeneric>1</bInGeneric>
 		</SoundData>
 		<SoundData>
-			<SoundID>SONG_WTP_9</SoundID>
+			<SoundID>SONG_WTP_09</SoundID>
 			<Filename>Sounds/Soundtrack/Farewell_Life</Filename>
 			<LoadType>STREAMED</LoadType>
 			<bIsCompressed>1</bIsCompressed>
@@ -484,7 +484,7 @@
 		</SoundData>
 		<SoundData>
 			<SoundID>SONG_WTP_46</SoundID>
-			<Filename>Sounds/Soundtrack/This_Ends_Now</Filename>
+			<Filename>Sounds/Soundtrack/To_Loves_End</Filename>
 			<LoadType>STREAMED</LoadType>
 			<bIsCompressed>1</bIsCompressed>
 			<bInGeneric>1</bInGeneric>
@@ -512,7 +512,7 @@
 		</SoundData>
 		<SoundData>
 			<SoundID>SONG_WTP_50</SoundID>
-			<Filename>Sounds/Soundtrack/Your_God_Is_Dead</Filename>
+			<Filename>Sounds/Soundtrack/Timeless_Tale</Filename>
 			<LoadType>STREAMED</LoadType>
 			<bIsCompressed>1</bIsCompressed>
 			<bInGeneric>1</bInGeneric>
@@ -527,6 +527,195 @@
 		<SoundData>
 			<SoundID>SONG_WTP_52</SoundID>
 			<Filename>Sounds/Soundtrack/King_Arthur</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_53</SoundID>
+			<Filename>Sounds/Soundtrack/A_Final_Sacrifice</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_54</SoundID>
+			<Filename>Sounds/Soundtrack/A_James_Horner_Tribute</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_55</SoundID>
+			<Filename>Sounds/Soundtrack/A_Way_of_Live_Small_Measure</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_56</SoundID>
+			<Filename>Sounds/Soundtrack/Be_Bold_and_Be_Brave</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_57</SoundID>
+			<Filename>Sounds/Soundtrack/Born_A_Legend</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_58</SoundID>
+			<Filename>Sounds/Soundtrack/Broken_Hearts</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_59</SoundID>
+			<Filename>Sounds/Soundtrack/Butterflies</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_60</SoundID>
+			<Filename>Sounds/Soundtrack/Cold</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_61</SoundID>
+			<Filename>Sounds/Soundtrack/Dance_For_Me_Wallis</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_62</SoundID>
+			<Filename>Sounds/Soundtrack/Dawn_Of_A_New_Time</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_63</SoundID>
+			<Filename>Sounds/Soundtrack/Death_May_Die</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_64</SoundID>
+			<Filename>Sounds/Soundtrack/Destination_Unknown</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_65</SoundID>
+			<Filename>Sounds/Soundtrack/Emotional_Piano_X</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_66</SoundID>
+			<Filename>Sounds/Soundtrack/Faithful_Fate</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_67</SoundID>
+			<Filename>Sounds/Soundtrack/Fallen_Tears</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_68</SoundID>
+			<Filename>Sounds/Soundtrack/For_the_love_of_a_Princess</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_69</SoundID>
+			<Filename>Sounds/Soundtrack/Harry_in_Winter</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_70</SoundID>
+			<Filename>Sounds/Soundtrack/Honor</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_71</SoundID>
+			<Filename>Sounds/Soundtrack/Janes_Lament</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_72</SoundID>
+			<Filename>Sounds/Soundtrack/Reckoning_Day</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_73</SoundID>
+			<Filename>Sounds/Soundtrack/Rimani</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_74</SoundID>
+			<Filename>Sounds/Soundtrack/Someday_I_will_follow</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_75</SoundID>
+			<Filename>Sounds/Soundtrack/Top</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_76</SoundID>
+			<Filename>Sounds/Soundtrack/Touch</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_77</SoundID>
+			<Filename>Sounds/Soundtrack/When_all_is_Lost</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_78</SoundID>
+			<Filename>Sounds/Soundtrack/Whitesand</Filename>
+			<LoadType>STREAMED</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SONG_WTP_79</SoundID>
+			<Filename>Sounds/Soundtrack/You_Left_Me</Filename>
 			<LoadType>STREAMED</LoadType>
 			<bIsCompressed>1</bIsCompressed>
 			<bInGeneric>1</bInGeneric>
@@ -4074,6 +4263,13 @@
 			<bInGeneric>1</bInGeneric>
 		</SoundData>
 		<SoundData>
+			<SoundID>SND_WHIP</SoundID>
+			<Filename>Sounds/Units/Whip</Filename>
+			<LoadType>DYNAMIC_RES</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
 			<SoundID>SND_HIT_VOX</SoundID>
 			<Filename>Sounds/Units/HitVox</Filename>
 			<LoadType>DYNAMIC_RES</LoadType>
@@ -4222,7 +4418,7 @@
 		</SoundData>
 		<SoundData>
 			<SoundID>SND_AMB_TMMS_EULE-RAUHFUSSEULE</SoundID>
-			<Filename>Sounds/TMMS/Tiere/Eule-Rauhfusseule</Filename>
+			<Filename>Sounds/TMMS/Tiere/Eule-Rauhfusskauz</Filename>
 			<LoadType>DYNAMIC_RES</LoadType>
 			<bIsCompressed>1</bIsCompressed>
 			<bInGeneric>1</bInGeneric>
@@ -4237,6 +4433,34 @@
 		<SoundData>
 			<SoundID>SND_AMB_TMMS_ADLER</SoundID>
 			<Filename>Sounds/TMMS/Tiere/Adler</Filename>
+			<LoadType>DYNAMIC_RES</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SND_GATOR_IDLE</SoundID>
+			<Filename>Sounds/Units/gator_idle</Filename>
+			<LoadType>DYNAMIC_RES</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SND_GATOR_HURT</SoundID>
+			<Filename>Sounds/Units/gator_hurt</Filename>
+			<LoadType>DYNAMIC_RES</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SND_GATOR_DIE</SoundID>
+			<Filename>Sounds/Units/gator_die</Filename>
+			<LoadType>DYNAMIC_RES</LoadType>
+			<bIsCompressed>1</bIsCompressed>
+			<bInGeneric>1</bInGeneric>
+		</SoundData>
+		<SoundData>
+			<SoundID>SND_GATOR_FIDGET</SoundID>
+			<Filename>Sounds/Units/gator_fidget</Filename>
 			<LoadType>DYNAMIC_RES</LoadType>
 			<bIsCompressed>1</bIsCompressed>
 			<bInGeneric>1</bInGeneric>

@@ -58,6 +58,7 @@ const char* getSavedEnumNameTalkingHeadMessage(SavegameVariableTypes eType)
 	case TalkingHeadMessageSave_Target: return "TalkingHeadMessageSave_Target";
 	case TalkingHeadMessageSave_Shown: return "TalkingHeadMessageSave_Shown";
 	}
+	FAssertMsg(0, "Missing case");
 	return "";
 }
 
@@ -127,6 +128,8 @@ void CvTalkingHeadMessage::read(CvSavegameReader reader)
 
 void CvTalkingHeadMessage::write(CvSavegameWriter writer)
 {
+	LogIntentHelper helper(writer, "CvTalkingHeadMessage");
+
 	writer.AssignClassType(SAVEGAME_CLASS_TALKINGHEADMESSAGE);
 
 	// Write the data.

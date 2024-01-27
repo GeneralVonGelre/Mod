@@ -21,6 +21,7 @@
 #include "FVariableSystem.h"
 #include "CvInitCore.h"
 #include "UserSettings.h"
+#include "StartupErrorChecking.h"
 
 #include <stdlib.h>
 
@@ -34,8 +35,6 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
-
-CvGlobals gGlobals;
 
 //
 // CONSTRUCTOR
@@ -115,13 +114,14 @@ m_iAI_LOST_TRANSPORT_MEMORY_COUNT(0),
 // TAC - AI Improved Navel AI - koma13 - END
 
 // R&R, ray, caching globals from Global Defines Alt - START
-// Caching Vanilla variables	
+// Caching Vanilla variables
 m_PLOT_VISIBILITY_RANGE(0),
 m_UNIT_VISIBILITY_RANGE(0),
 m_MIN_CITY_YIELD_DECAY(0),
 m_CITY_YIELD_DECAY_PERCENT(0),
 m_IMMIGRATION_THRESHOLD(0),
 m_IMMIGRATION_THRESHOLD_INCREASE(0),
+m_IMMIGRATION_THRESHOLD_MODIFIER_UNITS_ON_DOCK(0),
 m_TAX_TRADE_THRESHOLD(0),
 m_TAX_TRADE_THRESHOLD_TAX_RATE_PERCENT(0),
 m_TAX_INCREASE_CHANCE(0),
@@ -131,7 +131,7 @@ m_REDUCED_REF_PERCENT(0),
 // Domestic Market
 m_PRICE_DIFF_EUROPE_DOMESTIC_LUXURY_GOODS(0),
 m_DOMESTIC_SALES_MESSAGES(0),
-// Wild Animals	
+// Wild Animals
 m_WILD_ANIMAL_LAND_TERRAIN_NATIVE_WEIGHT(0),
 m_WILD_ANIMAL_LAND_UNIT_VARIATION_WEIGHT(0),
 m_WILD_ANIMAL_SEA_TERRAIN_NATIVE_WEIGHT(0),
@@ -282,15 +282,6 @@ m_CUSTOMHOUSE_PRODUCED_SELL_THRESHOLD(0),
 m_TAX_TRADE_INCREASE_CHANCE_KING_ATTITUDE_BASE(0),
 // R&R, ray, caching globals from Global Defines Alt - END
 
-// cache ship profession - start - Nightinggale
-m_PROFESSION_WHALING_BOAT_WORKING(-1),
-m_PROFESSION_FISHING_BOAT_WORKING(-1),
-// cache ship profession - end - Nightinggale
-// R&R, ray, enhanced caching Whaling and Fishing - START
-m_UNITCLASS_WHALING_BOAT(-1),
-m_UNITCLASS_FISHING_BOAT(-1),
-// R&R, ray, enhanced caching Whaling and Fishing - END
-
 // R&R, ray, Health - START
 m_MIN_POP_NEG_HEALTH(0),
 m_POP_DIVISOR_NEG_HEALTH(0),
@@ -317,7 +308,7 @@ m_BASE_CHANCE_FESTIVITIES_HAPPINESS(0),
 m_MIN_BALANCE_UNREST_UNHAPPINESS(0),
 m_MIN_BALANCE_FESTIVITIES_HAPPINESS(0),
 m_TURNS_UNREST_UNHAPPINESS(0),
-m_FOUNDING_FAHTER_POINTS_FESTIVITIES_HAPPINESS(0),
+m_FOUNDING_FATHER_POINTS_FESTIVITIES_HAPPINESS(0),
 m_TIMER_FESTIVITIES_OR_UNRESTS(0),
 // WTP, ray, Happiness - END
 
@@ -370,6 +361,7 @@ m_iUSE_ON_UPDATE_CALLBACK(0),
 m_iUSE_ON_UNIT_CREATED_CALLBACK(0),
 m_iUSE_ON_UNIT_LOST_CALLBACK(0),
 // K-Mod \ RaR
+m_iThreadID(GetCurrentThreadId()),
 m_bUSE_AI_UNIT_UPDATE_CALLBACK(false),
 m_bUSE_AI_DO_DIPLO_CALLBACK(false),
 m_bUSE_AI_DO_WAR_CALLBACK(false),
@@ -383,7 +375,8 @@ m_bUSE_GET_EXPERIENCE_NEEDED_CALLBACK(false),
 m_bUSE_DO_COMBAT_CALLBACK(false),
 // K-Mod \RaR end,
 m_paHints(NULL),
-m_paMainMenus(NULL)
+m_paMainMenus(NULL),
+m_bExeXmlLengthOverride(true)
 {
 }
 
@@ -396,6 +389,7 @@ CvGlobals::~CvGlobals()
 //
 void CvGlobals::init()
 {
+	StartupCheck::GlobalInitXMLCheck();
 	//
 	// These vars are used to initialize the globals.
 	//
@@ -440,7 +434,7 @@ void CvGlobals::init()
 		0,	// CARDINALDIRECTION_WEST
 	};
 
-	int aiCityPlotY[NUM_CITY_PLOTS_RADIUS_2] =
+	int aiCityPlotY[NUM_CITY_PLOTS_2_PLOTS] =
 	{
 		0,
 		0, 1, 1, 1, 0,-1,-1,-1,
@@ -448,7 +442,7 @@ void CvGlobals::init()
 		2, 2,-2,-2, // R&R, ray, 2 Plot Radius
 	};
 
-	int aiCityPlotX[NUM_CITY_PLOTS_RADIUS_2] =
+	int aiCityPlotX[NUM_CITY_PLOTS_2_PLOTS] =
 	{
 		0,
 		1, 1, 0,-1,-1,-1, 0, 1,
@@ -456,7 +450,7 @@ void CvGlobals::init()
 		2,-2,-2, 2, // R&R, ray, 2 Plot Radius
 	};
 
-	int aiCityPlotPriority[NUM_CITY_PLOTS_RADIUS_2] =
+	int aiCityPlotPriority[NUM_CITY_PLOTS_2_PLOTS] =
 	{
 		0,
 		1, 2, 1, 2, 1, 2, 1, 2,
@@ -551,40 +545,6 @@ void CvGlobals::init()
 	memcpy(m_aaiXYCityPlot_2_plot, aaiXYCityPlot_2_plot, sizeof(aaiXYCityPlot_2_plot));
 
 	this->setCityCatchmentRadius(0);
-}
-
-void CvGlobals::setCityCatchmentRadius(int iRadius)
-{
-	// Ideally this assert should trigger if altered after players are added, but it doesn't look like there are any way to check that.
-	// What really should be checked here is that the total count of cities in the game should be 0.
-//	FAssert(!GC.getGameINLINE().isFinalInitialized());
-#ifndef CHECK_GLOBAL_CONSTANTS
-	CITY_PLOTS_RADIUS = static_cast<CityPlotTypes>(iRadius);
-	if (iRadius == 1)
-	{
-		m_aaiXYCityPlot = m_aaiXYCityPlot_1_plot;
-		NUM_CITY_PLOTS = NUM_CITY_PLOTS_1_PLOT;
-		CITY_PLOTS_DIAMETER = static_cast<CityPlotTypes>(3);
-		m_iMIN_CITY_RANGE = getDefineINT("MIN_CITY_RANGE");
-		GC.setDefineFLOAT("CAMERA_CITY_ZOOM_IN_DISTANCE", GC.getDefineFLOAT("CAMERA_CITY_ZOOM_IN_DISTANCE_ONE_PLOT"));
-	}
-	else if (iRadius == 2)
-	{
-		m_aaiXYCityPlot = m_aaiXYCityPlot_2_plot;
-		NUM_CITY_PLOTS = NUM_CITY_PLOTS_2_PLOTS;
-		CITY_PLOTS_DIAMETER = static_cast<CityPlotTypes>(5);
-		m_iMIN_CITY_RANGE = getDefineINT("MIN_CITY_RANGE_TWO_PLOT");
-		GC.setDefineFLOAT("CAMERA_CITY_ZOOM_IN_DISTANCE", GC.getDefineFLOAT("CAMERA_CITY_ZOOM_IN_DISTANCE_TWO_PLOT"));
-	}
-	else
-	{
-		// invalid setting (likely 0). Use UserSetting value.
-		// Odds are that a scenario is read and the radius isn't specified.
-		UserSettings settings;
-		setCityCatchmentRadius(settings.getColonyRadius());
-	}
-	LAST_CITY_PLOT = NUM_CITY_PLOTS - static_cast<CityPlotTypes>(1);
-#endif
 }
 
 //
@@ -1026,8 +986,7 @@ std::vector<CvColorInfo*>& CvGlobals::getColorInfo()
 
 CvColorInfo& CvGlobals::getColorInfo(ColorTypes e)
 {
-	FAssert(e > -1);
-	FAssert(e < GC.getNumColorInfos());
+	FAssert(VARINFO<ColorTypes>::isInRange(e));
 	return *(m_paColorInfo[e]);
 }
 
@@ -1477,7 +1436,7 @@ CvWorldPickerInfo& CvGlobals::getWorldPickerInfo(int iIndex)
 	return *(m_paWorldPickerInfo[iIndex]);
 }
 
-int CvGlobals::getNumUnitInfos()
+int CvGlobals::getNumUnitInfos() const
 {
 	return (int)m_paUnitInfo.size();
 }
@@ -1524,8 +1483,8 @@ std::vector<CvInfoBase*>& CvGlobals::getConceptInfo()	// For Moose - XML Load Ut
 
 CvInfoBase& CvGlobals::getConceptInfo(ConceptTypes e)
 {
-	FAssert(e > -1);
-	FAssert(e < GC.getNumConceptInfos());
+	FAssert(e > NO_CONCEPT);
+	FAssert(e < NUM_CONCEPT_TYPES);
 	return *(m_paConceptInfo[e]);
 }
 int CvGlobals::getNumCalendarInfos()
@@ -1996,8 +1955,7 @@ std::vector<CvTurnTimerInfo*>& CvGlobals::getTurnTimerInfo()	// Do NOT export ou
 
 CvTurnTimerInfo& CvGlobals::getTurnTimerInfo(TurnTimerTypes eTurnTimerNum)
 {
-	FAssert(eTurnTimerNum > -1);
-	FAssert(eTurnTimerNum < GC.getNumTurnTimerInfos());
+	FAssert(VARINFO<TurnTimerTypes>::isInRange(eTurnTimerNum));
 	return *(m_paTurnTimerInfo[eTurnTimerNum]);
 }
 
@@ -2018,7 +1976,7 @@ CvBuildingClassInfo& CvGlobals::getBuildingClassInfo(BuildingClassTypes eBuildin
 	return *(m_paBuildingClassInfo[eBuildingClassNum]);
 }
 
-int CvGlobals::getNumBuildingInfos()
+int CvGlobals::getNumBuildingInfos() const
 {
 	return (int)m_paBuildingInfo.size();
 }
@@ -2456,8 +2414,7 @@ std::vector<CvUnitArtStyleTypeInfo*>& CvGlobals::getUnitArtStyleTypeInfo()
 
 CvUnitArtStyleTypeInfo& CvGlobals::getUnitArtStyleTypeInfo(UnitArtStyleTypes eUnitArtStyleTypeNum)
 {
-	FAssert(eUnitArtStyleTypeNum > -1);
-	FAssert(eUnitArtStyleTypeNum < GC.getNumUnitArtStyleTypeInfos());
+	FAssert(VARINFO<UnitArtStyleTypes>::isInRange(eUnitArtStyleTypeNum));
 	return *(m_paUnitArtStyleTypeInfo[eUnitArtStyleTypeNum]);
 }
 //Androrc End
@@ -2656,13 +2613,14 @@ void CvGlobals::cacheGlobals()
 	m_iUSE_ON_UNIT_LOST_CALLBACK = getDefineINT("USE_ON_UNIT_LOST_CALLBACK");
 
 	// R&R, ray, caching globals from Global Defines Alt - START
-	// Caching Vanilla variables	
+	// Caching Vanilla variables
 	m_PLOT_VISIBILITY_RANGE = getDefineINT("PLOT_VISIBILITY_RANGE");
 	m_UNIT_VISIBILITY_RANGE = getDefineINT("UNIT_VISIBILITY_RANGE");
 	m_MIN_CITY_YIELD_DECAY = getDefineINT("MIN_CITY_YIELD_DECAY");
 	m_CITY_YIELD_DECAY_PERCENT = getDefineINT("CITY_YIELD_DECAY_PERCENT");
 	m_IMMIGRATION_THRESHOLD = getDefineINT("IMMIGRATION_THRESHOLD");
 	m_IMMIGRATION_THRESHOLD_INCREASE = getDefineINT("IMMIGRATION_THRESHOLD_INCREASE");
+	m_IMMIGRATION_THRESHOLD_MODIFIER_UNITS_ON_DOCK = getDefineINT("IMMIGRATION_THRESHOLD_MODIFIER_UNITS_ON_DOCK");
 	m_TAX_TRADE_THRESHOLD = getDefineINT("TAX_TRADE_THRESHOLD");
 	m_TAX_TRADE_THRESHOLD_TAX_RATE_PERCENT = getDefineINT("TAX_TRADE_THRESHOLD_TAX_RATE_PERCENT");
 	m_TAX_INCREASE_CHANCE = getDefineINT("TAX_INCREASE_CHANCE");
@@ -2672,7 +2630,7 @@ void CvGlobals::cacheGlobals()
 	// Domestic Market
 	m_PRICE_DIFF_EUROPE_DOMESTIC_LUXURY_GOODS = getDefineINT("PRICE_DIFF_EUROPE_DOMESTIC_LUXURY_GOODS");
 	m_DOMESTIC_SALES_MESSAGES = getDefineINT("DOMESTIC_SALES_MESSAGES");
-	// Wild Animals	
+	// Wild Animals
 	m_WILD_ANIMAL_LAND_TERRAIN_NATIVE_WEIGHT = getDefineINT("WILD_ANIMAL_LAND_TERRAIN_NATIVE_WEIGHT");
 	m_WILD_ANIMAL_LAND_UNIT_VARIATION_WEIGHT = getDefineINT("WILD_ANIMAL_LAND_UNIT_VARIATION_WEIGHT");
 	m_WILD_ANIMAL_SEA_TERRAIN_NATIVE_WEIGHT = getDefineINT("WILD_ANIMAL_SEA_TERRAIN_NATIVE_WEIGHT");
@@ -2809,6 +2767,8 @@ void CvGlobals::cacheGlobals()
 	m_NATIVE_POTENTIAL_RAID_TARGET_THRESHOLD = getDefineINT("NATIVE_POTENTIAL_RAID_TARGET_THRESHOLD");
 	m_NATIVE_GOODS_RAID_PERCENT = getDefineINT("NATIVE_GOODS_RAID_PERCENT");
 	m_RANDOM_NATIVE_RAID_BASECHANCE = getDefineINT("RANDOM_NATIVE_RAID_BASECHANCE");
+	m_NATIVE_PRODUCTION_RAID_MIN = getDefineINT("NATIVE_PRODUCTION_RAID_MIN");
+	m_NATIVE_PRODUCTION_RAID_RANDOM = getDefineINT("NATIVE_PRODUCTION_RAID_RANDOM");
 	m_NATIVE_SPARE_AI_TREASURE_CHANCE = getDefineINT("NATIVE_SPARE_AI_TREASURE_CHANCE");
 	// Roundwise Native Income
 	m_PER_ROUND_PER_VILLAGE_INCOME_MAX = getDefineINT("PER_ROUND_PER_VILLAGE_INCOME_MAX");
@@ -2845,7 +2805,7 @@ void CvGlobals::cacheGlobals()
 	m_MIN_BALANCE_UNREST_UNHAPPINESS = getDefineINT("MIN_BALANCE_UNREST_UNHAPPINESS");
 	m_MIN_BALANCE_FESTIVITIES_HAPPINESS = getDefineINT("MIN_BALANCE_FESTIVITIES_HAPPINESS");
 	m_TURNS_UNREST_UNHAPPINESS = getDefineINT("TURNS_UNREST_UNHAPPINESS");
-	m_FOUNDING_FAHTER_POINTS_FESTIVITIES_HAPPINESS = getDefineINT("FOUNDING_FAHTER_POINTS_FESTIVITIES_HAPPINESS");
+	m_FOUNDING_FATHER_POINTS_FESTIVITIES_HAPPINESS = getDefineINT("FOUNDING_FATHER_POINTS_FESTIVITIES_HAPPINESS");
 	m_TIMER_FESTIVITIES_OR_UNRESTS = getDefineINT("TIMER_FESTIVITIES_OR_UNRESTS");
 	// WTP, ray, Happiness - END
 
@@ -2867,7 +2827,7 @@ void CvGlobals::cacheGlobals()
 	// K-Mod \ RaR
 	m_bUSE_AI_UNIT_UPDATE_CALLBACK = getDefineINT("USE_AI_UNIT_UPDATE_CALLBACK") != 0;
 	m_bUSE_AI_DO_DIPLO_CALLBACK = getDefineINT("USE_AI_DO_DIPLO_CALLBACK") != 0;
-	m_bUSE_AI_DO_WAR_CALLBACK = getDefineINT("USE_AI_DO_WAR_CALLBACK") != 0;	
+	m_bUSE_AI_DO_WAR_CALLBACK = getDefineINT("USE_AI_DO_WAR_CALLBACK") != 0;
 	m_bUSE_DO_GROWTH_CALLBACK = getDefineINT("USE_DO_GROWTH_CALLBACK") != 0;
 	m_bUSE_DO_CULTURE_CALLBACK = getDefineINT("USE_DO_CULTURE_CALLBACK") != 0;
 	m_bUSE_DO_PLOT_CULTURE_CALLBACK = getDefineINT("USE_DO_PLOT_CULTURE_CALLBACK") != 0;
@@ -2877,6 +2837,12 @@ void CvGlobals::cacheGlobals()
 	m_bUSE_GET_EXPERIENCE_NEEDED_CALLBACK = getDefineINT("USE_GET_EXPERIENCE_NEEDED_CALLBACK") != 0;
 	m_bUSE_DO_COMBAT_CALLBACK = getDefineINT("USE_DO_COMBAT_CALLBACK") != 0;
 	// K-Mod end \ RaR
+
+	m_iOPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_COLONIZERS = getDefineINT("OPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_COLONIZERS");
+	m_iOPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_NATIVES = getDefineINT("OPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_NATIVES");
+	m_iOPPRESSOMETER_FORCED_LABOR_MODIFIER_BASE = getDefineINT("OPPRESSOMETER_FORCED_LABOR_MODIFIER_BASE");
+	m_iOPPRESSOMETER_DECAY_RATE_BASE = getDefineINT("OPPRESSOMETER_DECAY_RATE_BASE");
+
 }
 
 int CvGlobals::getDefineINT( const char * szName ) const
@@ -3083,7 +3049,6 @@ int CvGlobals::getNumGraphicLevels() const { return NUM_GRAPHICLEVELS; }
 //
 // non-inline versions
 //
-CvMap& CvGlobals::getMap() { return *m_map; }
 CvGameAI& CvGlobals::getGame() { return *m_game; }
 CvGameAI *CvGlobals::getGamePointer(){ return m_game; }
 
@@ -3179,3 +3144,8 @@ int CvGlobals::getSymbolID(FontSymbols eSymbol) const
 	return m_aiGameFontCustomSymbolID[eSymbol];
 }
 /// GameFont XML control - end - Nightinggale
+
+bool CvGlobals::isMainThread() const
+{
+	return m_iThreadID == GetCurrentThreadId();
+}

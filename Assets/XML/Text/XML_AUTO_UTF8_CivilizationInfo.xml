@@ -19,6 +19,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Алгонкины</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_ALGONQUIAN_PEDIA</Tag>
@@ -45,6 +46,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Апачи</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_APACHE_PEDIA</Tag>
@@ -73,6 +75,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Араваки</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_ARAWAK_PEDIA</Tag>
@@ -105,6 +108,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Империя Ацтеков</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_AZTEC_PEDIA</Tag>
@@ -137,6 +141,7 @@
             <Gender>Male</Gender>
             <Plural>1</Plural>
         </Spanish>
+        <Russian>Дикие животные</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_BARBARIAN_PEDIA</Tag>
@@ -148,7 +153,7 @@
         <Tag>TXT_KEY_CIVILIZATION_BLACKFOOT</Tag>
         <English>Blackfoot</English>
         <French>
-            <Text>Pieds-Noirs</Text>
+            <Text>Niitsitapi</Text>
             <Gender>Male</Gender>
             <Plural>1</Plural>
         </French>
@@ -163,6 +168,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Черноногие</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_BLACKFOOT_PEDIA</Tag>
@@ -189,6 +195,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Карибы</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_CARIBS_PEDIA</Tag>
@@ -215,6 +222,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Чероки</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_CHEROKEE_PEDIA</Tag>
@@ -247,12 +255,13 @@
             <Gender>Female</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Святая Церковь</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_CHURCH_PEDIA</Tag>
         <English>[H1]Church in the New World[\H1][PARAGRAPH:2:1][BOLD]Background :[\BOLD][NEWLINE][TAB]When Columbus discovered the New World in 1492, the discovery sparked many theological debates in Europe. The existence of millions of Natives who never heard about Christ or Christianity energized European theologians. Churches disagreed with one another about the humanity of Natives, the justification of their brutal treatment, the legitimacy of slavery of non-Christians, and the best way of converting them to Christianity. Pope Alexander VI divided the New World in 1493 between Spain and Portugal, and ordered these nations to bring both continents under Christian rule. Sanctioned by such high ecclesiastical authority, Spanish conquistadors embarked on several campaigns of exploration and conquest, often brutally slaughtering the Natives they encountered, which they justified as a great mission of spreading Christianity across the world. Priests and missionaries travelled with the conquistadors, some aiding in the forced conversion of subdued Natives, while others went into the wilderness to convert Indian nations yet had to be conquered. As a result Catholic Christianity became dominant in all regions under Spanish or Portuguese control, a situation that persists to the present day. Missionaries were powerful factors in New World politics. The Jesuits established missions in South America, particularly among the Guarani people of modern-day Paraguay, which protected these Indians from slavery and the brutal treatment of Portuguese and Spanish colonists. Franciscans and Dominicans founded missions in California and New Mexico. These orders had a mighty ally in the Catholic Church, with independence from worldy powers like Spain and Portugal.[PARAGRAPH:1]Protestant religions were introduced later than Catholic religions in the New World. When English, Dutch and Swedish colonization of North America began, the colonists brought their various religions along with them. After the English had gained the upper hand over their competitors in eastern North America, their colonies became a patchwork of small, diverse religious sects, many fleeing persecution in the Old World, where their religious ideas were considered radical. While some of these sects persecuted and outlawed one another at various points in the history of New England, no single one of them ever managed to become dominant enough to force the others out. This lack of a dominant religion was one of the main motivations for the Founding Fathers to argue for the "Separation of Church and State", to be able to unite the various sects under one flag.[PARAGRAPH:1]A major difference between the English Protestants in North America and the Catholics in Central-South America was their concept of the New World, and its natives and their place in the world. While the Catholics aimed to convert the Native population and assimilate them into new Catholic states, the English had little interest in conversion of Natives. They viewed the New World as destined for them by God and saw the Natives as a nuisance to be extinguished. This idea of "Manifest Destiny" was strengthened by the vulnerability of Indians to European diseases, which was interpreted as an act of God, to cleanse the land for his chosen people to inhabit. Like the Catholics a century earlier, Protestants in North America justified the large-scale slaughter of Natives by invoking the divine command to spread Christianity over the entire world.[PARAGRAPH:1]Nowadays South and Central America are still predominantly Catholic, while North America has no dominant religion. The main Christian groups in the United States today are Catholics, Baptists, Methodists, Mormons, Lutherans, Anglicans and Pentacostals.</English>
         <French>[H1]L'Eglise dans le Nouveau Monde[\H1][PARAGRAPH:2:1][BOLD]Histoire :[\BOLD][NEWLINE][TAB]La découvert du Nouveau Monde par Colomb en 1492 a été la source de nombreux débats en Europe. La présence de millions d'indigènes, qui n'avaient jamais entendu parler du Christ, intéressa particulièrement les théologiens. Certains radicaux contestaient leur humanité pour justifier les traitements brutaux dont ils faisaient l'objet, la traite d'esclaves non-chrétiens ou la meilleure façon de les convertir à la fois chrétienne. C'est le Pape Alexandre VI qui, en 1493, divisa les terres d'exploration du Monde entre l'Espagne et le Portugal. Il ordonna par ailleurs aux deux puissances de répandre la parole du Christ. Avec la bénédiction des autorités écclesiastique de l'époque, les Conquistadors espagnals ont lancé de nombreuses campagnes d'exploration et de conquête, souvent dans la violence. Leur mission prosélite étant souvent invoqué comme prétexte pour justifier leurs actions. Des prêtres et des missionnaires ont voyagé avec les Conquistadors, certains forçant la conversion des indigènes soumis, d'autres s'aventurant dans les terres sauvages encore affranchies de toute influence européenne. La foi catholique s'imposa ainsi rapidement comme la religion dominante dans l'ensemble des territoires sous administration espagnole ou portugaise. Une situation qui persiste de nos jours. Les missionaires ont par ailleurs joué un rôle politique important dans le Nouveau Monde. Les Jésuites ont établis de nombreuses missions en Amérique du Sud, particulièrement chez les guaranis dans l'actuel Paraguay. Ces dernières ont permis aux indigènes d'échapper à l'esclavage des colons portugais et espagnols. Les franciscains et dominicains ont églement fondé de nombreuses missions en Californie et au Nouveau Mexique. L'Eglise leur était un allié de première importance pour leur apporter une certaine autonomie par rapport aux puissances coloniales.[PARAGRAPH:1]La religion protestante a été introduite dans le Nouveau Monde après la religion catholique. Lorsque les anglais, danois et suédois sont arrivés en Amérique du Nord, ils ont apporté une variété de cultes différents avec eux. Une fois que les anglais ont acquis l'hégémonie en Amérique du Nord, une myriade de religions ou de sectes, souvent persécutés en Europe, se sont mises à prospérer. Même si certains mouvements particulièrement radicaux ont pu être interdits en Nouvelle Angleterre, aucune n'a jamais réussi à devenir suffisamment dominante pour forcer l'exclusion des autres. C'est cette diversité religieuse qui est à l'origine des Pères Fondateurs de séparer l'église de l'état, de manière à unir chacun derrière le même drapeau.[PARAGRAPH:1]La différence principale entre les protestants d'Amérique du Nord et les catholiques d'Amérique Centrale et du Sud étaient dans leur représentation de la place des indigènes dans le Nouveau Monde. Alors que les catholiques souhaitaient convertir les populations autochtones et les assimiler dans la communauté, les anglais avaient peu d'intérêt pour la question. Ils voyaient le Nouveau Monde comme était une Destinée Manifeste qui leur était réservé par Dieu, et ne voyait dans les indigènes qu'une nuisance dont il fallait se débarasser. Cette idée de Destinée Manifeste a été renforcée par la grande mortalité des indigènes en raison des maladies importées d'Europe. Ces dernières étaient souvent interprétées comme un signe de Dieu, pour nettoyer les terres et permettre aux peuples de foi d'y prospérer. Comme les catholiques un siècle plus tôt, les protestants d'Amérique du Nord ont justifié des massacres d'indigènes à grande échelle au nom de la foi.[PARAGRAPH:1]Aujourd'hui, l'Amérique Centrale et du Sud est toujours catholiques, alors que l'Amérique du Nord n'a pas de religion dominante. Les groupes chrétiens les plus importants aux Etats-Unis sont les catholiques, baptistes, méthodistes, mormons, luthériens, anglicans et pentecôtistes.</French>
-        <German>[H1]Kirche in der Neuen Welt[H1][\H1][PARAGRAPH:2:1][BOLD]Hintergrund :[\BOLD][NEWLINE][TAB]Als Kolumbus 1492 die Neue Welt entdeckte, löste dies viele theologische Debatten in Europa aus. Vor allem die Existenz von Millionen Ureinwohnern, die nie von Christus gehört hatten, interessierte die europäischen Theologen sehr. Viel Unstimmigkeit gab es bezüglich der Menschlichkeit der Ureinwohner, der Rechtfertigung der brutalen Behandlung durch die Europäer, der Rechtmässigkeit der Versklavung von Nicht-Christen und bezüglich des besten Weges, um die Ureinwohner zu christianisieren. Papst Alexander VI. teilte die Neue Welt zwischen Spanien und Portugal auf und befahl diesen Nationen, die beiden Kontinente Amerikas unter christliche Herrschaft zu bringen. Von den höchsten geistlichen Autoritäten der Zeit sanktioniert, brachen die spanischen Konquistadoren zu mehreren Kampagnen zur Erkundung und Eroberung auf. Dabei schlachteten sie oft die Ureinwohner, die sie trafen, brutal ab und rechtfertigten dies mit der Verbreitung des Christentums in der Welt. Priester und Missionare reisten mit den Konquistadoren. Einige halfen bei der erzwungenen Konvertierung der unterworfenen Ureinwohner, während andere in die Wildnis zogen, um die Ureinwohnerstämme, die noch nicht erobert wurden, zu konvertieren. Als Resultat daraus wurde das katholische Christentum die dominante Religion in allen Gebieten unter spanischer oder portugiesischer Herrschaft, was auch heute noch der Fall ist. Die Missionare wurden ein mächtiger Faktor in der Politik der Neuen Welt. Die Jesuiten bekamen sogar eigene für sie reservierte Missionsgebiete in Süd-Amerika zugewiesen; diese dienten unter anderem der Missionierung der Guarani, ein Volk, das im heutigen Paraguay siedelte. Diese Missionen schützten die Ureinwohner vor der Sklaverei und Misshandlung durch spanische und portugiesische Kolonisten. Die Franziskaner und Dominikaner errichteten Missionen in Kalifornien und Neu-Mexiko. Durch ihren mächtigen Alliierten, den Papst, gelang es ihnen, weitgehend unabhängig von der weltlichen Herrschaft der Spanier und Portugiesen zu bleiben.[PARAGRAPH:1]Die protestantischen Religionen verbreiteten sich erst viel später in der Neuen Welt. Als die Kolonisation durch Engländer, Holländer und Schweden in Nord-Amerika begann, brachten diese natürlich ihren Glauben mit. Nachdem die Engländer die Oberhand gegen ihre Konkurrenten im östlichen Nord-Amerika erlangt hatten, entwickelten sich ihre Siedlungen zu einer Art Zusammenschluss verschiedener religiöser Sekten, die der Verfolgung in der Alten Welt entkommen wollten. Obwohl die verschiedenen Sekten sich teilweise gegenseitig bannten und verfolgten, gelang es keiner dieser Sekten, die Dominanz zu erringen. Diese fehlende Dominanz einer einzigen Religion, war die massgebliche Motivation der Gründerväter für eine Teilung von Kirche und Staat zu argumentieren.[PARAGRAPH:1]Einer der grössten Unterschiede zwischen den Protestanten in Nord-Amerika und den Katholiken in Zentral- und Süd-Amerika, war die Art und Weise, wie sie die Ureinwohner und ihren eigenen Platz in der neuen Welt sahen. Während die Katholiken darauf abzielten, die Ureinwohner zu konvertieren und in die neuen katholischen Staaten zu assimilieren, hatten die Engländer daran wenig Interesse. Sie sahen die Neue Welt als ihr von Gott gegebenes Schicksal und die Ureinwohner als wenig mehr, als eine Störung des göttlichen Plans, die beseitigt werden musste. Selbst die hohen Sterblichkeit der Ureinwohner, durch die von Europäern eingeschleppten Krankheiten, wurde als Werk Gottes interpretiert, um das Land für sein auserwähltes Volk zu säubern. Wie die Katholiken es ein Jahrhundert zuvor getan hatten, rechtfertigten die Protestanten den gross angelegten Völkermord durch den göttlichen Auftrag, das Christentum in der gesamten Welt zu verbreiten.[PARAGRAPH:1]Heutzutage sind Zentral- und Süd-Amerika immer noch weitgehend katholisch, während es in Nord-Amerika keine dominante Religion gibt. Die grössten christlichen Gruppen in den Vereinigten Staaten sind Katholiken, Baptisten, Methodisten, Mormonen, Lutheraner und Anglikaner.</German>
+        <German>[H1]Kirche in der Neuen Welt[\H1][PARAGRAPH:2:1][BOLD]Hintergrund :[\BOLD][NEWLINE][TAB]Als Kolumbus 1492 die Neue Welt entdeckte, löste dies viele theologische Debatten in Europa aus. Vor allem die Existenz von Millionen Ureinwohnern, die nie von Christus gehört hatten, interessierte die europäischen Theologen sehr. Viel Unstimmigkeit gab es bezüglich der Menschlichkeit der Ureinwohner, der Rechtfertigung der brutalen Behandlung durch die Europäer, der Rechtmässigkeit der Versklavung von Nicht-Christen und bezüglich des besten Weges, um die Ureinwohner zu christianisieren. Papst Alexander VI. teilte die Neue Welt zwischen Spanien und Portugal auf und befahl diesen Nationen, die beiden Kontinente Amerikas unter christliche Herrschaft zu bringen. Von den höchsten geistlichen Autoritäten der Zeit sanktioniert, brachen die spanischen Konquistadoren zu mehreren Kampagnen zur Erkundung und Eroberung auf. Dabei schlachteten sie oft die Ureinwohner, die sie trafen, brutal ab und rechtfertigten dies mit der Verbreitung des Christentums in der Welt. Priester und Missionare reisten mit den Konquistadoren. Einige halfen bei der erzwungenen Konvertierung der unterworfenen Ureinwohner, während andere in die Wildnis zogen, um die Ureinwohnerstämme, die noch nicht erobert wurden, zu konvertieren. Als Resultat daraus wurde das katholische Christentum die dominante Religion in allen Gebieten unter spanischer oder portugiesischer Herrschaft, was auch heute noch der Fall ist. Die Missionare wurden ein mächtiger Faktor in der Politik der Neuen Welt. Die Jesuiten bekamen sogar eigene für sie reservierte Missionsgebiete in Süd-Amerika zugewiesen; diese dienten unter anderem der Missionierung der Guarani, ein Volk, das im heutigen Paraguay siedelte. Diese Missionen schützten die Ureinwohner vor der Sklaverei und Misshandlung durch spanische und portugiesische Kolonisten. Die Franziskaner und Dominikaner errichteten Missionen in Kalifornien und Neu-Mexiko. Durch ihren mächtigen Alliierten, den Papst, gelang es ihnen, weitgehend unabhängig von der weltlichen Herrschaft der Spanier und Portugiesen zu bleiben.[PARAGRAPH:1]Die protestantischen Religionen verbreiteten sich erst viel später in der Neuen Welt. Als die Kolonisation durch Engländer, Holländer und Schweden in Nord-Amerika begann, brachten diese natürlich ihren Glauben mit. Nachdem die Engländer die Oberhand gegen ihre Konkurrenten im östlichen Nord-Amerika erlangt hatten, entwickelten sich ihre Siedlungen zu einer Art Zusammenschluss verschiedener religiöser Sekten, die der Verfolgung in der Alten Welt entkommen wollten. Obwohl die verschiedenen Sekten sich teilweise gegenseitig bannten und verfolgten, gelang es keiner dieser Sekten, die Dominanz zu erringen. Diese fehlende Dominanz einer einzigen Religion, war die massgebliche Motivation der Gründerväter für eine Teilung von Kirche und Staat zu argumentieren.[PARAGRAPH:1]Einer der grössten Unterschiede zwischen den Protestanten in Nord-Amerika und den Katholiken in Zentral- und Süd-Amerika, war die Art und Weise, wie sie die Ureinwohner und ihren eigenen Platz in der neuen Welt sahen. Während die Katholiken darauf abzielten, die Ureinwohner zu konvertieren und in die neuen katholischen Staaten zu assimilieren, hatten die Engländer daran wenig Interesse. Sie sahen die Neue Welt als ihr von Gott gegebenes Schicksal und die Ureinwohner als wenig mehr, als eine Störung des göttlichen Plans, die beseitigt werden musste. Selbst die hohen Sterblichkeit der Ureinwohner, durch die von Europäern eingeschleppten Krankheiten, wurde als Werk Gottes interpretiert, um das Land für sein auserwähltes Volk zu säubern. Wie die Katholiken es ein Jahrhundert zuvor getan hatten, rechtfertigten die Protestanten den gross angelegten Völkermord durch den göttlichen Auftrag, das Christentum in der gesamten Welt zu verbreiten.[PARAGRAPH:1]Heutzutage sind Zentral- und Süd-Amerika immer noch weitgehend katholisch, während es in Nord-Amerika keine dominante Religion gibt. Die grössten christlichen Gruppen in den Vereinigten Staaten sind Katholiken, Baptisten, Methodisten, Mormonen, Lutheraner und Anglikaner.</German>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_COMANCHE</Tag>
@@ -273,6 +282,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Команчи</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_COMANCHE_PEDIA</Tag>
@@ -299,6 +309,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Кроу</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_CROW_PEDIA</Tag>
@@ -313,6 +324,7 @@
         <German>Dänische Kolonien</German>
         <Italian>Danish Colonies</Italian>
         <Spanish>Danish Colonies</Spanish>
+        <Russian>Датские колонии</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_DENMARK_EUROPE</Tag>
@@ -321,6 +333,7 @@
         <German>Königreich von Dänemark</German>
         <Italian>Kingdom of Denmark</Italian>
         <Spanish>Kingdom of Denmark</Spanish>
+        <Russian>Королевство Дания-Норвегия</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_DENMARK_EUROPE_PEDIA</Tag>
@@ -329,6 +342,7 @@
         <German>Dänemark</German>
         <Italian>Denmark</Italian>
         <Spanish>Denmark</Spanish>
+        <Russian>Дания-Норвегия</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_DENMARK_PEDIA</Tag>
@@ -355,6 +369,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Голландские колонии</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_DUTCH_EUROPE</Tag>
@@ -375,6 +390,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Голландия</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_DUTCH_EUROPE_PEDIA</Tag>
@@ -407,6 +423,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Английские колонии</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_ENGLAND_EUROPE</Tag>
@@ -427,6 +444,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Британская империя</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_ENGLAND_EUROPE_PEDIA</Tag>
@@ -459,6 +477,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Французские колонии</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_FRANCE_EUROPE</Tag>
@@ -479,6 +498,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Королевство Франция</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_FRANCE_EUROPE_PEDIA</Tag>
@@ -507,6 +527,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Гуарани</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_GUARANI_PEDIA</Tag>
@@ -533,6 +554,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Нгабе</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_GUAYMI_PEDIA</Tag>
@@ -559,6 +581,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Гуроны</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_HURON_PEDIA</Tag>
@@ -589,6 +612,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Империя Инков</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_INCA_PEDIA</Tag>
@@ -617,6 +641,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Инуиты</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_INUIT_PEDIA</Tag>
@@ -643,6 +668,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Ирокезы</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_IROQUOIS_PEDIA</Tag>
@@ -671,6 +697,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Мачипаро</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_MACHIPARO_PEDIA</Tag>
@@ -697,6 +724,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Мапуче</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_MAPUCHE_PEDIA</Tag>
@@ -723,6 +751,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Империя Майа</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_MAYA_PEDIA</Tag>
@@ -749,6 +778,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Миштеки</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_MIXTEC_PEDIA</Tag>
@@ -775,6 +805,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Муиски</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_MUISCA_PEDIA</Tag>
@@ -801,6 +832,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Навахо</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_NAVAJO_PEDIA</Tag>
@@ -827,6 +859,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Не-Персе</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_NEZ_PERCE_PEDIA</Tag>
@@ -853,6 +886,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Омагуа</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_OMAGUA_PEDIA</Tag>
@@ -867,6 +901,7 @@
         <German>Colónias Portuguesas</German>
         <Italian>Colonie portoghesi</Italian>
         <Spanish>Portuguese Colonies</Spanish>
+        <Russian>Португальские колонии</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_PORTUGAL_EUROPE</Tag>
@@ -875,6 +910,7 @@
         <German>Königreich Portugal</German>
         <Italian>Impero Portoghese</Italian>
         <Spanish>Imperio portugués</Spanish>
+        <Russian>Португальская империя</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_PORTUGAL_EUROPE_PEDIA</Tag>
@@ -883,6 +919,7 @@
         <German>Portugal</German>
         <Italian>Portogallo</Italian>
         <Spanish>Portugal</Spanish>
+        <Russian>Португалия</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_PORTUGAL_PEDIA</Tag>
@@ -897,6 +934,7 @@
         <German>Russische Kolonien</German>
         <Italian>Russian Colonies</Italian>
         <Spanish>Russian Colonies</Spanish>
+        <Russian>Русские колонии</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_RUSSIA_EUROPE</Tag>
@@ -905,6 +943,7 @@
         <German>Russisches Reich</German>
         <Italian>Russian Empire</Italian>
         <Spanish>Russian Empire</Spanish>
+        <Russian>Российская Империя</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_RUSSIA_EUROPE_PEDIA</Tag>
@@ -913,6 +952,7 @@
         <German>Russland</German>
         <Italian>Russia</Italian>
         <Spanish>Russia</Spanish>
+        <Russian>Россия</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_RUSSIA_PEDIA</Tag>
@@ -941,6 +981,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Шошоны</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_SHOSHONE_PEDIA</Tag>
@@ -967,6 +1008,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Шуар</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_SHUAR_PEDIA</Tag>
@@ -993,6 +1035,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Сиу</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_SIOUX_PEDIA</Tag>
@@ -1021,6 +1064,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Испанские колонии</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_SPAIN_EUROPE</Tag>
@@ -1041,6 +1085,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Испанская империя</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_SPAIN_EUROPE_PEDIA</Tag>
@@ -1061,6 +1106,7 @@
         <German>Schwedische Kolonien</German>
         <Italian>Swedish Colonies</Italian>
         <Spanish>Swedish Colonies</Spanish>
+        <Russian>Шведские колонии</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_SWEDEN_EUROPE</Tag>
@@ -1069,6 +1115,7 @@
         <German>Königreich von Schwden</German>
         <Italian>Kingdom of Sweden</Italian>
         <Spanish>Kingdom of Sweden</Spanish>
+        <Russian>Королевство Швеция</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_SWEDEN_EUROPE_PEDIA</Tag>
@@ -1077,6 +1124,7 @@
         <German>Schweden</German>
         <Italian>Sweden</Italian>
         <Spanish>Sweden</Spanish>
+        <Russian>Швеция</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_SWEDEN_PEDIA</Tag>
@@ -1103,6 +1151,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Тараски</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_TARASCANS_PEDIA</Tag>
@@ -1129,6 +1178,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Теуэльче</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_TEHUELCHE_PEDIA</Tag>
@@ -1155,6 +1205,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Торомона</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_TOROMONA_PEDIA</Tag>
@@ -1181,6 +1232,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Тупи</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_TUPI_PEDIA</Tag>
@@ -1209,6 +1261,7 @@
             <Gender>Male</Gender>
             <Plural>0</Plural>
         </Spanish>
+        <Russian>Сапотеки</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_CIVILIZATION_ZAPOTEC_PEDIA</Tag>

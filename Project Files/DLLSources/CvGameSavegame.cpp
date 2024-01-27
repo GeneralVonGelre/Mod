@@ -177,6 +177,7 @@ const char* getSavedEnumNameGame(SavegameVariableTypes eType)
 	case GameSave_CultureVictoryCultureLevel: return "GameSave_CultureVictoryCultureLevel";
 
 	}
+	FAssertMsg(0, "Missing case");
 	return "";
 }
 
@@ -363,6 +364,8 @@ void CvGame::read(CvSavegameReader reader)
 
 void CvGame::write(CvSavegameWriter writer)
 {
+	LogIntentHelper helper(writer, "CvGame");
+
 	writer.AssignClassType(SAVEGAME_CLASS_GAME);
 
 	// Write the data.

@@ -163,10 +163,10 @@ public:
 	DllExport CvInterface* getInterfacePtr();
 	DllExport int getMaxCivPlayers() const;
 #ifdef _USRDLL
-	CvMap& getMapINLINE() { return *m_map; }				// inlined for perf reasons, do not use outside of dll
+	CvMap& getMap() { return *m_map; }
 	CvGameAI& getGameINLINE() { return *m_game; }			// inlined for perf reasons, do not use outside of dll
+	const CvGameAI& getGameConst() const { return *m_game; }
 #endif
-	DllExport CvMap& getMap();
 	DllExport CvGameAI& getGame();
 	DllExport CvGameAI *getGamePointer();
 	DllExport CvRandom& getASyncRand();
@@ -180,7 +180,7 @@ public:
 	DllExport FAStar& getRouteFinder();
 	DllExport FAStar& getBorderFinder();
 	DllExport FAStar& getAreaFinder();
-	
+
 	NiPoint3& getPt3Origin();
 
 	DllExport std::vector<CvInterfaceModeInfo*>& getInterfaceModeInfo();
@@ -346,9 +346,9 @@ public:
 	std::vector<CvWorldPickerInfo*>& getWorldPickerInfo();
 	DllExport	CvWorldPickerInfo& getWorldPickerInfo(int iIndex);
 
-	DllExport int getNumUnitInfos();
-	DllExport std::vector<CvUnitInfo*>& getUnitInfo();
-	DllExport	CvUnitInfo& getUnitInfo(UnitTypes eUnitNum);
+	int getNumUnitInfos() const;
+	std::vector<CvUnitInfo*>& getUnitInfo();
+	CvUnitInfo& getUnitInfo(UnitTypes eUnitNum);
 
 	int getNumSpecialUnitInfos();
 	std::vector<CvSpecialUnitInfo*>& getSpecialUnitInfo();
@@ -466,9 +466,10 @@ public:
 	std::vector<CvBuildingClassInfo*>& getBuildingClassInfo();
 	CvBuildingClassInfo& getBuildingClassInfo(BuildingClassTypes eBuildingClassNum);
 
-	DllExport int getNumBuildingInfos();
-	DllExport std::vector<CvBuildingInfo*>& getBuildingInfo();
-	DllExport CvBuildingInfo& getBuildingInfo(BuildingTypes eBuildingNum);
+	int getNumBuildingInfos() const;
+	int getNumBuildingInfosFakeExe() const;
+	std::vector<CvBuildingInfo*>& getBuildingInfo();
+	CvBuildingInfo& getBuildingInfo(BuildingTypes eBuildingNum);
 
 	DllExport int getNumSpecialBuildingInfos();
 	std::vector<CvSpecialBuildingInfo*>& getSpecialBuildingInfo();
@@ -567,7 +568,6 @@ public:
 	//Androrc End
 	DllExport int getNUM_ENGINE_DIRTY_BITS() const;
 	DllExport int getNUM_INTERFACE_DIRTY_BITS() const;
-	DllExport int getNUM_YIELD_TYPES() const;
 	DllExport int getNUM_FORCECONTROL_TYPES() const;
 	DllExport int getNUM_INFOBAR_TYPES() const;
 	DllExport int getNUM_HEALTHBAR_TYPES() const;
@@ -665,6 +665,7 @@ public:
 	int getCITY_YIELD_DECAY_PERCENT();
 	int getIMMIGRATION_THRESHOLD();
 	int getIMMIGRATION_THRESHOLD_INCREASE();
+	int getIMMIGRATION_THRESHOLD_MODIFIER_UNITS_ON_DOCK();
 	int getTAX_TRADE_THRESHOLD();
 	int getTAX_TRADE_THRESHOLD_TAX_RATE_PERCENT();
 	int getTAX_INCREASE_CHANCE();
@@ -776,7 +777,7 @@ public:
 	int getBASE_CHANCE_CONTINENTAL_GUARD();
 	int getBASE_CHANCE_MORTAR();
 	int getCHURCH_CONTACT_CHANCE();
-	int getMIN_ROUND_CHURCH_CONTACT();	
+	int getMIN_ROUND_CHURCH_CONTACT();
 	int getBASE_CHANCE_CHURCH_WAR();
 	int getMIN_ROUND_CHURCH_WAR();
 	int getPRICE_MILITIA();
@@ -811,6 +812,8 @@ public:
 	int getNATIVE_POTENTIAL_RAID_TARGET_THRESHOLD();
 	int getNATIVE_GOODS_RAID_PERCENT();
 	int getRANDOM_NATIVE_RAID_BASECHANCE();
+	int getNATIVE_PRODUCTION_RAID_MIN();
+	int getNATIVE_PRODUCTION_RAID_RANDOM();
 	int getNATIVE_SPARE_AI_TREASURE_CHANCE();
 	// Roundwise Native Income
 	int getPER_ROUND_PER_VILLAGE_INCOME_MAX();
@@ -823,16 +826,6 @@ public:
 	// Improvement TAX mechanism
 	int getTAX_TRADE_INCREASE_CHANCE_KING_ATTITUDE_BASE();
 	// R&R, ray, caching globals from Global Defines Alt - END
-
-	// cache ship profession - start - Nightinggale
-	int getPROFESSION_WHALING_BOAT_WORKING();
-	int getPROFESSION_FISHING_BOAT_WORKING();
-	// cache ship profession - end - Nightinggale
-
-	// R&R, ray, enhanced caching Whaling and Fishing - START
-	int getUNITCLASS_WHALING_BOAT();
-	int getUNITCLASS_FISHING_BOAT();
-	// R&R, ray, enhanced caching Whaling and Fishing - END
 
 	// R&R, ray, Health - START
 	int getMIN_POP_NEG_HEALTH();
@@ -860,7 +853,7 @@ public:
 	int getMIN_BALANCE_UNREST_UNHAPPINESS();
 	int getMIN_BALANCE_FESTIVITIES_HAPPINESS();
 	int getTURNS_UNREST_UNHAPPINESS();
-	int getFOUNDING_FAHTER_POINTS_FESTIVITIES_HAPPINESS();
+	int getFOUNDING_FATHER_POINTS_FESTIVITIES_HAPPINESS();
 	int getTIMER_FESTIVITIES_OR_UNRESTS();
 	// WTP, ray, Happiness - END
 
@@ -880,6 +873,12 @@ public:
 	int getTRADE_POST_GOLD_PER_NATIVE(); // WTP, ray, Native Trade Posts - START
 
 	// softcoding enum values
+
+	int getOPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_COLONIZERS();
+	int getOPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_NATIVES();
+	int getOPPRESSOMETER_FORCED_LABOR_MODIFIER_BASE();
+	int getOPPRESSOMETER_DECAY_RATE_BASE();
+
 
 	void postXMLLoad(bool bFirst);
 
@@ -991,10 +990,12 @@ public:
 	void deleteInfoArrays();
 
 	void cleanInfoStrings();
-	
+
 	const InfoArray<YieldTypes>& getDomesticDemandYieldTypes() const { return m_iaDomesticDemandYieldTypes; }
 
 	void setCityCatchmentRadius(int iSetting);
+
+	bool isMainThread() const;
 
 	ProfilerManager& getProfiler() { return m_ProfileManager; }
 
@@ -1237,13 +1238,14 @@ protected:
 	// TAC - AI Improved Navel AI - koma13 - END
 
 	// R&R, ray, caching globals from Global Defines Alt - START
-	// Caching Vanilla variables 
+	// Caching Vanilla variables
 	int m_PLOT_VISIBILITY_RANGE;
 	int m_UNIT_VISIBILITY_RANGE;
 	int m_MIN_CITY_YIELD_DECAY;
 	int m_CITY_YIELD_DECAY_PERCENT;
 	int m_IMMIGRATION_THRESHOLD;
 	int m_IMMIGRATION_THRESHOLD_INCREASE;
+	int m_IMMIGRATION_THRESHOLD_MODIFIER_UNITS_ON_DOCK;
 	int m_TAX_TRADE_THRESHOLD;
 	int m_TAX_TRADE_THRESHOLD_TAX_RATE_PERCENT;
 	int m_TAX_INCREASE_CHANCE;
@@ -1253,7 +1255,7 @@ protected:
 	// Domestic Market
 	int m_PRICE_DIFF_EUROPE_DOMESTIC_LUXURY_GOODS;
 	int m_DOMESTIC_SALES_MESSAGES;
-	// Wild Animals	
+	// Wild Animals
 	int m_WILD_ANIMAL_LAND_TERRAIN_NATIVE_WEIGHT;
 	int m_WILD_ANIMAL_LAND_UNIT_VARIATION_WEIGHT;
 	int m_WILD_ANIMAL_SEA_TERRAIN_NATIVE_WEIGHT;
@@ -1390,6 +1392,8 @@ protected:
 	int m_NATIVE_POTENTIAL_RAID_TARGET_THRESHOLD;
 	int m_NATIVE_GOODS_RAID_PERCENT;
 	int m_RANDOM_NATIVE_RAID_BASECHANCE;
+	int m_NATIVE_PRODUCTION_RAID_MIN;
+	int m_NATIVE_PRODUCTION_RAID_RANDOM;
 	int m_NATIVE_SPARE_AI_TREASURE_CHANCE;
 	// Roundwise Native Income
 	int m_PER_ROUND_PER_VILLAGE_INCOME_MAX;
@@ -1402,13 +1406,6 @@ protected:
 	// Improvement TAX mechanism
 	int m_TAX_TRADE_INCREASE_CHANCE_KING_ATTITUDE_BASE;
 	// R&R, ray, caching globals from Global Defines Alt - END
-
-	// cache ship profession - start - Nightinggale
-	int m_PROFESSION_WHALING_BOAT_WORKING;
-	int m_PROFESSION_FISHING_BOAT_WORKING;
-	int m_UNITCLASS_WHALING_BOAT; // R&R, ray
-	int m_UNITCLASS_FISHING_BOAT; // R&R, ray
-	// cache ship profession - end - Nightinggale
 
 	// R&R, ray, Health - START
 	int m_MIN_POP_NEG_HEALTH;
@@ -1438,7 +1435,7 @@ protected:
 	int m_MIN_BALANCE_UNREST_UNHAPPINESS;
 	int m_MIN_BALANCE_FESTIVITIES_HAPPINESS;
 	int m_TURNS_UNREST_UNHAPPINESS;
-	int m_FOUNDING_FAHTER_POINTS_FESTIVITIES_HAPPINESS;
+	int m_FOUNDING_FATHER_POINTS_FESTIVITIES_HAPPINESS;
 	int m_TIMER_FESTIVITIES_OR_UNRESTS;
 	// WTP, ray, Happiness - END
 
@@ -1453,6 +1450,11 @@ protected:
 	int m_MAX_SLAVE_REVOLT_REDUCTION_BONUS_PER_CITY;
 	int m_MAX_SLAVE_WORKER_PRODUCTION_BONUS_PER_CITY;
 	//WTP, ray, Slave Hunter and Slave Master - END
+
+	int m_iOPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_COLONIZERS;
+	int m_iOPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_NATIVES;
+	int m_iOPPRESSOMETER_FORCED_LABOR_MODIFIER_BASE;
+	int m_iOPPRESSOMETER_DECAY_RATE_BASE;
 
 	/// GameFont XML control - start - Nightinggale
 	FontSymbols  m_aiGameFontCustomSymbolID[MAX_NUM_SYMBOLS];
@@ -1496,7 +1498,7 @@ protected:
 	int m_iUSE_ON_UPDATE_CALLBACK;
 	int m_iUSE_ON_UNIT_CREATED_CALLBACK;
 	int m_iUSE_ON_UNIT_LOST_CALLBACK;
-	
+
 	ProfilerManager m_ProfileManager;
 
 	// K-Mod \ RaR
@@ -1506,12 +1508,14 @@ protected:
 	bool m_bUSE_DO_GROWTH_CALLBACK;
 	bool m_bUSE_DO_CULTURE_CALLBACK;
 	bool m_bUSE_DO_PLOT_CULTURE_CALLBACK;
-	bool m_bUSE_DO_PRODUCTION_CALLBACK;	
+	bool m_bUSE_DO_PRODUCTION_CALLBACK;
 	bool m_bUSE_AI_CHOOSE_PRODUCTION_CALLBACK;
 	bool m_bUSE_DO_PILLAGE_GOLD_CALLBACK;
 	bool m_bUSE_GET_EXPERIENCE_NEEDED_CALLBACK;
 	bool m_bUSE_DO_COMBAT_CALLBACK;
 	// K-Mod \ RaR end
+
+	const DWORD m_iThreadID;
 
 	// DLL interface
 	CvDLLUtilityIFaceBase* m_pDLL;
@@ -1531,15 +1535,24 @@ protected:
 
 		inline bool getUSE_AI_UNIT_UPDATE_CALLBACK() { return m_bUSE_AI_UNIT_UPDATE_CALLBACK; }
 		inline bool getUSE_AI_DO_DIPLO_CALLBACK() { return m_bUSE_AI_DO_DIPLO_CALLBACK; }
-		inline bool getUSE_AI_DO_WAR_CALLBACK() { return m_bUSE_AI_DO_WAR_CALLBACK; }		
+		inline bool getUSE_AI_DO_WAR_CALLBACK() { return m_bUSE_AI_DO_WAR_CALLBACK; }
 		inline bool getUSE_DO_GROWTH_CALLBACK() { return m_bUSE_DO_GROWTH_CALLBACK; }
 		inline bool getUSE_DO_CULTURE_CALLBACK() { return m_bUSE_DO_CULTURE_CALLBACK; }
 		inline bool getUSE_DO_PLOT_CULTURE_CALLBACK() { return m_bUSE_DO_PLOT_CULTURE_CALLBACK; }
-		inline bool getUSE_DO_PRODUCTION_CALLBACK() { return m_bUSE_DO_PRODUCTION_CALLBACK; }		
+		inline bool getUSE_DO_PRODUCTION_CALLBACK() { return m_bUSE_DO_PRODUCTION_CALLBACK; }
 		inline bool getUSE_AI_CHOOSE_PRODUCTION_CALLBACK() { return m_bUSE_AI_CHOOSE_PRODUCTION_CALLBACK; }
 		inline bool getUSE_DO_PILLAGE_GOLD_CALLBACK() { return m_bUSE_DO_PILLAGE_GOLD_CALLBACK; }
 		inline bool getUSE_GET_EXPERIENCE_NEEDED_CALLBACK() { return m_bUSE_GET_EXPERIENCE_NEEDED_CALLBACK; }
 		inline bool getUSE_DO_COMBAT_CALLBACK() { return m_bUSE_DO_COMBAT_CALLBACK; }
+
+public:
+	void setExeXmlLengthOverride(bool bEnabled)
+	{
+		m_bExeXmlLengthOverride = bEnabled;
+	}
+
+protected:
+	bool m_bExeXmlLengthOverride;
 };
 
 extern CvGlobals gGlobals;	// for debugging
@@ -1784,6 +1797,10 @@ inline int CvGlobals::getIMMIGRATION_THRESHOLD()
 inline int CvGlobals::getIMMIGRATION_THRESHOLD_INCREASE()
 {
 	return m_IMMIGRATION_THRESHOLD_INCREASE;
+}
+inline int CvGlobals::getIMMIGRATION_THRESHOLD_MODIFIER_UNITS_ON_DOCK()
+{
+	return m_IMMIGRATION_THRESHOLD_MODIFIER_UNITS_ON_DOCK;
 }
 inline int CvGlobals::getTAX_TRADE_THRESHOLD()
 {
@@ -2339,6 +2356,14 @@ inline int CvGlobals::getRANDOM_NATIVE_RAID_BASECHANCE()
 {
 	return m_RANDOM_NATIVE_RAID_BASECHANCE;
 }
+inline int CvGlobals::getNATIVE_PRODUCTION_RAID_MIN()
+{
+	return m_NATIVE_PRODUCTION_RAID_MIN;
+}
+inline int CvGlobals::getNATIVE_PRODUCTION_RAID_RANDOM()
+{
+	return m_NATIVE_PRODUCTION_RAID_RANDOM;
+}
 inline int CvGlobals::getNATIVE_SPARE_AI_TREASURE_CHANCE()
 {
 	return m_NATIVE_SPARE_AI_TREASURE_CHANCE;
@@ -2375,30 +2400,6 @@ inline int CvGlobals::getTAX_TRADE_INCREASE_CHANCE_KING_ATTITUDE_BASE()
 	return m_TAX_TRADE_INCREASE_CHANCE_KING_ATTITUDE_BASE;
 }
 // R&R, ray, caching globals from Global Defines Alt - END
-
-// cache ship profession - start - Nightinggale
-inline int CvGlobals::getPROFESSION_WHALING_BOAT_WORKING()
-{
-	return m_PROFESSION_WHALING_BOAT_WORKING;
-}
-
-inline int CvGlobals::getPROFESSION_FISHING_BOAT_WORKING()
-{
-	return m_PROFESSION_FISHING_BOAT_WORKING;
-}
-// cache ship profession - end - Nightinggale
-
-// R&R, ray, enhanced caching Whaling and Fishing - START
-inline int CvGlobals::getUNITCLASS_WHALING_BOAT()
-{
-	return m_UNITCLASS_WHALING_BOAT;
-}
-
-inline int CvGlobals::getUNITCLASS_FISHING_BOAT()
-{
-	return m_UNITCLASS_FISHING_BOAT;
-}
-// R&R, ray, enhanced caching Whaling and Fishing - END
 
 // R&R, ray, Health - START
 inline int CvGlobals::getMIN_POP_NEG_HEALTH()
@@ -2497,9 +2498,9 @@ inline int CvGlobals::getTURNS_UNREST_UNHAPPINESS()
 	return m_TURNS_UNREST_UNHAPPINESS;
 }
 
-inline int CvGlobals::getFOUNDING_FAHTER_POINTS_FESTIVITIES_HAPPINESS()
+inline int CvGlobals::getFOUNDING_FATHER_POINTS_FESTIVITIES_HAPPINESS()
 {
-	return m_FOUNDING_FAHTER_POINTS_FESTIVITIES_HAPPINESS;
+	return m_FOUNDING_FATHER_POINTS_FESTIVITIES_HAPPINESS;
 }
 
 inline int CvGlobals::getTIMER_FESTIVITIES_OR_UNRESTS()
@@ -2555,6 +2556,28 @@ inline int CvGlobals::getTRADE_POST_GOLD_PER_NATIVE()
 	return m_TRADE_POST_GOLD_PER_NATIVE;
 }
 // WTP, ray, Native Trade Posts - END
+
+inline int CvGlobals::getOPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_COLONIZERS()
+{
+	return m_iOPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_COLONIZERS;
+}
+
+inline int CvGlobals::getOPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_NATIVES()
+{
+	return m_iOPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_NATIVES;
+}
+
+inline int CvGlobals::getOPPRESSOMETER_FORCED_LABOR_MODIFIER_BASE()
+{
+	return m_iOPPRESSOMETER_FORCED_LABOR_MODIFIER_BASE;
+}
+
+inline int CvGlobals::getOPPRESSOMETER_DECAY_RATE_BASE()
+{
+	return m_iOPPRESSOMETER_DECAY_RATE_BASE;
+}
+
+
 
 inline float CvGlobals::getCAMERA_MIN_YAW()
 {
@@ -2771,11 +2794,6 @@ inline int CvGlobals::getNUM_ENGINE_DIRTY_BITS() const
 inline int CvGlobals::getNUM_INTERFACE_DIRTY_BITS() const
 {
 	return NUM_INTERFACE_DIRTY_BITS;
-}
-
-inline int CvGlobals::getNUM_YIELD_TYPES() const
-{
-	return NUM_YIELD_TYPES;
 }
 
 inline int CvGlobals::getNUM_FORCECONTROL_TYPES() const

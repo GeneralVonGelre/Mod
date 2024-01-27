@@ -9,35 +9,50 @@
 		<Tag>TXT_KEY_CREDITS_BUTTON</Tag>
 		<English>WTP - Credits</English>
 		<French>WTP - Crédits</French>
+		<Russian>WTP - Спасибо</Russian>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_CREDITS_HEAD</Tag>
 		<English>We The People - Credits</English>
 		<French>We The People - Crédits</French>
+		<Russian>We The People - Благодарности</Russian>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_CREDITS_WTP</Tag>
 		<English>[H1]"We The People" (WTP)[\H1]</English>
+		<Russian>[H1]Команда "We The People" (WTP)[\H1]</Russian>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_CREDITS_SPECIAL</Tag>
+		<English>[H1]Special Credits[\H1]</English>
+		<French>[H1]Nos remerciements particuliers[\H1]</French>
+		<German>[H1]Besonderen Dank[\H1]</German>
+		<Spanish>[H1]Agradecimientos Especiales[\H1]</Spanish>
+		<Russian>[H1]Особая благодарность[\H1]</Russian>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_CREDITS_RAR</Tag>
-		<English>[H1]"Religion and Revolution" (RaR)[\H1] has been developed by an international mod-team at CivFanatics.[NEWLINE]Visit us here: http://forums.civfanatics.com/forumdisplay.php?f=455</English>
-		<French>[H1]"Religion and Revolution" (RaR)[\H1]a été développé par une équipe internationale de moddeurs sur le site de CivFanatics. Venez nous rendre visite ici: http://forums.civfanatics.com/forumdisplay.php?f=455[NEWLINE]</French>
+		<English>[H1]"Religion and Revolution" (RaR)[\H1] has been developed by an international mod-team at CivFanatics.</English>
+		<French>[H1]"Religion and Revolution" (RaR)[\H1]a été développé par une équipe internationale de moddeurs sur le site de CivFanatics.</French>
+		<Russian>[H1]"Religion and Revolution" (RaR)[\H1] разработаный международной командой моддеров CivFanatics</Russian>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_CREDITS_TAC</Tag>
 		<English>[H1]Special Credits to "The Authentic Colonization" (TAC), including former members:[\H1]</English>
-		<French>[H1]Nous tenons à remercier tout particulièrementles membres de l'équipe de développement du mod TAC ("The Authentic Colonization") y compris les anciens membres[\H1]</French>
+		<French>[H1]Nous tenons à remercier tout particulièrement les membres de l'équipe de développement du mod TAC ("The Authentic Colonization") y compris les anciens membres[\H1]</French>
+		<Russian>[H1]Особенная благодарность команде "The Authentic Colonization" (TAC), включая бывших участников:[\H1]</Russian>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_CREDITS_MUSIC</Tag>
 		<English>[H1]Special Credits for our Soundtrack to Rene Osmanczyk who allowed us to use his fantastic work.[\H1]</English>
 		<French>[H1]Nous remercions chaleureusement Rene Osmanczyk pour a bande-son extraordinaire.[\H1]</French>
+		<Russian>[H1]Особая благодарность за наш саундтрек Rene Osmanczyk, который позволил нам использовать его фантастическую работу.[\H1]</Russian>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_CREDITS_OTHER_PROJECTS</Tag>
 		<English>[H1]Credits to artists, modders and projects for work included:[\H1]</English>
 		<French>[H1]Nous remercions aussi les artistes, moddeurs ou projets dont les travaux ont été inclus:[\H1]</French>
+		<Russian>[H1]Наша благодарность художникам, моддерам и сторонникам за их работу:[\H1]</Russian>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_CREDITS_OTHER_PROJECTS_TAC</Tag>
@@ -83,25 +98,45 @@
 [ICON_BULLET] L'équipe de Fall for Heaven (graphismes du désert)
 [ICON_BULLET] Marry Harrsch (photo)
 [ICON_BULLET] Aeterna (Traduction française)</French>
+		<Russian>[H1]Отдельная благодарность другим художникам, моддерам и сторонникам за их работу, включенную в TAC:[\H1]
+[ICON_BULLET] Netbandit (Netbandit's balance MOD)
+[ICON_BULLET] Dale (Age of Discovery II; Достижения v1.00)
+[ICON_BULLET] cgtextures.com (текстуры)
+[ICON_BULLET] the_suebian (рисунки заднего плана)
+[ICON_BULLET] cephalo (скрипт Faire Weather)
+[ICON_BULLET] ledat (скрипт Hemispherical)
+[ICON_BULLET] Ekmek (лидеры)
+[ICON_BULLET] Mangammal (модели лидеров)
+[ICON_BULLET] Aymerick (рисунки плантации, части китобойного промысла, части планирования маршрута)
+[ICON_BULLET] Deliverator &amp; BLU-Mod-Team (юниты)
+[ICON_BULLET] oleg153 (рисунки юнитов)
+[ICON_BULLET] charle88 (рисунки юнитов)
+[ICON_BULLET] Kailric (рисунки юнитов, части китобойного промысла)
+[ICON_BULLET] jdog5000 (кодирование поведения ИИ)
+[ICON_BULLET] hrochland (рисунки торнадо)
+[ICON_BULLET] Fierabras (события "торнадо" и "вулкан")
+[ICON_BULLET] Kissa (рисунки гор)
+[ICON_BULLET] Team of Fall for Heaven (рисунки пустыни)
+[ICON_BULLET] Marry Harrsch (фотографии)
+[ICON_BULLET] Aeterna (перевод на фрацузский)</Russian>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_CREDITS_END</Tag>
 		<English>And we don't want to forget to thank Firaxis and 2Kgames for their masterpiece Civ4/BtS. We use a lot of material from these games.[NEWLINE]
-The copyright of these materials belongs to the respective owners. In most cases we got permission to use their materials but in some cases we didn't. We ask these authors to contact us as to whether we can use their material. The copyright of the changes the TAC team has done to these materials belongs to TAC. The copyright of changes the RaR team has done to these materials belongs to RaR.[NEWLINE]
+The copyright of these materials belongs to the respective owners. In most cases we got permission to use their materials but in some cases we didn't. We ask these authors to contact us as to whether we can use their material. The copyright of the changes the TAC team has done to these materials belongs to TAC. The copyright of changes the RaR team has done to these materials belongs to RaR. The copyright of changes the WtP team has done to these materials belongs to WtP.[NEWLINE]
 The copyright of "Sid Meier's Civilisation IV: Colonization" belongs to Take Two Interactive. Sid Meier's Civilization IV: Colonization, Civ, Civilization, 2K Games, the 2K-Logo, Firaxis Games, the Firaxis game logo and Take-Two Interactive Software are registered trademarks of Take-Two Interactive Software, Inc. Developed by Firaxis Games.[NEWLINE]
 Some textures on our 3D-models have been created with images from CGTextures.com. These images may not be redistributed by default. Please visit www.cgtextures.com for more information.[NEWLINE]
 RaR is a non-commercial mod project. If you use or distribute RaR please pay attention to the copyright. We allow usage and distribution as long as RaR remains non-commercial.[NEWLINE]
 As a matter of course it is permitted to use RaR in an own mod project as long as the copyrights are not harmed, and it remains a non-commercial project. If you use RaR in an own mod project you have to make clear that you have done changes to the original TAC and to RaR. If you wish to use artwork, we could give you more information about the creators so that you can mention them in the credits of your own modification.[NEWLINE]
-You can contact TAC via civforum http://www.civforum.de/showthread.php?t=56991 or via email to writing.bull@gmx.de.[NEWLINE]
-You can contact RaR at CivFanatics: http://forums.civfanatics.com/forumdisplay.php?f=455[NEWLINE][NEWLINE]</English>
+You can contact TAC, RaR and WtP via CivFanatics forum (you will find the link in the readme file) or via email to writing.bull@gmx.de.[NEWLINE][NEWLINE]</English>
 		<French>Et nous n'oublions pas de remercier Firaxis et 2Kgames pour leur chef d'oeuvre Civ4/BtS. De nombreux éléments ont été repris de ces jeux.[NEWLINE]
-Les droits de reproduction de ces éléments appartiennent à leurs propriétaires respectifs. Dans la plupart des cas nous avons eu l'autorisation de les utiliser, sauf exception. Nous remercions les propriétaires de nous contacter pour nous donner ou non cette autorisation. Les droits liés à l'utilisation de TAC appartiennent à l'équipe de TAC. Les droits liés à l'utilisation de RAR appartiennent à l'équipe de RAR.[NEWLINE]
+Les droits de reproduction de ces éléments appartiennent à leurs propriétaires respectifs. Dans la plupart des cas nous avons eu l'autorisation de les utiliser, sauf exception. Nous remercions les propriétaires de nous contacter pour nous donner ou non cette autorisation. Les droits liés à l'utilisation de TAC appartiennent à l'équipe de TAC. Les droits liés à l'utilisation de RAR appartiennent à l'équipe de RAR. Les droits liés à l'utilisation de WtP appartiennent à l'équipe de WtP.[NEWLINE]
 Les droits de reproduction de "Sid Meier's Civilisation IV: Colonization" appartiennent à Take Two Interactive. Sid Meier's Civilization IV: Colonization, Civ, Civilization, 2K Games, the 2K-Logo, Firaxis Games, the Firaxis game logo and Take-Two Interactive Software sont des marques déposées de Take-Two Interactive Software, Inc. Developé par Firaxis Games.[NEWLINE]
 Quelques textures de nos modèles 3D ont été créées avec des images de CGTextures.com. Ces images ne sont pas redistribuées par défaut. Merci de visiter www.cgtextures.com pour plus d'information.[NEWLINE]
 RaR est un projet à but non commercial. Si vous utilisez ou distribuez RaR, merci de faire attention à ces droits de reproduction. Nous autorisons l'utilisation et la distribution qu'à la condition que RaR reste à usage non-commercial.[NEWLINE]
 Il est par ailleurs permis d'utiliser RAR pour d'autres projets de mods à la condition que les droits de reproduction soient respectés, et s'il s'agit également de projets non-commerciaux. Si vous utilisez RaR pour un projet personnel, vous devez spécifier qu'il s'agit d'une version modifiée des projets TAC et RaR. Si vous souhaitez utiliser des graphismes, nous pouvons vous donner plus d'informations sur leurs créateurs de façon à les mentionner dans vos crédits.[NEWLINE]
-Vous pouvez contacter TAC via le site "civforum" : http://www.civforum.de/showthread.php?t=56991 ; ou par e-mail : writing.bull@gmx.de.[NEWLINE]
-Vous pouvez contacter RaR via le site "CivFanatics" : http://forums.civfanatics.com/forumdisplay.php?f=455[NEWLINE][NEWLINE]</French>
+Vous pouvez contacter TAC, RaR et WtP via le site "CivFanatics forum" (vous trouverez le lien dans le fichier readme) ; ou par e-mail : writing.bull@gmx.de.</French>
+		<Russian>Мы также благодарны Firaxis и 2Kgames за их шедевр Civ4/BtS. Мы используем много материала из этих игр.[NEWLINE]Авторские права на эти материалы принадлежат соответствующим правообладателям. В большинстве случаев мы получили разрешение на использование их материалов, но в некоторых случаях мы этого не сделали. Мы просим этих авторов связаться с нами, чтобы узнать, можем ли мы использовать их материалы. Авторские права на изменения, внесенные командой TAC в эти материалы, принадлежат TAC. Авторские права на изменения, внесенные командой RaR в эти материалы, принадлежат RaR.Авторские права на изменения, внесенные командой WtP в эти материалы, принадлежат WtP.[NEWLINE]Авторские права на "Sid Meier's Civilization IV: Colonization" принадлежат Take Two Interactive. Sid Meier's Civilization IV: Colonization, Civ, Civilization, 2K Games, 2K-Logo, Firaxis Games, игровой логотип Firaxis и Take-Two Interactive Software являются зарегистрированными товарными знаками Take-Two Interactive Software, Inc., разработанными Firaxis Games.[NEWLINE]Некоторые текстуры на наших 3D-моделях созданы с использованием изображений с сайта CGTextures.com. Эти изображения не могут распространяться по умолчанию. Посетите сайт www.cgtextures.com для получения дополнительной информации.[NEWLINE]WtP — это некоммерческий мод-проект. Если вы используете или распространяете WtP, обратите внимание на авторские права. Мы разрешаем использование и распространение, пока WtP остается некоммерческим.[NEWLINE]Разумеется, разрешено использовать WtP в собственном мод-проекте, если не нарушаются авторские права и он остается некоммерческим проектом. Если вы используете WtP в собственном проекте мода, вы должны четко указать, что вы внесли изменения в исходный TAC, RaR и WtP. Если вы хотите использовать обложку, мы можем предоставить вам больше информации о создателях, чтобы вы могли упомянуть их в титрах своей модификации.[NEWLINE]Вы можете связаться с командой WtP через форум CivFanatics или группу ВК (ссылки есть в Readme).</Russian>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_CREDITS_FURSTBISCHOF</Tag>
@@ -111,10 +146,27 @@ Vous pouvez contacter RaR via le site "CivFanatics" : http://forums.civfanatics.
 		<Tag>TXT_KEY_CREDITS_RAUWURGER</Tag>
 		<English>Raubwürger</English>
 	</TEXT>
+		<TEXT>
+		<Tag>TXT_KEY_CREDITS_f1rpo</Tag>
+		<English>f1rpo (continous support related to coding)</English>
+		<German>f1rpo (wiederholte Unterstützung zu Code)</German>
+		<Spanish>f1rpo (ayuda repetida con código)</Spanish>
+		<Russian>f1rpo (постоянная поддержка, связанная с кодированием)</Russian>
+	</TEXT>
+		<TEXT>
+		<Tag>TXT_KEY_CREDITS_karadoc</Tag>
+		<English>karadoc (for his pathfinding code)</English>
+		<German>karadoc (für seinen Pathfinding Code)</German>
+		<Spanish>karadoc (por su algoritmo de búsqueda)</Spanish>
+		<Russian>karadoc (за его код поиска пути)</Russian>
+	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_CREDITS_FORMER_MEMBER</Tag>
 		<English>(former member)</English>
+		<German>(früheres Mitglied)</German>
 		<French>(ex-membre)</French>
+		<Spanish>(ex-miembro)</Spanish>
+		<Russian>(бывшие участники)</Russian>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_CREDITS_MELCHER_KURZER</Tag>
@@ -128,56 +180,60 @@ Vous pouvez contacter RaR via le site "CivFanatics" : http://forums.civfanatics.
 		<Tag>TXT_KEY_CREDITS_OTHER_NAME_1</Tag>
 		<English>Victor Meirelles (Painting: Primeira missa no Brasil)</English>
 		<French>Victor Meirelles (Peinture : Primeira missa no Brasil)</French>
+		<Russian>Victor Meirelles (Картина: Первая месса в Бразилии)</Russian>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_CREDITS_OTHER_NAME_2</Tag>
 		<English>John Trumbull (Painting: The Death of General Warren at the Battle of Bunker Hill)</English>
 		<French>John Trumbull (Peinture : The Death of General Warren at the Battle of Bunker Hill)</French>
+		<Russian>John Trumbull (Картина: Смерть генерала Уоррена в битве при Банкер-Хилле)</Russian>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_CREDITS_OTHER_NAME_3</Tag>
 		<English>George Walter Vincent Smith (Painting: New England Scenery)</English>
 		<French>George Walter Vincent Smith (Peinture : New England Scenery)</French>
+		<Russian>George Walter Vincent Smith (Картина: Пейзаж Новой Англии)</Russian>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_CREDITS_OTHER_NAME_4</Tag>
 		<English>Clint Mansell (Main Theme)</English>
 		<French>Clint Mansell (Thème principal)</French>
+		<Russian>Clint Mansell (Главная тема)</Russian>
 	</TEXT>
 	<!-- Readme -->
 	<TEXT>
 		<Tag>TXT_KEY_README_BUTTON</Tag>
-		<English>RaR concept</English>
-		<French>Concept de RaR</French>
-		<German>RaR-Konzept</German>
-		<Italian>RaR concept</Italian>
-		<Spanish>RaR concept</Spanish>
+		<English>WtP concept</English>
+		<French>Concept de WtP</French>
+		<German>WtP-Konzept</German>
+		<Russian>Концепция WtP</Russian>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_README_HEAD</Tag>
-		<English>Religion and Revolution</English>
-		<French>Religion and Revolution</French>
-		<German>Religion and Revolution</German>
-		<Italian>Religion and Revolution</Italian>
-		<Spanish>Religion and Revolution</Spanish>
+		<English>We the People</English>
+		<French>We the People</French>
+		<German>We the People</German>
+		<Italian>We the People</Italian>
+		<Spanish>We the People</Spanish>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_README_TEXT</Tag>
-		<English>[H1]Welcome to "Religion and Revolution" - RaR ![\H1][NEWLINE]
-[H2]The idea behind "Religion and Revolution" is simple: We want to create the largest and best CivCol-Mod ever ![\H2][NEWLINE]
-Thus we have chosen "The Authentic Colonization" (TAC) as base for this project and added many many cool features and improvements to it.[NEWLINE]
+		<English>[H1]Welcome to "We the People" - WtP ![\H1][NEWLINE]
+[H2]The idea behind "We the People" is simple: We want to create the largest and best CivCol-Mod ever ![\H2][NEWLINE]
+Thus we have chosen "The Authentic Colonization" (TAC) and "Religion and Revolution" (RaR) as base for this project and added many many cool features and improvements to it.[NEWLINE]
 Enjoy![NEWLINE]
 		</English>
-		<French>[H1]Bienvenue dans "Religion and Revolution" - RaR ![\H1][NEWLINE]
-[H2]L'idée derrière "Religion and Revolution" est simple : nous voulons créer le plus grand et le meilleur mod pour CivCol ![\H2][NEWLINE]
-C'est pourquoi nous avons choisi de prendre "The Authentic Colonization" TAC comme base en y ajoutant de nouveaux éléments et améliorations.[NEWLINE]
+		<French>[H1]Bienvenue dans "We the People" - WtP ![\H1][NEWLINE]
+[H2]L'idée derrière "We the People" est simple : nous voulons créer le plus grand et le meilleur mod pour CivCol ![\H2][NEWLINE]
+C'est pourquoi nous avons choisi de prendre "The Authentic Colonization" (TAC) et "Religion and Revolution" (RaR) comme base en y ajoutant de nouveaux éléments et améliorations.[NEWLINE]
 Faites-vous plaisir ![NEWLINE]
 		</French>
-		<German>[H1]Willkommen zu "Religion and Revolution" - RaR ![\H1][NEWLINE]
-[H2]Die Grundidee zu "Religion and Revolution" ist einfach: Wir wollen die grösste und beste CivCol-Mod aller Zeiten schaffen ![\H2][NEWLINE]
-Deshalb haben wir uns für "The Authentic Colonization" (TAC) als Basis entschlossen und viele neue Features und Verbesserungen hinzugefügt.[NEWLINE]
+		<German>[H1]Willkommen zu "We the People" - WtP ![\H1][NEWLINE]
+[H2]Die Grundidee zu "We the People" ist einfach: Wir wollen die grösste und beste CivCol-Mod aller Zeiten schaffen ![\H2][NEWLINE]
+Deshalb haben wir uns für "The Authentic Colonization" (TAC) und "Religion and Revolution" (RaR) als Basis entschlossen und viele neue Features und Verbesserungen hinzugefügt.[NEWLINE]
 Viel Spass![NEWLINE]
 		</German>
+		<Russian>[H1]Добро пожаловать в мод "We the People" — WtP![\H1][NEWLINE][H2]Идея "We the People" проста: мы хотим создать самый большой и лучший CivCol-Mod![\H2][NEWLINE]Поэтому мы выбрали "The Authentic Colonization" (TAC) и "Religion and Revolution" (RaR) в качестве основы для этого проекта и добавили множество интересных функций и улучшений.[NEWLINE][NEWLINE]Наслаждайтесь![NEWLINE]</Russian>
 	</TEXT>
 	<!-- Hints -->
 	<TEXT>
@@ -195,314 +251,228 @@ Viel Spass![NEWLINE]
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_3</Tag>
 		<English>America owes most of its social prejudices to the exaggerated religious opinions of the different sects which were so instrumental in establishing the colonies.[NEWLINE]--- James Fenimore Cooper (1789 - 1851), novelist</English>
-		<French>America owes most of its social prejudices to the exaggerated religious opinions of the different sects which were so instrumental in establishing the colonies.[NEWLINE]--- James Fenimore Cooper (1789 - 1851), novelist</French>
-		<German>America owes most of its social prejudices to the exaggerated religious opinions of the different sects which were so instrumental in establishing the colonies.[NEWLINE]--- James Fenimore Cooper (1789 - 1851), novelist</German>
+		<French>L'Amérique doit la plupart de ses préjugés sociaux aux opinions religieuses si prévalentes des différentes chapelles qui furent si fondamentales à l'établissement des colonies.[NEWLINE]--- James Fenimore Cooper (1789 - 1851), romancier.</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_4</Tag>
 		<English>Slavery is no more sinful, by the Christian code, than it is sinful to wear a whole coat, while another is in tatters, to eat a better meal than a neighbour, or otherwise to enjoy ease and plenty, while our fellow creatures are suffering and in want.[NEWLINE]--- James Fenimore Cooper (1789 - 1851), novelist</English>
-		<French>Slavery is no more sinful, by the Christian code, than it is sinful to wear a whole coat, while another is in tatters, to eat a better meal than a neighbour, or otherwise to enjoy ease and plenty, while our fellow creatures are suffering and in want.[NEWLINE]--- James Fenimore Cooper (1789 - 1851), novelist</French>
-		<German>Slavery is no more sinful, by the Christian code, than it is sinful to wear a whole coat, while another is in tatters, to eat a better meal than a neighbour, or otherwise to enjoy ease and plenty, while our fellow creatures are suffering and in want.[NEWLINE]--- James Fenimore Cooper (1789 - 1851), novelist</German>
+		<French>L'esclavage n'est pas plus un pêché, selon le code de conduite chrétien, que ne le sont le fait de porter un manteau confortable, quand un autre est en lambeaux, de mieux manger que son voisin, ou jouir de l'abondance et d'une vie facile, quand nos frères souffrent et manquent de tout.[NEWLINE]--- James Fenimore Cooper (1789 - 1851), romancier.</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_5</Tag>
 		<English>The Indian Corn, or Maiz, proves the most useful Grain in the World; and had it not been for the Fruitfulness of this Species, it would have proved very difficult to have settled some of the Plantations in America.[NEWLINE]--- John Lawson (1674 - 1711), British explorer</English>
-		<French>The Indian Corn, or Maiz, proves the most useful Grain in the World; and had it not been for the Fruitfulness of this Species, it would have proved very difficult to have settled some of the Plantations in America.[NEWLINE]--- John Lawson (1674 - 1711), British explorer</French>
-		<German>The Indian Corn, or Maiz, proves the most useful Grain in the World; and had it not been for the Fruitfulness of this Species, it would have proved very difficult to have settled some of the Plantations in America.[NEWLINE]--- John Lawson (1674 - 1711), British explorer</German>
+		<French>Le blé indien, ou maïs, s'est montré la meilleure céréale dans ce monde, et sans l'abondance et la fertilité de cette plante, l'établissement des Plantations en Amériques se serait avéré bien difficile.[NEWLINE]--- John Lawson (1674 - 1711), explorateur britannique</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_6</Tag>
 		<English>There are not enough Indians in the world to defeat the Seventh Cavalry.[NEWLINE]--- George Armstrong Custer, Seventh Cavalry Commander, prior to being massacred by the Sioux at the Battle of Little Bighorn (June 25-26, 1876)</English>
-		<French>There are not enough Indians in the world to defeat the Seventh Cavalry.[NEWLINE]--- George Armstrong Custer, Seventh Cavalry Commander, prior to being massacred by the Sioux at the Battle of Little Bighorn (June 25-26, 1876)</French>
-		<German>There are not enough Indians in the world to defeat the Seventh Cavalry.[NEWLINE]--- George Armstrong Custer, Seventh Cavalry Commander, prior to being massacred by the Sioux at the Battle of Little Bighorn (June 25-26, 1876)</German>
+		<French>Il n'y a pas assez d'indiens dans ce monde pour battre la Septième Cavalerie.[NEWLINE]--- George Armstrong Custer, Commandant de la Septième Cavalerie, avant de se faire massacrer avec ses troupes par les Sioux à la bataille de Little Bighorn (25-26 juin 1876)</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_7</Tag>
 		<English>The Indians gave up the land of their own free will, and for it received brass kettles, blankets, guns, shirts, flints, tobacco, rum and many trinkets in which their simple hearts delighted.[NEWLINE]--- Patrick Gordon (1635 - 1699), Scottish explorer</English>
-		<French>The Indians gave up the land of their own free will, and for it received brass kettles, blankets, guns, shirts, flints, tobacco, rum and many trinkets in which their simple hearts delighted.[NEWLINE]--- Patrick Gordon (1635 - 1699), Scottish explorer</French>
-		<German>The Indians gave up the land of their own free will, and for it received brass kettles, blankets, guns, shirts, flints, tobacco, rum and many trinkets in which their simple hearts delighted.[NEWLINE]--- Patrick Gordon (1635 - 1699), Scottish explorer</German>
+		<French>Les Indiens ont cédé leurs terres de leur plein gré, et ils ont reçu en échange des bouilloires, des couvertures, des fusils, des vêtements, du tabac, du rhum, et biens des babioles qui ont ravi leur esprit simple.[NEWLINE]--- Patrick Gordon (1635 - 1699), Explorateur écossais</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_8</Tag>
 		<English>It affords me sincere pleasure to be able to apprise you of the entire removal of the Cherokee Nation of Indians to their new homes west of the Mississippi.[NEWLINE]--- Martin Van Buren, 8th President of the United States</English>
-		<French>It affords me sincere pleasure to be able to apprise you of the entire removal of the Cherokee Nation of Indians to their new homes west of the Mississippi.[NEWLINE]--- Martin Van Buren, 8th President of the United States</French>
-		<German>It affords me sincere pleasure to be able to apprise you of the entire removal of the Cherokee Nation of Indians to their new homes west of the Mississippi.[NEWLINE]--- Martin Van Buren, 8th President of the United States</German>
+		<French>J'ai le plus grand plaisir de pouvoir vous annoncer la déportation de toute la nation indienne des Cherokees vers leur nouveau domicile à l'ouest du Mississippi.[NEWLINE]--- Martin Van Buren, 8e président des États-Unis</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_9</Tag>
 		<English>We derive our authority from God and the West India Company, not from the pleasure of a few ignorant subjects.[NEWLINE]--- Peter Stuyvesant, directeur-generaal of Nieuw-Nederland in the period 1647-1664</English>
-		<French>We derive our authority from God and the West India Company, not from the pleasure of a few ignorant subjects.[NEWLINE]--- Peter Stuyvesant, directeur-generaal of Nieuw-Nederland dans la période 1647-1664</French>
-		<German>We derive our authority from God and the West India Company, not from the pleasure of a few ignorant subjects.[NEWLINE]--- Peter Stuyvesant, directeur-generaal von Nieuw-Nederland in der Zeit von 1647-1664</German>
+		<French>Nous tenons notre autorité de Dieu et de la Companie des Indes Occidentales, et non du bon-vouloir d'une poignée de sujets idiots.[NEWLINE]--- Peter Stuyvesant, directeur-général de la Nouvelle-Néerlande dans la période 1647-1664</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_10</Tag>
 		<English>We pray that the deceitful race - such hateful enemies and blasphemers of the name of Christ - be not allowed to further infect and trouble this new colony.[NEWLINE]--- Peter Stuyvesant, directeur-generaal of Nieuw-Nederland in the period 1647-1664, on Jewish citizens of Nieuw-Amsterdam</English>
-		<French>We pray that the deceitful race - such hateful enemies and blasphemers of the name of Christ - be not allowed to further infect and trouble this new colony.[NEWLINE]--- Peter Stuyvesant, directeur général des Nouveaux Pays-Bas pendant la période 1647-1664, sur les citoyens juifs de Nieuw-Amsterdam</French>
-		<German>We pray that the deceitful race - such hateful enemies and blasphemers of the name of Christ - be not allowed to further infect and trouble this new colony.[NEWLINE]--- Peter Stuyvesant, directeur-generaal von Nieuw-Nederland in der Zeit von 1647-1664, über jüdische Bürger von Nieuw-Amsterdam</German>
+		<French>Nous prions que cette race perfide - des ennemis haineux et blasphémateurs envers le Christ - ne soit pas autorisé à infester davantage et gâter cette nouvelle colonie[NEWLINE]--- Peter Stuyvesant, directeur-général de la Nouvelle-Néerlande dans la période 1647-1664, au sujet des juifs établis à la Nouvelle-Amsterdam</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_11</Tag>
-		<English>Money is the father of luxury, lasciviousness, intrigues, trickery, lies, betrayal, insincerity – of all the world's worst behaviour. Fathers sell their children, husbands their wives, wives betray their husbands, brothers kill each other, friends are false, and all because of money. In the light of all this, tell me that we Wendat are not right in refusing to touch, or so much to look at silver?[NEWLINE]--- Kandiaronk, Wendat Chief, 1703</English>
-		<French>Money is the father of luxury, lasciviousness, intrigues, trickery, lies, betrayal, insincerity – of all the world's worst behaviour. Fathers sell their children, husbands their wives, wives betray their husbands, brothers kill each other, friends are false, and all because of money. In the light of all this, tell me that we Wendat are not right in refusing to touch, or so much to look at silver?[NEWLINE]--- Kandiaronk, Wendat Chief, 1703</French>
-		<German>Money is the father of luxury, lasciviousness, intrigues, trickery, lies, betrayal, insincerity – of all the world's worst behaviour. Fathers sell their children, husbands their wives, wives betray their husbands, brothers kill each other, friends are false, and all because of money. In the light of all this, tell me that we Wendat are not right in refusing to touch, or so much to look at silver?[NEWLINE]--- Kandiaronk, Wendat Chief, 1703</German>
+		<English>Money is the father of luxury, lasciviousness, intrigues, trickery, lies, betrayal, insincerity – of all the world's worst behaviour. Fathers sell their children, husbands their wives, wives betray their husbands, brothers kill each other, friends are false, and all because of money. In the light of all this, tell me that we Wendat are not right in refusing to touch, or so much to look at silver?[NEWLINE]--- Kondiaronk, Wendat Chief, 1703</English>
+		<French>L'argent, la monnaie est la source de la luxure, de la débauche, des intrigues, des tromperies, des mensonges, des trahisons, et de la fausseté - des pires comportements au monde. Des pères vendent leurs enfants, des maris leur femmes, les femmes trompent leur mari, les frères s'entretuent, les amis sont faux, et tout à cause de l'argent. En voyant tout cela, dites-moi que nous, Wendats, avons tort de refuser à toucher, et même de regarder l'argent?[NEWLINE]--- Kondiaronk, chef des Wendats, 1703  </French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_12</Tag>
 		<English>The attack did not succeed as well as I had hoped, no small impediment having been the loss of my right leg.[NEWLINE]--- Peter Stuyvesant, directeur-generaal of Nieuw-Nederland in the period 1647-1664</English>
-		<French>The attack did not succeed as well as I had hoped, no small impediment having been the loss of my right leg.[NEWLINE]--- Peter Stuyvesant, directeur général des Nouveaux Pays-Bas pendant la période 1647-1664</French>
-		<German>The attack did not succeed as well as I had hoped, no small impediment having been the loss of my right leg.[NEWLINE]--- Peter Stuyvesant, directeur-generaal von Nieuw-Nederland in der Zeit von 1647-1664</German>
+		<French>L'attaque ne réussit pas aussi bien que je ne l'avais espéré, un des coups du sort fut la perte de ma jambe droite.[NEWLINE]--- Peter Stuyvesant, directeur-général de la Nouvelle-Néerlande dans la période 1647-1664</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_13</Tag>
 		<English>I value the blood of one Christian more than that of a hundred Indians.[NEWLINE]--- Peter Stuyvesant, directeur-generaal of Nieuw-Nederland in the period 1647-1664</English>
-		<French>I value the blood of one Christian more than that of a hundred Indians.[NEWLINE]--- Peter Stuyvesant, directeur général des Nouveaux Pays-Bas pendant la période 1647-1664</French>
-		<German>I value the blood of one Christian more than that of a hundred Indians.[NEWLINE]--- Peter Stuyvesant, directeur-generaal von Nieuw-Nederland in der Zeit von 1647-1664</German>
+		<French>J'estime davantage le sang d'un seul chrétien que celui de cent Indiens [NEWLINE]--- Peter Stuyvesant, directeur-général de la Nouvelle-Néerlande dans la période 1647-1664</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_14</Tag>
 		<English>There are apothecaries' shops, where prepared medicines, liquids, ointments, and plasters are sold; barbers' shops, where they wash and shave the head; and restaurateurs, that furnish food and drink at a certain price.[NEWLINE]--- Hernán Cortés, Spanish conquistador, on the Aztec capital of Tenochtitlan (November 8, 1519)</English>
-		<French>There are apothecaries' shops, where prepared medicines, liquids, ointments, and plasters are sold; barbers' shops, where they wash and shave the head; and restaurateurs, that furnish food and drink at a certain price.[NEWLINE]--- Hernán Cortés, Spanish conquistador, on the Aztec capital of Tenochtitlan (November 8, 1519)</French>
-		<German>There are apothecaries' shops, where prepared medicines, liquids, ointments, and plasters are sold; barbers' shops, where they wash and shave the head; and restaurateurs, that furnish food and drink at a certain price.[NEWLINE]--- Hernán Cortés, Spanish conquistador, on the Aztec capital of Tenochtitlan (November 8, 1519)</German>
+		<French>Il y a des boutiques d'apothiquaires, où l'on vent des remèdes tout prêts, des liquides, des onguents, et des cataplames; des barbiers, où ils lavent et rasent la têtes, et des restaurateurs; qui fournissent nourritures et boisson à un certain prix.[NEWLINE]--- Hernán Cortés, Conquistador espagnol, au sujet de la capitale aztèque de Tenochtitlan, le 9 novembre 1519</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_15</Tag>
 		<English>The city is as large as Sevilla or Córdoba; its streets, I speak of the principal ones, are very wide and straight; some of these, and all the inferior ones, are half land and half water, and are navigated by canoes.[NEWLINE]--- Hernán Cortés, Spanish conquistador, on the Aztec capital of Tenochtitlan (November 8, 1519)</English>
-		<French>The city is as large as Sevilla or Córdoba; its streets, I speak of the principal ones, are very wide and straight; some of these, and all the inferior ones, are half land and half water, and are navigated by canoes.[NEWLINE]--- Hernán Cortés, Spanish conquistador, on the Aztec capital of Tenochtitlan (November 8, 1519)</French>
-		<German>The city is as large as Sevilla or Córdoba; its streets, I speak of the principal ones, are very wide and straight; some of these, and all the inferior ones, are half land and half water, and are navigated by canoes.[NEWLINE]--- Hernán Cortés, Spanish conquistador, on the Aztec capital of Tenochtitlan (November 8, 1519)</German>
+		<French>La cité est aussi grande que Séville ou Cordoue; ses artères principales sont très larges et droites, et les secondaires, sont mi-rues, mi-canaux, et il y navigue des canoës.[NEWLINE]--- Hernán Cortés, Conquistador espagnol, au sujet de la capitale aztèque de Tenochtitlan, le 9 novembre 1519</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_16</Tag>
 		<English>Among these temples there is one which far surpasses all the rest, whose grandeur of architectural details no human tongue is able to describe; for within its precincts, surrounded by a lofty wall, there is room enough for a town of five hundred families.[NEWLINE]--- Hernán Cortés, Spanish conquistador, on the Aztec capital of Tenochtitlan (November 8, 1519)</English>
-		<French>Among these temples there is one which far surpasses all the rest, whose grandeur of architectural details no human tongue is able to describe; for within its precincts, surrounded by a lofty wall, there is room enough for a town of five hundred families.[NEWLINE]--- Hernán Cortés, Spanish conquistador, on the Aztec capital of Tenochtitlan (November 8, 1519)</French>
-		<German>Among these temples there is one which far surpasses all the rest, whose grandeur of architectural details no human tongue is able to describe; for within its precincts, surrounded by a lofty wall, there is room enough for a town of five hundred families.[NEWLINE]--- Hernán Cortés, Spanish conquistador, on the Aztec capital of Tenochtitlan (November 8, 1519)</German>
+		<French>Parmi ces temples il y en a un qui surpasse tous les autres, dont la grandeur des détails d'architecture surpasse toute description ; En son sein, entouré d'un mur imposant, il y a assez de place pour une ville de cinq cents familles.[NEWLINE]--- Hernán Cortés, Conquistador espagnol, au sujet de la capitale aztèque de Tenochtitlan, le 9 novembre 1519</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_17</Tag>
 		<English>If the freedom of speech is taken away then dumb and silent we may be led, like sheep to the slaughter.[NEWLINE]--- George Washington (1732 - 1799), Commander-in-Chief of the Continental Army and first President of the United States</English>
-		<French>If the freedom of speech is taken away then dumb and silent we may be led, like sheep to the slaughter.[NEWLINE]--- George Washington (1732 - 1799), Commander-in-Chief of the Continental Army and first President of the United States</French>
-		<German>If the freedom of speech is taken away then dumb and silent we may be led, like sheep to the slaughter.[NEWLINE]--- George Washington (1732 - 1799), Commander-in-Chief of the Continental Army and first President of the United States</German>
+		<French>Si la liberté de la presse est retirée, alors nous pourrions être menés aveuglement et sans bruit comme des moutons à l'abattoir.[NEWLINE]--- George Washington (1732 - 1799), Commandeur-en-Chef de l'Armée Continentale et Premier président des États-Unis</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_18</Tag>
 		<English>The marvel of all history is the patience with which men and women submit to burdens unnecessarily laid upon them by their governments.[NEWLINE]--- George Washington (1732 - 1799), Commander-in-Chief of the Continental Army and first President of the United States</English>
-		<French>The marvel of all history is the patience with which men and women submit to burdens unnecessarily laid upon them by their governments.[NEWLINE]--- George Washington (1732 - 1799), Commander-in-Chief of the Continental Army and first President of the United States</French>
-		<German>The marvel of all history is the patience with which men and women submit to burdens unnecessarily laid upon them by their governments.[NEWLINE]--- George Washington (1732 - 1799), Commander-in-Chief of the Continental Army and first President of the United States</German>
+		<French>Une des merveilles de l'histoire et la patience avec laquelle hommes et femmes subissent les tracas superflus que leur imposent leurs gouvernements.[NEWLINE]--- George Washington (1732 - 1799), Commandeur-en-Chef de l'Armée Continentale et Premier président des États-Unis</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_19</Tag>
 		<English>The alternate domination of one faction over another, sharpened by the spirit of revenge, natural to party dissension, which in different ages and countries has perpetrated the most horrid enormities, is itself a frightful despotism. But this leads at length to a more formal and permanent despotism. The disorders and miseries which result gradually incline the minds of men to seek security and repose in the absolute power of an individual; and sooner or later the chief of some prevailing faction, more able or more fortunate than his competitors, turns this disposition to the purposes of his own elevation, on the ruins of public liberty.[NEWLINE]--- George Washington (1732 - 1799), President of the United States farewell address, 1796</English>
-		<French>The alternate domination of one faction over another, sharpened by the spirit of revenge, natural to party dissension, which in different ages and countries has perpetrated the most horrid enormities, is itself a frightful despotism. But this leads at length to a more formal and permanent despotism. The disorders and miseries which result gradually incline the minds of men to seek security and repose in the absolute power of an individual; and sooner or later the chief of some prevailing faction, more able or more fortunate than his competitors, turns this disposition to the purposes of his own elevation, on the ruins of public liberty.[NEWLINE]--- George Washington (1732 - 1799), President of the United States farewell address, 1796</French>
-		<German>The alternate domination of one faction over another, sharpened by the spirit of revenge, natural to party dissension, which in different ages and countries has perpetrated the most horrid enormities, is itself a frightful despotism. But this leads at length to a more formal and permanent despotism. The disorders and miseries which result gradually incline the minds of men to seek security and repose in the absolute power of an individual; and sooner or later the chief of some prevailing faction, more able or more fortunate than his competitors, turns this disposition to the purposes of his own elevation, on the ruins of public liberty.[NEWLINE]--- George Washington (1732 - 1799), President of the United States farewell address, 1796</German>
+		<French>L'alternance au pouvoir d'une faction puis de l'autre, aiguisée par l'esprit de revanche accompagnant les désaccords entre les partis, ce qui a perpétué les pires horreurs en d'autres temps et d'autres pays, est en elle même un despotisme atroce. Mais cela mène avec le temps à un autre despotisme de droit plus permanent. Les désordres et les malheurs qui en découlent poussent peu à peu l'esprit des hommes à chercher la sécurité et la quiétude dans le pouvoir absolu d'un seul individu ; tôt ou tard le chef d'une des factions importantes, plus chanceux ou plus abile que ses concurrents, tirera parti de cette tendance pour son propre profit, sur les ruines des libertés publiques.[NEWLINE]--- George Washington (1732 - 1799), Discours d'adieu en tant que président des États-Unis, 1796</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_20</Tag>
 		<English>Rebellion to tyrants is obedience to God.[NEWLINE]--- William Penn (1644 - 1718), Founder of Pennsylvania</English>
-		<French>Rebellion to tyrants is obedience to God.[NEWLINE]--- William Penn (1644 - 1718), Founder of Pennsylvania</French>
-		<German>Rebellion to tyrants is obedience to God.[NEWLINE]--- William Penn (1644 - 1718), Founder of Pennsylvania</German>
+		<French>La rébellion face aux tyrans est obéir à Dieu[NEWLINE]--- William Penn (1644 - 1718), Fondateur de la Pennsylvanie</French>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_21</Tag>
 		<English>This land is naturally fruitful, and capable of supporting a large population, if it were judiciously allotted according to location. The air is pleasant, and more temperate than in Netherland.[NEWLINE]--- Adriaen van der Donck (c.1618 - 1655), Dutch lawyer, on Nieuw-Nederland</English>
-		<French>This land is naturally fruitful, and capable of supporting a large population, if it were judiciously allotted according to location. The air is pleasant, and more temperate than in Netherland.[NEWLINE]--- Adriaen van der Donck (c.1618 - 1655), Dutch lawyer, on Nieuw-Nederland</French>
-		<German>This land is naturally fruitful, and capable of supporting a large population, if it were judiciously allotted according to location. The air is pleasant, and more temperate than in Netherland.[NEWLINE]--- Adriaen van der Donck (c.1618 - 1655), Dutch lawyer, on Nieuw-Nederland</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_22</Tag>
 		<English>Why does Maxixcatzin deem these people gods, who seem more like ravenous monsters thrown up by the intemperate sea to blight us, gorging themselves on gold, silver, stones and pearls; sleeping in their own clothes; and generally acting in the manner of those who would one day make cruel masters?[NEWLINE]--- Xicotencatl, Tlatoani (elder) of Tlaxcatl (almost one hundred years old), 1520</English>
-		<French>Why does Maxixcatzin deem these people gods, who seem more like ravenous monsters thrown up by the intemperate sea to blight us, gorging themselves on gold, silver, stones and pearls; sleeping in their own clothes; and generally acting in the manner of those who would one day make cruel masters?[NEWLINE]--- Xicotencatl, Tlatoani (elder) of Tlaxcatl (almost one hundred years old), 1520</French>
-		<German>Why does Maxixcatzin deem these people gods, who seem more like ravenous monsters thrown up by the intemperate sea to blight us, gorging themselves on gold, silver, stones and pearls; sleeping in their own clothes; and generally acting in the manner of those who would one day make cruel masters?[NEWLINE]--- Xicotencatl, Tlatoani (elder) of Tlaxcatl (almost one hundred years old), 1520</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_23</Tag>
 		<English>The natives are generally well-set in their limbs, slender round the waist, broad across the shoulders, and have black hair and dark eyes. They are very nimble and active, well adapted to travel on foot and to drag heavy burdens. They are divided into different tribes and languages, each tribe living generally by itself, and having one of its number as a chief, though he has not much power or distinction except in their dances or in time of wars. Among some there is not the least knowledge of God, and among others very little, though they relate very strange fables concerning Him.[NEWLINE]--- Adriaen van der Donck (c.1618 - 1655), Dutch lawyer</English>
-		<French>The natives are generally well-set in their limbs, slender round the waist, broad across the shoulders, and have black hair and dark eyes. They are very nimble and active, well adapted to travel on foot and to drag heavy burdens. They are divided into different tribes and languages, each tribe living generally by itself, and having one of its number as a chief, though he has not much power or distinction except in their dances or in time of wars. Among some there is not the least knowledge of God, and among others very little, though they relate very strange fables concerning Him.[NEWLINE]--- Adriaen van der Donck (c.1618 - 1655), Dutch lawyer</French>
-		<German>The natives are generally well-set in their limbs, slender round the waist, broad across the shoulders, and have black hair and dark eyes. They are very nimble and active, well adapted to travel on foot and to drag heavy burdens. They are divided into different tribes and languages, each tribe living generally by itself, and having one of its number as a chief, though he has not much power or distinction except in their dances or in time of wars. Among some there is not the least knowledge of God, and among others very little, though they relate very strange fables concerning Him.[NEWLINE]--- Adriaen van der Donck (c.1618 - 1655), Dutch lawyer</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_24</Tag>
 		<English>A state too expensive in itself, or by virtue of its dependencies, ultimately falls into decay; its free government is transformed into a tyranny; it disregards the principles which it should preserve, and finally degenerates into despotism. The distinguishing characteristic of small republics is stability: the character of large republics is mutability.[NEWLINE]--- Simón Bolívar, Latin American Revolutionary, "Letter from Jamaica" (Summer 1815)</English>
-		<French>A state too expensive in itself, or by virtue of its dependencies, ultimately falls into decay; its free government is transformed into a tyranny; it disregards the principles which it should preserve, and finally degenerates into despotism. The distinguishing characteristic of small republics is stability: the character of large republics is mutability.[NEWLINE]--- Simón Bolívar, Latin American Revolutionary, "Letter from Jamaica" (Summer 1815)</French>
-		<German>A state too expensive in itself, or by virtue of its dependencies, ultimately falls into decay; its free government is transformed into a tyranny; it disregards the principles which it should preserve, and finally degenerates into despotism. The distinguishing characteristic of small republics is stability: the character of large republics is mutability.[NEWLINE]--- Simón Bolívar, Latin American Revolutionary, "Letter from Jamaica" (Summer 1815)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_25</Tag>
 		<English>Colombians! My last wish is for the happiness of the patria. If my death contributes to the end of partisanship and the consolidation of the union, I shall be lowered in peace into my grave.[NEWLINE]--- Simón Bolívar, Latin American Revolutionary, "Final proclamation to the people of Colombia" (December 8, 1830)</English>
-		<French>Colombians! My last wish is for the happiness of the patria. If my death contributes to the end of partisanship and the consolidation of the union, I shall be lowered in peace into my grave.[NEWLINE]--- Simón Bolívar, Latin American Revolutionary, "Final proclamation to the people of Colombia" (December 8, 1830)</French>
-		<German>Colombians! My last wish is for the happiness of the patria. If my death contributes to the end of partisanship and the consolidation of the union, I shall be lowered in peace into my grave.[NEWLINE]--- Simón Bolívar, Latin American Revolutionary, "Final proclamation to the people of Colombia" (December 8, 1830)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_26</Tag>
 		<English>I have fulfilled the sacred promises which I made Peru; I have witnessed the assembly of its representatives; the enemy's force threatens the independence of no place that wishes to be free, and that possesses the means of being so. A numerous army, under the direction of warlike chiefs, is ready to march in a few days to put an end to the war. Nothing is left for me to do, but to offer you my sincerest thanks, and to promise, that if the liberties of the Peruvians shall ever be attacked, I shall claim the honor of accompanying them to defend their freedom like a citizen.[NEWLINE]--- José de San Martín, Latin American Revolutionary, "Resignation address to the Peruvian Congress" (September 22, 1820)</English>
-		<French>I have fulfilled the sacred promises which I made Peru; I have witnessed the assembly of its representatives; the enemy's force threatens the independence of no place that wishes to be free, and that possesses the means of being so. A numerous army, under the direction of warlike chiefs, is ready to march in a few days to put an end to the war. Nothing is left for me to do, but to offer you my sincerest thanks, and to promise, that if the liberties of the Peruvians shall ever be attacked, I shall claim the honor of accompanying them to defend their freedom like a citizen.[NEWLINE]--- José de San Martín, Latin American Revolutionary, "Resignation address to the Peruvian Congress" (September 22, 1820)</French>
-		<German>I have fulfilled the sacred promises which I made Peru; I have witnessed the assembly of its representatives; the enemy's force threatens the independence of no place that wishes to be free, and that possesses the means of being so. A numerous army, under the direction of warlike chiefs, is ready to march in a few days to put an end to the war. Nothing is left for me to do, but to offer you my sincerest thanks, and to promise, that if the liberties of the Peruvians shall ever be attacked, I shall claim the honor of accompanying them to defend their freedom like a citizen.[NEWLINE]--- José de San Martín, Latin American Revolutionary, "Resignation address to the Peruvian Congress" (September 22, 1820)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_27</Tag>
 		<English>From this moment on, Peru is free and independent by the general will of its people and by the justice of its cause that God defends. Long live the nation! Long live the freedom! Long live the independence![NEWLINE]--- "Peruvian Declaration of Independence" (July 28, 1821)</English>
-		<French>From this moment on, Peru is free and independent by the general will of its people and by the justice of its cause that God defends. Long live the nation! Long live the freedom! Long live the independence![NEWLINE]--- "Peruvian Declaration of Independence" (July 28, 1821)</French>
-		<German>From this moment on, Peru is free and independent by the general will of its people and by the justice of its cause that God defends. Long live the nation! Long live the freedom! Long live the independence![NEWLINE]--- "Peruvian Declaration of Independence" (July 28, 1821)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_28</Tag>
 		<English>The Indians were totally deprived of their freedom and were put into the harshest, fiercest, most horrible servitude and captivity which no one who has not seen it can understand. Even beasts enjoy more freedom when they are allowed to graze in the field.[NEWLINE]--- Bartolomé de Las Casas, "History of the Indies" (1561)</English>
-		<French>The Indians were totally deprived of their freedom and were put into the harshest, fiercest, most horrible servitude and captivity which no one who has not seen it can understand. Even beasts enjoy more freedom when they are allowed to graze in the field.[NEWLINE]--- Bartolomé de Las Casas, "History of the Indies" (1561)</French>
-		<German>The Indians were totally deprived of their freedom and were put into the harshest, fiercest, most horrible servitude and captivity which no one who has not seen it can understand. Even beasts enjoy more freedom when they are allowed to graze in the field.[NEWLINE]--- Bartolomé de Las Casas, "History of the Indies" (1561)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_29</Tag>
 		<English>Broken spears lie in the roads;[NEWLINE]We have torn our hair in our grief.[NEWLINE]The houses are roofless now, and their walls[NEWLINE]Are red with blood.[NEWLINE]--- Nahuatl poem (16th century)</English>
-		<French>Broken spears lie in the roads;[NEWLINE]We have torn our hair in our grief.[NEWLINE]The houses are roofless now, and their walls[NEWLINE]Are red with blood.[NEWLINE]--- Nahuatl poem (16th century)</French>
-		<German>Broken spears lie in the roads;[NEWLINE]We have torn our hair in our grief.[NEWLINE]The houses are roofless now, and their walls[NEWLINE]Are red with blood.[NEWLINE]--- Nahuatl poem (16th century)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_30</Tag>
 		<English>Who could conquer Tenochtitlán? Who could shake the foundation of heaven?[NEWLINE]--- Nahuatl poem (15th century)</English>
-		<French>Who could conquer Tenochtitlán? Who could shake the foundation of heaven?[NEWLINE]--- Nahuatl poem (15th century)</French>
-		<German>Who could conquer Tenochtitlán? Who could shake the foundation of heaven?[NEWLINE]--- Nahuatl poem (15th century)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_31</Tag>
 		<English>Who can doubt that gunpowder against the infidels is incense for the Lord?[NEWLINE]--- Gonzalo Fernández de Oviedo y Valdés, Spanish conquistador, "General and Natural History of the Indies" (1526)</English>
-		<French>Who can doubt that gunpowder against the infidels is incense for the Lord?[NEWLINE]--- Gonzalo Fernández de Oviedo y Valdés, Spanish conquistador, "General and Natural History of the Indies" (1526)</French>
-		<German>Who can doubt that gunpowder against the infidels is incense for the Lord?[NEWLINE]--- Gonzalo Fernández de Oviedo y Valdés, Spanish conquistador, "General and Natural History of the Indies" (1526)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_32</Tag>
 		<English>The Inca asked Fray Vicente who had told him so. Fray Vicente responded that the Gospel had told him, the book. Atahualpa said, "Give me the book, so that it will tell me." So he gave it to him and he took it in his hands and began to look through the pages of the book. The Inca said, "Well, why doesn't it tell me? The book doesn't even talk to me!" Speaking with great majesty, seated in his throne, the Inca Atahualpa threw the book down from his hands. Don Francisco Pizarro and Don Diego de Almagro shouted and said, "Out, knights, against these infidels who are against our Christianity, and for our Emperor and King let us have at them!"[NEWLINE]--- Felipe Guamán Poma de Ayala, "The First New Chronicle and Good Government" (1615), on the conquest of the Incan Empire</English>
-		<French>The Inca asked Fray Vicente who had told him so. Fray Vicente responded that the Gospel had told him, the book. Atahualpa said, "Give me the book, so that it will tell me." So he gave it to him and he took it in his hands and began to look through the pages of the book. The Inca said, "Well, why doesn't it tell me? The book doesn't even talk to me!" Speaking with great majesty, seated in his throne, the Inca Atahualpa threw the book down from his hands. Don Francisco Pizarro and Don Diego de Almagro shouted and said, "Out, knights, against these infidels who are against our Christianity, and for our Emperor and King let us have at them!"[NEWLINE]--- Felipe Guamán Poma de Ayala, "The First New Chronicle and Good Government" (1615), on the conquest of the Incan Empire</French>
-		<German>The Inca asked Fray Vicente who had told him so. Fray Vicente responded that the Gospel had told him, the book. Atahualpa said, "Give me the book, so that it will tell me." So he gave it to him and he took it in his hands and began to look through the pages of the book. The Inca said, "Well, why doesn't it tell me? The book doesn't even talk to me!" Speaking with great majesty, seated in his throne, the Inca Atahualpa threw the book down from his hands. Don Francisco Pizarro and Don Diego de Almagro shouted and said, "Out, knights, against these infidels who are against our Christianity, and for our Emperor and King let us have at them!"[NEWLINE]--- Felipe Guamán Poma de Ayala, "The First New Chronicle and Good Government" (1615), on the conquest of the Incan Empire</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_33</Tag>
-		<English>We never bring lawsuits against one another. And why do we never bring lawsuits? Well, because we made a decision neither to accept or make use of money. And why do we refuse to allow money into our communities? The reason is this: we are determined not to have laws – because, since the world was a world, our ancestors have been able to live contentedly without them.[NEWLINE]--- Kandiaronk, Wendat Chief, 1703</English>
-		<French>We never bring lawsuits against one another. And why do we never bring lawsuits? Well, because we made a decision neither to accept or make use of money. And why do we refuse to allow money into our communities? The reason is this: we are determined not to have laws – because, since the world was a world, our ancestors have been able to live contentedly without them.[NEWLINE]--- Kandiaronk, Wendat Chief, 1703</French>
-		<German>We never bring lawsuits against one another. And why do we never bring lawsuits? Well, because we made a decision neither to accept or make use of money. And why do we refuse to allow money into our communities? The reason is this: we are determined not to have laws – because, since the world was a world, our ancestors have been able to live contentedly without them.[NEWLINE]--- Kandiaronk, Wendat Chief, 1703</German>
+		<English>We never bring lawsuits against one another. And why do we never bring lawsuits? Well, because we made a decision neither to accept or make use of money. And why do we refuse to allow money into our communities? The reason is this: we are determined not to have laws – because, since the world was a world, our ancestors have been able to live contentedly without them.[NEWLINE]--- Kondiaronk, Wendat Chief, 1703</English>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_34</Tag>
 		<English>All Christians have a duty toward missions so long as any heathen exists. Christians will be called severely to account if they content themselves merely in carrying on in trading with the heathen.[NEWLINE]--- Hans Egede (1686 - 1758), Danish Lutheran Missionary</English>
-		<French>All Christians have a duty toward missions so long as any heathen exists. Christians will be called severely to account if they content themselves merely in carrying on in trading with the heathen.[NEWLINE]--- Hans Egede (1686 - 1758), Danish Lutheran Missionary</French>
-		<German>All Christians have a duty toward missions so long as any heathen exists. Christians will be called severely to account if they content themselves merely in carrying on in trading with the heathen.[NEWLINE]--- Hans Egede (1686 - 1758), Danish Lutheran Missionary</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_35</Tag>
 		<English>These natives are a very good people; for when they saw that I would not remain, they supposed that I was afraid of their bows; and, taking their arrows, they broke them in pieces and threw them into the fire.[NEWLINE]--- Henry Hudson, English explorer, on the Algonquian natives of the Hudson River (September 4, 1609)</English>
-		<French>These natives are a very good people; for when they saw that I would not remain, they supposed that I was afraid of their bows; and, taking their arrows, they broke them in pieces and threw them into the fire.[NEWLINE]--- Henry Hudson, English explorer, on the Algonquian natives of the Hudson River (September 4, 1609)</French>
-		<German>These natives are a very good people; for when they saw that I would not remain, they supposed that I was afraid of their bows; and, taking their arrows, they broke them in pieces and threw them into the fire.[NEWLINE]--- Henry Hudson, English explorer, on the Algonquian natives of the Hudson River (September 4, 1609)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_36</Tag>
 		<English>At this time, they (the Muisca) stripped the heir to his skin, and anointed him with a sticky earth on which they placed gold dust so that he was completely covered with this metal. They placed him on the raft ... and at his feet they placed a great heap of gold and emeralds for him to offer to his God. In the raft with him went four principal subject chiefs, decked in plumes, crowns, bracelets, pendants and ear rings all of gold. They, too, were naked, and each one carried his offering ... when the raft reached the centre of the lagoon, they raised a banner as a signal for silence.[NEWLINE]--- Juan Rodríguez Freyle, "El Carnero" (1638), on the Muisca natives</English>
-		<French>At this time, they (the Muisca) stripped the heir to his skin, and anointed him with a sticky earth on which they placed gold dust so that he was completely covered with this metal. They placed him on the raft ... and at his feet they placed a great heap of gold and emeralds for him to offer to his God. In the raft with him went four principal subject chiefs, decked in plumes, crowns, bracelets, pendants and ear rings all of gold. They, too, were naked, and each one carried his offering ... when the raft reached the centre of the lagoon, they raised a banner as a signal for silence.[NEWLINE]--- Juan Rodríguez Freyle, "El Carnero" (1638), on the Muisca natives</French>
-		<German>At this time, they (the Muisca) stripped the heir to his skin, and anointed him with a sticky earth on which they placed gold dust so that he was completely covered with this metal. They placed him on the raft ... and at his feet they placed a great heap of gold and emeralds for him to offer to his God. In the raft with him went four principal subject chiefs, decked in plumes, crowns, bracelets, pendants and ear rings all of gold. They, too, were naked, and each one carried his offering ... when the raft reached the centre of the lagoon, they raised a banner as a signal for silence.[NEWLINE]--- Juan Rodríguez Freyle, "El Carnero" (1638), on the Muisca natives</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_37</Tag>
 		<English>The Great Montezuma was about forty years old, of good height and well proportioned, slender, and spare of flesh, not very swarthy, but of the natural colour and shade of an Indian. He did not wear his hair long, but so as just to cover his ears, his scanty black beard was well shaped and thin. His face was somewhat long, but cheerful, and he had good eyes and showed in his appearance and manner both tenderness and, when necessary, gravity. He was very neat and clean and bathed once every day in the afternoon.[NEWLINE]--- Bernal Díaz del Castillo, "The Discovery and Conquest of Mexico" (1568)</English>
-		<French>The Great Montezuma was about forty years old, of good height and well proportioned, slender, and spare of flesh, not very swarthy, but of the natural colour and shade of an Indian. He did not wear his hair long, but so as just to cover his ears, his scanty black beard was well shaped and thin. His face was somewhat long, but cheerful, and he had good eyes and showed in his appearance and manner both tenderness and, when necessary, gravity. He was very neat and clean and bathed once every day in the afternoon.[NEWLINE]--- Bernal Díaz del Castillo, "The Discovery and Conquest of Mexico" (1568)</French>
-		<German>The Great Montezuma was about forty years old, of good height and well proportioned, slender, and spare of flesh, not very swarthy, but of the natural colour and shade of an Indian. He did not wear his hair long, but so as just to cover his ears, his scanty black beard was well shaped and thin. His face was somewhat long, but cheerful, and he had good eyes and showed in his appearance and manner both tenderness and, when necessary, gravity. He was very neat and clean and bathed once every day in the afternoon.[NEWLINE]--- Bernal Díaz del Castillo, "The Discovery and Conquest of Mexico" (1568)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_38</Tag>
 		<English>Vigorous measures at present would soon put an end to this rebellion. The deluded people are made to believe that they are invincible... When this army is ordered to act against them, they will soon be convinced that they are very insignificant when opposed to regular troops.[NEWLINE]--- Thomas Pitcairn, Royal Army Commander, in a letter to John Montagu, Lord Sandwich, the British Secretary of State (February 14, 1775)</English>
-		<French>Vigorous measures at present would soon put an end to this rebellion. The deluded people are made to believe that they are invincible... When this army is ordered to act against them, they will soon be convinced that they are very insignificant when opposed to regular troops.[NEWLINE]--- Thomas Pitcairn, Royal Army Commander, in a letter to John Montagu, Lord Sandwich, the British Secretary of State (February 14, 1775)</French>
-		<German>Vigorous measures at present would soon put an end to this rebellion. The deluded people are made to believe that they are invincible... When this army is ordered to act against them, they will soon be convinced that they are very insignificant when opposed to regular troops.[NEWLINE]--- Thomas Pitcairn, Royal Army Commander, in a letter to John Montagu, Lord Sandwich, the British Secretary of State (February 14, 1775)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_39</Tag>
 		<English>By the rude bridge that arched the flood,[NEWLINE]Their flag to April's breeze unfurled,[NEWLINE]Here once the embattled farmers stood,[NEWLINE]And fired the shot heard round the world.[NEWLINE]--- Ralph Waldo Emerson, "Concord Hymn" (1837), commemorating the Battle of Lexington and Concord (April 19, 1775)</English>
-		<French>By the rude bridge that arched the flood,[NEWLINE]Their flag to April's breeze unfurled,[NEWLINE]Here once the embattled farmers stood,[NEWLINE]And fired the shot heard round the world.[NEWLINE]--- Ralph Waldo Emerson, "Concord Hymn" (1837), commemorating the Battle of Lexington and Concord (April 19, 1775)</French>
-		<German>By the rude bridge that arched the flood,[NEWLINE]Their flag to April's breeze unfurled,[NEWLINE]Here once the embattled farmers stood,[NEWLINE]And fired the shot heard round the world.[NEWLINE]--- Ralph Waldo Emerson, "Concord Hymn" (1837), commemorating the Battle of Lexington and Concord (April 19, 1775)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_40</Tag>
 		<English>Come out, you old rat. Surrender in the name of the Great Jehovah and the Continental Congress.[NEWLINE]--- Ethan Allen, leader of the Green Mountain Boys, demanding the surrender of the British commander of Fort Ticonderoga (May 10, 1775)</English>
-		<French>Come out, you old rat. [Surrender] in the name of the Great Jehovah and the Continental Congress.[NEWLINE]--- Ethan Allen, leader of the Green Mountain Boys, demanding the surrender of the British commander of Fort Ticonderoga (May 10, 1775)</French>
-		<German>Come out, you old rat. [Surrender] in the name of the Great Jehovah and the Continental Congress.[NEWLINE]--- Ethan Allen, leader of the Green Mountain Boys, demanding the surrender of the British commander of Fort Ticonderoga (May 10, 1775)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_41</Tag>
 		<English>We must all hang together now, or assuredly we shall hang separately.[NEWLINE]--- Benjamin Franklin, after signing the "Declaration of Independence" (July 4, 1776)</English>
-		<French>We must all hang together now, or assuredly we shall hang separately.[NEWLINE]--- Benjamin Franklin, after signing the "Declaration of Independence" (July 4, 1776)</French>
-		<German>We must all hang together now, or assuredly we shall hang separately.[NEWLINE]--- Benjamin Franklin, after signing the "Declaration of Independence" (July 4, 1776)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_42</Tag>
-		<English>No man shall be compelled to frequent or support and religious worship, place, or ministry... nor shall otherwise suffer on account of his religious opinions or belief, but that all men shall be free to profess, and by argument to maintain, their opinion on matters of religion.[NEWLINE]--- Thomas Jefferson, "Virginia Bill on Religious Freedom" (1776)</English>
-		<French>No man shall be compelled to frequent or support and religious worship, place, or ministry... nor shall otherwise suffer on account of his religious opinions or belief, but that all men shall be free to profess, and by argument to maintain, their opinion on matters of religion.[NEWLINE]--- Thomas Jefferson, "Virginia Bill on Religious Freedom" (1776)</French>
-		<German>No man shall be compelled to frequent or support and religious worship, place, or ministry... nor shall otherwise suffer on account of his religious opinions or belief, but that all men shall be free to profess, and by argument to maintain, their opinion on matters of religion.[NEWLINE]--- Thomas Jefferson, "Virginia Bill on Religious Freedom" (1776)</German>
+		<English>No man shall be compelled to frequent or support any religious worship, place, or ministry... nor shall otherwise suffer on account of his religious opinions or belief, but that all men shall be free to profess, and by argument to maintain, their opinion on matters of religion.[NEWLINE]--- Thomas Jefferson, "Virginia Bill on Religious Freedom" (1776)</English>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_43</Tag>
 		<English>When once these rebels have felt a smart blow, they will submit.[NEWLINE]--- Comment of a Hessian mercenary, before going into battle against American rebels (1776)</English>
-		<French>When once these rebels have felt a smart blow, they will submit.[NEWLINE]--- Comment of a Hessian mercenary, before going into battle against American rebels (1776)</French>
-		<German>When once these rebels have felt a smart blow, they will submit.[NEWLINE]--- Comment of a Hessian mercenary, before going into battle against American rebels (1776)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_44</Tag>
 		<English>The unfortunate soldiers were in want of everything; they had neither coats, nor hats, nor shirts, nor shoes; their feet and their legs froze till they grew black and it was often necessary to amputate them... The army frequently passed whole days without food.[NEWLINE]--- Gilbert du Motier, Marquis de La Fayette, on the Continental Army at Valley Forge, Pennsylvania (1777)</English>
-		<French>The unfortunate soldiers were in want of everything; they had neither coats, nor hats, nor shirts, nor shoes; their feet and their legs froze till they grew black and it was often necessary to amputate them... The army frequently passed whole days without food.[NEWLINE]--- Gilbert du Motier, Marquis de La Fayette, on the Continental Army at Valley Forge, Pennsylvania (1777)</French>
-		<German>The unfortunate soldiers were in want of everything; they had neither coats, nor hats, nor shirts, nor shoes; their feet and their legs froze till they grew black and it was often necessary to amputate them... The army frequently passed whole days without food.[NEWLINE]--- Gilbert du Motier, Marquis de La Fayette, on the Continental Army at Valley Forge, Pennsylvania (1777)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_45</Tag>
 		<English>Poor food - hard lodging - cold weather - fatigue - nasty clothes - nasty cookery... There comes a bowl of beef soup, full of burnt leaves and dirt![NEWLINE]--- Albigence Waldo, Continental Army surgeon, writing in his diary on conditions of the army at Valley Forge (1777)</English>
-		<French>Poor food - hard lodging - cold weather - fatigue - nasty clothes - nasty cookery... There comes a bowl of beef soup, full of burnt leaves and dirt![NEWLINE]--- Albigence Waldo, Continental Army surgeon, writing in his diary on conditions of the army at Valley Forge (1777)</French>
-		<German>Poor food - hard lodging - cold weather - fatigue - nasty clothes - nasty cookery... There comes a bowl of beef soup, full of burnt leaves and dirt![NEWLINE]--- Albigence Waldo, Continental Army surgeon, writing in his diary on conditions of the army at Valley Forge (1777)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_46</Tag>
 		<English>There was as much sorrow as joy... We had lived together as a family of brothers for several years, setting aside some little family squabbles, like most other families, had shared with each other the hardships, dangers, and sufferings incident to a soldier's life, had sympathized with each other in trouble and in sickness; had assisted in bearing each other's burdens... And now we were to be... parted forever.[NEWLINE]--- Joseph Plumb Martin, Continental Army soldier, in his memoir "Private Yankee Doodle" (1830)</English>
-		<French>There was as much sorrow as joy... We had lived together as a family of brothers for several years, setting aside some little family squabbles, like most other families, had shared with each other the hardships, dangers, and sufferings incident to a soldier's life, had sympathized with each other in trouble and in sickness; had assisted in bearing each other's burdens... And now we were to be... parted forever.[NEWLINE]--- Joseph Plumb Martin, Continental Army soldier, in his memoir "Private Yankee Doodle" (1830)</French>
-		<German>There was as much sorrow as joy... We had lived together as a family of brothers for several years, setting aside some little family squabbles, like most other families, had shared with each other the hardships, dangers, and sufferings incident to a soldier's life, had sympathized with each other in trouble and in sickness; had assisted in bearing each other's burdens... And now we were to be... parted forever.[NEWLINE]--- Joseph Plumb Martin, Continental Army soldier, in his memoir "Private Yankee Doodle" (1830)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_47</Tag>
 		<English>Here is the God the Spaniards worship. For these they fight and kill; for these they persecute us and that is why we have to throw them into the sea... They tell us, these tyrants, that they adore a God of peace and equality, and yet they usurp our land and make us their slaves. They speak to us of an immortal soul and of their eternal rewards and punishments, and yet they rob our belongings, seduce our women, violate our daughters. Incapable of matching us in valor, these cowards cover themselves with iron that our weapons cannot break.[NEWLINE]--- Hatuey, Arawak cacique, to the Carib natives of Cuba, 1511</English>
-		<French>Here is the God the Spaniards worship. For these they fight and kill; for these they persecute us and that is why we have to throw them into the sea... They tell us, these tyrants, that they adore a God of peace and equality, and yet they usurp our land and make us their slaves. They speak to us of an immortal soul and of their eternal rewards and punishments, and yet they rob our belongings, seduce our women, violate our daughters. Incapable of matching us in valor, these cowards cover themselves with iron that our weapons cannot break.[NEWLINE]--- Hatuey, Arawak cacique, to the Carib natives of Cuba, 1511</French>
-		<German>Here is the God the Spaniards worship. For these they fight and kill; for these they persecute us and that is why we have to throw them into the sea... They tell us, these tyrants, that they adore a God of peace and equality, and yet they usurp our land and make us their slaves. They speak to us of an immortal soul and of their eternal rewards and punishments, and yet they rob our belongings, seduce our women, violate our daughters. Incapable of matching us in valor, these cowards cover themselves with iron that our weapons cannot break.[NEWLINE]--- Hatuey, Arawak cacique, to the Carib natives of Cuba, 1511</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_48</Tag>
 		<English>Hatuey, thinking a little, asked the religious man if Spaniards went to heaven. The religious man answered yes... The chief then said without further thought that he did not want to go there but to hell so as not to be where they were and where he would not see such cruel people. This is the name and honor that God and our faith have earned February 2, 1512[NEWLINE]--- Bartolomé de Las Casas, "Brief account of the destruction of the Indies" (1552), on the execution of the Arawak cacique Hatuey</English>
-		<French>Hatuey, thinking a little, asked the religious man if Spaniards went to heaven. The religious man answered yes... The chief then said without further thought that he did not want to go there but to hell so as not to be where they were and where he would not see such cruel people. This is the name and honor that God and our faith have earned February 2, 1512[NEWLINE]--- Bartolomé de Las Casas, "Brief account of the destruction of the Indies" (1552), on the execution of the Arawak cacique Hatuey</French>
-		<German>Hatuey, thinking a little, asked the religious man if Spaniards went to heaven. The religious man answered yes... The chief then said without further thought that he did not want to go there but to hell so as not to be where they were and where he would not see such cruel people. This is the name and honor that God and our faith have earned February 2, 1512[NEWLINE]--- Bartolomé de Las Casas, "Brief account of the destruction of the Indies" (1552), on the execution of the Arawak cacique Hatuey</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_49</Tag>
 		<English>And never have the Indians in all the Indies committed any act against the Spanish Christians, until those Christians have first and many times committed countless cruel aggressions against them or against neighbouring nations.[NEWLINE]--- Bartolomé de Las Casas, "Brief account of the destruction of the Indies" (1552)</English>
-		<French>And never have the Indians in all the Indies committed any act against the Spanish Christians, until those Christians have first and many times committed countless cruel aggressions against them or against neighbouring nations.[NEWLINE]--- Bartolomé de Las Casas, "Brief account of the destruction of the Indies" (1552)</French>
-		<German>And never have the Indians in all the Indies committed any act against the Spanish Christians, until those Christians have first and many times committed countless cruel aggressions against them or against neighbouring nations.[NEWLINE]--- Bartolomé de Las Casas, "Brief account of the destruction of the Indies" (1552)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_50</Tag>
 		<English>Their reason for killing and destroying such an infinite number of souls is that the Christians have an ultimate aim, which is to acquire gold, and to swell themselves with riches in a very brief time and thus rise to a high estate disproportionate to their merits.[NEWLINE]--- Bartolomé de Las Casas, "Brief account of the destruction of the Indies" (1552)</English>
-		<French>Their reason for killing and destroying such an infinite number of souls is that the Christians have an ultimate aim, which is to acquire gold, and to swell themselves with riches in a very brief time and thus rise to a high estate disproportionate to their merits.[NEWLINE]--- Bartolomé de Las Casas, "Brief account of the destruction of the Indies" (1552)</French>
-		<German>Their reason for killing and destroying such an infinite number of souls is that the Christians have an ultimate aim, which is to acquire gold, and to swell themselves with riches in a very brief time and thus rise to a high estate disproportionate to their merits.[NEWLINE]--- Bartolomé de Las Casas, "Brief account of the destruction of the Indies" (1552)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_51</Tag>
 		<English>We can estimate very surely and truthfully that in the forty years that have passed, with the infernal actions of the Christians, there have been unjustly slain more than twelve million men, women, and children. In truth, I believe without trying to deceive myself that the number of the slain is more like fifteen million.[NEWLINE]--- Bartolomé de Las Casas, "Brief account of the destruction of the Indies" (1552)</English>
-		<French>We can estimate very surely and truthfully that in the forty years that have passed, with the infernal actions of the Christians, there have been unjustly slain more than twelve million men, women, and children. In truth, I believe without trying to deceive myself that the number of the slain is more like fifteen million.[NEWLINE]--- Bartolomé de Las Casas, "Brief account of the destruction of the Indies" (1552)</French>
-		<German>We can estimate very surely and truthfully that in the forty years that have passed, with the infernal actions of the Christians, there have been unjustly slain more than twelve million men, women, and children. In truth, I believe without trying to deceive myself that the number of the slain is more like fifteen million.[NEWLINE]--- Bartolomé de Las Casas, "Brief account of the destruction of the Indies" (1552)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_52</Tag>
 		<English>Compare then the blessings enjoyed by Spaniards of prudence, genius, magnanimity, temperance, humanity, and religion with those of the little men [the Indians] in whom you will scarcely find even vestiges of humanity. ... How can we doubt that these people - so uncivilized, so barbaric, contaminated with so many impieties and obscenities - have been justly conquered?[NEWLINE]--- Juan Ginés de Sepúlveda, to Bartolomé de Las Casas, at the Valladolid debate (1550-1551)</English>
-		<French>Compare then the blessings enjoyed by Spaniards of prudence, genius, magnanimity, temperance, humanity, and religion with those of the little men [the Indians] in whom you will scarcely find even vestiges of humanity. ... How can we doubt that these people - so uncivilized, so barbaric, contaminated with so many impieties and obscenities - have been justly conquered?[NEWLINE]--- Juan Ginés de Sepúlveda, to Bartolomé de Las Casas, at the Valladolid debate (1550-1551)</French>
-		<German>Compare then the blessings enjoyed by Spaniards of prudence, genius, magnanimity, temperance, humanity, and religion with those of the little men [the Indians] in whom you will scarcely find even vestiges of humanity. ... How can we doubt that these people - so uncivilized, so barbaric, contaminated with so many impieties and obscenities - have been justly conquered?[NEWLINE]--- Juan Ginés de Sepúlveda, to Bartolomé de Las Casas, at the Valladolid debate (1550-1551)</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_53</Tag>
 		<English>The Russians went to the settlement and carried out a terrible blood bath. Only a few people were able to flee to Angyahtalek in baidarkas; 300 Koniags were shot by the Russians. This happened in April. When our people revisited the place in the summer the stench of the corpses lying on the shore polluted the air so badly that none could stay there, and since then the island has been uninhabited. After this every chief had to surrender his children as hostages; I was saved only by my father's begging and many sea otter pelts.[NEWLINE]--- Arsenti Aminak, Alutiiq native, on the 1784 massacre of thousands of Alutiiq by Russian fur traders at Ala'uq</English>
-		<French>The Russians went to the settlement and carried out a terrible blood bath. Only a few [people] were able to flee to Angyahtalek in baidarkas; 300 Koniags were shot by the Russians. This happened in April. When our people revisited the place in the summer the stench of the corpses lying on the shore polluted the air so badly that none could stay there, and since then the island has been uninhabited. After this every chief had to surrender his children as hostages; I was saved only by my father's begging and many sea otter pelts.[NEWLINE]--- Arsenti Aminak, Alutiiq native, on the 1784 massacre of thousands of Alutiiq by Russian fur traders at Ala'uq</French>
-		<German>The Russians went to the settlement and carried out a terrible blood bath. Only a few [people] were able to flee to Angyahtalek in baidarkas; 300 Koniags were shot by the Russians. This happened in April. When our people revisited the place in the summer the stench of the corpses lying on the shore polluted the air so badly that none could stay there, and since then the island has been uninhabited. After this every chief had to surrender his children as hostages; I was saved only by my father's begging and many sea otter pelts.[NEWLINE]--- Arsenti Aminak, Alutiiq native, on the 1784 massacre of thousands of Alutiiq by Russian fur traders at Ala'uq</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_QUOTE_54</Tag>
 		<English>The time is near at hand which must determine whether Americans are to be free men or slaves.[NEWLINE]--- George Washington (1732 - 1799), Commander-in-Chief of the Continental Army and first President of the United States</English>
-		<French>The time is near at hand which must determine whether Americans are to be free men or slaves.[NEWLINE]--- George Washington (1732 - 1799), Commander-in-Chief of the Continental Army and first President of the United States</French>
-		<German>The time is near at hand which must determine whether Americans are to be free men or slaves.[NEWLINE]--- George Washington (1732 - 1799), Commander-in-Chief of the Continental Army and first President of the United States</German>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_HINT_1</Tag>
@@ -544,7 +514,7 @@ Viel Spass![NEWLINE]
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_HINT_6</Tag>
-		<English>Nay, so great was our famine, that a Savage we slew, and buried, the poorer sort tooke him up againe and eat him, and so did divers one another boyled and stewed with roots and herbs: And one amongst the rest did kill his wife, powdered her, and had eaten part of her before it was knowne.[NEWLINE]--- "A Trve declaration of the estate of the Colonie in Virginia" (1610)</English>
+		<English>Nay, so great was our famine, that a Savage we slew, and buried, the poorer sort tooke him up againe and eat him, and so did divers one another boyled and stewed with roots and herbs: And one amongst the rest did kill his wife, powdered her, and had eaten part of her before it was knowne.[NEWLINE]--- "A True declaration of the estate of the Colonie in Virginia" (1610)</English>
 		<French>Si vous désirez modifier ce que vos colons produisent dans une case, effectuez un [double-clic] sur l'un d'entre eux et une liste des professions disponibles apparaîtra.</French>
 		<German>Unerträglicher Hunger trieb uns dazu, einen Indianer aus seinem Grabe zu schaufeln, in dem er drei Tage gelegen hatte, und ihn ganz zu verschlingen.[NEWLINE]--- "Chronik der Bürgerversammlung von Virginia" über die Gründerzeit von Jamestown</German>
 		<Italian>Se vuoi cambiare quello che sta producendo uno dei tuoi coloni in una casella, [clicca due volte] sul cittadino e apparirà una lista delle nuove professioni.</Italian>
@@ -685,6 +655,18 @@ Viel Spass![NEWLINE]
 		<Spanish>Cuando una de vuestras unidades visite un asentamiento indígena, no dejéis de hablar con el jefe. Puede que tenga un regalo para vos.</Spanish>
 	</TEXT>
 	<TEXT>
+		<Tag>TXT_KEY_HINT_24</Tag>
+		<English>Many master craftspeople must choose which one of two or more yields to work on at any given time, creating different finished goods. Some finished items, such as tools for guns, can be used to make other things. One example of a long sequence starts with sheep providing wool through the butcher, then wool cloth from the weaver, coloured wool cloth from the dyer, and ends once the tailor stitches together everyday clothes. Trading can happen at every stage. Some yields are useful only as trade commodities. Gold is valuable but rare. Rubber is mid-priced, but much more common.</English>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_HINT_25</Tag>
+		<English>As terrain increases in variety, choosing where to settle is a more subtle choice. A bonus resource is good but that might be only one of three or more resources on a single terrain tile. Resources affect how building is done. Without original food available a windmill can't be built. Without ore there can never be an iron mill. Depending on strategy, the best site might have no bonuses. Instead it will have tiles with the right combination of basic resources for production and trading success.</English>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_HINT_26</Tag>
+		<English>[BOLD]Don't put troops on your first frigate![\BOLD]When you get your first frigate, whether you buy it, build it, or get it from a quest or a Founding Father, the King is going to commandeer it for the Royal Navy. Don't worry. You'll get it back in ten turns. However if you put any of your soldiers aboard they'll be shanghaied into the Royal Marines. You'll never see those troops again.</English>
+	</TEXT>
+	<TEXT>
 		<Tag>TXT_KEY_HINT_27</Tag>
 		<English>This country is worth seeking, not only because great wealth may be obtained from it, gold and silver, all sorts of gems, and spices, which never reach us.[NEWLINE]--- Paolo Toscanelli, "First Letter to Columbus" (1474)</English>
 		<French>Si vos réserves de nourriture atteignent 200 unités, ces dernières seront immédiatement consumées et vous obtiendrez un nouveau colon libre.</French>
@@ -750,7 +732,7 @@ Viel Spass![NEWLINE]
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_HINT_38</Tag>
-		<English>If you try to build a colony too close to a Native settlement, the local chief may require you to purchase the land you are claiming. You can refuse to pay, of course, but this will certainly worsen relations between you and the Natives.</English>
+		<English>If you try to build a colony too close to a Native settlement, the local chief may require you to purchase the land you are claiming. You can refuse to pay, of course, but this will certainly worsen relations between you and the Natives already established there.</English>
 		<French>Si vous tentez de fonder une ville trop près d'une colonie indigène, il se peut que le chef local vous demande d'acheter les terres que vous tentez de récupérer. Vous pouvez refuser de payer, bien entendu, mais cela entachera vos relations avec les indigènes concernés.</French>
 		<German>Wenn Sie versuchen, eine Kolonie zu nahe an einer Ureinwohner-Siedlung zu errichten, bietet Ihnen der einheimische Häuptling vielleicht das Land, das Sie beanspruchen, zum Kauf an. Wenn Sie sich weigern zu zahlen, so hat das eindeutig negative Auswirkungen auf Ihre Beziehung zu den Ureinwohnern.</German>
 		<Italian>Se provi a costruire una colonia troppo vicino a un insediamento di nativi, il capo potrebbe chiederti di acquistare la terra che rivendichi. Puoi naturalmente rifiutarti di pagare, ma ciò peggiorerà le relazioni con i nativi.</Italian>
@@ -758,15 +740,15 @@ Viel Spass![NEWLINE]
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_HINT_39</Tag>
-		<English>Without a warehouse, your settlement can only store 100 of any given type of good except food. A warehouse increases capacity to 200. A warehouse expansion ups your settlement's storage to 300.</English>
+		<English>Goods need storage. Ships need berths. Soldiers need barracks. Warehouses, docks and forts are all necessary to keep your people busy and secure. Capacity has to increase as the colony grows. Buildings need regular upgrades. Infrastructure may not be the exciting side of politics, but when it's neglected business, private and public, will grind to a halt.</English>
 		<French>Sans entrepôt, une colonie ne peut stocker que 100 unités d'une marchandise, excepté pour la nourriture. Un entrepôt fait passer cette limite à 200 et une extension d'entrepôt à 300.</French>
-		<German>Ohne Lagerhaus kann Ihre Siedlung nur 100 Einheiten eines bestimmten Guts, mit Ausnahme von Nahrung, lagern. Ein Lagerhaus erhöht die Lagerkapazität Ihrer Siedlung auf 200, eine Lagerhauserweiterung auf 300.</German>
+		<German>Waren benötigen Lagerräume. Schiffe brauchen Liegeplätze. Soldaten brauchen Kasernen. Lagerhäuser, Docks und Festungen sind notwendig, um die Menschen zu beschäftigen und zu schützen.[NEWLINE]Die Kapazitäten müssen mit dem Wachstum der Kolonie mithalten und daher Gebäude regelmäßig modernisiert werden.[NEWLINE]Die Infrastruktur ist vielleicht nicht die aufregendste Seite der Politik, aber wenn sie vernachlässigt wird, kommen die privaten und öffentlichen Geschäfte zum Stillstand.</German>
 		<Italian>Senza un magazzino, il tuo insediamento può mettere da parte solo 100 unità di qualsiasi bene, a parte il cibo. Un magazzino aumenta la capacità a 200. L'espansione del magazzino porta la capacità del tuo insediamento a 300.</Italian>
 		<Spanish>Sin un Almacén, vuestro asentamiento solo puede guardar 100 de cualquier tipo de mercancías, excepto Alimentos. Un Almacén aumenta la capacidad a 200. El Almacén ampliado sube la capacidad de almacenamiento del asentamiento a 300.</Spanish>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_HINT_40</Tag>
-		<English>In Europe when you recruit units with a profession that needs goods, like the veteran soldier or seasoned scout, they come fully equipped with all the horses and weapons they require.</English>
+		<English>In Europe when you recruit units with a profession that needs goods, like the veteran soldier or seasoned scout, they come fully equipped with all the horses and weapons they require, including baked goods and gunpowder.</English>
 		<French>Lorsque vous recrutez en Europe des unités dont la profession nécessitent certaines marchandises (comme c'est le cas pour le soldat vétéran ou l'éclaireur aguerri), ils se joindront à vous avec tous les chevaux et/ou les armes requises.</French>
 		<German>Wenn Sie in Europa Einheiten rekrutieren, die Güter benötigen, um ihrem Beruf nachzugehen (etwa einen Offizier oder einen Routinierten Späher), werden diese Einheiten voll ausgerüstet - mit den notwendigen Pferden und Schusswaffen - geliefert.</German>
 		<Italian>Quando recluti in Europa unità che solitamente hanno bisogno di beni per intraprendere la professione, come per soldati veterani o scout esperti, arriveranno completamente equipaggiati con le armi e i cavalli di cui hanno bisogno.</Italian>
@@ -774,7 +756,15 @@ Viel Spass![NEWLINE]
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_HINT_41</Tag>
-		<English>When building your first settlement, it's always a good idea to keep as close to Europe as possible. Your ships will spend less time in transit between colony and mother country, lessening the chance of being attacked by enemy ships.</English>
+		<English>When building your first settlement, it's always a good idea to keep as close to Europe as possible. Your ships will spend less time in transit between colony and mother country, lessening the chance of being attacked by enemy ships. Settle beside coast tiles rather than shallow coast. Otherwise when you get larger ships they won't be able to enter your port. It may take some searching to find a safe harbour for your settlement.</English>
+		<French>Lorsque vous fondez votre première colonie, il est toujours judicieux de le faire le plus près possible de votre voie d'accès à l'Europe. Ainsi, vos navires passeront moins de temps en mer entre votre colonie et votre patrie, réduisant le risque qu'ils soient assaillis par un navire ennemi.</French>
+		<German>Wenn Sie Ihre erste Siedlung errichten, ist es immer sinnvoll, diese so nah wie möglich an Ihrer Route nach Europa anzulegen. Das bedeutet, daß Ihre Schiffe benötigen weniger lange für die Reise zwischen Kolonie und Mutterland brauchen. Zudem sinkt auch die Wahrscheinlichkeit, dass sie von gegnerischen Schiffen angegriffen werden.</German>
+		<Italian>Quando costruisci il tuo primo insediamento è sempre una buona idea costruirlo il più vicino possibile alla tua rotta per l'Europa. In questo modo le tue navi spenderanno meno tempo in viaggio tra la colonia e la madrepatria, riducendo le probabilità di venire attaccate dalle navi nemiche.</Italian>
+		<Spanish>A la hora de construir el primer asentamiento, siempre es una buena idea hacerlo lo más cerca posible de la ruta con Europa. Esto supone que vuestros barcos pasarán menos tiempo en los tránsitos entre la colonia y la madre patria, y reducir la posibilidad de ser atacados por naves enemigas.</Spanish>
+	</TEXT>
+	<TEXT>
+		<Tag>TXT_KEY_HINT_42</Tag>
+		<English>When building your first settlement, it's always a good idea to keep as close to Europe as possible. Your ships will spend less time in transit between colony and mother country, lessening the chance of being attacked by enemy ships. Settle beside coast tiles rather than shallow coast. Otherwise when you get larger ships they won't be able to enter your port. It may take some searching to find a safe harbour for your settlement.</English>
 		<French>Lorsque vous fondez votre première colonie, il est toujours judicieux de le faire le plus près possible de votre voie d'accès à l'Europe. Ainsi, vos navires passeront moins de temps en mer entre votre colonie et votre patrie, réduisant le risque qu'ils soient assaillis par un navire ennemi.</French>
 		<German>Wenn Sie Ihre erste Siedlung errichten, ist es immer sinnvoll, diese so nah wie möglich an Ihrer Route nach Europa anzulegen. Das bedeutet, daß Ihre Schiffe benötigen weniger lange für die Reise zwischen Kolonie und Mutterland brauchen. Zudem sinkt auch die Wahrscheinlichkeit, dass sie von gegnerischen Schiffen angegriffen werden.</German>
 		<Italian>Quando costruisci il tuo primo insediamento è sempre una buona idea costruirlo il più vicino possibile alla tua rotta per l'Europa. In questo modo le tue navi spenderanno meno tempo in viaggio tra la colonia e la madrepatria, riducendo le probabilità di venire attaccate dalle navi nemiche.</Italian>
@@ -782,15 +772,15 @@ Viel Spass![NEWLINE]
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_HINT_43</Tag>
-		<English>Galleons are the finest transport ships available and the only ships capable of transporting treasure units to Europe.</English>
+		<English>Galleons are the finest transport ships available and the only ships capable of transporting treasure units to Europe. However they cannot transport any other units. Once you have enough treasures, the King may offer you a special price on a galleon to carry them, but he'll wait until you have enough gold on hand.</English>
 		<French>Les galions sont les navires de transport disponibles les plus performants. Ils sont notamment les seuls à pouvoir transporter les trésors en Europe.</French>
-		<German>Galeonen sind die besten verfügbaren Transportschiffe und die einzigen, die Schatzeinheiten nach Europa bringen können.</German>
+		<German>Galeonen sind die besten verfügbaren Transportschiffe und die einzigen, die Schatzeinheiten nach Europa bringen können. Allerdings können sie keine anderen Einheiten transportieren.</German>
 		<Italian>I galeoni sono le migliori navi da trasporto disponibili e sono le uniche in grado di trasportare i tesori in Europa.</Italian>
-		<Spanish>Los Galeones son los mejores barcos de transporte y los únicos capaces de llevar unidades de Tesoro a Europa.</Spanish>
+		<Spanish>Los Galeones son los mejores barcos de transporte y los únicos capaces de llevar unidades de Tesoro a Europa. Por otro lado, no pueden transportar otros tipos de unidades.</Spanish>
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_HINT_45</Tag>
-		<English>To load goods onto a transport, you must move the transport unit into the same tile as the goods and press the "Load Goods" icon. You can also do it from the "Transport" section of the Settlement Screen.</English>
+		<English>To load goods onto a transport, you must move the transport unit into the same tile as the goods and press the "Load Goods" icon. You can also do it from the "Transport" section of the Settlement Screen. You can unload goods one of two ways - by selecting the good you would like to unload from the unit stack and pressing "Unload" from the orders display or by activating the transport unit and clicking "Unload All." You can only unload goods in settlements (or in Europe).Soldiers need guns and gunpowder. </English>
 		<French>Pour charger des marchandises dans une unité de transport, vous devez déplacer cette dernière sur la même case que les marchandises puis cliquer sur l'icône Charger des marchandises. Vous pouvez également le faire depuis l'espace Transport de l'écran de colonie.</French>
 		<German>Um Güter auf ein Transportmittel zu laden, müssen Sie die Transporteinheit auf dasselbe Geländefeld wie die Güter bewegen und auf "Beladen" klicken. Dies ist ebenfalls im Menü "Transport" im Siedlungsbildschirm möglich.</German>
 		<Italian>Per caricare dei beni su un trasporto devi prima spostare l'unità da trasporto nella stessa casella in cui si trovano i beni, per poi cliccare sull'icona "Carica beni". Puoi anche farlo dalla sezione "Trasporti" nella schermata dell'insediamento.</Italian>
@@ -798,7 +788,7 @@ Viel Spass![NEWLINE]
 	</TEXT>
 	<TEXT>
 		<Tag>TXT_KEY_HINT_46</Tag>
-		<English>You can unload goods one of two ways - by selecting the good you would like to unload from the unit stack and pressing "Unload" from the orders display or by activating the transport unit and clicking "Unload All." You can only unload goods in settlements (or in Europe).</English>
+		<English>Pioneers and scouts need provisions to go with their tools and horses. To keep costs down the baker's house and the powder maker's house should be among your first buildings.</English>
 		<French>Il existe deux manières de décharger des marchandises : en sélectionnant la marchandise à décharger dans la pile d'unités puis en appuyant sur Décharger dans la boîte d'ordre, ou en activant l'unité de transport puis en cliquant sur Décharger tout. Vous ne pouvez décharger des marchandises que dans les colonies et en Europe.</French>
 		<German>Sie können Güter auf zwei verschiedene Arten entladen : indem Sie das gewünschte Gut aus den Einheiten auswählen und in der Befehlsanzeige "Entladen" anklicken oder indem Sie die Transporteinheit aktivieren und "Alle entladen" anklicken. Sie können Güter nur in Siedlungen (oder in Europa) entladen.</German>
 		<Italian>Puoi scaricare i beni in due modi: selezionando il bene che vuoi scaricare dal gruppo e scegliendo "Scarica" nella finestra degli ordini, oppure attivando l'unità di trasporto e cliccando su "Scarica tutto". Puoi scaricare i beni solo negli insediamenti (o in Europa).</Italian>

@@ -37,6 +37,12 @@
             <VictoryThresholds/>
         </BuildingClassInfo>
         <BuildingClassInfo>
+            <Type>BUILDINGCLASS_COLONIAL_CONGRESS</Type>
+            <Description>TXT_KEY_BUILDINGCLASS_COLONIAL_CONGRESS</Description>
+            <DefaultBuilding>BUILDING_COLONIAL_CONGRESS</DefaultBuilding>
+            <VictoryThresholds/>
+        </BuildingClassInfo>
+        <BuildingClassInfo>
             <Type>BUILDINGCLASS_VILLAGE_COURT</Type>
             <Description>TXT_KEY_BUILDINGCLASS_VILLAGE_COURT</Description>
             <DefaultBuilding>BUILDING_VILLAGE_COURT</DefaultBuilding>
@@ -58,12 +64,6 @@
             <Type>BUILDINGCLASS_SUPREME_COURT</Type>
             <Description>TXT_KEY_BUILDINGCLASS_SUPREME_COURT</Description>
             <DefaultBuilding>BUILDING_SUPREME_COURT</DefaultBuilding>
-            <VictoryThresholds/>
-        </BuildingClassInfo>
-        <BuildingClassInfo>
-            <Type>BUILDINGCLASS_COLONIAL_CONGRESS</Type>
-            <Description>TXT_KEY_BUILDINGCLASS_COLONIAL_CONGRESS</Description>
-            <DefaultBuilding>BUILDING_COLONIAL_CONGRESS</DefaultBuilding>
             <VictoryThresholds/>
         </BuildingClassInfo>
         <BuildingClassInfo>
@@ -796,6 +796,12 @@
             <Type>BUILDINGCLASS_BAKERY</Type>
             <Description>TXT_KEY_BUILDINGCLASS_BAKERY</Description>
             <DefaultBuilding>BUILDING_BAKERY</DefaultBuilding>
+            <VictoryThresholds/>
+        </BuildingClassInfo>
+        <BuildingClassInfo>
+            <Type>BUILDINGCLASS_JAIL</Type>
+            <Description>TXT_KEY_BUILDINGCLASS_JAIL</Description>
+            <DefaultBuilding>BUILDING_JAIL</DefaultBuilding>
             <VictoryThresholds/>
         </BuildingClassInfo>
     </BuildingClassInfos>

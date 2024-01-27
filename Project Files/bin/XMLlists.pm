@@ -20,6 +20,7 @@ our @EXPORT = qw(
 	getInfo
 	getXMLKeywords
 	isAlwaysHardcodedEnum
+	hasNoTypeTag
 	getNoType
 	updateAutoFile
 	isTwoLevelFile
@@ -32,21 +33,31 @@ our @EXPORT = qw(
 # this means changing any of those files in a way that will alter the list of Types will require a recompile.
 sub isAlwaysHardcodedEnum
 {
-	my $file = shift;
+	my $type = shift;
 	
-	return 1 if $file eq "BasicInfos/CIV4DomainInfos.xml";
-	return 1 if $file eq "BasicInfos/CIV4UnitAIInfos.xml";
-	return 1 if $file eq "BasicInfos/CIV4InvisibleInfos.xml";
-	return 1 if $file eq "GameInfo/CIV4GameOptionInfos.xml";
-	return 1 if $file eq "GameInfo/CIV4PlayerOptionInfos.xml";
-	return 1 if $file eq "GameInfo/CIV4TradeScreenInfo.xml";
-	return 1 if $file eq "GameInfo/CIV4WorldInfo.xml";
-	return 1 if $file eq "Terrain/CIV4TerrainInfos.xml";
-	return 1 if $file eq "Terrain/CIV4YieldInfos.xml";
-	return 1 if $file eq "Units/CIV4AutomateInfos.xml";
-	return 1 if $file eq "Units/CIV4CommandInfos.xml";
-	return 1 if $file eq "Units/CIV4ControlInfos.xml";
-	return 1 if $file eq "Units/CIV4MissionInfos.xml";
+	return 1 if $type eq "DomainTypes";
+	return 1 if $type eq "UnitAITypes";
+	return 1 if $type eq "InvisibleTypes";
+	return 1 if $type eq "GameOptionTypes";
+	return 1 if $type eq "PlayerOptionTypes";
+	return 1 if $type eq "TradeScreenTypes";
+	return 1 if $type eq "TerrainTypes";
+	return 1 if $type eq "YieldTypes";
+	return 1 if $type eq "AutomateTypes";
+	return 1 if $type eq "CommandTypes";
+	return 1 if $type eq "ControlTypes";
+	return 1 if $type eq "MissionTypes";
+	return 1 if $type eq "HurryTypes";
+	return 1 if $type eq "RouteTypes";
+	return 1 if $type eq "AttitudeTypes";
+	return 1 if $type eq "MemoryTypes";
+	return 1 if $type eq "CalendarTypes";
+	return 1 if $type eq "DenialTypes";
+	return 1 if $type eq "MultiplayerOptionTypes";
+	return 1 if $type eq "ForceControlTypes";
+	return 1 if $type eq "GraphicOptionTypes";
+	return 1 if $type eq "InterfaceModeTypes";
+	return 1 if $type eq "EuropeTypes";
 	
 	return 0;
 }
@@ -73,6 +84,22 @@ sub getFileWithPath
 	return undef;
 }
 
+sub getBasename
+{
+	my $basename = shift;
+	
+	my $index = index($basename, "Info");
+	return substr($basename, 0, $index) if $index != -1;
+	
+	$index = index($basename, "s.");
+	return substr($basename, 0, $index) if $index != -1;
+	
+	$index = index($basename, ".");
+	return substr($basename, 0, $index) if $index != -1;
+	
+	return $basename;
+}
+
 sub getXMLKeywords
 {
 	my $file = shift;
@@ -84,7 +111,7 @@ sub getXMLKeywords
 	my $enum = ""; # needs a buffer variable. The contents will not be used.
 	($enum, $basename) = split("/", $file) if index($file, "/") != -1;
 	$basename = substr($basename, 4) if lc(substr($basename, 0, 4)) eq "civ4";
-	($basename) = split("Info", $basename);
+	$basename = getBasename($basename);
 	
 	$enum = $basename . "Types";
 	my $TYPE = uc($basename);
@@ -114,6 +141,23 @@ sub getXMLKeywords
 		$TYPE = "UNIT_ARTSTYLE";
 	}
 	
+	if ($file eq "Interface/CIV4ColorVals.xml")
+	{
+		$basename = "Color";
+		$enum = "ColorTypes";
+		$TYPE = "COLOR";
+	}
+	if ($file eq "Terrain/CIV4TerrainSettings.xml")
+	{
+		$basename = "Landscape";
+		$enum = "LandscapeTypes";
+		$TYPE = "LANDSCAPE";
+	}
+	
+	
+	
+	$enum = "MultiplayerOptionTypes" if $file eq "GameInfo/CIV4MPOptionInfos.xml";
+	
 	return ($basename, $enum, $TYPE);
 }
 
@@ -122,6 +166,7 @@ sub getNoType
 	my $type = shift;
 	
 	return "NO_FATHER_POINT_TYPE" if $type eq "FATHER_POINT";
+	return "ENTITY_EVENT_NONE" if $type eq "ENTITYEVENT";
 	
 	return "NO_" . $type;
 }
@@ -130,8 +175,14 @@ sub getNumFunction
 {
 	my $basename = shift;
 
+	return "m_paAttitudeInfos.size()"   if $basename eq "Attitude";
 	return "m_paCivEffectInfo.size()"   if $basename eq "CivEffect";
 	return "m_paDomainInfo.size()"      if $basename eq "Domain";
+	return "m_paGraphicOptionInfos.size()" if $basename eq "GraphicOption";
+	return "GC.getNumMainMenus()"       if $basename eq "MainMenu";
+	return "GC.m_paInterfaceModeInfo.size()" if $basename eq "InterfaceMode";
+	return "m_paMemoryInfos.size()"     if $basename eq "Memory";
+	return "GC.getNumLandscapeInfos()"  if $basename eq "Landscape";
 	return "m_paUnitAIInfos.size()"     if $basename eq "UnitAI";
 	return "GC.getNumWorldInfos()"      if $basename eq "WorldSize";
 	return "m_paYieldInfo.size()"       if $basename eq "Yield";
@@ -162,10 +213,20 @@ sub getEnumFiles
 {
 	my @list = ();
 	
+	push(@list, "Art/CIV4MainMenus.xml");
+	push(@list, "Art/CIV4RiverModelInfos.xml");
+	push(@list, "Art/Civ4RouteModelInfos.xml");
+	
+	push(@list, "BasicInfos/CIV4AttitudeInfos.xml");
 	push(@list, "BasicInfos/CIV4BasicInfos.xml");
+	push(@list, "BasicInfos/CIV4CalendarInfos.xml");
+	push(@list, "BasicInfos/CIV4DenialInfos.xml");
 	push(@list, "BasicInfos/CIV4DomainInfos.xml");
 	push(@list, "BasicInfos/CIV4FatherCategoryInfos.xml");
 	push(@list, "BasicInfos/CIV4InvisibleInfos.xml");
+	push(@list, "BasicInfos/CIV4MemoryInfos.xml");
+	push(@list, "BasicInfos/CIV4MonthInfos.xml");
+	push(@list, "BasicInfos/CIV4SeasonInfos.xml");
 	push(@list, "BasicInfos/CIV4UnitAIInfos.xml");
 	push(@list, "BasicInfos/CIV4UnitCombatInfos.xml");
 	
@@ -189,36 +250,59 @@ sub getEnumFiles
 	push(@list, "GameInfo/CIV4CivicOptionInfos.xml");
 	push(@list, "GameInfo/CIV4ClimateInfo.xml");
 	push(@list, "GameInfo/CIV4CultureLevelInfo.xml");
+	push(@list, "GameInfo/CIV4CursorInfo.xml");
 	push(@list, "GameInfo/CIV4DiplomacyInfos.xml");
 	push(@list, "GameInfo/CIV4EmphasizeInfo.xml");
 	push(@list, "GameInfo/CIV4EraInfos.xml");
 	push(@list, "GameInfo/CIV4EuropeInfo.xml");
 	push(@list, "GameInfo/CIV4FatherInfos.xml");
 	push(@list, "GameInfo/CIV4FatherPointInfos.xml");
+	push(@list, "GameInfo/CIV4ForceControlInfos.xml");
 	push(@list, "GameInfo/CIV4GameOptionInfos.xml");
 	push(@list, "GameInfo/CIV4GameSpeedInfo.xml");
 	push(@list, "GameInfo/CIV4GoodyInfo.xml");
+	push(@list, "GameInfo/CIV4GraphicOptionInfos.xml");
 	push(@list, "GameInfo/CIV4HandicapInfo.xml");
+	push(@list, "GameInfo/CIV4Hints.xml");
 	push(@list, "GameInfo/CIV4HurryInfo.xml");
+	push(@list, "GameInfo/CIV4MPOptionInfos.xml");
 	push(@list, "GameInfo/CIV4PlayerOptionInfos.xml");
 	push(@list, "GameInfo/CIV4SeaLevelInfo.xml");
+	push(@list, "GameInfo/CIV4TurnTimerInfo.xml");
 	push(@list, "GameInfo/CIV4TradeScreenInfo.xml");
 	push(@list, "GameInfo/CIV4VictoryInfo.xml");
 	push(@list, "GameInfo/CIV4WorldInfo.xml");
 	
+	push(@list, "Interface/CIV4ColorVals.xml");
+	push(@list, "Interface/CIV4InterfaceModeInfos.xml");
+	push(@list, "Interface/CIV4PlayerColorInfos.xml");
+	push(@list, "Interface/CIV4SlideShowInfos.xml");
+	push(@list, "Interface/CIV4SlideShowRandomInfos.xml");
+	push(@list, "Interface/CIV4WorldPickerInfos.xml");
+	
+	push(@list, "Misc/CIV4AttachableInfos.xml");
+	#push(@list, "Misc/CIV4CameraOverlayInfos.xml");
+	push(@list, "Misc/CIV4DetailManager.xml");
 	push(@list, "Misc/CIV4EffectInfos.xml");
 	push(@list, "Misc/CIV4RouteInfos.xml");
+	push(@list, "Misc/CIV4TerrainPlaneInfos.xml");
+	push(@list, "Misc/CIV4WaterPlaneInfos.xml");
 	
 	push(@list, "Terrain/CIV4BonusInfos.xml");
 	push(@list, "Terrain/CIV4FeatureInfos.xml");
 	push(@list, "Terrain/CIV4ImprovementInfos.xml");
 	push(@list, "Terrain/CIV4TerrainInfos.xml");
+	push(@list, "Terrain/CIV4TerrainSettings.xml");
 	push(@list, "Terrain/CIV4YieldInfos.xml");
 	
+	#push(@list, "Units/Civ4AnimationInfos.xml");
+	#push(@list, "Units/Civ4AnimationPathInfos.xml");
 	push(@list, "Units/CIV4AutomateInfos.xml");
 	push(@list, "Units/CIV4BuildInfos.xml");
 	push(@list, "Units/CIV4CommandInfos.xml");
+	push(@list, "Units/Civ4EntityEventInfos.xml");
 	push(@list, "Units/CIV4ControlInfos.xml");
+	push(@list, "Units/CIV4FormationInfos.xml");
 	push(@list, "Units/CIV4MissionInfos.xml");
 	push(@list, "Units/CIV4ProfessionInfos.xml");
 	push(@list, "Units/CIV4PromotionInfos.xml");
@@ -227,6 +311,29 @@ sub getEnumFiles
 	push(@list, "Units/CIV4UnitInfos.xml");
 	
 	return @list;
+}
+
+sub hasNoTypeTag
+{
+	my $type = shift;
+	
+	return 1 if $type eq "Art/CIV4RiverModelInfos.xml";
+	return 1 if $type eq "Art/Civ4RouteModelInfos.xml";
+	
+	return 1 if $type eq "GameInfo/CIV4Hints.xml";
+	
+	return 1 if $type eq "Interface/CIV4SlideShowInfos.xml";
+	return 1 if $type eq "Interface/CIV4SlideShowRandomInfos.xml";
+	return 1 if $type eq "Interface/CIV4WorldPickerInfos.xml";
+	
+	return 1 if $type eq "Misc/CIV4CameraOverlayInfos.xml";
+	return 1 if $type eq "Misc/CIV4DetailManager.xml";
+	return 1 if $type eq "Misc/CIV4TerrainPlaneInfos.xml";
+	return 1 if $type eq "Misc/CIV4WaterPlaneInfos.xml";
+	
+	return 1 if $type eq "Units/CIV4FormationInfos.xml";
+	
+	return 0;
 }
 
 sub isDllExport

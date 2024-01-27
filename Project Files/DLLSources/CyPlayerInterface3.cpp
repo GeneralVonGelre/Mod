@@ -33,6 +33,7 @@ void CyPlayerPythonInterface3(python::class_<CyPlayer>& x)
 		.def("canDoCivics", &CyPlayer::canDoCivics, "bool (int (CivicTypes) eCivic)")
 		.def("greatGeneralThreshold", &CyPlayer::greatGeneralThreshold, "int ()")
 		.def("greatAdmiralThreshold", &CyPlayer::greatAdmiralThreshold, "int ()")
+		.def("getImmigrationThresholdModifierFromUnitsWaitingOnDock", &CyPlayer::getImmigrationThresholdModifierFromUnitsWaitingOnDock, "int ()") // WTP, ray, increase threshold if more than X units waiting on the docks - START
 		.def("immigrationThreshold", &CyPlayer::immigrationThreshold, "int ()")
 		.def("revolutionEuropeUnitThreshold", &CyPlayer::revolutionEuropeUnitThreshold, "int ()")
 		.def("getStartingPlot", &CyPlayer::getStartingPlot, python::return_value_policy<python::manage_new_object>(), "CyPlot* ()")
@@ -117,7 +118,6 @@ void CyPlayerPythonInterface3(python::class_<CyPlayer>& x)
 		.def("missionaryThreshold", &CyPlayer::missionaryThreshold, "int (int /*PlayerTypes*/ ePlayer)") 
 		.def("getMissionaryRateModifier", &CyPlayer::getMissionaryRateModifier, "int (int /*PlayerTypes*/ ePlayer)")
 		//WTP, ray Kings Used Ship - START
-		.def("cacheUsedShipData", &CyPlayer::cacheUsedShipData, "int (int iUsedShipPrice, int iUsedShipClassType)") 
 		.def("getRandomUsedShipClassTypeID", &CyPlayer::getRandomUsedShipClassTypeID, "int ()") 
 		.def("getUsedShipPrice", &CyPlayer::getUsedShipPrice, "int (int iUsedShipClassType)") 
 		.def("isKingWillingToTradeUsedShips", &CyPlayer::isKingWillingToTradeUsedShips, "bool ()")
@@ -125,7 +125,6 @@ void CyPlayerPythonInterface3(python::class_<CyPlayer>& x)
 		//WTP, ray Kings Used Ship - END
 
 		// WTP, ray, Foreign Kings, buy Immigrants - START
-		.def("cacheForeignImmigrantData", &CyPlayer::cacheForeignImmigrantData, "int (int iForeignImmigrantPrice, int iForeignImmigrantClassType)") 
 		.def("getRandomForeignImmigrantClassTypeID", &CyPlayer::getRandomForeignImmigrantClassTypeID, "int ()") 
 		.def("getForeignImmigrantPrice", &CyPlayer::getForeignImmigrantPrice, "int (int iForeignImmigrantClassType, int iEuropeKingID)") 
 		.def("isForeignKingWillingToTradeImmigrants", &CyPlayer::isForeignKingWillingToTradeImmigrants, "bool (int iEuropeKingID)")

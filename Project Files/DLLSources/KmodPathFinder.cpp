@@ -189,6 +189,12 @@ bool KmodPathFinder::GeneratePath(const CvPlot* pToPlot)
 {
 	if (!settings.pGroup || !pToPlot)
 		return false;
+
+	if (settings.pGroup->plot() == NULL)
+	{
+		FAssertMsg(false, "empty selection group trying to generate path");
+		return false;
+	}
 	return GeneratePath(settings.pGroup->plot()->getX(), settings.pGroup->plot()->getY(),
 		pToPlot->getX(), pToPlot->getY());
 }
@@ -234,6 +240,17 @@ CvPlot* KmodPathFinder::GetPathEndTurnPlot() const
 
 	while (node && node->m_iData2 > 1)
 	{
+		if (!GLOBAL_DEFINE_USE_CLASSIC_MOVEMENT_SYSTEM) {
+			if (node->m_pParent == NULL || (node->m_pParent->m_iData2 == 1 && node->m_pParent->m_iData1 > 0))
+				// With the new movement system enabled, there is a new possibility:
+				// The movement during this turn reaches a plot, but the moving unit has negative movement points after arriving there
+				// That means the m_iData2 for the end turn plot is still > 1
+				// (because we could only move out of the end turn plot after more than 1 turn - we will have to wait there)
+				// yet we still want to return the correct end turn plot and not one plot before on the path
+				// This checks that the m_pParent node is reached within the current turn and there are still movement points left,
+				// because then we can still move to the current node in the same turn -> so break here
+				break;
+		}
 		node = node->m_pParent;
 	}
 	FAssert(node);

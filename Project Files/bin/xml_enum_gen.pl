@@ -14,6 +14,7 @@ my $FILE         = getAutoDir() . "/AutoXmlEnum.h";
 my $FILE_TEST    = getAutoDir() . "/AutoXmlTest.h";
 my $FILE_DECLARE = getAutoDir() . "/AutoXmlDeclare.h";
 my $FILE_INIT    = getAutoDir() . "/AutoXmlInit.h";
+my $FILE_PRELOAD = getAutoDir() . "/AutoXmlPreload.h";
 
 my $files = [];
 my %varToEnum;
@@ -22,6 +23,11 @@ my $output         = "";
 my $output_test    = "";
 my $output_declare = "";
 my $output_init    = "";
+
+my $output_preload_dynamic     = "";
+my $output_preload_declaration = "";
+my $output_preload_function    = "";
+my $output_length_test         = "";
 
 $output .= "#ifndef AUTO_XML_ENUM\n";
 $output .= "#define AUTO_XML_ENUM\n";
@@ -68,15 +74,30 @@ foreach my $file (getEnumFiles())
 $output_init .= "} else {\n";
 
 handleGlobalDefineALT();
+handleHardcodedEnumVariables();
 
 $output .= "\n#endif // AUTO_XML_ENUM\n";
 $output_declare .= "#endif\n";
 $output_init .= "}\n#endif\n";
 
+my $output_preload = "";
+$output_preload .= $output_preload_declaration;
+$output_preload .= "#ifndef HARDCODE_XML_VALUES\n";
+$output_preload .= $output_preload_dynamic;
+$output_preload .= "#endif\n";
+$output_preload .= "static void setXmlLengthsAuto(const std::string& basePath)\n{\n";
+$output_preload .= $output_preload_function;
+$output_preload .= "}\n\n";
+$output_preload .= "static void testAllXMLLengths()\n{\n";
+$output_preload .= $output_length_test;
+$output_preload .= "}\n\n";
+
+
 writeFile($FILE        , \$output        );
 writeFile($FILE_TEST   , \$output_test   );
 writeFile($FILE_DECLARE, \$output_declare);
 writeFile($FILE_INIT   , \$output_init   );
+writeFile($FILE_PRELOAD, \$output_preload);
 
 sub getChild
 {
@@ -114,10 +135,12 @@ sub processFile
 
 	my ($basename, $enum, $TYPE) = getXMLKeywords($filename);
 	
-	my $isHardcoded = isAlwaysHardcodedEnum($filename);
+	my $isHardcoded = isAlwaysHardcodedEnum($enum);
 	
 	my $hardcodedBool = "true";
 	$hardcodedBool = "false" unless $isHardcoded;
+	
+	my $found_type = 0;
 	
 	my $isYield = $enum eq "YieldTypes";
 
@@ -125,46 +148,66 @@ sub processFile
 	$output .= $enum . "\n{\n";
 	$output .= "\tINVALID_PROFESSION = -2,\n" if $basename eq "Profession";
 	$output .= "\t" . getNoType($TYPE) . " = -1,\n\n";
-	$output .= "#ifdef HARDCODE_XML_VALUES\n\n" unless $isHardcoded;
 	
-	foreach my $type (getTypesInFile($filename))
-	{
-		$varToEnum{$type} = $enum;
-		$output .= "\t" . $type . ",\n";
-		$output_test .= "DisplayXMLhardcodingError(strcmp(\"". $type . "\", " . getInfo($basename) . "($type).getType()) == 0, \"$type\", true);\n" if $isHardcoded;
-	}
-
-	$output_test .= "DisplayXMLhardcodingError(NUM_" . $TYPE . "_TYPES == (" . $enum . ")" . getNumFunction($basename) . ", \"NUM_" . $TYPE . "_TYPES\", " . $hardcodedBool . ");\n";
-
-	$output .= "\n\tNUM_" . $TYPE . "_TYPES,\n";
-	$output .= "\tNUM_CARGO_YIELD_TYPES = YIELD_HAMMERS,\n" if $isYield;
-	$output .= "\n\tCOMPILE_TIME_NUM_" . $TYPE . "_TYPES = NUM_" . $TYPE . "_TYPES,\n";
 	
-	unless ($isHardcoded)
+	my @types = getTypesInFile($filename);
+	
+	$found_type = 1 if scalar @types > 0;
+	
+	unless ($found_type)
 	{
-		$output .= "\n#else // HARDCODE_XML_VALUES\n";
 		$output .= "\n\tCOMPILE_TIME_NUM_" . $TYPE . "_TYPES = MAX_SHORT,\n";
-		$output .= "\n#endif // HARDCODE_XML_VALUES\n";
+	}
+	else
+	{
+		$output .= "#ifdef HARDCODE_XML_VALUES\n\n" unless $isHardcoded;
+		
+		foreach my $type (@types)
+		{
+			$varToEnum{$type} = $enum;
+			$output .= "\t" . $type . ",\n";
+			$output_test .= "DisplayXMLhardcodingError(strcmp(\"". $type . "\", " . getInfo($basename) . "($type).getType()) == 0, \"$type\", true);\n" if $isHardcoded;
+		}
+
+		$output_test .= "DisplayXMLhardcodingError(NUM_" . $TYPE . "_TYPES == (" . $enum . ")" . getNumFunction($basename) . ", \"NUM_" . $TYPE . "_TYPES\", " . $hardcodedBool . ");\n" if $found_type;
+
+		$output .= "\n\tNUM_" . $TYPE . "_TYPES,\n";
+		$output .= "\tNUM_CARGO_YIELD_TYPES = YIELD_HAMMERS,\n" if $isYield;
+		$output .= "\n\tCOMPILE_TIME_NUM_" . $TYPE . "_TYPES = NUM_" . $TYPE . "_TYPES,\n";
+		
+		unless ($isHardcoded)
+		{
+			$output .= "\n#else // HARDCODE_XML_VALUES\n";
+			$output .= "\n\tCOMPILE_TIME_NUM_" . $TYPE . "_TYPES = MAX_SHORT,\n";
+			$output .= "\n#endif // HARDCODE_XML_VALUES\n";
+		}
 	}
 	
 	$output .= "\n\tFIRST_" . $TYPE . " = 0,\n";
 	$output .= "};\n\n";
 	
+	
+	$output_preload_declaration .= $enum . " NUM_" . $TYPE . "_TYPES_NON_CONST;\n";
+	$output_preload_declaration .= "const " . $enum . "& NUM_" . $TYPE . "_TYPES = NUM_" . $TYPE . "_TYPES_NON_CONST;\n" unless $found_type;
+	$output_preload_function    .= "\tsetSingleLength(basePath, NUM_" . $TYPE . "_TYPES_NON_CONST);\n";
+	
 	unless ($isHardcoded)
 	{
-		$output .= "#ifndef HARDCODE_XML_VALUES\n";
+		$output .= "#ifndef HARDCODE_XML_VALUES\n" if $found_type;
 		$output .= "extern const " . $enum . "& NUM_" . $TYPE . "_TYPES;\n";
-		$output .= "#endif\n\n";
-		$output_declare .= $enum . " NUM_" . $TYPE . "_TYPES_NON_CONST;\n";
-		$output_declare .= "const " . $enum . "& NUM_" . $TYPE . "_TYPES = NUM_" . $TYPE . "_TYPES_NON_CONST;\n";
-		$output_init .= "NUM_" . $TYPE . "_TYPES_NON_CONST = (" . $enum . ")" . getNumFunction($basename) . ";\n";
+		$output .= "#endif\n\n" if $found_type;
+		$output_preload_dynamic .= "const " . $enum . "& NUM_" . $TYPE . "_TYPES = NUM_" . $TYPE . "_TYPES_NON_CONST;\n" if $found_type;
 	}
-	$output .= "#define NUM_" . substr($enum, 0, -5) . "_TYPES NUM_" . $TYPE . "_TYPES\n\n"
+	$output .= "#define NUM_" . substr($enum, 0, -5) . "_TYPES NUM_" . $TYPE . "_TYPES\n\n";
+	# blindly test the lenght of all enum types. If it is dynamic, the length will be tested against itself, hence always true
+	$output_length_test .= "\tStartupCheck::CheckXmlLength(\"" . $enum . "\", VARINFO<" . $enum . ">::END, NUM_" . $TYPE . "_TYPES_NON_CONST);\n";
 }
 
 sub getTypesInFile
 {
 	my $filename = shift;
+	
+	return () if hasNoTypeTag($filename);
 	
 	my $fileWithPath = getFileWithPath($filename);
 	
@@ -190,14 +233,31 @@ sub getTypesInFile
 	
 	# the file isn't present in the mod. Add the vanilla values
 	# no need to look up vanilla. That can cause issues and we know the values even without looking
+	return ("ATTITUDE_FURIOUS", "ATTITUDE_ANNOYED", "ATTITUDE_CAUTIOUS", "ATTITUDE_PLEASED", "ATTITUDE_FRIENDLY") if $filename eq "BasicInfos/CIV4AttitudeInfos.xml";
+	return ("CALENDAR_DEFAULT", "CALENDAR_BI_YEARLY", "CALENDAR_YEARS", "CALENDAR_TURNS", "CALENDAR_SEASONS", "CALENDAR_MONTHS", "CALENDAR_WEEKS") if $filename eq "BasicInfos/CIV4CalendarInfos.xml";
+	return ("DENIAL_UNKNOWN", "DENIAL_NEVER", "DENIAL_TOO_MUCH", "DENIAL_MYSTERY", "DENIAL_JOKING", "DENIAL_CONTACT_THEM", "DENIAL_VICTORY", "DENIAL_ATTITUDE", "DENIAL_ATTITUDE_THEM", "DENIAL_POWER_US", "DENIAL_POWER_YOU", "DENIAL_POWER_THEM", "DENIAL_TOO_MANY_WARS", "DENIAL_NO_GAIN", "DENIAL_NOT_INTERESTED", "DENIAL_NOT_ALLIED", "DENIAL_RECENT_CANCEL", "DENIAL_WORST_ENEMY", "DENIAL_POWER_YOUR_ENEMIES", "DENIAL_TOO_FAR", "DENIAL_WAR_NOT_POSSIBLE_US", "DENIAL_WAR_NOT_POSSIBLE_YOU", "DENIAL_PEACE_NOT_POSSIBLE_US", "DENIAL_PEACE_NOT_POSSIBLE_YOU") if $filename eq "BasicInfos/CIV4DenialInfos.xml";
 	return ("DOMAIN_SEA", "DOMAIN_LAND", "DOMAIN_IMMOBILE") if $filename eq "BasicInfos/CIV4DomainInfos.xml";
 	return ("FATHERCATEGORY_EXPLORATION", "FATHERCATEGORY_RELIGION", "FATHERCATEGORY_TRADE", "FATHERCATEGORY_MILITARY", "FATHERCATEGORY_POLITICS") if $filename eq "BasicInfos/CIV4FatherCategoryInfos.xml";
+	return ("MEMORY_DECLARED_WAR", "MEMORY_DECLARED_WAR_ON_FRIEND", "MEMORY_HIRED_WAR_ALLY", "MEMORY_RAZED_CITY", "MEMORY_GIVE_HELP", "MEMORY_REFUSED_HELP", "MEMORY_ACCEPT_DEMAND", "MEMORY_REJECTED_DEMAND", "MEMORY_ACCEPTED_JOIN_WAR", "MEMORY_DENIED_JOIN_WAR", "MEMORY_ACCEPTED_STOP_TRADING", "MEMORY_DENIED_STOP_TRADING", "MEMORY_STOPPED_TRADING", "MEMORY_STOPPED_TRADING_RECENT", "MEMORY_HIRED_TRADE_EMBARGO", "MEMORY_MADE_DEMAND", "MEMORY_MADE_DEMAND_RECENT", "MEMORY_CANCELLED_OPEN_BORDERS", "MEMORY_EVENT_GOOD_TO_US", "MEMORY_EVENT_BAD_TO_US", "MEMORY_LIBERATED_CITIES", "MEMORY_REFUSED_TAX", "MEMORY_REVENGE_TAKEN", "MEMORY_MISSIONARY_FAIL") if $filename eq "BasicInfos/CIV4MemoryInfos.xml";
+	return ("MONTH_JANUARY", "MONTH_FEBRUARY", "MONTH_MARCH", "MONTH_APRIL", "MONTH_MAY", "MONTH_JUNE", "MONTH_JULY", "MONTH_AUGUST", "MONTH_SEPTEMBER", "MONTH_OCTOBER", "MONTH_NOVEMBER", "MONTH_DECEMBER") if $filename eq "BasicInfos/CIV4MonthInfos.xml";
+	return ("SEASON_WINTER", "SEASON_SPRING", "SEASON_SUMMER", "SEASON_FALL") if $filename eq "BasicInfos/CIV4SeasonInfos.xml";
+	
 	return ("ALARM_DEFAULT") if $filename eq "Civilizations/CIV4AlarmInfos.xml";
+	
 	return ("CIVICOPTION_SLAVERY", "CIVICOPTION_ELECTION", "CIVICOPTION_NATIVES", "CIVICOPTION_RELIGION", "CIVICOPTION_SECURITY") if $filename eq "GameInfo/CIV4CivicOptionInfos.xml";
 	return ("CLIMATE_TEMPERATE", "CLIMATE_TROPICAL", "CLIMATE_ROCKY") if $filename eq "GameInfo/CIV4ClimateInfo.xml";
+	return ("CURSOR_DEFAULT", "CURSOR_PING", "CURSOR_GO_TO", "CURSOR_ROUTE_TO", "CURSOR_BUSY", "CURSOR_MOVE", "CURSOR_SPLITV", "CURSOR_SPLITH", "CURSOR_SIZEV", "CURSOR_SIZEH", "CURSOR_SIZENE", "CURSOR_SIZENW", "CURSOR_SIZEALL", "CURSOR_LINK", "CURSOR_GRIP", "CURSOR_EDIT") if $filename eq "GameInfo/CIV4CursorInfo.xml";
 	return ("EUROPE_EAST", "EUROPE_WEST", "EUROPE_NORTH", "EUROPE_SOUTH") if $filename eq "GameInfo/CIV4EuropeInfo.xml";
+	return ("FORCECONTROL_SPEED", "FORCECONTROL_HANDICAP", "FORCECONTROL_OPTIONS", "FORCECONTROL_VICTORIES", "FORCECONTROL_MAX_TURNS", "FORCECONTROL_MAX_CITY_ELIMINATION", "FORCECONTROL_ADVANCED_START") if $filename eq "GameInfo/CIV4ForceControlInfos.xml";
+	return ("GRAPHICOPTION_HEALTH_BARS", "GRAPHICOPTION_NO_COMBAT_ZOOM", "GRAPHICOPTION_NO_ENEMY_GLOW", "GRAPHICOPTION_FROZEN_ANIMATIONS", "GRAPHICOPTION_EFFECTS_DISABLED", "GRAPHICOPTION_GLOBE_VIEW_BUILDINGS_DISABLED", "GRAPHICOPTION_FULLSCREEN", "GRAPHICOPTION_LOWRES_TEXTURES", "GRAPHICOPTION_HIRES_TERRAIN", "GRAPHICOPTION_NO_MOVIES") if $filename eq "GameInfo/CIV4GraphicOptionInfos.xml";
 	return ("HURRY_GOLD", "HURRY_IMMIGRANT") if $filename eq "GameInfo/CIV4HurryInfo.xml";
+	return ("MPOPTION_SIMULTANEOUS_TURNS", "MPOPTION_TAKEOVER_AI", "MPOPTION_SHUFFLE_TEAMS", "MPOPTION_ANONYMOUS", "MPOPTION_TURN_TIMER") if $filename eq "GameInfo/CIV4MPOptionInfos.xml";
 	return ("SEALEVEL_LOW", "SEALEVEL_MEDIUM", "SEALEVEL_HIGH") if $filename eq "GameInfo/CIV4SeaLevelInfo.xml";
+	return ("TURNTIMER_STATIC", "TURNTIMER_SNAIL", "TURNTIMER_SLOW", "TURNTIMER_MEDIUM", "TURNTIMER_FAST", "TURNTIMER_BLAZING") if $filename eq "GameInfo/CIV4TurnTimerInfo.xml";
+	
+	return ("ANIMCAT_NONE", "ANIMCAT_IDLE", "ANIMCAT_MOVE", "ANIMCAT_FIDGET", "ANIMCAT_MELEE_FORTIFY", "ANIMCAT_MELEE_FORTIFIED", "ANIMCAT_MELEE_STRIKE", "ANIMCAT_MELEE_HURT", "ANIMCAT_MELEE_DIE", "ANIMCAT_MELEE_DIE_FADE", "ANIMCAT_MELEE_FLEE", "ANIMCAT_RUNDIE", "ANIMCAT_RANGED_FORTIFY", "ANIMCAT_RANGED_FORTIFIED", "ANIMCAT_RANGED_STRIKE", "ANIMCAT_RANGED_DIE", "ANIMCAT_RANGED_DIE_FADE", "ANIMCAT_FOUND", "ANIMCAT_IRRIGATE_BEGIN", "ANIMCAT_IRRIGATE", "ANIMCAT_IRRIGATE_PAUSE", "ANIMCAT_BUILD_BEGIN", "ANIMCAT_BUILD", "ANIMCAT_BUILD_PAUSE", "ANIMCAT_MINE_BEGIN", "ANIMCAT_MINE", "ANIMCAT_MINE_PAUSE", "ANIMCAT_CHOP_BEGIN", "ANIMCAT_CHOP", "ANIMCAT_CHOP_PAUSE", "ANIMCAT_SHOVEL_BEGIN", "ANIMCAT_SHOVEL", "ANIMCAT_SHOVEL_PAUSE", "ANIMCAT_RAILROAD_BEGIN", "ANIMCAT_RAILROAD", "ANIMCAT_RAILROAD_PAUSE", "ANIMCAT_GREAT_EVENT", "ANIMCAT_SURRENDER", "ANIMCAT_LEADER_COMMAND", "ANIMCAT_LEADER_COMMAND_IDLE", "ANIMCAT_DAMAGE_0", "ANIMCAT_DAMAGE_1", "ANIMCAT_DAMAGE_2", "ANIMCAT_DAMAGE_3") if $filename eq "Units/Civ4AnimationInfos.xml";
+	return ("ANIMATIONPATH_IDLE", "ANIMATIONPATH_MOVE", "ANIMATIONPATH_DAMAGE", "ANIMATIONPATH_RANDOMIZE_ANIMATION_SET", "ANIMATIONPATH_MELEE_STRIKE", "ANIMATIONPATH_MELEE_HURT", "ANIMATIONPATH_MELEE_DIE", "ANIMATIONPATH_MELEE_FORTIFIED", "ANIMATIONPATH_MELEE_DIE_FADE", "ANIMATIONPATH_MELEE_FLEE", "ANIMATIONPATH_RANGED_STRIKE", "ANIMATIONPATH_RANGED_DIE", "ANIMATIONPATH_RANGED_FORTIFIED", "ANIMATIONPATH_RANGED_RUNHIT", "ANIMATIONPATH_RANGED_RUNDIE", "ANIMATIONPATH_RANGED_DIE_FADE", "ANIMATIONPATH_LEADER_COMMAND", "ANIMATIONPATH_HEAL", "ANIMATIONPATH_SLEEP", "ANIMATIONPATH_FORTIFY", "ANIMATIONPATH_MELEE_FORTIFY", "ANIMATIONPATH_PILLAGE", "ANIMATIONPATH_SENTRY", "ANIMATIONPATH_FOUND", "ANIMATIONPATH_IRRIGATE", "ANIMATIONPATH_BUILD", "ANIMATIONPATH_MINE", "ANIMATIONPATH_CHOP", "ANIMATIONPATH_SHOVEL", "ANIMATIONPATH_RAILROAD", "ANIMATIONPATH_GREAT_EVENT", "ANIMATIONPATH_SURRENDER") if $filename eq "Units/Civ4AnimationPathInfos.xml";
+	return ("ENTITY_EVENT_IDLE", "ENTITY_EVENT_DIE", "ENTITY_EVENT_DAMAGE", "ENTITY_EVENT_BEGIN_COMBAT", "ENTITY_EVENT_END_COMBAT", "ENTITY_EVENT_SURRENDER", "ENTITY_EVENT_CAPTURED", "ENTITY_EVENT_MULTI_SELECT", "ENTITY_EVENT_MULTI_DESELECT", "ENTITY_EVENT_GREAT_EVENT", "ENTITY_EVENT_PILLAGE", "ENTITY_EVENT_BOMBARD", "ENTITY_EVENT_FOUND", "ENTITY_EVENT_FORTIFY", "ENTITY_EVENT_SENTRY", "ENTITY_EVENT_HEAL", "ENTITY_EVENT_SLEEP", "ENTITY_EVENT_SHOVEL", "ENTITY_EVENT_BUILD", "ENTITY_EVENT_IRRIGATE", "ENTITY_EVENT_MINE", "ENTITY_EVENT_CHOP", "ENTITY_EVENT_RAILROAD") if $filename eq "Units/Civ4EntityEventInfos.xml";
 	
 	die "getTypesInFile: " . $filename . " not supported\n";
 }
@@ -271,7 +331,15 @@ sub handleGlobalDefineALT
 		
 		if ($hardcoded{$tag})
 		{
-			$output .= "const $vartype{$tag} $var = $value{$tag};\n";
+			if ($vartype{$tag} eq "int")
+			{
+				$output .= "#define $var $value{$tag}\n";
+			}
+			else
+			{
+				$output .= "const $vartype{$tag} $var = $value{$tag};\n";
+			}
+			
 			if ($vartype{$tag} eq "int")
 			{
 				$output_test .= "DisplayXMLhardcodingError($var == $value{$tag}, \"$tag\", true);\n";
@@ -307,6 +375,54 @@ sub handleGlobalDefineALT
 	$output .= $declare_dynamic;
 	$output .= "#endif // hardcoded xml\n";
 	
+	close($fh);
+}
+
+sub handleHardcodedEnumVariables
+{
+	my $filename = "DLLSources/HardcodedEnumSetup.h";
+	my $lineno = 0;
+	my $enum = "";
+	
+	
+	$output .= "\n#ifndef HARDCODE_XML_VALUES\n";
+	
+	open(my $fh, '<:encoding(UTF-8)', $filename)
+	  or die "Could not open file '$filename' $!";
+	  
+	while (my $line = <$fh>)
+	{
+		$lineno += 1;
+		chomp($line);
+		
+		if (substr($line, 0, 5) eq "enum ")
+		{
+			die("$filename($lineno) found new enum without ending the previous one\n") unless $enum eq "";
+			$enum = substr($line, 5);
+		}
+		elsif ($enum ne "")
+		{
+			if (substr($line, 0, 2) eq "};")
+			{
+				$enum = "";
+			}
+			elsif ((my $index = index($line, ",")) != -1)
+			{
+				my $variableName = substr($line, 0, $index);
+				
+				# remove whitespace on the left of the string
+				$variableName =~ s/^\s+//;
+				$output_declare .= $enum . " " . $variableName . "_NON_CONST;\n";
+				$output_declare .= "const " . $enum . "& " . $variableName . " = " . $variableName . "_NON_CONST;\n";
+				$output_init .= $variableName . "_NON_CONST = getIndexOfType(" . $variableName . "_NON_CONST, \"" . $variableName . "\");\n";
+				$output_init .= "DisplayXMLmissingError((int)$variableName != -1, \"$variableName\");\n";
+				$output .= "extern const " . $enum . "& " . $variableName . ";\n";
+			}
+		}
+	}
+	
+	$output .= "#endif // hardcoded xml\n";
+	close($fh);
 }
 
 sub addVanillaSingleValue
@@ -318,6 +434,21 @@ sub addVanillaSingleValue
 	$$valueContainer{value}{$tag} = $number;
 	$$valueContainer{vartype}{$tag} = "int";
 	$$valueContainer{hardcoded}{$tag} = 1;
+}
+
+sub addVanillaSingleValueEnum
+{
+	my $valueContainer = shift;
+	my $tag = shift;
+	my $number = shift;
+	my $hardcoded = shift;
+	$hardcoded = 1 unless defined $hardcoded;
+	
+	my $type = $varToEnum{$number} || return;
+	
+	$$valueContainer{value}{$tag} = $number;
+	$$valueContainer{vartype}{$tag} = $type;
+	$$valueContainer{hardcoded}{$tag} = $hardcoded;
 }
 
 sub addVanillaValues
@@ -501,4 +632,6 @@ sub addVanillaValues
 	addVanillaSingleValue(\%valueContainer, "NATIVE_GOODS_RAID_PERCENT", 50);
 	addVanillaSingleValue(\%valueContainer, "NATIVE_GROWTH_THRESHOLD_MULTIPLIER", 100);
 	addVanillaSingleValue(\%valueContainer, "END_GAME_DISPLAY_WARNING", 100);
+	
+	addVanillaSingleValueEnum(\%valueContainer, "DEFAULT_POPULATION_UNIT", "UNITCLASS_COLONIST", 0);
 }

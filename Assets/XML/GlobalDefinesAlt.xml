@@ -34,6 +34,10 @@
 		<iDefineIntVal>2</iDefineIntVal>
 	</Define>
 	<Define>
+		<DefineName>BASE_CITY_GROWTH_THRESHOLD</DefineName>
+		<iDefineIntVal>200</iDefineIntVal>
+	</Define>
+	<Define>
 		<DefineName>FREE_CITY_ADJACENT_CULTURE</DefineName>
 		<iDefineIntVal>2</iDefineIntVal>
 	</Define>
@@ -51,7 +55,15 @@
 	</Define>
 	<Define>
 		<DefineName>IMMIGRATION_MAX_CROSS_LIMIT</DefineName>
-		<iDefineIntVal>400</iDefineIntVal>
+		<iDefineIntVal>1000</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>NO_BAD_GOODIES_MAP_RANGE_PERCENT</DefineName>
+		<iDefineIntVal>200</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>NO_BAD_GOODIES_EXPERIENCE_PERCENT</DefineName>
+		<iDefineIntVal>150</iDefineIntVal>
 	</Define>
 	<Define>
 		<DefineName>NBMOD_REF_ENABLE</DefineName>
@@ -147,7 +159,7 @@
 	</Define>
 	<Define>
 		<DefineName>MAX_TAX_RATE</DefineName>
-		<iDefineIntVal>60</iDefineIntVal>
+		<iDefineIntVal>70</iDefineIntVal>
 	</Define>
 	<Define>
 		<DefineName>MIN_TAX_RATE</DefineName>
@@ -256,6 +268,10 @@
 	<Define>
 		<DefineName>UNITCLASS_REVOLTING_CRIMINAL</DefineName>
 		<DefineTextVal>UNITCLASS_REVOLTING_CRIMINAL</DefineTextVal>
+	</Define>
+	<Define>
+		<DefineName>UNITCLASS_REVOLTING_PRISONER_OF_WAR</DefineName>
+		<DefineTextVal>UNITCLASS_REVOLTING_PRISONER_OF_WAR</DefineTextVal>
 	</Define>
 	<Define>
 		<DefineName>LBD_MIN_EXPERIENCE_FREE_BY_COMBAT</DefineName>
@@ -538,6 +554,14 @@
 		<iDefineIntVal>1</iDefineIntVal>
 	</Define>
 	<Define>
+		<DefineName>NATIVE_PRODUCTION_RAID_MIN</DefineName>
+		<iDefineIntVal>20</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>NATIVE_PRODUCTION_RAID_RANDOM</DefineName>
+		<iDefineIntVal>80</iDefineIntVal>
+	</Define>
+	<Define>
 		<DefineName>NATIVE_SPARE_AI_TREASURE_CHANCE</DefineName>
 		<iDefineIntVal>75</iDefineIntVal>
 	</Define>
@@ -691,10 +715,18 @@
 	</Define>
 	<Define>
 		<DefineName>IMMIGRATION_THRESHOLD_INCREASE</DefineName>
-		<iDefineIntVal>10</iDefineIntVal>
+		<iDefineIntVal>5</iDefineIntVal>
 	</Define>
 	<Define>
 		<DefineName>IMMIGRATION_THRESHOLD</DefineName>
+		<iDefineIntVal>10</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>MIN_UNITS_ON_DOCK_BEFORE_THRESHOLD_INCREASED</DefineName>
+		<iDefineIntVal>5</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>IMMIGRATION_THRESHOLD_MODIFIER_UNITS_ON_DOCK</DefineName>
 		<iDefineIntVal>10</iDefineIntVal>
 	</Define>
 	<Define>
@@ -820,6 +852,10 @@
 	<Define>
 		<DefineName>PRICE_DIFF_EUROPE_DOMESTIC_LUXURY_GOODS</DefineName>
 		<iDefineIntVal>6</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>PRICE_DIFF_EUROPE_DOMESTIC_OTHER_GOODS</DefineName>
+		<iDefineIntVal>2</iDefineIntVal>
 	</Define>
 	<Define>
 		<DefineName>DOMESTIC_SALES_MESSAGES</DefineName>
@@ -1200,7 +1236,7 @@
 		<iDefineIntVal>3</iDefineIntVal>
 	</Define>
 	<Define>
-		<DefineName>FOUNDING_FAHTER_POINTS_FESTIVITIES_HAPPINESS</DefineName>
+		<DefineName>FOUNDING_FATHER_POINTS_FESTIVITIES_HAPPINESS</DefineName>
 		<iDefineIntVal>50</iDefineIntVal>
 	</Define>
 	<Define>
@@ -1222,6 +1258,10 @@
 	<Define>
 		<DefineName>UNITCLASS_FAILED_MISSIONARY</DefineName>
 		<DefineTextVal>UNITCLASS_FAILED_MISSIONARY</DefineTextVal>
+	</Define>
+	<Define>
+		<DefineName>UNITCLASS_FAILED_TRADER</DefineName>
+		<DefineTextVal>UNITCLASS_FAILED_TRADER</DefineTextVal>
 	</Define>
 	<Define>
 		<DefineName>UNITCLASS_PROTECTOR_HOSTILE_VILLAGE</DefineName>
@@ -1301,11 +1341,11 @@
 	</Define>
 	<Define>
 		<DefineName>MAX_SLAVE_REVOLT_REDUCTION_BONUS_PER_CITY</DefineName>
-		<iDefineIntVal>100</iDefineIntVal>
+		<iDefineIntVal>60</iDefineIntVal>
 	</Define>
 	<Define>
 		<DefineName>MAX_SLAVE_WORKER_PRODUCTION_BONUS_PER_CITY</DefineName>
-		<iDefineIntVal>100</iDefineIntVal>
+		<iDefineIntVal>60</iDefineIntVal>
 	</Define>
 	<!-- BRAVE LIEUTENANT AND CAPABLE CAPTAIN -->
 	<Define>
@@ -1504,7 +1544,8 @@
 	<!-- Movement System -->
 	<Define>
 		<DefineName>USE_CLASSIC_MOVEMENT_SYSTEM</DefineName>
-		<iDefineIntVal>0</iDefineIntVal>
+		<iDefineIntVal>1</iDefineIntVal>
+		<bAlwaysHardcoded>1</bAlwaysHardcoded>
 	</Define>
 	<Define>
 		<DefineName>TIMER_PRIVATEERS_DIPLO_EVENT</DefineName>
@@ -1550,6 +1591,22 @@
 		<iDefineIntVal>1</iDefineIntVal>
 	</Define>
 	<Define>
+		<DefineName>OPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_COLONIZERS</DefineName>
+		<iDefineIntVal>300</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>OPPRESSOMETER_DISCRIMINATION_MODIFIER_BASE_NATIVES</DefineName>
+		<iDefineIntVal>150</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>OPPRESSOMETER_FORCED_LABOR_MODIFIER_BASE</DefineName>
+		<iDefineIntVal>100</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>OPPRESSOMETER_DECAY_RATE_BASE</DefineName>
+		<iDefineIntVal>3</iDefineIntVal>
+	</Define>
+	<Define>
 		<DefineName>UNITCLASS_EUROPEAN_FREE</DefineName>
 		<DefineTextVal>UNITCLASS_COLONIST</DefineTextVal>
 	</Define>
@@ -1579,7 +1636,7 @@
 	</Define>
 	<Define>
 		<DefineName>UNITCLASS_INDIO_ELITE</DefineName>
-		<DefineTextVal>UNITCLASS_COLONIST</DefineTextVal>
+		<DefineTextVal>UNITCLASS_CONVERTED_NATIVE</DefineTextVal>
 	</Define>
 	<Define>
 		<DefineName>UNITCLASS_AFRICAN_FREE</DefineName>
@@ -1595,7 +1652,7 @@
 	</Define>
 	<Define>
 		<DefineName>UNITCLASS_AFRICAN_ELITE</DefineName>
-		<DefineTextVal>UNITCLASS_COLONIST</DefineTextVal>
+		<DefineTextVal>UNITCLASS_FREED_SLAVE</DefineTextVal>
 	</Define>
 	<Define>
 		<DefineName>UNITCLASS_MESTIZZO_FREE</DefineName>
@@ -1611,7 +1668,7 @@
 	</Define>
 	<Define>
 		<DefineName>UNITCLASS_MESTIZZO_ELITE</DefineName>
-		<DefineTextVal>UNITCLASS_COLONIST</DefineTextVal>
+		<DefineTextVal>UNITCLASS_MESTIZZO</DefineTextVal>
 	</Define>
 	<Define>
 		<DefineName>UNITCLASS_MULATTO_FREE</DefineName>
@@ -1627,6 +1684,34 @@
 	</Define>
 	<Define>
 		<DefineName>UNITCLASS_MULATTO_ELITE</DefineName>
-		<DefineTextVal>UNITCLASS_COLONIST</DefineTextVal>
+		<DefineTextVal>UNITCLASS_MULATTO</DefineTextVal>
+	</Define>
+	<Define>
+		<!-- warning: can create a huge log -->
+		<DefineName>USE_OOS_LOGGING</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+		<bAlwaysHardcoded>1</bAlwaysHardcoded>
+	</Define>
+	<Define>
+		<!-- warning: can create a huge log -->
+		<DefineName>USE_NIF_LOGGING</DefineName>
+		<iDefineIntVal>0</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>SHOW_TERRAIN_SPECIFIC_CITY_BACKGROUNDS</DefineName>
+		<iDefineIntVal>1</iDefineIntVal>
+	</Define>
+	<!-- PRISONERS of WAR -->
+	<Define>
+		<DefineName>UNITCLASS_PRISONER_OF_WAR</DefineName>
+		<DefineTextVal>UNITCLASS_PRISONER_OF_WAR</DefineTextVal>
+	</Define>
+	<Define>
+		<DefineName>BASE_CHANCE_CAPTURING_PRISONER_OF_WAR</DefineName>
+		<iDefineIntVal>100</iDefineIntVal>
+	</Define>
+	<Define>
+		<DefineName>BASE_TERRAINS_WITHOUT_FEATURE_PERCENTAGE</DefineName>
+		<iDefineIntVal>20</iDefineIntVal>
 	</Define>
 </Civ4Defines>

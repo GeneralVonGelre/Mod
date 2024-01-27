@@ -246,6 +246,24 @@
             </FeatureVariety>
         </FeatureArtInfo>
         <FeatureArtInfo>
+            <Type>ART_DEF_FEATURE_WILD_FLOWERS</Type>
+            <bAnimated>0</bAnimated>
+            <TileArtType>TILE_ART_TYPE_NONE</TileArtType>
+            <fScale>0.9</fScale>
+            <fInterfaceScale>1.0</fInterfaceScale>
+            <Button>Art/Interface/Buttons/Flowers_Button.dds</Button>
+            <FeatureVariety>
+                <FeatureArtPieces>
+                    <FeatureArtPiece>
+                        <ModelFile>Art/Terrain/Features/flowers/wheat1.nif</ModelFile>
+                        <Connections/>
+                    </FeatureArtPiece>
+                </FeatureArtPieces>
+                <iModelCopies>1</iModelCopies>
+                <VarietyButton>Art/Interface/Buttons/Flowers_Button.dds</VarietyButton>
+            </FeatureVariety>
+        </FeatureArtInfo>
+        <FeatureArtInfo>
             <Type>ART_DEF_FEATURE_MEADOW</Type>
             <bAnimated>0</bAnimated>
             <TileArtType>TILE_ART_TYPE_NONE</TileArtType>
@@ -276,7 +294,7 @@
                         <ModelFile>Art/Terrain/Features/shrub/strauch_03.nif</ModelFile>
                         <ModelFile>Art/Terrain/Features/shrub/strauch_04.nif</ModelFile>
                         <ModelFile>Art/Terrain/Features/shrub/strauch_05.nif</ModelFile>
-                        <Connections></Connections>
+                        <Connections/>
                     </FeatureArtPiece>
                 </FeatureArtPieces>
                 <iModelCopies>7</iModelCopies>
@@ -1192,7 +1210,7 @@
             <FeatureVariety>
                 <FeatureArtPieces>
                     <FeatureArtPiece>
-                        <ModelFile>Art/Terrain/Features/seagrass/wheat.nif</ModelFile>
+                        <ModelFile>Art/Terrain/Features/seagrass/seagrass.nif</ModelFile>
                         <Connections/>
                     </FeatureArtPiece>
                 </FeatureArtPieces>
@@ -1230,7 +1248,7 @@
                     <FeatureArtPiece>
                         <ModelFile>Art/Terrain/Features/Coral_Rock/Coral1.nif</ModelFile>
                         <ModelFile>Art/Terrain/Features/Coral_Rock/Coral2.nif</ModelFile>
-                        <Connections></Connections>
+                        <Connections/>
                     </FeatureArtPiece>
                 </FeatureArtPieces>
                 <iModelCopies>1</iModelCopies>

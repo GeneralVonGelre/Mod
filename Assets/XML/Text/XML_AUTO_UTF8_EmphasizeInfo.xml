@@ -7,6 +7,7 @@
         <German>Wachstum vermeiden</German>
         <Italian>Evita la crescita</Italian>
         <Spanish>Evitar crecimiento</Spanish>
+        <Russian>Отключить рост поселения</Russian>
     </TEXT>
     <TEXT>
         <Tag>TXT_KEY_EMPHASIZE_BARLEY</Tag>
@@ -84,7 +85,7 @@
         <Tag>TXT_KEY_EMPHASIZE_COCA_LEAVES</Tag>
         <English>Emphasize Coca Leaves</English>
         <French>Privilégier la Coca</French>
-        <German>Schwerpunkt Cocablätter</German>
+        <German>Schwerpunkt Coca-Blätter</German>
         <Italian>Accentuare foglie di coca</Italian>
         <Spanish>Favorecer Hojas de coca</Spanish>
     </TEXT>
@@ -220,7 +221,7 @@
         <Tag>TXT_KEY_EMPHASIZE_HIDES</Tag>
         <English>Emphasize Cowhides</English>
         <French>Privilégier les Peaux</French>
-        <German>Schwerpunkt Rinderhäute</German>
+        <German>Schwerpunkt Rindshäute</German>
         <Italian>Accentuare pelli di mucca</Italian>
         <Spanish>Favorecer Pieles de vaca</Spanish>
     </TEXT>
@@ -340,7 +341,7 @@
         <Tag>TXT_KEY_EMPHASIZE_NO_COCA_LEAVES</Tag>
         <English>Deemphasize Coca Leaves</English>
         <French>Minimiser la Coca</French>
-        <German>Schwerpunkt Cocablätter aufheben</German>
+        <German>Schwerpunkt Coca-Blätter aufheben</German>
         <Italian>De-accentuare foglie di coca</Italian>
         <Spanish>Desfavorecer Hojas de coca</Spanish>
     </TEXT>
@@ -476,7 +477,7 @@
         <Tag>TXT_KEY_EMPHASIZE_NO_HIDES</Tag>
         <English>Deemphasize Cowhides</English>
         <French>Minimiser les Peaux</French>
-        <German>Schwerpunkt Rinderhäute aufheben</German>
+        <German>Schwerpunkt Rindshäute aufheben</German>
         <Italian>De-accentuare pelli di mucca</Italian>
         <Spanish>Desfavorecer Pieles de vaca</Spanish>
     </TEXT>

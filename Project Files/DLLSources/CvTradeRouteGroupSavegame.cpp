@@ -27,6 +27,7 @@ const char* getSavedEnumNameTradeRouteGroup(SavegameVariableTypes eType)
 	case TradeRouteGroupSave_Name: return "TradeRouteGroupSave_Name";
 	case TradeRouteGroupSave_Routes: return "TradeRouteGroupSave_Routes";
 	}
+	FAssertMsg(0, "Missing case");
 	return "";
 }
 
@@ -74,6 +75,8 @@ void CvTradeRouteGroup::read(CvSavegameReader reader)
 
 void CvTradeRouteGroup::write(CvSavegameWriter writer)
 {
+	LogIntentHelper helper(writer, "CvTradeRouteGroup");
+
 	writer.AssignClassType(SAVEGAME_CLASS_TRADEROUTEGROUP);
 
 	// Write the data.

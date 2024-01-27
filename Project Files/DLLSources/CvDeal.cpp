@@ -74,7 +74,7 @@ void CvDeal::kill(bool bKillTeam, TeamTypes eKillingTeam)
 			szDealString.clear();
 			GAMETEXT.getDealString(szDealString, *this, getFirstPlayer());
 			szString.Format(L"%s: %s", szCancelString.GetCString(), szDealString.getCString());
-			gDLL->getInterfaceIFace()->addMessage((PlayerTypes)getFirstPlayer(), true, GC.getEVENT_MESSAGE_TIME(), szString, "AS2D_DEAL_CANCELLED");
+			gDLL->UI().addPlayerMessage((PlayerTypes)getFirstPlayer(), true, GC.getEVENT_MESSAGE_TIME(), szString, "AS2D_DEAL_CANCELLED");
 		}
 
 		if (GET_TEAM(GET_PLAYER(getSecondPlayer()).getTeam()).isHasMet(GET_PLAYER(getFirstPlayer()).getTeam()))
@@ -82,7 +82,7 @@ void CvDeal::kill(bool bKillTeam, TeamTypes eKillingTeam)
 			szDealString.clear();
 			GAMETEXT.getDealString(szDealString, *this, getSecondPlayer());
 			szString.Format(L"%s: %s", szCancelString.GetCString(), szDealString.getCString());
-			gDLL->getInterfaceIFace()->addMessage((PlayerTypes)getSecondPlayer(), true, GC.getEVENT_MESSAGE_TIME(), szString, "AS2D_DEAL_CANCELLED");
+			gDLL->UI().addPlayerMessage((PlayerTypes)getSecondPlayer(), true, GC.getEVENT_MESSAGE_TIME(), szString, "AS2D_DEAL_CANCELLED");
 		}
 	}
 
@@ -490,6 +490,7 @@ bool CvDeal::startTrade(TradeData trade, PlayerTypes eFromPlayer, PlayerTypes eT
 	case TRADE_GOLD:
 		{
 			int iGold = trade.m_iData1;
+			OOS_LOG("deal move gold", iGold);
 			GET_PLAYER(eFromPlayer).changeGold(-iGold);
 			GET_PLAYER(eToPlayer).changeGold(iGold * GET_PLAYER(eToPlayer).getExtraTradeMultiplier(eFromPlayer) / 100);
 			GET_PLAYER(eFromPlayer).AI_changeGoldTradedTo(eToPlayer, iGold);
@@ -560,9 +561,10 @@ bool CvDeal::startTrade(TradeData trade, PlayerTypes eFromPlayer, PlayerTypes eT
 
 					if (iAmount > 0)
 					{
-						GET_PLAYER(eFromPlayer).changeYieldTradedTotal(eYield, iAmount);
-						GET_PLAYER(eToPlayer).changeYieldTradedTotal(eYield, iAmount);
-						GC.getGameINLINE().changeYieldBoughtTotal(GET_PLAYER(eToPlayer).getID(), eYield, -iAmount);
+						// WTP, ray, fixing that deals with other Players through Diplomacy changes Yield bought (in Europe) and thus affects taxes
+						// GET_PLAYER(eFromPlayer).changeYieldTradedTotal(eYield, iAmount);
+						// GET_PLAYER(eToPlayer).changeYieldTradedTotal(eYield, iAmount);
+						// GC.getGameINLINE().changeYieldBoughtTotal(GET_PLAYER(eToPlayer).getID(), eYield, -iAmount);
 
 						int iNativeHappy = GC.getYieldInfo(eYield).getNativeHappy();
 						if (iNativeHappy != 0)
@@ -602,9 +604,9 @@ bool CvDeal::startTrade(TradeData trade, PlayerTypes eFromPlayer, PlayerTypes eT
 		break;
 
 	case TRADE_MAPS:
-		for (iI = 0; iI < GC.getMapINLINE().numPlotsINLINE(); iI++)
+		for (iI = 0; iI < GC.getMap().numPlotsINLINE(); iI++)
 		{
-			pLoopPlot = GC.getMapINLINE().plotByIndexINLINE(iI);
+			pLoopPlot = GC.getMap().plotByIndexINLINE(iI);
 
 			if (pLoopPlot->isRevealed(GET_PLAYER(eFromPlayer).getTeam(), false))
 			{

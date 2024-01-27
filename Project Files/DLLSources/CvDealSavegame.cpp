@@ -35,6 +35,7 @@ const char* getSavedEnumNameDeal(SavegameVariableTypes eType)
 		case DealSave_firstTrades: return "DealSave_firstTrades";
 		case DealSave_secondTrades: return "DealSave_secondTrades";
 	}
+	FAssertMsg(0, "Missing case");
 	return "";
 }
 
@@ -89,6 +90,8 @@ void CvDeal::read(CvSavegameReader reader)
 
 void CvDeal::write(CvSavegameWriter writer)
 {
+	LogIntentHelper helper(writer, "CvDeal");
+
 	writer.AssignClassType(SAVEGAME_CLASS_DEAL);
 
 	// Write the data.

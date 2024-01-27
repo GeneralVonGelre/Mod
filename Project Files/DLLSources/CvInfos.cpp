@@ -909,7 +909,7 @@ m_iCityAttackPercent(0),
 m_iCityDefensePercent(0),
 m_iHillsAttackPercent(0),
 m_iHillsDefensePercent(0),
-m_iDomesticBonusPercent(0),	
+m_iDomesticBonusPercent(0),
 m_iCommandType(NO_COMMAND),
 m_iPillageChange(0),
 m_iAnimalGoldChange(0), //WTP, ray, Animal Promotions increase gold from Animals
@@ -1065,7 +1065,7 @@ int CvPromotionInfo::getHillsDefensePercent() const
 int CvPromotionInfo::getDomesticBonusPercent() const
 {
 	return m_iDomesticBonusPercent;
-}											
+}
 int CvPromotionInfo::getCommandType() const
 {
 	return m_iCommandType;
@@ -1249,7 +1249,7 @@ void CvPromotionInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iCityDefensePercent);
 	stream->Read(&m_iHillsAttackPercent);
 	stream->Read(&m_iHillsDefensePercent);
-	stream->Read(&m_iDomesticBonusPercent);	
+	stream->Read(&m_iDomesticBonusPercent);
 	stream->Read(&m_iCommandType);
 	stream->Read(&m_iPillageChange);
 	stream->Read(&m_iAnimalGoldChange); //WTP, ray, Animal Promotions increase gold from Animals
@@ -1331,7 +1331,7 @@ void CvPromotionInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iCityDefensePercent);
 	stream->Write(m_iHillsAttackPercent);
 	stream->Write(m_iHillsDefensePercent);
-	stream->Write(m_iDomesticBonusPercent);	
+	stream->Write(m_iDomesticBonusPercent);
 	stream->Write(m_iCommandType);
 	stream->Write(m_iPillageChange);
 	stream->Write(m_iAnimalGoldChange); //WTP, ray, Animal Promotions increase gold from Animals
@@ -1401,7 +1401,7 @@ bool CvPromotionInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iCityDefensePercent, "iCityDefense");
 	pXML->GetChildXmlValByName(&m_iHillsAttackPercent, "iHillsAttack");
 	pXML->GetChildXmlValByName(&m_iHillsDefensePercent, "iHillsDefense");
-	pXML->GetChildXmlValByName(&m_iDomesticBonusPercent, "iDomesticBonus");	
+	pXML->GetChildXmlValByName(&m_iDomesticBonusPercent, "iDomesticBonus");
 	pXML->GetChildXmlValByName(&m_iPillageChange, "iPillageChange");
 	pXML->GetChildXmlValByName(&m_iAnimalGoldChange, "iAnimalGoldChange"); //WTP, ray, Animal Promotions increase gold from Animals
 	pXML->GetChildXmlValByName(&m_iSlaveRevoltReductionBonus, "iSlaveRevoltReductionBonus"); //WTP, ray, Slave Hunter and Slave Master
@@ -1452,7 +1452,7 @@ CvProfessionInfo::CvProfessionInfo() :
 	// m_iYieldConsumed(NO_YIELD),
 	// R&R, ray , MYCP partially based on code of Aymerick - END
 	m_iSpecialBuilding(NO_SPECIALBUILDING),
-	m_iCombatChange(0), 
+	m_iCombatChange(0),
 	m_iBombardRateChangeProfession(0), // WTP, ray, Cannons to Professions - START
 	m_iBarracksSpaceNeededChange(0), // WTP, ray, new Barracks System - START
 	m_iMovesChange(0),
@@ -1501,13 +1501,13 @@ int CvProfessionInfo::getUnitCombatType() const
 }
 
 // TAC - LbD - Ray - START
-bool CvProfessionInfo::LbD_isUsed() const 
+bool CvProfessionInfo::LbD_isUsed() const
 {
 	return m_LbDused;
 }
 
 int CvProfessionInfo::LbD_getExpert() const
-{	
+{
 	return m_expert;
 }
 
@@ -1698,7 +1698,7 @@ void CvProfessionInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_bCanCrossLargeRivers);//WTP, ray, Large Rivers
 	stream->Read(&m_bCityDefender);
 	stream->Read(&m_bCanFound);
-	
+
 	// TAC - LbD - Ray - START
 	stream->Read(&m_LbDused);
 	stream->Read(&m_expert);
@@ -1782,7 +1782,7 @@ void CvProfessionInfo::write(FDataStreamBase* stream)
 		stream->Write(m_aYieldEquipments[i].iYieldAmount);
 	}
 	stream->Write(GC.getNumPromotionInfos(), m_abFreePromotions);
-	
+
 	// R&R, ray , MYCP partially based on code of Aymerick - START
 	stream->Write(m_aiYieldsProduced.size());
 	for (std::vector<int>::iterator it = m_aiYieldsProduced.begin(); it != m_aiYieldsProduced.end(); ++it)
@@ -2656,8 +2656,8 @@ void CvUnitMeshGroups::write(FDataStreamBase* stream)
 /*********************************************************************/
 /**                                                                 **/
 /** float CvUnitInfo::NBMOD_GetStrengthWeight() const               **/
-/** Gibt das Stärke-Gewicht dieser Einheit für die EMW/KMW Berech-  **/
-/** nun zurück.                                                     **/
+/** Gibt das Stï¿½rke-Gewicht dieser Einheit fï¿½r die EMW/KMW Berech-  **/
+/** nun zurï¿½ck.                                                     **/
 /**                                                                 **/
 /*********************************************************************/
 float CvUnitInfo::NBMOD_GetStrengthWeight() const
@@ -2672,7 +2672,7 @@ float CvUnitInfo::NBMOD_GetStrengthWeight() const
 /*********************************************************************/
 /**                                                                 **/
 /** int CvUnitInfo::NBMOD_GetTeachLevel() const                     **/
-/** Ermittelt die Bildungsstufe, welche diese Einheit benötigt.     **/
+/** Ermittelt die Bildungsstufe, welche diese Einheit benï¿½tigt.     **/
 /**                                                                 **/
 /*********************************************************************/
 
@@ -2724,6 +2724,7 @@ m_iMinAreaSize(0),
 m_iMoves(0),
 m_iWorkRate(0),
 m_iWorkRateModifier(0),
+m_iGoldFromGoodiesAndChiefsModifier(0), // WTP, ray, Scout Gold Modifier for Goodies and Chiefs at Unit - START
 m_iMissionaryRateModifier(0),
 m_iNativeTradeRateModifier(0), // WTP, ray, Native Trade Posts - START
 m_iCombat(0),
@@ -2741,7 +2742,7 @@ m_iCargoSpace(0),
 m_iRequiredTransportSize(0),
 m_iAssetValue(0),
 m_iPowerValue(0),
-m_iUnitClassType(NO_UNITCLASS),
+m_eUnitClassType(NO_UNITCLASS),
 m_iSpecialUnitType(NO_SPECIALUNIT),
 m_iUnitCaptureClassType(NO_UNITCLASS),
 m_iUnitCombatType(NO_UNITCOMBAT),
@@ -2966,6 +2967,12 @@ int CvUnitInfo::getWorkRateModifier() const
 {
 	return m_iWorkRateModifier;
 }
+// WTP, ray, Scout Gold Modifier for Goodies and Chiefs at Unit - START
+int CvUnitInfo::getGoldFromGoodiesAndChiefsModifier() const
+{
+	return m_iGoldFromGoodiesAndChiefsModifier;
+}
+// WTP, ray, Scout Gold Modifier for Goodies and Chiefs at Unit - END
 int CvUnitInfo::getMissionaryRateModifier() const
 {
 	return m_iMissionaryRateModifier;
@@ -3015,7 +3022,7 @@ int CvUnitInfo::getHillsDefenseModifier() const
 int CvUnitInfo::getDomesticBonusModifier() const
 {
 	return m_iDomesticBonusModifier;
-}	
+}
 int CvUnitInfo::getBombardRate() const
 {
 	return m_iBombardRate;
@@ -3044,9 +3051,9 @@ int CvUnitInfo::getPowerValue() const
 {
 	return m_iPowerValue;
 }
-int CvUnitInfo::getUnitClassType() const
+UnitClassTypes CvUnitInfo::getUnitClassType() const
 {
-	return m_iUnitClassType;
+	return m_eUnitClassType;
 }
 int CvUnitInfo::getSpecialUnitType() const
 {
@@ -3645,6 +3652,7 @@ void CvUnitInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iMoves);
 	stream->Read(&m_iWorkRate);
 	stream->Read(&m_iWorkRateModifier);
+	stream->Read(&m_iGoldFromGoodiesAndChiefsModifier); // WTP, ray, Scout Gold Modifier for Goodies and Chiefs at Unit - START
 	stream->Read(&m_iMissionaryRateModifier);
 	stream->Read(&m_iNativeTradeRateModifier); // WTP, ray, Native Trade Posts - START
 	stream->Read(&m_iCombat);
@@ -3655,7 +3663,7 @@ void CvUnitInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iCityDefenseModifier);
 	stream->Read(&m_iHillsAttackModifier);
 	stream->Read(&m_iHillsDefenseModifier);
-	stream->Read(&m_iDomesticBonusModifier);	
+	stream->Read(&m_iDomesticBonusModifier);
 	stream->Read(&m_iBombardRate);
 	stream->Read(&m_iSpecialCargo);
 	stream->Read(&m_iDomainCargo);
@@ -3666,7 +3674,7 @@ void CvUnitInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iBarracksSpaceNeeded); // WTP, ray, new Barracks System - START
 	stream->Read(&m_iAssetValue);
 	stream->Read(&m_iPowerValue);
-	stream->Read(&m_iUnitClassType);
+	stream->Read(&m_eUnitClassType);
 	stream->Read(&m_iSpecialUnitType);
 	stream->Read(&m_iUnitCaptureClassType);
 	stream->Read(&m_iUnitCombatType);
@@ -3737,11 +3745,11 @@ void CvUnitInfo::read(FDataStreamBase* stream)
 	//TAC Whaling, ray
 	stream->Read(&m_bGatherBoat);
 	//End TAC Whaling, ray
-	
+
 	// < JAnimals Mod Start >
 	stream->Read(&m_bAnimal);
 	// < JAnimals Mod End >
-	
+
 	int iSize;
 	stream->Read(&iSize);
 	m_aProfessionGroups.clear();
@@ -3874,6 +3882,7 @@ void CvUnitInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iMoves);
 	stream->Write(m_iWorkRate);
 	stream->Write(m_iWorkRateModifier);
+	stream->Write(m_iGoldFromGoodiesAndChiefsModifier); // WTP, ray, Scout Gold Modifier for Goodies and Chiefs at Unit - START
 	stream->Write(m_iMissionaryRateModifier);
 	stream->Write(m_iNativeTradeRateModifier); // WTP, ray, Native Trade Posts - START
 	stream->Write(m_iCombat);
@@ -3884,7 +3893,7 @@ void CvUnitInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iCityDefenseModifier);
 	stream->Write(m_iHillsAttackModifier);
 	stream->Write(m_iHillsDefenseModifier);
-	stream->Write(m_iDomesticBonusModifier);	
+	stream->Write(m_iDomesticBonusModifier);
 	stream->Write(m_iBombardRate);
 	stream->Write(m_iSpecialCargo);
 	stream->Write(m_iDomainCargo);
@@ -3895,7 +3904,7 @@ void CvUnitInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iBarracksSpaceNeeded); // WTP, ray, new Barracks System - START
 	stream->Write(m_iAssetValue);
 	stream->Write(m_iPowerValue);
-	stream->Write(m_iUnitClassType);
+	stream->Write(m_eUnitClassType);
 	stream->Write(m_iSpecialUnitType);
 	stream->Write(m_iUnitCaptureClassType);
 	stream->Write(m_iUnitCombatType);
@@ -3961,11 +3970,11 @@ void CvUnitInfo::write(FDataStreamBase* stream)
 	//TAC Whaling, ray
 	stream->Write(m_bGatherBoat);
 	//End TAC Whaling, ray
-	
+
 	// < JAnimals Mod Start >
 	stream->Write(m_bAnimal);
 	// < JAnimals Mod End >
-	
+
 	stream->Write((int) m_aProfessionGroups.size());
 	for (int i = 0; i < (int) m_aProfessionGroups.size(); ++i)
 	{
@@ -4020,8 +4029,7 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	int j=0;				//loop counter
 	int k=0;				//loop counter
 	int iNumSibs=0;				// the number of siblings the current xml node has
-	pXML->GetChildXmlValByName(szTextVal, "Class");
-	m_iUnitClassType = pXML->FindInInfoClass(szTextVal);
+	pXML->GetEnum(getType(), m_eUnitClassType, "Class");
 	pXML->GetChildXmlValByName(szTextVal, "Special");
 	m_iSpecialUnitType = pXML->FindInInfoClass(szTextVal);
 	pXML->GetChildXmlValByName(szTextVal, "Capture");
@@ -4143,6 +4151,7 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iMoves, "iMoves");
 	pXML->GetChildXmlValByName(&m_iWorkRate, "iWorkRate");
 	pXML->GetChildXmlValByName(&m_iWorkRateModifier, "iWorkRateModifier");
+	pXML->GetChildXmlValByName(&m_iGoldFromGoodiesAndChiefsModifier, "iGoldFromGoodiesAndChiefsModifier"); // WTP, ray, Scout Gold Modifier for Goodies and Chiefs at Unit - START
 	pXML->GetChildXmlValByName(&m_iMissionaryRateModifier, "iMissionaryRateModifier");
 	pXML->GetChildXmlValByName(&m_iNativeTradeRateModifier, "iNativeTradeRateModifier"); // WTP, ray, Native Trade Posts - START
 	pXML->SetVariableListTagPair(&m_abTerrainImpassable, "TerrainImpassables", GC.getNumTerrainInfos(), false);
@@ -4162,7 +4171,7 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iCityDefenseModifier, "iCityDefense");
 	pXML->GetChildXmlValByName(&m_iHillsAttackModifier, "iHillsAttack");
 	pXML->GetChildXmlValByName(&m_iHillsDefenseModifier, "iHillsDefense");
-	pXML->GetChildXmlValByName(&m_iDomesticBonusModifier, "iDomesticBonus");	
+	pXML->GetChildXmlValByName(&m_iDomesticBonusModifier, "iDomesticBonus");
 	pXML->SetVariableListTagPair(&m_aiTerrainAttackModifier, "TerrainAttacks", GC.getNumTerrainInfos(), 0);
 	pXML->SetVariableListTagPair(&m_aiTerrainDefenseModifier, "TerrainDefenses", GC.getNumTerrainInfos(), 0);
 	pXML->SetVariableListTagPair(&m_aiFeatureAttackModifier, "FeatureAttacks", GC.getNumFeatureInfos(), 0);
@@ -4240,12 +4249,20 @@ bool CvUnitInfo::read(CvXMLLoadUtility* pXML)
 	m_iLeaderPromotion = pXML->FindInInfoClass(szTextVal);
 	pXML->GetChildXmlValByName(&m_iLeaderExperience, "iLeaderExperience");
 	updateArtDefineButton();
-	return true;
-}
 
-int CvUnitInfo::EXE_getDefaultProfession() const
-{
-	return getDefaultProfession();
+
+#ifdef FASSERT_ENABLE
+	// test if xml data is valid
+	for (int i = 0; i < m_info_YieldDemands.getLength(); ++i)
+	{
+		FAssertMsg(m_info_YieldDemands.get1(i) > 0, CvString::format("%s: %s demanded at 0 amount (index %d)", getType(), getTypeStr(m_info_YieldDemands.get0(i)), i).c_str());
+	}
+
+#endif // FASSERT_ENABLE
+
+
+
+	return true;
 }
 
 int CvUnitInfo::PYgetYieldCost(int i) const
@@ -4979,7 +4996,7 @@ bool CvUnitClassInfo::readPass3()
 /*********************************************************************/
 /**                                                                 **/
 /** int CvBuildingInfo::NBMOD_GetTeachLevel() const                 **/
-/** Ermittelt die Bildungsstufe, die das Gebäude bereit stellt.     **/
+/** Ermittelt die Bildungsstufe, die das Gebï¿½ude bereit stellt.     **/
 /**                                                                 **/
 /*********************************************************************/
 
@@ -5282,7 +5299,7 @@ const InfoArray<UnitClassTypes, int>& CvBuildingInfo::AI_getUnitClassWeight() co
 	return m_info_AIUnitClassWeight;
 }
 //WTP, Nightinggale - Terrain locator - end
-bool CvBuildingInfo::isCapital() const 
+bool CvBuildingInfo::isCapital() const
 {
 	return m_bCapital;
 }
@@ -6119,13 +6136,7 @@ m_aiTeachUnitClassWeights(NULL),
 m_abLeaders(NULL),
 m_abCivilizationFreeBuildingClass(NULL),
 m_abValidProfessions(NULL),
-m_abTraits(NULL),
-
-m_paszGeneralNames(NULL), // TAC - Great General Names - Ray - START
-m_paszAdmiralNames(NULL), // R&R, ray, Great Admirals - START
-m_paszShipNames(NULL), // TAC - Great Ship Names - Ray - START
-
-m_paszCityNames(NULL)
+m_abTraits(NULL)
 {
 }
 //------------------------------------------------------------------------------------------------------
@@ -6146,10 +6157,6 @@ CvCivilizationInfo::~CvCivilizationInfo()
 	SAFE_DELETE_ARRAY(m_abCivilizationFreeBuildingClass);
 	SAFE_DELETE_ARRAY(m_abValidProfessions);
 	SAFE_DELETE_ARRAY(m_abTraits);
-	SAFE_DELETE_ARRAY(m_paszCityNames);	
-	SAFE_DELETE_ARRAY(m_paszGeneralNames); // TAC - Great General Names - Ray - START
-	SAFE_DELETE_ARRAY(m_paszAdmiralNames); // R&R, ray, Great Admirals - START
-	SAFE_DELETE_ARRAY(m_paszShipNames); // TAC - Ship Names - Ray - START
 }
 void CvCivilizationInfo::reset()
 {
@@ -6362,12 +6369,14 @@ int CvCivilizationInfo::getCivilizationBuildings(int i) const
 	FAssertMsg(i > -1, "Index out of bounds");
 	return m_aiCivilizationBuildings ? m_aiCivilizationBuildings[i] : -1;
 }
+
 int CvCivilizationInfo::getCivilizationUnits(int i) const
 {
 	FAssertMsg(i < GC.getNumUnitClassInfos(), "Index out of bounds");
 	FAssertMsg(i > -1, "Index out of bounds");
 	return m_aiCivilizationUnits ? m_aiCivilizationUnits[i] : -1;
 }
+
 int CvCivilizationInfo::getNumCivilizationFreeUnits() const
 {
 	return m_aCivilizationFreeUnits.size();
@@ -6433,37 +6442,49 @@ const char* CvCivilizationInfo::getButton() const
 {
 	return getArtInfo()->getButton();
 }
-std::string CvCivilizationInfo::getCityNames(int i) const
+CvWString CvCivilizationInfo::getCityNames(int i) const
 {
 	FAssertMsg(i < getNumCityNames(), "Index out of bounds");
 	FAssertMsg(i > -1, "Index out of bounds");
-	return m_paszCityNames[i];
+
+	CvWString tag;
+	tag.Format(L"%s_CITY_%d", m_szTextKey.GetCString(), i);
+	return gDLL->getText(tag);
 }
 
 // TAC - Great General Names - Ray - START
-std::string CvCivilizationInfo::getGeneralNames(int i) const
+CvWString CvCivilizationInfo::getGeneralNames(int i) const
 {
 	FAssertMsg(i < getNumGeneralNames(), "Index out of bounds");
 	FAssertMsg(i > -1, "Index out of bounds");
-	return m_paszGeneralNames[i];
+	
+	CvWString tag;
+	tag.Format(L"%s_GENERAL_%d", m_szTextKey.GetCString(), i);
+	return gDLL->getText(tag);
 }
 // TAC - Great General Names - Ray - END
 
 // R&R, ray, Great Admirals - START
-std::string CvCivilizationInfo::getAdmiralNames(int i) const
+CvWString CvCivilizationInfo::getAdmiralNames(int i) const
 {
 	FAssertMsg(i < getNumAdmiralNames(), "Index out of bounds");
 	FAssertMsg(i > -1, "Index out of bounds");
-	return m_paszAdmiralNames[i];
+	
+	CvWString tag;
+	tag.Format(L"%s_ADMIRAL_%d", m_szTextKey.GetCString(), i);
+	return gDLL->getText(tag);
 }
 // R&R, ray, Great Admirals - END
 
 // TAC - Ship Names - Ray - START
-std::string CvCivilizationInfo::getShipNames(int i) const
+CvWString CvCivilizationInfo::getShipNames(int i) const
 {
 	FAssertMsg(i < getNumShipNames(), "Index out of bounds");
 	FAssertMsg(i > -1, "Index out of bounds");
-	return m_paszShipNames[i];
+	
+	CvWString tag;
+	tag.Format(L"%s_SHIP_%d", m_szTextKey.GetCString(), i);
+	return gDLL->getText(tag);
 }
 // TAC - Ship Names - Ray - END
 
@@ -6563,28 +6584,6 @@ void CvCivilizationInfo::read(FDataStreamBase* stream)
 	SAFE_DELETE_ARRAY(m_abTraits);
 	m_abTraits = new bool[GC.getNumTraitInfos()];
 	stream->Read(GC.getNumTraitInfos(), m_abTraits);
-
-	SAFE_DELETE_ARRAY(m_paszCityNames);
-	m_paszCityNames = new CvString[m_iNumCityNames];
-	stream->ReadString(m_iNumCityNames, m_paszCityNames);
-	
-	// TAC - Great General Names - Ray - START
-	SAFE_DELETE_ARRAY(m_paszGeneralNames);
-	m_paszGeneralNames = new CvString[m_iNumGeneralNames];
-	stream->ReadString(m_iNumGeneralNames, m_paszGeneralNames);
-	// TAC - Great General Names - Ray - END
-
-	// R&R, ray, Great Admirals - START
-	SAFE_DELETE_ARRAY(m_paszAdmiralNames);
-	m_paszAdmiralNames = new CvString[m_iNumAdmiralNames];
-	stream->ReadString(m_iNumAdmiralNames, m_paszAdmiralNames);
-	// R&R, ray, Great Admirals - END
-
-	// TAC - Ship Names - Ray - START
-	SAFE_DELETE_ARRAY(m_paszShipNames);
-	m_paszShipNames = new CvString[m_iNumShipNames];
-	stream->ReadString(m_iNumShipNames, m_paszShipNames);
-	// TAC - Ship Names - Ray - END
 }
 void CvCivilizationInfo::write(FDataStreamBase* stream)
 {
@@ -6592,12 +6591,12 @@ void CvCivilizationInfo::write(FDataStreamBase* stream)
 	uint uiFlag=0;
 	stream->Write(uiFlag);		// flag for expansion
 	stream->Write(m_iDefaultPlayerColor);
-	stream->Write(m_iArtStyleType);	
+	stream->Write(m_iArtStyleType);
 	stream->Write(m_iUnitArtStyleType); //Androrc UnitArtStyles
-	stream->Write(m_iNumCityNames);	
+	stream->Write(m_iNumCityNames);
 	stream->Write(m_iNumGeneralNames);  // TAC - Great General Names - Ray - START
-	stream->Write(m_iNumAdmiralNames);  // R&R, ray, Great Admirals - START	
-	stream->Write(m_iNumShipNames); // TAC - Ship Names - Ray - START	
+	stream->Write(m_iNumAdmiralNames);  // R&R, ray, Great Admirals - START
+	stream->Write(m_iNumShipNames); // TAC - Ship Names - Ray - START
 	stream->Write(m_iNumLeaders);
 	stream->Write(m_iSelectionSoundScriptId);
 	stream->Write(m_iActionSoundScriptId);
@@ -6641,10 +6640,6 @@ void CvCivilizationInfo::write(FDataStreamBase* stream)
 	stream->Write(GC.getNumBuildingClassInfos(), m_abCivilizationFreeBuildingClass);
 	stream->Write(GC.getNumProfessionInfos(), m_abValidProfessions);
 	stream->Write(GC.getNumTraitInfos(), m_abTraits);
-	stream->WriteString(m_iNumCityNames, m_paszCityNames);	
-	stream->WriteString(m_iNumGeneralNames, m_paszGeneralNames); // TAC - Great General Names - Ray - START
-	stream->WriteString(m_iNumAdmiralNames, m_paszAdmiralNames); // R&R, ray, Great Admirals - START	
-	stream->WriteString(m_iNumShipNames, m_paszShipNames); // TAC - Ship Names - Ray - START	
 }
 
 bool CvCivilizationInfo::read(CvXMLLoadUtility* pXML)
@@ -6698,36 +6693,6 @@ bool CvCivilizationInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetEnum(getType(), m_eCivCategory, "eCivCategory");
 
 	pXML->GetEnum(getType(), m_eCivEffect, "eCivEffect", false);
-
-	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(),"Cities"))
-	{
-		pXML->SetStringList(&m_paszCityNames, &m_iNumCityNames);
-		gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
-	}
-
-	// TAC - Great General Names - Ray - START
-	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(),"Generals"))
-	{
-		pXML->SetStringList(&m_paszGeneralNames, &m_iNumGeneralNames);
-		gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
-	}
-	// TAC - Great General Names - Ray - END
-
-	// R&R, ray, Great Admirals - START
-	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(),"Admirals"))
-	{
-		pXML->SetStringList(&m_paszAdmiralNames, &m_iNumAdmiralNames);
-		gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
-	}
-	// R&R, ray, Great Admirals - END
-
-	// TAC - Ship Names - Ray - START
-	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(),"Ships"))
-	{
-		pXML->SetStringList(&m_paszShipNames, &m_iNumShipNames);
-		gDLL->getXMLIFace()->SetToParent(pXML->GetXML());
-	}
-	// TAC - Ship Names - Ray - END
 
 	// if we can set the current xml node to it's next sibling
 	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(),"Buildings"))
@@ -6887,6 +6852,38 @@ bool CvCivilizationInfo::read(CvXMLLoadUtility* pXML)
 	}
 	pXML->SetVariableListTagPair(&m_abLeaders, "Leaders", GC.getNumLeaderHeadInfos(), false);
 	pXML->GetChildXmlValByName(szTextVal, "CivilizationSelectionSound");
+
+	{
+		// setlength of lists of names based on available TXT_KEYs
+		CvWString tag;
+		CvWString text;
+
+		for (;; ++m_iNumAdmiralNames)
+		{
+			tag.Format(L"%s_ADMIRAL_%d", m_szTextKey.GetCString(), m_iNumAdmiralNames);
+			text = gDLL->getText(tag);
+			if (tag == text) break;
+		}
+		for (;; ++m_iNumCityNames)
+		{
+			tag.Format(L"%s_CITY_%d", m_szTextKey.GetCString(), m_iNumCityNames);
+			text = gDLL->getText(tag);
+			if (tag == text) break;
+		}
+		for (;; ++m_iNumGeneralNames)
+		{
+			tag.Format(L"%s_GENERAL_%d", m_szTextKey.GetCString(), m_iNumGeneralNames);
+			text = gDLL->getText(tag);
+			if (tag == text) break;
+		}
+		for (;; ++m_iNumShipNames)
+		{
+			tag.Format(L"%s_SHIP_%d", m_szTextKey.GetCString(), m_iNumShipNames);
+			text = gDLL->getText(tag);
+			if (tag == text) break;
+		}
+	}
+
 	return true;
 }
 bool CvCivilizationInfo::readPass2(CvXMLLoadUtility* pXML)
@@ -7145,6 +7142,7 @@ m_iMinGoldAskPercent(25),
 
 /** NBMOD REF **/
 m_iNBMOD_REF_Weight(100),
+m_iOppressometerGrowthHandicap(100),
 /** NBMOD REF **/
 m_iAdvancedStartPointsMod(0),
 m_iStartingGold(0),
@@ -7469,6 +7467,8 @@ void CvHandicapInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iNBMOD_REF_Weight);
 	/** NBMOD REF **/
 
+	stream->Read(&m_iOppressometerGrowthHandicap);
+
 	stream->ReadString(m_szHandicapName);
 	stream->Read(&m_iWaveTurns);	// TAC - AI Revolution - koma13
 
@@ -7539,8 +7539,10 @@ void CvHandicapInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iNBMOD_REF_Weight);
 	/** NBMOD REF **/
 
+	stream->Write(m_iOppressometerGrowthHandicap);
+
 	stream->WriteString(m_szHandicapName);
-	
+
 	stream->Write(m_iWaveTurns);	// TAC - AI Revolution - koma13
 
 	// Arrays
@@ -7567,6 +7569,7 @@ bool CvHandicapInfo::read(CvXMLLoadUtility* pXML)
 	/** NBMOD REF **/
 	pXML->GetChildXmlValByName(&m_iNBMOD_REF_Weight, "iNBMOD_REF_Weight");
 	/** NBMOD REF **/
+	pXML->GetChildXmlValByName(&m_iOppressometerGrowthHandicap, "iOppressometerGrowthHandicap");
 	pXML->GetChildXmlValByName(&m_iAdvancedStartPointsMod, "iAdvancedStartPointsMod");
 	pXML->GetChildXmlValByName(&m_iStartingGold, "iGold");
 	pXML->GetChildXmlValByName(&m_iFatherPercent, "iFatherPercent");
@@ -7898,6 +7901,10 @@ bool CvBuildInfo::isKill() const
 {
 	return m_bKill;
 }
+bool CvBuildInfo::isRoute() const
+{
+	return (getRoute() != NO_ROUTE);
+}
 // Arrays
 int CvBuildInfo::getFeatureTime(int i) const
 {
@@ -8124,7 +8131,7 @@ bool CvGoodyInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(m_szChiefTextKey, "ChiefText");
 	pXML->GetChildXmlValByName(&m_iGold, "iGold");
 	pXML->GetChildXmlValByName(&m_iGoldRand1, "iGoldRand1");
-	pXML->GetChildXmlValByName(&m_iGoldRand2, "iGoldRand2"); 
+	pXML->GetChildXmlValByName(&m_iGoldRand2, "iGoldRand2");
 	pXML->GetChildXmlValByName(&m_iImmigration, "iImmigration"); // R&R, ray, Goody Enhancement
 	pXML->GetChildXmlValByName(&m_iMapOffset, "iMapOffset");
 	pXML->GetChildXmlValByName(&m_iMapRange, "iMapRange");
@@ -8316,6 +8323,7 @@ m_iHammersModifierForCity(0), // WTP, ray, Improvements give Bonus to their City
 m_iToolsModifierForCity(0), // WTP, ray, Improvements give Bonus to their City - PART 2 - START
 m_iStorageModifierForCity(0), // WTP, ray, Improvements give Bonus to their City - PART 3 - START
 m_iPillageGold(0),
+m_iHealModifier(0),// WTP, ray, Plot Heal Modifier for Improvements - START
 m_iImprovementPillage(NO_IMPROVEMENT),
 m_iImprovementUpgrade(NO_IMPROVEMENT),
 // Super Forts begin *XML*
@@ -8433,6 +8441,14 @@ int CvImprovementInfo::getPillageGold() const
 {
 	return m_iPillageGold;
 }
+
+// WTP, ray, Plot Heal Modifier for Improvements - START
+int CvImprovementInfo::getHealModifier() const
+{
+	return m_iHealModifier;
+}
+// WTP, ray, Plot Heal Bonus for Improvements - END
+
 bool CvImprovementInfo::isOutsideBorders() const
 {
 	return m_bOutsideBorders;
@@ -8710,6 +8726,7 @@ void CvImprovementInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iToolsModifierForCity); // WTP, ray, Improvements give Bonus to their City - PART 2 - START
 	stream->Read(&m_iStorageModifierForCity); // WTP, ray, Improvements give Bonus to their City - PART 3 - START
 	stream->Read(&m_iPillageGold);
+	stream->Read(&m_iHealModifier); // WTP, ray, Plot Heal Modifier for Improvements - START
 	stream->Read(&m_iImprovementPillage);
 	stream->Read(&m_iImprovementUpgrade);
 	// Super Forts begin *XML*
@@ -8796,6 +8813,7 @@ void CvImprovementInfo::write(FDataStreamBase* stream)
 	stream->Write(m_iToolsModifierForCity); // WTP, ray, Improvements give Bonus to their City - PART 2 - START
 	stream->Write(m_iStorageModifierForCity); // WTP, ray, Improvements give Bonus to their City - PART 3 - START
 	stream->Write(m_iPillageGold);
+	stream->Write(m_iHealModifier); // WTP, ray, Plot Heal Modifier for Improvements - START
 	stream->Write(m_iImprovementPillage);
 	stream->Write(m_iImprovementUpgrade);
 	// Super Forts begin *XML*
@@ -8889,6 +8907,7 @@ bool CvImprovementInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(&m_iToolsModifierForCity, "iToolsModifierForCity"); // WTP, ray, Improvements give Bonus to their City - PART 2 - START
 	pXML->GetChildXmlValByName(&m_iStorageModifierForCity, "iStorageModifierForCity"); // WTP, ray, Improvements give Bonus to their City - PART 3 - START
 	pXML->GetChildXmlValByName(&m_iPillageGold, "iPillageGold");
+	pXML->GetChildXmlValByName(&m_iHealModifier, "iHealModifier"); // WTP, ray, Plot Heal Modifier for Improvements - START
 	pXML->GetChildXmlValByName(&m_bOutsideBorders, "bOutsideBorders");
 	// Super Forts begin *XML*
 	pXML->GetChildXmlValByName(&m_iCulture, "iCulture");
@@ -8995,14 +9014,14 @@ m_iGroupRand(0),
 m_iBuilding(0),
 m_bOneArea(false),
 m_bPeaks(false), // R&R, ray, Bonus on Peaks - START
-m_bHills(false), 
+m_bHills(false),
 m_bOcean(false), //TAC Whaling, ray
 m_bFlatlands(false),
 m_bNoRiverSide(false),
 m_bRiverSideOnly(false), // Ray, adding 2 more XML tags to control bonus placement
 m_bCoastalLandOnly(false), // Ray, adding 2 more XML tags to control bonus placement
-m_bOnlySouthernHemisphere(false), //ray, Norther and Southern Hemisphere, using hint of f1rpo 
-m_bOnlyNorthernHemisphere(false), //ray, Norther and Southern Hemisphere, using hint of f1rpo 
+m_bOnlySouthernHemisphere(false), //ray, Norther and Southern Hemisphere, using hint of f1rpo
+m_bOnlyNorthernHemisphere(false), //ray, Norther and Southern Hemisphere, using hint of f1rpo
 m_bUseLSystem(false),
 m_bWhalingboatWorkable(false), //TAC Whaling, ray
 m_bFishingboatWorkable(false), // R&R, ray, High Sea Fishing
@@ -9451,20 +9470,21 @@ m_bRequiresPeaks(false), //WTP, Feature settings enhancements
 m_bRequiresRiver(false),
 m_bImpassable(false),
 // ray, Streams Feature - START
-m_bNorthMovementBonus(false), 
-m_bSouthMovementBonus(false), 
-m_bEastMovementBonus(false), 
-m_bWestMovementBonus(false), 
-m_bNorthEastMovementBonus(false), 
-m_bNorthWestMovementBonus(false), 
-m_bSouthEastMovementBonus(false), 
-m_bSouthWestMovementBonus(false), 
+m_bNorthMovementBonus(false),
+m_bSouthMovementBonus(false),
+m_bEastMovementBonus(false),
+m_bWestMovementBonus(false),
+m_bNorthEastMovementBonus(false),
+m_bNorthWestMovementBonus(false),
+m_bSouthEastMovementBonus(false),
+m_bSouthWestMovementBonus(false),
 // ray, Streams Feature - END
 
 m_bNoCity(false),
 m_bNoImprovement(false),
 m_bVisibleAlways(false),
 m_iWorldSoundscapeScriptId(0),
+m_eEffectType(NO_EFFECT),
 m_iEffectProbability(0),
 m_aiYieldChange(NULL),
 m_aiRiverYieldIncrease(NULL),
@@ -9515,9 +9535,9 @@ int CvFeatureInfo::getAdvancedStartRemoveCost() const
 	return m_iAdvancedStartRemoveCost;
 }
 // R&R, Robert Surcouf, Damage on Storm plots, Start
-int CvFeatureInfo::getTurnDamage() const			
+int CvFeatureInfo::getTurnDamage() const
 {
-	return m_iTurnDamage; 
+	return m_iTurnDamage;
 }
 bool CvFeatureInfo::isGeneratedEveryRound() const
 {
@@ -9628,9 +9648,9 @@ int CvFeatureInfo::getWorldSoundscapeScriptId() const
 {
 	return m_iWorldSoundscapeScriptId;
 }
-const char* CvFeatureInfo::getEffectType() const
+EffectTypes CvFeatureInfo::getEffectType() const
 {
-	return m_szEffectType;
+	return m_eEffectType;
 }
 int CvFeatureInfo::getEffectProbability() const
 {
@@ -9737,7 +9757,7 @@ bool CvFeatureInfo::read(CvXMLLoadUtility* pXML)
 	{
 		m_iWorldSoundscapeScriptId = -1;
 	}
-	pXML->GetChildXmlValByName(m_szEffectType, "EffectType");
+	pXML->GetEnum(getType(), m_eEffectType, "EffectType", false);
 	pXML->GetChildXmlValByName(&m_iEffectProbability, "iEffectProbability");
 	pXML->SetVariableListTagPair(&m_abTerrain, "TerrainBooleans", GC.getNumTerrainInfos(), false);
 	return true;
@@ -10068,7 +10088,7 @@ bool CvYieldInfo::read(CvXMLLoadUtility* pXML)
 	// R&R, Androrc, Livestock Breeding, END
 	pXML->GetChildXmlValByName(m_szIcon, "Icon");
 	// KJ Jansson addon for Multiple Professions per Building modcomp by Androrc the Orc START
-	pXML->GetChildXmlValByName(m_szCombiIcon, "CombiIcon");	
+	pXML->GetChildXmlValByName(m_szCombiIcon, "CombiIcon");
 	// KJ Jansson addon for Multiple Professions per Building modcomp by Androrc the Orc END
 	pXML->GetChildXmlValByName(m_szHightlightIcon, "HightlightIcon");
 
@@ -10916,7 +10936,7 @@ bool CvLeaderHeadInfo::read(CvXMLLoadUtility* pXML)
 	//TAC Native Mercs
 	pXML->GetChildXmlValByName(&m_iMinAttitudeGiveMercs, "iMinAttitudeGiveMercs");
 	pXML->GetChildXmlValByName(&m_iBaseChanceGiveMercs, "iBaseChanceGiveMercs");
-	//End TAC Native Mercs	
+	//End TAC Native Mercs
 	// R&R, ray, Native Slave, START
 	pXML->GetChildXmlValByName(&m_iMinAttitudeGiveNativeSlaves, "iMinAttitudeGiveNativeSlaves");
 	pXML->GetChildXmlValByName(&m_iBaseChanceGiveNativeSlaves, "iBaseChanceGiveNativeSlaves");
@@ -11453,7 +11473,7 @@ int CvTraitInfo::getTaxRateThresholdModifier() const
 int CvTraitInfo::getMaxTaxRateThresholdDecrease() const // R&R, ray, new Attribute in Traits
 {
 	return m_iMaxTaxRateThresholdDecrease;
-} 
+}
 int CvTraitInfo::getNativeAttitudeChange() const
 {
 	return m_iNativeAttitudeChange;
@@ -11692,7 +11712,7 @@ void CvTraitInfo::read(FDataStreamBase* stream)
 	stream->Read(&m_iKingAttitudeChange); // R&R, ray, new Attribute in Traits
 	stream->Read(&m_iCityDefense);
 	stream->Read(&m_iLandPriceDiscount);
-	stream->Read(&m_iRecruitPriceDiscount); 
+	stream->Read(&m_iRecruitPriceDiscount);
 	stream->Read(&m_iRecruitPriceDiscountAfrica); // WTP, ray, Recruit Price Discounts Africa and Port Royal
 	stream->Read(&m_iRecruitPriceDiscountPortRoyal); // WTP, ray, Recruit Price Discounts Africa and Port Royal
 	stream->Read(&m_iEuropeTravelTimeModifier);
@@ -13358,8 +13378,7 @@ bool CvEraInfo::read(CvXMLLoadUtility* pXML)
 		if (m_iNumSoundtracks > 0)
 		{
 			m_paiSoundtracks = new int[m_iNumSoundtracks];
-			int j;
-			for (j=0;j<m_iNumSoundtracks;j++)
+			for (int j = 0; j < m_iNumSoundtracks; ++j)
 			{
 				m_paiSoundtracks[j] = ((!gDLL->getAudioDisabled()) ? gDLL->getAudioTagIndex(pszSoundTrackNames[j], AUDIOTAG_2DSCRIPT) : -1);
 			}
@@ -13574,7 +13593,7 @@ bool CvGameText::STATIC_bChangeLanguage = false;
  * Vanilla provides IDs for 5 languages and all mods use those, hiding the issue. As long as all mods only use languages
  *   from vanilla, this won't be a problem. Selecting language 0 is English in all mods.
  * However this is only true for languages 0-4. If two mods adds language 5, but disagree on which is 5, a huge mess will occur.
- * 
+ *
  * A really big problem is selecting language 5 and then switch to a mod with only 5 languagages as this will remove all text.
  * Not just write errors, more like simply removing all text entirely like writing text delivers nothing.
  * This is clear right away as the main menu is empty. No text means nothing to click on, not even change language.
@@ -13584,7 +13603,7 @@ bool CvGameText::STATIC_bChangeLanguage = false;
  * Adding a text string is an issue if you have to add it for each language, particularly if the number of languages is increasing.
  *
  * This heavily modded part of CvGameText aims to allow adding languages much easier while avoiding issues when switching mods.
- * 
+ *
  * The core idea is splitting the language int into multiple ints:
  *  - Language ID: the value written to CivilizationIV.ini
  *  - Language menu ID: the index in the language selection menu in the game options
@@ -13878,7 +13897,7 @@ bool CvGameText::read(CvXMLLoadUtility* pXML, bool bUTF8, const char *szFileName
 		// do not trigger while reading the English fallback string
 		bLanguageFound = false;
 	}
-	
+
 	if (readString(pXML, wszTextVal, "Text", bUTF8, szFileName, bLanguageFound, getType()))
 	{
 		// There are child tags. Read all 3 of them.
@@ -13943,6 +13962,14 @@ bool CvGameText::readString(CvXMLLoadUtility* pXML, CvWString &wszTextVal, const
 		return false;
 	}
 
+	wszTextVal = convertFromUTF8(szBuffer, !bLanguageFound, szFileName, szType);
+	return true;
+}
+
+CvWString CvGameText::convertFromUTF8(const CvString szBuffer, bool bFallback, const char *szFileName, const char* szType)
+{
+	CvWString wszTextVal;
+
 	for (unsigned int i = 0; i < szBuffer.size(); ++i)
 	{
 		unsigned int iBuffer = szBuffer.c_str()[i] & 0xFF; // GetBits doesn't work if it wants to read all the bits, like 8 bits from a byte
@@ -13989,7 +14016,7 @@ bool CvGameText::readString(CvXMLLoadUtility* pXML, CvWString &wszTextVal, const
 
 		if (iReturnVal != 1)
 		{
-			if (!bLanguageFound && getCodePage() != 1252)
+			if (bFallback && getCodePage() != 1252)
 			{
 				// Convert to ASCII if possible as 0x7F and below is the same for all code pages
 				switch (iBuffer)
@@ -14133,7 +14160,7 @@ bool CvGameText::readString(CvXMLLoadUtility* pXML, CvWString &wszTextVal, const
 		wchar_t buffer = iChar;
 		wszTextVal.append(&buffer, 1);
 	}
-	return true;
+	return wszTextVal;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -14765,7 +14792,7 @@ const TCHAR* CvEventTriggerInfo::getEventArt() const
 	{
 		return NULL;
 	}
-	
+
 	return m_szEventArt;
 }
 // End EmperorFool: Events with Images
@@ -15175,7 +15202,7 @@ void CvEventTriggerInfo::verifyTriggerSettings() const
 	// terrain B allows feature B
 	// terrain A doesn't allow feature B
 	// both terrains and both features will pass
-	// removing terrain B will make feature B fail as none of the required terrains allow feature B 
+	// removing terrain B will make feature B fail as none of the required terrains allow feature B
 	verifyTriggerSettings(getFeaturesRequired());
 	verifyTriggerSettings(getTerrainsRequired());
 	verifyTriggerSettings(getImprovementsRequired());
@@ -15454,7 +15481,7 @@ const char* CvEventTriggerInfo::verifyTriggerSettings(ImprovementTypes eImprovem
 			}
 		}
 	}
-	
+
 	return NULL;
 }
 
@@ -15684,7 +15711,7 @@ int CvEventInfo::getAIValue() const
 
 // TAC - Generic Parameters for Events - Ray - START
 int CvEventInfo::getGenericParameter(int x) const
-{	
+{
 	if (x < 1) return 0;
 	if (x == 1) return m_iGenericParameter1;
 	if (x == 2) return m_iGenericParameter2;
@@ -16164,7 +16191,7 @@ bool CvMainMenuInfo::read(CvXMLLoadUtility* pXML)
 	pXML->GetChildXmlValByName(m_szScene, "Scene");
 	pXML->GetChildXmlValByName(m_szSoundtrack, "Soundtrack");
 	pXML->GetChildXmlValByName(m_szLoadingSlideshow, "LoadingSlideshow");
-	
+
 	if (gDLL->getXMLIFace()->SetToChildByTagName(pXML->GetXML(), "LoadingScreens"))
 	{
 		CvString szBuffer;
@@ -16908,6 +16935,11 @@ int CvHandicapInfo::getAIMaxTaxrate() const
 	return m_iAIMaxTaxrate;
 }
 // TAC - AI More Immigrants - koma13 - END
+
+int CvHandicapInfo::getOppressometerGrowthHandicap() const
+{
+    return m_iOppressometerGrowthHandicap;
+}
 
 // trade screen type - start - Nightinggale
 CvTradeScreenInfo::CvTradeScreenInfo()
